@@ -40,8 +40,8 @@
                     <h4>Payment Method</h4>
                     <div class="form-group">
                         <div class="form-group">
-                            <input type="radio" name="payment" value="cash" id="paymentCash" checked="checked"
-                                v-model="checkoutObj.paymentMethod" /><span>Cash</span>
+                            <input type="radio" name="payment" value="cash" id="paymentCash" checked="checked" />
+                            <span>Cash</span>
                             <p class="error-mess" v-if="errorObj.payErr.length > 0">{{ errorObj.payErr[0] }}</p>
                         </div>
                     </div>
@@ -50,22 +50,30 @@
                 <div class="form-group Conf" id="Confirm">
                     <input type="submit" value="Conferma" class="btn" />
                 </div>
+                <div>
+                    <button class="btn" type="button" style="margin-top: 20px; background-color: #ff8902;"
+                        @click="typeOrd('C')">Annulla</button>
+                </div>
             </form>
         </div>
+
+        <QuickViewCheckout v-if="showQuickView" @childEvent="Quickshow"></QuickViewCheckout>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewCheckout from "@/components/QuickViewCheckout.vue";
 import { mapState } from "vuex";
 export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", paymentMethod: "" },
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", paymentMethod: "cash" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], payErr: [] },
             cartItem: [],
             itemQuantity: [],
+            showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
         };
     },
@@ -87,6 +95,7 @@ export default {
             document.getElementById("coCardEx").setAttribute("min", minRange);
             document.getElementById("coCardEx").setAttribute("max", maxRange);
         },
+        
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
@@ -96,20 +105,15 @@ export default {
             });
             return temp;
         },
+
         calculateSummaryPrice: function () {
             let subtotal = 0;
             let discount = 0;
-            let delivery = 15;
-            let i = 0;
-            while (i < this.itemQuantity.length) {
-                subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i];
-                discount = discount + parseInt(this.filterFoods[i].food_discount) * this.itemQuantity[i];
-                i = i + 1;
+            let delivery = 0;
+            for (let i = 0; i < this.itemQuantity.length; i++) {
+                subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
             }
-            if (!this.filterFoods.length) {
-                delivery = 0;
-            }
-            let total = subtotal - discount + delivery;
+            let total = subtotal
             return [subtotal, discount, delivery, total];
         },
         async getAllCartItem() {
@@ -121,24 +125,38 @@ export default {
                 });
             }
         },
+
+        Quickshow(dataFromChild) {
+            this.showQuickView = dataFromChild
+        },
+
         resetCheckErr: function () {
             this.errorObj.TavoloErr = [];
             this.errorObj.CopertiErr = [];
             this.errorObj.NominativoErr = [];
             this.errorObj.payErr = [];
         },
+
         typeOrd: function (click) {
-            if (click === "T") {
-                document.getElementById("Tavolo").style.display = "block";
-                document.getElementById("Asporto").style.display = "none";
+            if (click === "C") {
+                this.showQuickView = true
+            } else {
+                switch (click) {
+                    case "T":
+                        document.getElementById("Tavolo").style.display = "block";
+                        document.getElementById("Asporto").style.display = "none";
+                        break;
+
+                    case "A":
+                        document.getElementById("Tavolo").style.display = "none";
+                        document.getElementById("Asporto").style.display = "block";
+                        break;
+                }
+                document.getElementById("General").style.display = "block";
+                document.getElementById("Confirm").style.display = "block";
             }
-            else {
-                document.getElementById("Tavolo").style.display = "none";
-                document.getElementById("Asporto").style.display = "block";
-            }
-            document.getElementById("General").style.display = "block";
-            document.getElementById("Confirm").style.display = "block";
         },
+
         checkEmptyErr: function () {
             for (var typeErr in this.errorObj) {
                 if (this.errorObj[typeErr].length != 0) {
@@ -147,6 +165,7 @@ export default {
             }
             return true;
         },
+
         inputUpcase: function (e) {
             e.target.value = e.target.value.toUpperCase();
         },
@@ -196,11 +215,11 @@ export default {
             };
             await axios.post("/billdetails", billDetails);
         },
+
         async handleSubmit(e) {
             this.checkForm();
             if (!this.checkEmptyErr()) {
                 e.preventDefault();
-                console.log('form err')
             }
             else {
                 e.preventDefault();
@@ -214,7 +233,6 @@ export default {
                 this.cartItem.forEach((foodId, index) => {
                     this.sendBillDetails(billId, foodId, this.itemQuantity[index]);
                 });
-                console.log('inizio insert')
 
                 var now = new Date();
                 var day = ("0" + now.getDate()).slice(-2);
@@ -236,7 +254,6 @@ export default {
                     bill_status: 1
                 };
 
-                console.log(billStatus)
                 axios.post("/billstatus", billStatus);
                 axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
@@ -244,12 +261,12 @@ export default {
                 this.$router.push("/thank");
             }
 
-            if (sessionStorage.getItem('MatchUser') === undefined) {
-                console.log("entro");
-                this.showQuickView = true;
-            }
         },
     },
+
+    components: {
+        QuickViewCheckout
+    }
 };
 </script>
 

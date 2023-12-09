@@ -46,7 +46,7 @@
                                                 <b>Descrizione</b>
                                                 <p>{{ f.food_desc }}</p>
                                             </div>
-                                            <button class="btn remove-btn" @click="removeBtn(index)"><i
+                                            <button class="btn remove-btn" @click="cancelBtn(index)"><i
                                                     class="fa fa-trash"></i>Rimuovi</button>
                                         </div>
 
@@ -63,11 +63,16 @@
                                         </div>
 
                                         <div class="item-qty col-sm-2 d-inline">
-                                            <label for="iQuantity"
-                                                style="font-size: 12px; padding-right: 2px;">Quantità:</label>
-                                            <input type="number" id="iQuantity" class="form-control item-quantity"
-                                                :value="itemQuantity[index]" min="1" max="1000"
-                                                @change="onQtyChange($event, index)">
+                                            <button class="btn" value="plus"
+                                                style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
+                                                @click="itemQuantity[index]++, onQtyChange(index)"><i
+                                                    class="fa-solid fa-plus"></i></button>
+                                            <label id="iQuantity" class="form-control item-quantity">{{ itemQuantity[index]
+                                            }}</label>
+                                            <button class="btn" value="minus"
+                                                style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+                                                @click="itemQuantity[index]--, onQtyChange(index)"><i
+                                                    class="fa-solid fa-minus"></i></button>
                                         </div>
 
                                         <div class="cal-total col-sm-2">
@@ -85,10 +90,12 @@
 
                         <div class="box-content row">
                             <div v-if="Isuser">
-                                <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Continua a comprare</router-link>
+                                <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Continua a
+                                    comprare</router-link>
                             </div>
                             <div v-else>
-                                <router-link to="/" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Inizia a comprare</router-link>
+                                <router-link to="/" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Inizia a
+                                    comprare</router-link>
                             </div>
                             <button class="btn check-out-btn" style="margin-left: 10px;"
                                 :disabled="filterFoods.length ? false : true" @click="checkOutBtn()"><i
@@ -100,7 +107,7 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <h3>Totale {{ calculateSummaryPrice()[3] }}€</h3>
+                                <h3>Totale {{ calculateSummaryPrice()[0] }}€</h3>
                             </div>
 
                             <div class="box-content">
@@ -108,7 +115,7 @@
                                     <button class="btn check-out-btn" :disabled="filterFoods.length ? false : true"
                                         @click="checkOutBtn()"><i class="fa fa-shopping-cart"></i>
                                         Checkout</button>
-                                    <button class="btn cancel-btn" @click="cancelBtn()"
+                                    <button class="btn cancel-btn" @click="cancelBtn(false)"
                                         :disabled="filterFoods.length ? false : true">
                                         Annulla</button>
                                 </div>
@@ -118,11 +125,14 @@
                 </div>
             </div>
         </div>
+
+        <quick-view-cart v-if="showQuickView" @childEvent="handleChildEvent" :parentData="dataFromParent"></quick-view-cart>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
 export default {
     name: "Cart",
@@ -131,6 +141,8 @@ export default {
         return {
             cartItem: [],
             itemQuantity: [],
+            showQuickView: false,
+            dataFromParent: null,
             Isuser: false,
         };
     },
@@ -160,33 +172,32 @@ export default {
             return temp
         },
 
+        handleChildEvent(dataFromChild) {
+            this.showQuickView = dataFromChild.event;
+            let i = dataFromChild.id
+            if (dataFromChild.type === 'si') {
+                this.cancelBtn(i)
+            }
+        },
+
         calculateItemPrice: function (index) {
             return ((parseInt(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
         },
 
         calculateSummaryPrice: function () {
             let subtotal = 0;
-            let discount = 0;
-            let delivery = 15;
-            let i = 0;
-            while (i < this.itemQuantity.length) {
+            for (let i = 0; i < this.itemQuantity.length; i++) {
                 subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
-                discount = discount + parseInt(this.filterFoods[i].food_discount) * this.itemQuantity[i]
-                i = i + 1
             }
-            if (!this.filterFoods.length) {
-                delivery = 0
-            }
-            let total = subtotal - discount + delivery;
-            return [subtotal, discount, delivery, total];
+            let total = subtotal;
+            return [subtotal, total];
         },
 
-        async onQtyChange(e, i) {
-            if (e.target.value < 1) {
-                e.target.value = 1
+        async onQtyChange(i) {
+            if (this.itemQuantity[i] == 0) {
+                this.dataFromParent = i
                 this.itemQuantity[i] = 1
-            } else {
-                this.itemQuantity[i] = e.target.value;
+                this.showQuickView = true
             }
 
             let data = {
@@ -197,28 +208,25 @@ export default {
             await axios.put("/cartItem/", data)
         },
 
-        async cancelBtn() {
-            await axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
-
-            this.cartItem = [];
-            this.itemQuantity = [];
+        async cancelBtn(index) {
+            if (index === false) {
+                await axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
+                this.cartItem = [];
+                this.itemQuantity = [];
+            } else {
+                await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.cartItem[index]);
+                this.cartItem.splice(index, 1);
+                this.itemQuantity.splice(index, 1);
+            }
         },
 
         checkOutBtn: function () {
             this.$router.push("/checkout");
         },
 
-        async removeBtn(index) {
-            await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.cartItem[index]);
-
-            this.cartItem.splice(index, 1);
-            this.itemQuantity.splice(index, 1);
-        },
-
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
-                console.log(sessionStorage.getItem('MatchUser'))
                 let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
@@ -228,6 +236,10 @@ export default {
         }
 
 
+    },
+
+    components: {
+        QuickViewCart
     }
 
 }
@@ -298,12 +310,12 @@ export default {
 .sale-price,
 .first-price,
 .item-quantity {
-    font-size: 12px;
-}
-
-.item-quantity {
-    width: 60px;
-    height: 15px;
+    text-align: center;
+    width: 6rem;
+    height: 30px;
+    font-size: 16px;
+    margin-bottom: 0px;
+    border-color: black;
 }
 
 .first-price {
@@ -311,7 +323,7 @@ export default {
 }
 
 .remove-btn {
-    font-size: 10px;
+    font-size: 12px;
     padding: 5px;
     margin-top: 27px;
 }
@@ -424,7 +436,8 @@ export default {
     }
 
     .desc .remove-btn {
-        font-size: 10px;
+        font-size: 12px;
+        margin-top: 25px;
         position: relative;
 
     }
@@ -442,8 +455,8 @@ export default {
 
     .item-qty {
         position: absolute;
-        margin-top: 55px;
-        padding-left: 160px;
+        margin-top: 15px;
+        padding-left: 200px;
     }
 
     .cal-total {

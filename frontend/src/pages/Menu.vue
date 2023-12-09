@@ -165,22 +165,6 @@ export default {
         console.log('up')
     },
 
-    beforeUnmount() {
-        console.log('before')
-        let previousCategory = this.foodObj.category
-        let divControl1 = document.getElementsByName("conferma")
-        var qtylenght = Object.keys(this.currentPageItems).length;
-        for (var l = 0; l < qtylenght; l++) {
-            console.log(divControl1[l].style.display)
-            if (divControl1[l].style.display == "block") {
-                this.foodObj.category = previousCategory
-                this.showQuickView = true
-                confirm("sei sicuro di voler lasciare la pagina")
-                return;
-            }
-        }
-    },
-
     computed: {
         ...mapState(["allFoods"]),
         filterFoods: function () {
@@ -667,7 +651,7 @@ hr {
     .menu-section .box-container .box .content h3 {
         font-size: large !important;
         padding-top: 2%;
-        height: 28px;
+        margin-bottom: 13px;
     }
 
     .menu-section .box-container .box .content .price {

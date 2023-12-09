@@ -2,10 +2,11 @@
     <div class="quick-view">
         <div class="quick-view-inner">
             <h2>Attenzione</h2><br>
-            <h3> Non puoi cambiare pagina se tutti gli articoli non sono confermati
+            <h3> Vuoi rimuovore l'articolo corrente
                 <slot></slot>
             </h3>
-            <button class="btn" @click="sendEventToParent">Ritorna e Conferma</button>
+            <button class="btn" @click="DataParent('si')" style="margin-right: 5%;">Si, rimuovi</button>
+            <button class="btn" @click="DataParent('no')" style="margin-left: 5%;">No, tieni</button>
         </div>
     </div>
 </template>
@@ -19,13 +20,23 @@ export default {
         }
     },
 
+    props: {
+        parentData: Number,
+    },
+
     scrollToTop() {
         window.scrollTo(0, 0);
     },
 
     methods: {
-        sendEventToParent() {
-            this.$emit('childEvent', false);
+        DataParent(where) {
+            console.log('paso con' + this.parentData)
+            const eventData = {
+                event: false,
+                type: where,
+                id: this.parentData,
+            };
+            this.$emit('childEvent', eventData);
         },
     },
 
@@ -71,7 +82,7 @@ export default {
     font-size: 18px;
     margin-top: 5vh;
     margin-bottom: 10px;
-    width: 100%;
+    width: 45%;
 }
 
 @media (max-width: 768px) {

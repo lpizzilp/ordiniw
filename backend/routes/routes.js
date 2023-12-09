@@ -65,7 +65,7 @@ router.delete("/api/foods/:id", deleteFood);
 
 ////////////////////////// USER ////////////////////////////////
 // get all user
-router.get("/api/users/:email", showAUser);
+router.get("/api/users/:name", showAUser);
 
 // create account
 router.post("/api/users/", createAccount);

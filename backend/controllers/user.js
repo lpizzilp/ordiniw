@@ -20,7 +20,7 @@ export const allUsers=(req,res)=>{
 
 // get single user
 export const showAUser = (req,res)=>{
-    getUserByEmail(req.params.email,(err,results)=> {
+    getUserByEmail(req.params.name,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

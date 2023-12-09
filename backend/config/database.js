@@ -2,51 +2,17 @@ import mysql from "mysql2";
 
 // create the connection to database
 
-/*       const db = mysql.createConnection({
-          host: "localhost",
-          user: "root",
-          password: "",
-          database: "db_restaurant"
-      });
-
-
-      db.connect(error => {
-        if (error) throw error;
-        console.log("Successfully connected to the database.");
-      });
- */
-
-//nuova gestione 
-
-var db_config = {
-  host: 'localhost',
-    user: 'root',
+const db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
     password: "",
-    database: 'db_restaurant'
-};
-var db;
+    database: "db_restaurant"
+});
 
-function handleDisconnect() {
-  db = mysql.createConnection(db_config); // Recreate the connection, since
-                                                  // the old one cannot be reused.
 
-  db.connect(function(err) {              // The server is either down
-    if(err) {                                     // or restarting (takes a while sometimes).
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
-    }                                     // to avoid a hot loop, and to allow our node script to
-  });                                     // process asynchronous requests in the meantime.
-                                          // If you're also serving http, display a 503 error.
-  db.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-      handleDisconnect();                         // lost due to either server restart, or a
-    } else {                                      // connnection idle timeout (the wait_timeout
-      throw err;                                  // server variable configures this)
-    }
-  });
-}
-
-handleDisconnect();
+db.connect(error => {
+  if (error) throw error;
+  console.log("Successfully connected to the database.");
+});
 
 export default db;
