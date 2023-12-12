@@ -16,7 +16,10 @@ export const insertBillDetails = (data,result) => {
 
 // get Bill Details
 export const getBillDetails = (id,result) => {
-    db.query("SELECT * FROM billdetails WHERE bill_id = ?",id, (err,results)=> {
+    db.query("SELECT bill_id, b.food_id, item_qty, food_name" + 
+        "  FROM billdetails b, food f " + 
+        " WHERE bill_id = ? "  +
+        "   AND f.food_id = b.food_id"     ,id, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
