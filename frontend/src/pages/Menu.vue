@@ -126,20 +126,27 @@ import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import axios from "axios";
 
+//Sul database
+// Se si aggiunge una nuova category sul database ricordarsi di cambiare il value del rispettivo pulsante
+//Codici database per type:
+// a = solo asporto
+// t = solo tavolo
+// at = entrambi
+
 export default {
     props: ["food"],
     name: "Menu",
 
     data() {
         let categorytype = sessionStorage.getItem('filtro')
-        //let Ordertype = sessionStorage.getItem('Type')
+        let Ordertype = sessionStorage.getItem('Type')
         if (categorytype == null || undefined || "") {
             categorytype = ""
         } else {
             sessionStorage.removeItem('filtro')
         }
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: "" },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype },
             showQuickView: false,
             showDropDown: false,
             matchUser: undefined,
@@ -276,7 +283,7 @@ export default {
                 return food;
             }
         },
-        s: function (e) {
+        filterFoodBtn: function (e) {
             let previousCategory = this.foodObj.category
             let divControl1 = document.getElementsByName("conferma")
             var qtylenght = Object.keys(this.currentPageItems).length;

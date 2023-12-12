@@ -8,10 +8,10 @@
                 </div>
 
                 <div class="btn-type">
-                    <button class="btn" @click="typeOrd('T')">Al tavolo</button>
-                    <button class="btn" @click="typeOrd('A')">Asporto</button>
+                    <button v-if="type === 't'" class="btn">Al tavolo</button>
+                    <button v-else class="btn">Asporto</button>
                 </div>
-
+            <div v-if="type === 't'">
                 <div class="form-group details-group" id="Tavolo">
                     <h4>Dettagli dell'acquirente</h4>
                     <div class="form-group">
@@ -26,7 +26,8 @@
                         <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                     </div>
                 </div>
-
+            </div>
+            <div v-else>
                 <div class="form-group details-group" id="Asporto">
                     <h4>Dettagli dell'acquirente</h4>
                     <div class="form-group">
@@ -35,7 +36,7 @@
                         <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}</p>
                     </div>
                 </div>
-
+            </div>
                 <div class="form-group details-group" id="General">
                     <h4>Payment Method</h4>
                     <div class="form-group">
@@ -47,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="form-group Conf" id="Confirm">
+                <div class="form-group" >
                     <input type="submit" value="Conferma" class="btn" />
                 </div>
                 <div>
@@ -75,6 +76,7 @@ export default {
             itemQuantity: [],
             showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
+            type: sessionStorage.getItem('Type')
         };
     },
     created() {
@@ -140,21 +142,7 @@ export default {
         typeOrd: function (click) {
             if (click === "C") {
                 this.showQuickView = true
-            } else {
-                switch (click) {
-                    case "T":
-                        document.getElementById("Tavolo").style.display = "block";
-                        document.getElementById("Asporto").style.display = "none";
-                        break;
-
-                    case "A":
-                        document.getElementById("Tavolo").style.display = "none";
-                        document.getElementById("Asporto").style.display = "block";
-                        break;
-                }
-                document.getElementById("General").style.display = "block";
-                document.getElementById("Confirm").style.display = "block";
-            }
+            } 
         },
 
         checkEmptyErr: function () {
@@ -172,10 +160,7 @@ export default {
 
         checkForm: function () {
             this.resetCheckErr();
-            var OrdineTav = document.getElementById("Tavolo")
-            var OrdineAsp = document.getElementById("Asporto")
-            if (OrdineTav.style.display === "block") {
-
+            if (this.type === 't') {
                 // Tavolo validate
                 if (!this.checkoutObj.Tavolo) {
                     this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
@@ -187,7 +172,8 @@ export default {
                     this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
                     console.log('errore coperti')
                 }
-            } else if (OrdineAsp.style.display === "block") {
+
+            } else if (this.type === 'a') {
                 // Nominativo validate
                 if (!this.checkoutObj.Nominativo) {
                     this.errorObj.NominativoErr.push("Il campo coperti è oblligatorio");
@@ -217,6 +203,7 @@ export default {
         },
 
         async handleSubmit(e) {
+            console.log('pasos')
             this.checkForm();
             if (!this.checkEmptyErr()) {
                 e.preventDefault();
@@ -352,13 +339,8 @@ export default {
     margin: 0;
 }
 
-div#Confirm {
-    margin: 0;
-    display: none;
-}
-
 .checkout-container .checkout-form-container form .form-group.details-group {
-    display: none;
+    display: block;
     margin-top: 40px;
 }
 
