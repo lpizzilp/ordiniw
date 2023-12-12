@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             Cancelled: false,
-            timer: 3
+            timer: 2
         }
     },
 
@@ -55,6 +55,8 @@ export default {
 
         startTimer() {
             // Decrementa il timer ogni secondo
+            sessionStorage.removeItem('Username')
+            sessionStorage.removeItem('MatchUser')
             this.timerInterval = setInterval(() => {
                 if (this.timer > 0) {
                     this.timer--;

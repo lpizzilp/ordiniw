@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from"></QuickViewFinal>
+        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId"></QuickViewFinal>
     </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
 
     data() {
         return {
-            NumId: 1,
+            NumId: 0,
             from: undefined,
             showQuickView: false
         }
@@ -96,7 +96,8 @@ export default {
     background: #fff;
     margin: 3vh auto;
     padding: 5vh;
-    width: calc(18vh + 10rem);
+    width: 22.5rem;
+    height: 22.5rem;
     border-radius: 50%;
     font-size: 10rem;
     text-align: center;

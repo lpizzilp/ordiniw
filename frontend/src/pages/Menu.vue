@@ -132,6 +132,7 @@ export default {
 
     data() {
         let categorytype = sessionStorage.getItem('filtro')
+        //let Ordertype = sessionStorage.getItem('Type')
         if (categorytype == null || undefined || "") {
             categorytype = ""
         } else {
@@ -275,7 +276,7 @@ export default {
                 return food;
             }
         },
-        filterFoodBtn: function (e) {
+        s: function (e) {
             let previousCategory = this.foodObj.category
             let divControl1 = document.getElementsByName("conferma")
             var qtylenght = Object.keys(this.currentPageItems).length;

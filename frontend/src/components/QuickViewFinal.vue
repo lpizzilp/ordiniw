@@ -8,50 +8,143 @@
             </h3>
             <button class="btn" @click="DataParent('I')" style="margin-right: 5%;">Indietro</button>
             <button class="btn" @click="DataParent('E')" style="margin-left: 5%;">Invia email</button>
-            <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla home</button>
+            <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
-        <div v-else class="quick-view-inner">
-            <h2>Invio Email</h2><br>
+        <div v-else-if="from === 'E'" class="quick-view-inner">
+            <h2 v-if="error === 'Si'">Riprova</h2><br>
+            <h2 v-if="error != 'Si'">Invio Email</h2>
             <h3>Inserisci la tua Email
                 <slot></slot>
             </h3>
-            <form action="process.php" method="post">
-                <input class="email" type="email" id="email" name="email" placeholder="Inserisci la tua email" required>
+            <form @submit.prevent="submitForm">
+                <input class="email" type="email" id="email" name="email" v-model="Dataform.email"
+                    placeholder="Inserisci la tua email" required>
                 <button class="btn" type="submit" style="width: 100%;">Invia</button>
+                <button class="btn" type="reset" @click="DataParent('I')"
+                    style="width: 100%; margin-top: 20px; background-color: #f38304;">Annulla</button>
             </form>
+        </div>
+        <div v-else-if="from === 'I'" class="quick-view-inner">
+            <h2 style="color: #27ae60;">Successo</h2><br>
+            <h3>L' email inviata con successo.<br>Controlla la casella di posta.<br>Puoi abbandonare la pagina
+                <slot></slot>
+            </h3>
+            <button @click="DataParent('E', 'Si')"
+                style="width: 100%; margin-top: 20px; background-color: white; text-align: center; color: #f38304; text-decoration: underline;">
+                <h4>L'email non è arrivata?</h4>
+            </button>
+        </div>
+        <div v-else-if="from === 'D'" class="quick-view-inner">
+            <h2 style="color: #c71b1b;">Errore</h2><br>
+            <h3>Email non inviata<br>Ti consigliamo di fare uno screenshot in attesa che l'assistenza tecnica intervenga.
+                <slot></slot>
+            </h3>
+            <button class="btn" @click="DataParent('I')" style="margin-right: 5%;">Indietro</button>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: "QuickView",
     data() {
         return {
-            from: 'H'
-        };
+            from: 'H',
+            Dataform: { email: "", id: "", data: "" },
+            error: 'N',
+            cartItem: [],
+            itemQuantity: [],
+            timer: 7
+        }
     },
     props: {
         parentData: String,
+        parentId: Number,
     },
 
     created() {
         this.from = this.parentData
+        this.Dataform.id = this.parentId
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var hour = ("0" + (now.getHours())).slice(-2);
+        var min = ("0" + (now.getMinutes())).slice(-2);
+        this.Dataform.data = hour + ":" + min + ' del giorno ' + day + '/' + month + '/' + now.getFullYear();
+
     },
 
     scrollToTop() {
         window.scrollTo(0, 0);
     },
     methods: {
-        async DataParent(where) {
+        //Codici
+        //this.from                 DataParent                          this.Error
+        //H = Banner Home           //H = Rotta Home                    //Si = errore
+        //E = Banner Email          //E = Valorizza From con E
+        //I = Banner Successo       //I = Indietro
+        //D = Banner Errore
+
+
+        async DataParent(where, err) {
             if (where === 'E') {
                 this.from = 'E'
+                this.error = err
             } else if (where === 'I') {
                 this.$emit('childEvent', false);
             } else if (where === 'H') {
+                sessionStorage.removeItem('MatchUser')
+                sessionStorage.removeItem('Username')
                 this.$router.push("/");
             }
-        }
+        },
+
+        async submitForm() {
+            let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+            existItem.data.forEach(element => {
+                this.cartItem.push(element.food_id);
+                this.itemQuantity.push(element.item_qty);
+            });
+
+            let data = {
+                user_email: this.Dataform.email,
+                user_id: this.Dataform.id,
+                ord_data: this.Dataform.data,
+                cart_item: this.cartItem,
+                item_qty: this.itemQuantity
+            }
+
+            await axios.post('/mail/', data)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data === '') {
+                        this.from = 'I'
+                        this.startTimer()
+                    } else {
+                        this.from = 'D'
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore durante l\'invio dell\'email:', error);
+                });
+        },
+
+        startTimer() {
+            sessionStorage.removeItem('MatchUser')
+            sessionStorage.removeItem('Username')
+            // Decrementa il timer ogni secondo
+            this.timerInterval = setInterval(() => {
+                if (this.timer > 0) {
+                    this.timer--;
+                } else {
+                    // Quando il timer raggiunge zero, ferma l'intervallo e reindirizza alla pagina home
+                    clearInterval(this.timerInterval);
+                    this.$router.push("/");
+                }
+            }, 1000);
+        },
     },
 };
 </script>
@@ -87,6 +180,7 @@ export default {
 
 .quick-view .quick-view-inner h3 {
     text-align: center;
+    text-transform: none;
     font-size: 22px;
     color: #000000ae;
 }
@@ -99,9 +193,12 @@ export default {
 }
 
 .email {
+    width: 90%;
+    text-transform: none;
     text-align: center;
-    font-size: large;
-    padding: 3vh;
+    font-size: medium;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
     height: 20px;
     margin: 2vh;
     border-color: black;
@@ -143,7 +240,7 @@ export default {
     .quick-view .quick-view-inner .btn {
         font-size: 16px;
         margin-top: 25px;
-        margin-bottom: 5px;
+        margin-bottom: 0px;
     }
 
 }

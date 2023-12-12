@@ -255,7 +255,7 @@ export default {
                 };
 
                 axios.post("/billstatus", billStatus);
-                axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
+                //axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
                 this.itemQuantity = [];
                 this.$router.push("/thank");

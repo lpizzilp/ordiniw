@@ -11,7 +11,8 @@ import {
 
 import {
     showAUser,
-    createAccount
+    createAccount,
+    SendMail
 } from "../controllers/user.js";
 
 import {
@@ -70,7 +71,8 @@ router.get("/api/users/:name", showAUser);
 // create account
 router.post("/api/users/", createAccount);
 
-
+// send mail
+router.post("/api/mail/", SendMail)
 
 ////////////////////////// CART ////////////////////////////////
 // add to cart

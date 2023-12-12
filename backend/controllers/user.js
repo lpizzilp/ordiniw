@@ -1,6 +1,7 @@
 // import functions from User model
 
 import {
+    Emailsender,
     getAllUser,
     getUserByEmail,
     insertUser
@@ -33,6 +34,18 @@ export const showAUser = (req,res)=>{
 export const createAccount=(req,res)=>{
     const data = req.body;
     insertUser(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+//send mail
+export const SendMail =(req,res)=>{
+    let Uemail = req.body;
+    Emailsender(Uemail,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

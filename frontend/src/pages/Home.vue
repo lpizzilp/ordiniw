@@ -65,56 +65,59 @@
                 </div>-->
             </div>
         </div>
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent"></QuickViewHome>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewHome from "@/components/QuickViewHome.vue";
 import { mapMutations } from "vuex";
 
 export default {
     name: "Home",
-
     data() {
         return {
             loginObj: { name: "", email: "exemple.exemple@gmail.com", phone: "+390000000000", pass: "Utente1", birth: "11223333", gen: "male" },
             matchUser: undefined,
             errors: [],
-        }
+            showQuickVue: false
+        };
     },
-
     methods: {
         ...mapMutations(["setUser"]),
-
         scrollToTop() {
             window.scrollTo(0, 0);
         },
 
+        handleChildEvent(){
+            this.showQuickVue = false
+            this.$router.push("/menu");
+        },
+
         randomizza() {
             var numeriGenerati = new Set();
-        
             // Funzione per generare un numero casuale unico
             function generaNumeroUnico() {
                 var numeroCasuale = Math.floor(Math.random() * 999999999) + 1;
                 if (numeriGenerati.has(numeroCasuale)) {
                     return generaNumeroUnico();
-                } else {
+                }
+                else {
                     numeriGenerati.add(numeroCasuale);
                     return numeroCasuale;
                 }
             }
-
             var numeroUnico = generaNumeroUnico();
             return numeroUnico;
         },
-
         // Punto dove inserisce user
-
         async handleSubmit(type) {
+            this.showQuickVue = true
             this.errors = [];
-            console.log("passo handle")
-            var idR = this.randomizza()
-            this.loginObj.name = "Utente" + idR
+            console.log("passo handle");
+            var idR = this.randomizza();
+            this.loginObj.name = "Utente" + idR;
             let datareg = {
                 user_id: idR,
                 user_name: this.loginObj.name,
@@ -123,13 +126,12 @@ export default {
                 user_password: this.loginObj.pass,
                 user_birth: this.loginObj.birth,
                 user_gender: this.loginObj.gen
-            }
+            };
             await axios.post("/users/", datareg);
-
             let data = await axios.get('/users/' + this.loginObj.name);
             this.matchUser = data.data;
             if (!this.matchUser) {
-                this.errors.push("Incorrect email or password!")
+                this.errors.push("Incorrect email or password!");
             }
             else {
                 if (this.matchUser.user_password === this.loginObj.pass) {
@@ -137,15 +139,13 @@ export default {
                     this.setUser(this.matchUser);
                     sessionStorage.setItem('Username', this.matchUser.user_id);
                     sessionStorage.setItem('MatchUser', this.matchUser);
-                    console.log(sessionStorage.getItem('Username'))
-                    sessionStorage.setItem('filtro', type)
-                    this.$router.push("/menu")
-
+                    console.log(sessionStorage.getItem('Username'));
+                    sessionStorage.setItem('filtro', type);
                 }
             }
-        }
-
-    }
+        },
+    },
+    components: { QuickViewHome }
 };
 </script>
 

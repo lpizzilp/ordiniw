@@ -221,6 +221,8 @@ export default {
         },
 
         checkOutBtn: function () {
+            this.cartItem = [];
+            this.itemQuantity = [];
             this.$router.push("/checkout");
         },
 
