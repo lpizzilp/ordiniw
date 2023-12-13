@@ -126,20 +126,27 @@ import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import axios from "axios";
 
+//Sul database
+// Se si aggiunge una nuova category sul database ricordarsi di cambiare il value del rispettivo pulsante
+//Codici database per type:
+// a = solo asporto
+// t = solo tavolo
+// at = entrambi
+
 export default {
     props: ["food"],
     name: "Menu",
 
     data() {
         let categorytype = sessionStorage.getItem('filtro')
-        //let Ordertype = sessionStorage.getItem('Type')
+        let Ordertype = sessionStorage.getItem('Type')
         if (categorytype == null || undefined || "") {
             categorytype = ""
         } else {
             sessionStorage.removeItem('filtro')
         }
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: "" },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype },
             showQuickView: false,
             showDropDown: false,
             matchUser: undefined,
@@ -151,6 +158,7 @@ export default {
             CartItem: [],
             perPage: 25,
             pageNum: 0,
+            timer: 0.25
         };
     },
 
@@ -276,7 +284,7 @@ export default {
                 return food;
             }
         },
-        s: function (e) {
+        filterFoodBtn: function (e) {
             let previousCategory = this.foodObj.category
             let divControl1 = document.getElementsByName("conferma")
             var qtylenght = Object.keys(this.currentPageItems).length;
@@ -299,12 +307,6 @@ export default {
             }
         },
 
-        addItem: function (index) {
-            this.sendId = parseInt(this.currentPageItems[index].food_id);
-            this.showCounterCart = !this.showCounterCart;
-        },
-
-
         displayFilterDrop: function () {
             let divControl1 = document.getElementsByClassName("filter-heading");
             let divControl2 = document.getElementsByClassName("filter-section");
@@ -322,17 +324,31 @@ export default {
         },
 
         onQtyChange: function (index) {
-            let divControl1 = document.getElementsByName("conferma");
-            divControl1[index].style.display = "block";
+            clearInterval(this.timerInterval);
+            // let divControl1 = document.getElementsByName("conferma");
+            //divControl1[index].style.display = "block";
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
             }
+
+            this.timerInterval = setInterval(() => {
+                if (this.timer > 0) {
+                    this.timer--;
+                } else {
+                    // Quando il timer raggiunge zero, ferma l'intervallo e inserisci nel carrello
+                    clearInterval(this.timerInterval);
+                    console.log(index + ' art confermato ' + this.qty[index] + ' con questa quantità')
+                    this.addToCart(index)
+                }
+            }, 250);
+
+
             this.setqty = true
         },
 
         async addToCart(index) {
-            let divControl1 = document.getElementsByName("conferma")
-            divControl1[index].style.display = "none";
+            // let divControl1 = document.getElementsByName("conferma")
+            //divControl1[index].style.display = "none";
 
             this.sendId = parseInt(this.currentPageItems[index].food_id);
             this.showCounterCart = !this.showCounterCart;

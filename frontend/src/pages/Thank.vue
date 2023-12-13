@@ -18,7 +18,8 @@
             </div>
         </div>
 
-        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId"></QuickViewFinal>
+        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId">
+        </QuickViewFinal>
     </div>
 </template>
 
@@ -41,6 +42,11 @@ export default {
         this.getnumid()
     },
 
+    beforeUnmount() {
+        sessionStorage.removeItem('MatchUser')
+        sessionStorage.removeItem('Username')
+    },
+
     methods: {
         async getnumid() {
             let bill = await axios.get('/billstatus/user/' + sessionStorage.getItem('Username'))
@@ -54,7 +60,7 @@ export default {
         },
 
         Btnclick(click) {
-            this.from = click 
+            this.from = click
             this.showQuickView = true
         },
 
@@ -149,4 +155,5 @@ export default {
         margin-top: 1vh;
         margin-bottom: 2vh;
     }
-}</style>
+}
+</style>

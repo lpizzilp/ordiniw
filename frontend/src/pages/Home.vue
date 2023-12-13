@@ -3,13 +3,13 @@
         <div class="home-main">
             <div class="content">
                 <span>Benvenuti a vigonovo!</span>
-                <h3>Ordina le nostre gustose pietanze 😋</h3>
+                <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
                 <button @click="handleSubmit('')" class="btn">Inizia a ordinare</button>
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
-               <!-- <img src="../assets/images/a.png" alt="" class="home-parallax-img">-->
+                <!-- <img src="../assets/images/a.png" alt="" class="home-parallax-img">-->
             </div>
         </div>
 
@@ -38,12 +38,14 @@
             <div class="content">
                 <span>Esagra, il gestionale sagre</span>
                 <h3 class="title">Esagra, il gestionale sagre per tutte le esigenze</h3>
-                <p>Cerchi un software completo ed efficente per gestire al meglio la tua sagra? Esagra è gestionale per feste paesane ed eventi che offrono al pubblico un servizio di ristorazione. È stato progettato all’insegna della massima flessibilità e semplicità d'utilizzo,in modo da adattarsi alle necessità della manifestazione. Nasce dall’esperienza diretta vissuta 
-                    all’interno delle pro loco e non si limita a recepire le attuali esigenze ma propone attivamente nuovi ed efficienti processi di gestione.              
+                <p>Cerchi un software completo ed efficente per gestire al meglio la tua sagra? Esagra è gestionale per
+                    feste paesane ed eventi che offrono al pubblico un servizio di ristorazione. È stato progettato
+                    all’insegna della massima flessibilità e semplicità d'utilizzo,in modo da adattarsi alle necessità della
+                    manifestazione.
                 </p>
                 <a href="http://esagra.it" target="_blank" @click="scrollToTop()" class="btn">Scoprì di più</a>
 
-               <!-- <div class="icons-container">
+                <!-- <div class="icons-container">
                     <div class="icons">
                         <img src="../assets/images/serv-2.png" alt="">
                         <h3>Ottimo cibo</h3>
@@ -65,7 +67,7 @@
                 </div>-->
             </div>
         </div>
-        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent"></QuickViewHome>
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :typeData="Filtertype"></QuickViewHome>
     </div>
 </template>
 
@@ -81,7 +83,8 @@ export default {
             loginObj: { name: "", email: "exemple.exemple@gmail.com", phone: "+390000000000", pass: "Utente1", birth: "11223333", gen: "male" },
             matchUser: undefined,
             errors: [],
-            showQuickVue: false
+            showQuickVue: false,
+            Filtertype: undefined
         };
     },
     methods: {
@@ -90,30 +93,8 @@ export default {
             window.scrollTo(0, 0);
         },
 
-        handleChildEvent(){
-            this.showQuickVue = false
-            this.$router.push("/menu");
-        },
-
-        randomizza() {
-            var numeriGenerati = new Set();
-            // Funzione per generare un numero casuale unico
-            function generaNumeroUnico() {
-                var numeroCasuale = Math.floor(Math.random() * 999999999) + 1;
-                if (numeriGenerati.has(numeroCasuale)) {
-                    return generaNumeroUnico();
-                }
-                else {
-                    numeriGenerati.add(numeroCasuale);
-                    return numeroCasuale;
-                }
-            }
-            var numeroUnico = generaNumeroUnico();
-            return numeroUnico;
-        },
-        // Punto dove inserisce user
-        async handleSubmit(type) {
-            this.showQuickVue = true
+        async handleChildEvent(type) {
+            this.showQuickVue = type.vis
             this.errors = [];
             console.log("passo handle");
             var idR = this.randomizza();
@@ -140,9 +121,32 @@ export default {
                     sessionStorage.setItem('Username', this.matchUser.user_id);
                     sessionStorage.setItem('MatchUser', this.matchUser);
                     console.log(sessionStorage.getItem('Username'));
-                    sessionStorage.setItem('filtro', type);
+                    sessionStorage.setItem('filtro', type.typefilter);
+                    this.$router.push("/menu");
                 }
             }
+        },
+
+        randomizza() {
+            var numeriGenerati = new Set();
+            // Funzione per generare un numero casuale unico
+            function generaNumeroUnico() {
+                var numeroCasuale = Math.floor(Math.random() * 999999999) + 1;
+                if (numeriGenerati.has(numeroCasuale)) {
+                    return generaNumeroUnico();
+                }
+                else {
+                    numeriGenerati.add(numeroCasuale);
+                    return numeroCasuale;
+                }
+            }
+            var numeroUnico = generaNumeroUnico();
+            return numeroUnico;
+        },
+        // Punto dove inserisce user
+        async handleSubmit(type) {
+            this.Filtertype = type
+            this.showQuickVue = true
         },
     },
     components: { QuickViewHome }
@@ -359,7 +363,8 @@ export default {
     padding: 1rem 0;
     line-height: 2;
     font-size: 2rem;
-    color: #000000a8;
+    color: #000000d1;
+    text-transform: none;
 }
 
 .home-about .content .icons-container {
