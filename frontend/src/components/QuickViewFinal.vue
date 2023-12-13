@@ -59,6 +59,7 @@ export default {
             timer: 7
         }
     },
+    
     props: {
         parentData: String,
         parentId: Number,

@@ -20,6 +20,10 @@ export default {
         }
     },
 
+    props: {
+        typeData: String,
+    },
+
     scrollToTop() {
         window.scrollTo(0, 0);
     },
@@ -28,7 +32,11 @@ export default {
         DataParent(where) {
             sessionStorage.setItem('Type', where)
             console.log(sessionStorage.getItem('Type'))
-            this.$emit('childEvent', false);
+            const dataforParent = {
+                vis: false,
+                typefilter: this.typeData
+            }
+            this.$emit('childEvent', dataforParent);
         },
     },
 
