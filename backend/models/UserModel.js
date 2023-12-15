@@ -50,15 +50,25 @@ export const Emailsender = (data, result) => {
         },
     });
 
+
     const emailText = `
-        <p style="text-align:left; font-size:16px;">Buongiorno gentile cliente,<br>
-        Questa è l' email inviata da ordini.esagra.it alle ` + data.ord_data + ` riqurdo il tuo ordine online,<br>volevamo ricordarti che il codice per il pagamento del tuo ordine è:</p><br><h2 style="text-align:center; font-size:70px; color:#27ae60; ma">` + data.user_id + `</h2>
-        <p style="text-align:left; font-size:16px;">La ringraziamo per aver uttilizzato il nostro servizio online.</p>
-        <hr style="border: 2px dotted #999933; margin-bottom:10px;">
-        <hr>
-        <hr style="border: 2px dotted #999933; margin-top:10px;">
-        <p style="text-align:left; font-size:16px;">In caso di qualsiasi problematica qui sotto riportiamo gli articoli che hai ordinato:</p>
-        `;
+        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 8px; padding-botton: 8px; border-radius: 10px">
+            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Grazie</p>
+            <p style="text-align: center; font-size:18px;">Buongiorno gentile cliente<br>Questa è l' email inviata da ordini.esagra.it alle ` + data.ord_data + ` riqurdo il tuo ordine online,
+            volevamo ricordarle che il codice per il pagamento del tuo ordine è:</p>
+            <h2 style="text-align:center; font-size:60px; padding-top: 10px; padding-botton: 10px; color:#27ae60; whidth:100%; background-color: #fff;">N.`  + data.user_id + `</h2>
+            <p style="text-align:left; font-size:18px;">Le ricordiamo che questo <strong>non è il numero eliminacode</strong>, serve per identificare l'ordine che ha eseguito e quindi procere al pagamento in cassa.<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
+            <hr style="border: 2px dashed #27ae60;">
+        </div>
+            <p style="background-color:#fff;"><br><br></p>
+        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
+            <hr style="border: 2px dashed #27ae60;">
+            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Articoli Ordinati</p>
+            <p style="text-align:center; font-size:20px;">In caso di qualsiasi problematica qui sotto riportiamo gli articoli che hai ordinato:</p>
+            <br>
+            <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item + `</td></tr></table>
+            <p style="text-align:left; font-size:16px;">Per qualsiasi problema e mal funzionamento riscontrato nell'utilizzo dell'ordinazione online avverta l'operatore di cassa</p>
+        </div>`;
 
     const mailOptions = {
         from: 'giulio.pizzinato@gmail.com',
@@ -82,5 +92,4 @@ export const Emailsender = (data, result) => {
     });
 
 };
-
 

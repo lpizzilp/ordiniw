@@ -11,11 +11,18 @@
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'E'" class="quick-view-inner">
-            <h2 v-if="error === 'Si'">Riprova</h2><br>
-            <h2 v-if="error != 'Si'">Invio Email</h2>
-            <h3>Inserisci la tua Email
-                <slot></slot>
-            </h3>
+            <div v-if="error === 'Si'">
+                <h2>Riprova</h2><br>
+                <h3>Controlla che l'email sia corretta
+                    <slot></slot>
+                </h3>
+            </div>
+            <div v-else>
+                <h2>Invio Email</h2>
+                <h3>Inserisci la tua Email
+                    <slot></slot>
+                </h3>
+            </div>
             <form @submit.prevent="submitForm">
                 <input class="email" type="email" id="email" name="email" v-model="Dataform.email"
                     placeholder="Inserisci la tua email" required>
@@ -54,12 +61,12 @@ export default {
             from: 'H',
             Dataform: { email: "", id: "", data: "" },
             error: 'N',
-            cartItem: [],
+            Item: [],
             itemQuantity: [],
             timer: 7
         }
     },
-    
+
     props: {
         parentData: String,
         parentId: Number,
@@ -102,21 +109,19 @@ export default {
             }
         },
 
-        async submitForm() {
-            let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-            existItem.data.forEach(element => {
-                this.cartItem.push(element.food_id);
-                this.itemQuantity.push(element.item_qty);
+        async submitForm() {  
+            let billitem = await axios.get('/billdetails/' + this.Dataform.id)
+            billitem.data.forEach(element => {
+                this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:18px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:18px; text-align: center;">' +  element.item_qty);
             });
-
             let data = {
                 user_email: this.Dataform.email,
-                user_id: this.Dataform.id,
+                user_matchuser: sessionStorage.getItem('MatchUser'),
+                user_name: sessionStorage.getItem('Username'),
+                ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
-                cart_item: this.cartItem,
-                item_qty: this.itemQuantity
+                ord_item: this.Item,
             }
-
             await axios.post('/mail/', data)
                 .then(response => {
                     console.log(response.data);
@@ -129,6 +134,7 @@ export default {
                 })
                 .catch(error => {
                     console.error('Errore durante l\'invio dell\'email:', error);
+                    this.from = 'D'
                 });
         },
 
