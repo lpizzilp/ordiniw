@@ -26,8 +26,10 @@ for (var i = 0; i < parametri.length; i++) {
 }
 
 // Ora puoi accedere ai valori dei parametri
-console.log(parametriObj.parametro1);
-console.log(parametriObj.parametro2);
+console.log(parametriObj.match);
+console.log(parametriObj.user);
+console.log(parametriObj.id)
+console.log(parametriObj.type)
 
 import axios from 'axios';
 export default {
@@ -40,24 +42,30 @@ export default {
     },
 
     created() {
-        this.getBillItem();
+        console.log('ciao')
+        this.getBillItem()
     },
 
 
     methods: {
         async getBillItem() {
-            sessionStorage.setItem('MatchUser', parametriObj.parametro1)
-            sessionStorage.setItem('Username', parametriObj.parametro2)
-            let billdata = await axios.get('/cartItem/' + sessionStorage.getItem('Username'))
-            for (let i = 0; i < billdata.length; i++) {
+            sessionStorage.setItem('MatchUser', parametriObj.match)
+            sessionStorage.setItem('Username', parametriObj.user)
+            sessionStorage.setItem('filtro', "")
+            sessionStorage.setItem('Type', parametriObj.type)
+            let billitem = await axios.get('/billdetails/' + parametriObj.id)
+            console.log(billitem.data.length)
+            for (let i = 0; i < billitem.data.length; i++) {
                 let data = {
                     user_id: parseInt(sessionStorage.getItem('Username')),
-                    food_id: parseInt(billdata.data.food_id),
-                    item_qty: parseInt(this.qty[i])
+                    food_id: parseInt(billitem.data[i].food_id),
+                    item_qty: parseInt(billitem.data[i].item_qty)
                 }
-
-                await axios.put("/cartItem/", data);
+                console.log(data)
+                await axios.post("/cartItem/", data);
             }
+
+            this.$router.push("/cart")
         },
     }
 }

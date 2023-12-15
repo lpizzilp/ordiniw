@@ -105,6 +105,7 @@ export default {
             } else if (where === 'H') {
                 sessionStorage.removeItem('MatchUser')
                 sessionStorage.removeItem('Username')
+                sessionStorage.removeItem('Type')
                 this.$router.push("/");
             }
         },
@@ -114,10 +115,10 @@ export default {
             billitem.data.forEach(element => {
                 this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:18px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:18px; text-align: center;">' +  element.item_qty);
             });
+
             let data = {
                 user_email: this.Dataform.email,
-                user_matchuser: sessionStorage.getItem('MatchUser'),
-                user_name: sessionStorage.getItem('Username'),
+                user_data: "http://" + window.location.hostname.toString() + ":8082/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('Type'),
                 ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,

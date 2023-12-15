@@ -42,9 +42,11 @@ export default {
         this.getnumid()
     },
 
+
     beforeUnmount() {
         sessionStorage.removeItem('MatchUser')
         sessionStorage.removeItem('Username')
+        sessionStorage.removeItem('Type')
     },
 
     methods: {
