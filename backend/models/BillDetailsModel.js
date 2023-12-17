@@ -28,3 +28,15 @@ export const getBillDetails = (id,result) => {
         }
     });
 };
+
+//delete Bill Details
+export const deleteBill = (id,result) => {
+    db.query("DELETE FROM billdetails WHERE bill_id = ?",[id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

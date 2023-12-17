@@ -209,6 +209,10 @@ export default {
                 e.preventDefault();
             }
             else {
+                if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                    axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
+                    axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
+                } 
                 e.preventDefault();
                 let billId = (await axios.get("/billstatus/new")).data;
                 if (billId == "") {
@@ -245,6 +249,7 @@ export default {
                 axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
                 this.itemQuantity = [];
+                sessionStorage.setItem('Bill', billStatus.bill_id)
                 this.$router.push("/thank");
             }
 
