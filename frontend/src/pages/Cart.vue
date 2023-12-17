@@ -35,7 +35,7 @@
                             <div v-else>
                                 <div v-for="(f, index) in filterFoods" :key="index">
                                     <div class="box-content row">
-                                        <div class="image-box col-sm-3" style="padding-left: 0;">
+                                        <div v-if="f.food_src != null" class="image-box col-sm-3" style="padding-left: 0;">
                                             <img :src="require(`../assets/images/${f.food_src}`)" alt=""
                                                 class="cart-product-img" />
                                         </div>

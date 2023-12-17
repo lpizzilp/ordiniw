@@ -66,7 +66,7 @@
                     <div v-for="(f, index) in currentPageItems" :key="index">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div class="image">
+                            <div v-if="f.food_src != null" class="image">
                                 <img :src="require(`../assets/images/${f.food_src}`)" alt="" />
                             </div>
                             <div class="content">
