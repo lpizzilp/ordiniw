@@ -2,7 +2,7 @@
     <div>
         <div class="home-main">
             <div class="content">
-                <span>Benvenuti a vigonovo!</span>
+                <span>Benvenuti!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
                 <button @click="handleSubmit('')" class="btn">Inizia a ordinare</button>

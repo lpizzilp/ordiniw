@@ -8,8 +8,8 @@
         </div>
 
         <div class="thank-letter">
-            <p>Abbiamo confermato il pagamento<br>
-                Utilizza il codice sopprastante per effettuare il pagamento in cassa.
+            <p>Abbiamo inserito l'ordine provisorio<br>
+                Utilizza il codice sopprastante per confermare l'ordine in cassa.
             </p>
             <div class="end-button">
                 <button class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un Email</button>

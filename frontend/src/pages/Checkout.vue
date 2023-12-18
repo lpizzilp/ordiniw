@@ -25,6 +25,13 @@
                             class="form-control" v-model="checkoutObj.Coperti" />
                         <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                     </div>
+
+                    <div class="form-group">
+                        <input type="text" name="Nominativo" id="Nominativo" placeholder="Campo nominativo, non obbligatorio"
+                            class="form-control" v-model="checkoutObj.Nominativo" />
+                        <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}</p>
+                    </div>
+
                 </div>
             </div>
             <div v-else>
@@ -113,7 +120,7 @@ export default {
             let discount = 0;
             let delivery = 0;
             for (let i = 0; i < this.itemQuantity.length; i++) {
-                subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
+                subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]
             }
             let total = subtotal
             return [subtotal, discount, delivery, total];
@@ -184,15 +191,6 @@ export default {
 
         },
 
-        isType: function () {
-            if (!this.checkoutObj.Tavolo) {
-                return this.checkoutObj.Nominativo;
-            }
-            else if (!this.checkoutObj.Nominativo) {
-                return this.checkoutObj.Tavolo;
-            }
-        },
-
         async sendBillDetails(billId, foodId, qty) {
             let billDetails = {
                 bill_id: parseInt(billId),
@@ -234,15 +232,16 @@ export default {
                 let billStatus = {
                     bill_id: parseInt(billId),
                     user_id: parseInt(sessionStorage.getItem('Username')),
-                    bill_phone: this.isType(),
-                    bill_address: this.checkoutObj.Coperti,
+                    bill_tavolo: this.checkoutObj.Tavolo,
+                    bill_coperti: this.checkoutObj.Coperti,
                     bill_when: currentTime,
                     bill_method: this.checkoutObj.paymentMethod,
                     bill_discount: parseInt(this.calculateSummaryPrice()[1]),
                     bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
-                    bill_total: parseInt(this.calculateSummaryPrice()[3]),
+                    bill_total: parseFloat(this.calculateSummaryPrice()[3]),
                     bill_paid: "false",
-                    bill_status: 1
+                    bill_status: 1,
+                    bill_nominativo: this.checkoutObj.Nominativo
                 };
 
                 axios.post("/billstatus", billStatus);

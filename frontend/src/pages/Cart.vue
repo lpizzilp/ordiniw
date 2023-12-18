@@ -3,7 +3,7 @@
 
         <div class="heading">
             <span>Carrello</span>
-            <h3>Ottimi prodotti, clienti soddisfatti</h3>
+            <h3>Conferma l'ordine premendo "Checkout"</h3>
         </div>
 
         <div class="container">
@@ -90,8 +90,8 @@
 
                         <div class="box-content row">
                             <div v-if="Isuser">
-                                <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Continua a
-                                    comprare</router-link>
+                                <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Aggiungi
+                                    articoli</router-link>
                             </div>
                             <div v-else>
                                 <router-link to="/" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Inizia a
@@ -117,7 +117,7 @@
                                         Checkout</button>
                                     <button class="btn cancel-btn" @click="cancelBtn(false)"
                                         :disabled="filterFoods.length ? false : true">
-                                        Annulla</button>
+                                        Annulla ordine</button>
                                 </div>
                             </div>
                         </div>
@@ -181,13 +181,13 @@ export default {
         },
 
         calculateItemPrice: function (index) {
-            return ((parseInt(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
+            return ((parseFloat(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
         },
 
         calculateSummaryPrice: function () {
             let subtotal = 0;
             for (let i = 0; i < this.itemQuantity.length; i++) {
-                subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
+                subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]
             }
             let total = subtotal;
             return [subtotal, total];

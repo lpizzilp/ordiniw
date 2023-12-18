@@ -2,7 +2,7 @@
     <div class="quick-view">
         <div v-if="from === 'H'" class="quick-view-inner">
             <h2>Sei sicuro?</h2><br>
-            <h3>Il codice è essenziale per effettuare il pagamento. Ti consigliamo di farti
+            <h3>Il codice è essenziale per presentarti alle casse. Ti consigliamo di farti
                 inviare un email o in alternativa di fare uno screenshot.
                 <slot></slot>
             </h3>
@@ -33,7 +33,7 @@
         </div>
         <div v-else-if="from === 'I'" class="quick-view-inner">
             <h2 style="color: #27ae60;">Successo</h2><br>
-            <h3>L' email inviata con successo.<br>Controlla la casella di posta.<br>Puoi abbandonare la pagina
+            <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.<br>Puoi abbandonare la pagina
                 <slot></slot>
             </h3>
             <button @click="DataParent('E', 'Si')"
@@ -84,6 +84,10 @@ export default {
 
     },
 
+    beforeUnmount() {
+        clearInterval(this.timerInterval);
+    },
+
     scrollToTop() {
         window.scrollTo(0, 0);
     },
@@ -110,11 +114,13 @@ export default {
             }
         },
 
-        async submitForm() {  
+        async submitForm() {
             let billitem = await axios.get('/billdetails/' + this.Dataform.id)
             billitem.data.forEach(element => {
-                this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:18px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:18px; text-align: center;">' +  element.item_qty);
+                console.log(element)
+                    this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">' + parseInt(element.item_qty));
             });
+
 
             let data = {
                 user_email: this.Dataform.email,
