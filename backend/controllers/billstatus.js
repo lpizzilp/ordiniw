@@ -6,7 +6,8 @@ import {
     getAll,
     updateStatus,
     updatePaid,
-    cancelStatus
+    cancelStatus,
+    deleteBillById
 } from "../models/BillStatusModel.js";
 
 // get newest Bill Status
@@ -91,6 +92,17 @@ export const updateBillPaid=(req,res)=>{
 // cancel Status
 export const cancelBillStatus=(req,res)=>{
     cancelStatus(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const deleteBill=(req,res)=>{
+    const id = req.params.id;
+    deleteBillById (id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

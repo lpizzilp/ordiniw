@@ -8,8 +8,8 @@
         </div>
 
         <div class="thank-letter">
-            <p>Abbiamo confermato il pagamento<br>
-                Utilizza il codice sopprastante per effettuare il pagamento in cassa.
+            <p>Abbiamo inserito l'ordine provisorio<br>
+                Utilizza il codice sopprastante per confermare l'ordine in cassa.
             </p>
             <div class="end-button">
                 <button class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un Email</button>
@@ -25,7 +25,6 @@
 
 
 <script>
-import axios from 'axios';
 import QuickViewFinal from "@/components/QuickViewFinal.vue";
 export default {
     name: 'Thank',
@@ -39,7 +38,7 @@ export default {
     },
 
     created() {
-        this.getnumid()
+        this.NumId = parseInt(sessionStorage.getItem('Bill'))
     },
 
 
@@ -47,20 +46,10 @@ export default {
         sessionStorage.removeItem('MatchUser')
         sessionStorage.removeItem('Username')
         sessionStorage.removeItem('Type')
+        sessionStorage.removeItem('Bill')
     },
 
     methods: {
-        async getnumid() {
-            let bill = await axios.get('/billstatus/user/' + sessionStorage.getItem('Username'))
-            if (bill.data.length > 0) {
-                let i = bill.data.length - 1
-                this.NumId = bill.data[i].bill_id
-            } else {
-                this.NumId = bill.data[0].bill_id
-            }
-            console.log(this.NumId)
-        },
-
         Btnclick(click) {
             this.from = click
             this.showQuickView = true

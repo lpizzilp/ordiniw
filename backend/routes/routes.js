@@ -29,7 +29,7 @@ import {
 } from "../controllers/booktable.js";
 
 import {
-    createBillDetails,getBillDetailsById
+    createBillDetails,deleteBillById,getBillDetailsById
 } from "../controllers/billdetails.js";
 
 import {
@@ -40,7 +40,8 @@ import {
     getAllBills,
     updateBillStatus,
     updateBillPaid,
-    cancelBillStatus
+    cancelBillStatus,
+    deleteBill
 } from "../controllers/billstatus.js";
 
 // init express router
@@ -103,6 +104,7 @@ router.post("/api/booking", createBooking);
 ////////////////////////// Bill Details ////////////////////////////////
 router.post("/api/billdetails", createBillDetails);
 router.get("/api/billdetails/:id", getBillDetailsById);
+router.delete("/api/billdetails/delete/:id", deleteBillById)
 
 
 
@@ -115,6 +117,7 @@ router.get("/api/billstatus", getAllBills);
 router.put("/api/billstatus/:id", updateBillStatus);
 router.put("/api/billstatus/paid/:id", updateBillPaid);
 router.put("/api/billstatus/cancel/:id", cancelBillStatus);
+router.delete("/api/billstatus/delete/:id", deleteBill)
 
 
 

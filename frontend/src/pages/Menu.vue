@@ -31,16 +31,16 @@
 
 
                         <li>
-                            <input type="button" name="cbStatus" id="ooStatus" value="pasta" hidden
+                            <input type="button" name="cbStatus" id="ooStatus" value="primi" hidden
                                 @click="filterFoodBtn($event)" />
-                            <label for="ooStatus" class="d-flex justify-content-between">Pasta</label>
+                            <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
                         </li>
 
 
                         <li>
-                            <input type="button" name="cbStatus" id="soStatus" value="carne" hidden
+                            <input type="button" name="cbStatus" id="soStatus" value="cucina" hidden
                                 @click="filterFoodBtn($event)" />
-                            <label for="soStatus" class="d-flex justify-content-between">Carne</label>
+                            <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
                         </li>
 
 
@@ -51,7 +51,7 @@
                         </li> -->
 
                         <li>
-                            <input type="button" name="cbStatus" id="ndStatus" value="bevande" hidden
+                            <input type="button" name="cbStatus" id="ndStatus" value="bar" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
                         </li>
@@ -70,7 +70,7 @@
                                 <img :src="require(`../assets/images/${f.food_src}`)" alt="" />
                             </div>
                             <div class="content">
-                                <h3>{{ f.food_name }}</h3>
+                                <h3>{{ f.food_name.substring(0, 19) }}</h3>
                                 <div class="desc">
                                     <p>{{ f.food_desc }}</p>
                                 </div>

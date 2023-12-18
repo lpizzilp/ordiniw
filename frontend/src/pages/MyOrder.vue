@@ -30,6 +30,7 @@ console.log(parametriObj.match);
 console.log(parametriObj.user);
 console.log(parametriObj.id)
 console.log(parametriObj.type)
+console.log(parametriObj.bill_id)
 
 import axios from 'axios';
 export default {
@@ -53,6 +54,7 @@ export default {
             sessionStorage.setItem('Username', parametriObj.user)
             sessionStorage.setItem('filtro', "")
             sessionStorage.setItem('Type', parametriObj.type)
+            sessionStorage.setItem('Bill', parametriObj.bill_id)
             let billitem = await axios.get('/billdetails/' + parametriObj.id)
             console.log(billitem.data.length)
             for (let i = 0; i < billitem.data.length; i++) {
