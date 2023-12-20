@@ -31,14 +31,14 @@
 
 
                         <li>
-                            <input type="button" name="cbStatus" id="ooStatus" value="primi" hidden
+                            <input type="button" name="cbStatus" id="ooStatus" value="P" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
                         </li>
 
 
                         <li>
-                            <input type="button" name="cbStatus" id="soStatus" value="cucina" hidden
+                            <input type="button" name="cbStatus" id="soStatus" value="C" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
                         </li>
@@ -51,7 +51,7 @@
                         </li> -->
 
                         <li>
-                            <input type="button" name="cbStatus" id="ndStatus" value="bar" hidden
+                            <input type="button" name="cbStatus" id="ndStatus" value="B" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
                         </li>
@@ -116,12 +116,10 @@
                 </div>
             </div>
         </div>
-        <QuickView v-if="showQuickView" @childEvent="handleChildEvent"></QuickView>
     </div>
 </template>
 
 <script>
-import QuickView from "@/components/QuickView.vue";
 import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import axios from "axios";
@@ -388,8 +386,7 @@ export default {
     },
 
     components: {
-        VueBasicAlert,
-        QuickView
+        VueBasicAlert
     }
 };
 </script>

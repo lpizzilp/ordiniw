@@ -45,11 +45,11 @@
                 </div>
             </div>
                 <div class="form-group details-group" id="General">
-                    <h4>Payment Method</h4>
+                    <h4>Pagamento</h4>
                     <div class="form-group">
                         <div class="form-group">
                             <input type="radio" name="payment" value="cash" id="paymentCash" checked="checked" />
-                            <span>Cash</span>
+                            <span>Pagamento in cassa</span>
                             <p class="error-mess" v-if="errorObj.payErr.length > 0">{{ errorObj.payErr[0] }}</p>
                         </div>
                     </div>
@@ -297,8 +297,8 @@ export default {
     margin: 0.7rem 0;
     border-radius: 0.5rem;
     background: #f7f7f7;
-    padding: 2rem 1.2rem;
-    font-size: 1.6rem;
+    padding: 2.2rem 1.2rem;
+    font-size: 1.8rem;
     color: #130f40;
     text-transform: none;
     width: 100%;

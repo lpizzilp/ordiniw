@@ -2,7 +2,7 @@
     <div>
         <div class="home-main">
             <div class="content">
-                <span>Benvenuti!</span>
+                <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
                 <button @click="handleSubmit('')" class="btn">Inizia a ordinare</button>
@@ -15,17 +15,17 @@
 
 
         <div class="home-category">
-            <button @click="handleSubmit('pasta')" class="box">
+            <button @click="handleSubmit('P')" class="box">
                 <img src="../assets/images/pasta-img.png" alt="">
-                <h3>Pasta</h3>
+                <h3>Primi</h3>
             </button>
 
-            <button @click="handleSubmit('carne')" class="box">
+            <button @click="handleSubmit('C')" class="box">
                 <img src="../assets/images/grigliata-img.png" alt="">
-                <h3>Carne</h3>
+                <h3>Cucina</h3>
             </button>
 
-            <button @click="handleSubmit('bevande')" class="box">
+            <button @click="handleSubmit('B')" class="box">
                 <img src="../assets/images/coca-img.png" alt="">
                 <h3>Bevande</h3>
             </button>
@@ -72,6 +72,15 @@
 </template>
 
 <script>
+var queryString = window.location.search;
+queryString = queryString.substring(1);
+var parametri = queryString.split("&");
+var parametriObj = {};
+for (var i = 0; i < parametri.length; i++) {
+    var coppia = parametri[i].split("=");
+    parametriObj[coppia[0]] = coppia[1];
+}
+
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import { mapMutations } from "vuex";
@@ -84,13 +93,35 @@ export default {
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
-            Filtertype: undefined
+            Filtertype: undefined,
+            sagra_name: ""
         };
     },
+
+    created() {
+        this.getsagra();
+    },
+
     methods: {
         ...mapMutations(["setUser"]),
         scrollToTop() {
             window.scrollTo(0, 0);
+        },
+
+        async getsagra() {
+            if (!sessionStorage.getItem('Sigla')) {
+                var sigla = await axios.get('/sagra/' + parametriObj.sigla)
+                console.log(sigla.data)
+                this.sagra_name = "al " + sigla.data[0].descrizione
+                console.log(this.sagra_name)
+                sessionStorage.setItem('Sigla', this.sagra_name)
+                if (history.replaceState) {
+                    var nuovoURL = window.location.pathname + window.location.hash;
+                    history.replaceState({}, document.title, nuovoURL);
+                }
+            } else{
+                this.sagra_name = sessionStorage.getItem('Sigla')
+            }
         },
 
         async handleChildEvent(type) {

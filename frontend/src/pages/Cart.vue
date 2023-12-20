@@ -44,7 +44,7 @@
                                             <h2 class="item-name">{{ f.food_name }}</h2>
                                             <div class="item-desc">
                                                 <b>Descrizione</b>
-                                                <p>{{ f.food_desc }}</p>
+                                                <p>{{ f.food_desc.substring(0, 25) }}</p>
                                             </div>
                                             <button class="btn remove-btn" @click="cancelBtn(index)"><i
                                                     class="fa fa-trash"></i>Rimuovi</button>
