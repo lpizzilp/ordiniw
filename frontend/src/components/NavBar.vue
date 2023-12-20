@@ -65,17 +65,17 @@ export default {
         },
 
         async getsagra() {
-            if (!sessionStorage.getItem('Sigla')) {
+            if (!sessionStorage.getItem('Siglanav')) {
                 var sigla = await axios.get('/sagra/' + parametriObj.sigla)
                 console.log(sigla.data)
                 this.sagra_name = sigla.data[0].descrizione
-                sessionStorage.setItem('Sigla', this.sagra_name)
+                sessionStorage.setItem('Siglanav', this.sagra_name)
                 if (history.replaceState) {
                     var nuovoURL = window.location.pathname + window.location.hash;
                     history.replaceState({}, document.title, nuovoURL);
                 }
             } else {
-                this.sagra_name = sessionStorage.getItem('Sigla')
+                this.sagra_name = sessionStorage.getItem('Siglanav')
             }
         },
 

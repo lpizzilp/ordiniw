@@ -111,9 +111,7 @@ export default {
         async getsagra() {
             if (!sessionStorage.getItem('Sigla')) {
                 var sigla = await axios.get('/sagra/' + parametriObj.sigla)
-                console.log(sigla.data)
-                this.sagra_name = "al " + sigla.data[0].descrizione
-                console.log(this.sagra_name)
+                this.sagra_name = "" + sigla.data[0].note + " " + sigla.data[0].descrizione
                 sessionStorage.setItem('Sigla', this.sagra_name)
                 if (history.replaceState) {
                     var nuovoURL = window.location.pathname + window.location.hash;
