@@ -1,4 +1,4 @@
-import { getSagrabySig } from "../models/catalogoModel.js";
+import { getSagrabySig } from "../models/CatalogoModel.js";
 
 
 export const getSagraSig=(req,res)=>{
