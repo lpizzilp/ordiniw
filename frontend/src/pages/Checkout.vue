@@ -108,7 +108,7 @@ export default {
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
-                if (parseInt(food.food_id) == element) {
+                if (food.food_id == element) {
                     temp = food;
                 }
             });
@@ -194,7 +194,7 @@ export default {
         async sendBillDetails(billId, foodId, qty) {
             let billDetails = {
                 bill_id: parseInt(billId),
-                food_id: parseInt(foodId),
+                food_id: foodId,
                 item_qty: parseInt(qty)
             };
             await axios.post("/billdetails", billDetails);

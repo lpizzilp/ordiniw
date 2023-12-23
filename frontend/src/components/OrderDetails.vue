@@ -62,7 +62,7 @@ export default {
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
-                if (parseInt(food.food_id) == element) {
+                if (food.food_id == element) {
                     temp = food
                 }
             });

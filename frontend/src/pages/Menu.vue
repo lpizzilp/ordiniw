@@ -202,7 +202,7 @@ export default {
             }
         },
         selectedFood: function () {
-            return this.allFoods.filter((f) => parseInt(f.food_id) == parseInt(this.food));
+            return this.allFoods.filter((f) => f.food_id == this.food);
         },
     },
     methods: {
@@ -221,6 +221,7 @@ export default {
             for (var l = 0; l < qtylenght; l++) {
                 this.qty.push(0);
             }
+            console.log(this.allFoods[0].food_id)
         },
 
         ImagePresent: function () {
@@ -236,9 +237,9 @@ export default {
                     let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
-                        let FoodID = parseInt(existItem.data[ix].food_id)
+                        let FoodID = existItem.data[ix].food_id
                         for (var l = 0; l < pageItem; l++) {
-                            var Itempage = parseInt(this.currentPageItems[l].food_id)
+                            var Itempage = this.currentPageItems[l].food_id
                             if (Itempage == FoodID) {
                                 this.qty[l] = parseInt(existItem.data[ix].item_qty)
                                 break;
@@ -344,14 +345,14 @@ export default {
         },
 
         async addToCart(index) {
-            this.sendId = parseInt(this.currentPageItems[index].food_id);
+            this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
             this.showQuickView = false
 
-            let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + parseInt(this.sendId))
+            let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
             let data = {
                 user_id: parseInt(sessionStorage.getItem('Username')),
-                food_id: parseInt(this.sendId),
+                food_id: this.sendId,
                 item_qty: parseInt(this.qty[index])
             }
 

@@ -60,7 +60,7 @@ export default {
             for (let i = 0; i < billitem.data.length; i++) {
                 let data = {
                     user_id: parseInt(sessionStorage.getItem('Username')),
-                    food_id: parseInt(billitem.data[i].food_id),
+                    food_id: billitem.data[i].food_id,
                     item_qty: parseInt(billitem.data[i].item_qty)
                 }
                 console.log(data)
