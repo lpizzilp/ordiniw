@@ -43,6 +43,10 @@ import {
     cancelBillStatus
 } from "../controllers/billstatus.js";
 
+import {
+    importAnagrafica
+} from "../controllers/callFromEsagra.js";
+
 // init express router
 const router = express.Router();
 
@@ -117,6 +121,8 @@ router.put("/api/billstatus/paid/:id", updateBillPaid);
 router.put("/api/billstatus/cancel/:id", cancelBillStatus);
 
 
+////////////////////////// Bill Details ////////////////////////////////
+router.post("/api/importfood", importAnagrafica);
 
 
 

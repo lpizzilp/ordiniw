@@ -230,15 +230,17 @@ export default {
                 let billStatus = {
                     bill_id: parseInt(billId),
                     user_id: parseInt(sessionStorage.getItem('Username')),
-                    bill_phone: this.isType(),
-                    bill_address: this.checkoutObj.Coperti,
+                    bill_Tavolo: this.isType(),
+                    bill_Coperti: this.checkoutObj.Coperti,
                     bill_when: currentTime,
                     bill_method: this.checkoutObj.paymentMethod,
                     bill_discount: parseInt(this.calculateSummaryPrice()[1]),
                     bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
                     bill_total: parseInt(this.calculateSummaryPrice()[3]),
                     bill_paid: "false",
-                    bill_status: 1
+                    bill_status: 1,
+                    TipoCassa: '' ,
+                    Nominativo: ''
                 };
 
                 axios.post("/billstatus", billStatus);
