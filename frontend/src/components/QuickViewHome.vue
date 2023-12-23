@@ -2,7 +2,7 @@
     <div class="quick-view">
         <div class="quick-view-inner">
             <h2>Scelgi il tipo ordine</h2><br>
-            <h3>Se non possiedi ancora un tavolo e mangi in sagra scegli "Tavolo"
+            <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent('t')" style="width: 100%;">Tavolo</button>
@@ -26,6 +26,13 @@ export default {
 
     scrollToTop() {
         window.scrollTo(0, 0);
+    },
+
+    created(){
+        console.log('pas')
+        if (this.typeData === 'PRE') {
+            this.DataParent(this.typeData)
+        }
     },
 
     methods: {
