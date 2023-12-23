@@ -226,7 +226,7 @@ export default {
         },
 
         Chekesauriti: function () {
-            let FoodID
+           /* let FoodID
             var pageItem = Object.keys(this.currentPageItems).length;
             for (var i = 0; i < this.allFoods.length; i++) {
                 FoodID = this.allFoods[i].food_id
@@ -237,7 +237,7 @@ export default {
                         break;
                     }
                 }
-            }
+            }*/
         },
         ImagePresent : function ()  {
             console.log("------" + this.f.food_src);
