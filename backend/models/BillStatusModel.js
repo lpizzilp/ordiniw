@@ -105,3 +105,15 @@ export const cancelStatus = (id,result) => {
         }
     });
 };
+
+
+export const deleteBillById = (id,result) => {
+    db.query("DELETE FROM Billstatus WHERE bill_id = ?",[id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

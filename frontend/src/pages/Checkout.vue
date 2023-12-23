@@ -25,6 +25,13 @@
                             class="form-control" v-model="checkoutObj.Coperti" />
                         <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                     </div>
+
+                    <div class="form-group">
+                        <input type="text" name="Nominativo" id="Nominativo" placeholder="Campo nominativo, non obbligatorio"
+                            class="form-control" v-model="checkoutObj.Nominativo" />
+                        <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}</p>
+                    </div>
+
                 </div>
             </div>
             <div v-else>
@@ -38,11 +45,11 @@
                 </div>
             </div>
                 <div class="form-group details-group" id="General">
-                    <h4>Payment Method</h4>
+                    <h4>Pagamento</h4>
                     <div class="form-group">
                         <div class="form-group">
                             <input type="radio" name="payment" value="cash" id="paymentCash" checked="checked" />
-                            <span>Cash</span>
+                            <span>Pagamento in cassa</span>
                             <p class="error-mess" v-if="errorObj.payErr.length > 0">{{ errorObj.payErr[0] }}</p>
                         </div>
                     </div>
@@ -70,7 +77,7 @@ export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", paymentMethod: "cash" },
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Type: "", paymentMethod: "cash" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], payErr: [] },
             cartItem: [],
             itemQuantity: [],
@@ -113,7 +120,7 @@ export default {
             let discount = 0;
             let delivery = 0;
             for (let i = 0; i < this.itemQuantity.length; i++) {
-                subtotal = subtotal + parseInt(this.filterFoods[i].food_price) * this.itemQuantity[i]
+                subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]
             }
             let total = subtotal
             return [subtotal, discount, delivery, total];
@@ -184,15 +191,6 @@ export default {
 
         },
 
-        isType: function () {
-            if (!this.checkoutObj.Tavolo) {
-                return this.checkoutObj.Nominativo;
-            }
-            else if (!this.checkoutObj.Nominativo) {
-                return this.checkoutObj.Tavolo;
-            }
-        },
-
         async sendBillDetails(billId, foodId, qty) {
             let billDetails = {
                 bill_id: parseInt(billId),
@@ -209,6 +207,10 @@ export default {
                 e.preventDefault();
             }
             else {
+                if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                    axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
+                    axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
+                } 
                 e.preventDefault();
                 let billId = (await axios.get("/billstatus/new")).data;
                 if (billId == "") {
@@ -230,23 +232,24 @@ export default {
                 let billStatus = {
                     bill_id: parseInt(billId),
                     user_id: parseInt(sessionStorage.getItem('Username')),
-                    bill_Tavolo: this.isType(),
-                    bill_Coperti: this.checkoutObj.Coperti,
+                    bill_tavolo: this.checkoutObj.Tavolo,
+                    bill_coperti: this.checkoutObj.Coperti,
                     bill_when: currentTime,
                     bill_method: this.checkoutObj.paymentMethod,
                     bill_discount: parseInt(this.calculateSummaryPrice()[1]),
                     bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
-                    bill_total: parseInt(this.calculateSummaryPrice()[3]),
+                    bill_total: parseFloat(this.calculateSummaryPrice()[3]),
                     bill_paid: "false",
                     bill_status: 1,
-                    TipoCassa: '' ,
-                    Nominativo: ''
+                    TipoCassa: sessionStorage.getItem('Type'),
+                    Nominativo: this.checkoutObj.Nominativo
                 };
 
                 axios.post("/billstatus", billStatus);
                 axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
                 this.itemQuantity = [];
+                sessionStorage.setItem('Bill', billStatus.bill_id)
                 this.$router.push("/thank");
             }
 
@@ -295,8 +298,8 @@ export default {
     margin: 0.7rem 0;
     border-radius: 0.5rem;
     background: #f7f7f7;
-    padding: 2rem 1.2rem;
-    font-size: 1.6rem;
+    padding: 2.2rem 1.2rem;
+    font-size: 1.8rem;
     color: #130f40;
     text-transform: none;
     width: 100%;

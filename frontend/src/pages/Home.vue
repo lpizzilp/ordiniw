@@ -2,10 +2,12 @@
     <div>
         <div class="home-main">
             <div class="content">
-                <span>Benvenuti a vigonovo!</span>
+                <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
-                <button @click="handleSubmit('')" class="btn">Inizia a ordinare</button>
+                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 15px;">Inizia a ordinare</button><br>
+                <span v-if="Prenotazione == 1" style="padding-left: 30px;">oppure</span><br>
+                <button v-if="Prenotazione == 1" @click="handleSubmit('PRE')" class="btn" style="margin-top: 15px;">Prenota specialità</button>
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
@@ -15,17 +17,17 @@
 
 
         <div class="home-category">
-            <button @click="handleSubmit('pasta')" class="box">
+            <button @click="handleSubmit('P')" class="box">
                 <img src="../assets/images/pasta-img.png" alt="">
-                <h3>Pasta</h3>
+                <h3>Primi</h3>
             </button>
 
-            <button @click="handleSubmit('carne')" class="box">
+            <button @click="handleSubmit('C')" class="box">
                 <img src="../assets/images/grigliata-img.png" alt="">
-                <h3>Carne</h3>
+                <h3>Cucina</h3>
             </button>
 
-            <button @click="handleSubmit('bevande')" class="box">
+            <button @click="handleSubmit('B')" class="box">
                 <img src="../assets/images/coca-img.png" alt="">
                 <h3>Bevande</h3>
             </button>
@@ -84,13 +86,28 @@ export default {
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
-            Filtertype: undefined
+            Filtertype: undefined,
+            sagra_name: "",
+            Prenotazione: ""
         };
     },
+
+    created() {
+        this.getsagra();
+    },
+
     methods: {
         ...mapMutations(["setUser"]),
         scrollToTop() {
             window.scrollTo(0, 0);
+        },
+
+        async getsagra() {
+            setTimeout(() => {
+                this.sagra_name = sessionStorage.getItem('SiglaHome')
+                this.Prenotazione = sessionStorage.getItem('SagraPren')
+                console.log(this.Prenotazione)
+            }, 150);
         },
 
         async handleChildEvent(type) {
