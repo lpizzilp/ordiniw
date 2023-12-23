@@ -66,7 +66,7 @@
                     <div v-for="(f, index) in currentPageItems" :key="index">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div v-if="f.food_src != null "  class="image">
+                            <div v-if="f.food_src != null" class="image">
                                 <img :src="require(`../assets/images/${f.food_src}`)" alt="" />
                             </div>
                             <div class="content">
@@ -79,11 +79,10 @@
                                     <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
                                 </div>
 
-                                <div v-if="qty[index] == 'Esaurito'" class="add-to-cart">
-                                    <h4
-                                        style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
-                                        {{
-                                            qty[index] }}</h4>
+                                <div v-if="f.esaurito == 1" class="add-to-cart">
+                                    <h4 style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
+                                        Esaurito
+                                    </h4>
                                 </div>
                                 <div v-else class="add-to-cart">
                                     <button class="btn" style="flex: 33%; padding-left: 2%; padding-right: 2%;"
@@ -222,26 +221,11 @@ export default {
             for (var l = 0; l < qtylenght; l++) {
                 this.qty.push(0);
             }
-            this.Chekesauriti()
         },
 
-        Chekesauriti: function () {
-           /* let FoodID
-            var pageItem = Object.keys(this.currentPageItems).length;
-            for (var i = 0; i < this.allFoods.length; i++) {
-                FoodID = this.allFoods[i].food_id
-                for (var l = 0; l < pageItem; l++) {
-                    let Itemid = parseInt(this.currentPageItems[l].food_id)
-                    if (Itemid == FoodID) {
-                        this.qty[l] = 'Esaurto'
-                        break;
-                    }
-                }
-            }*/
-        },
-        ImagePresent : function ()  {
+        ImagePresent: function () {
             console.log("------" + this.f.food_src);
-            if (this.f.food_src != null  ) {
+            if (this.f.food_src != null) {
                 return 1;
             }
         },
