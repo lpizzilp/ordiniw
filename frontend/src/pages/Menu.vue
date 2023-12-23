@@ -31,14 +31,14 @@
 
 
                         <li>
-                            <input type="button" name="cbStatus" id="ooStatus" value="primi" hidden
+                            <input type="button" name="cbStatus" id="ooStatus" value="P" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
                         </li>
 
 
                         <li>
-                            <input type="button" name="cbStatus" id="soStatus" value="cucina" hidden
+                            <input type="button" name="cbStatus" id="soStatus" value="C" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
                         </li>
@@ -51,7 +51,7 @@
                         </li> -->
 
                         <li>
-                            <input type="button" name="cbStatus" id="ndStatus" value="bar" hidden
+                            <input type="button" name="cbStatus" id="ndStatus" value="B" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
                         </li>
@@ -79,16 +79,19 @@
                                     <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
                                 </div>
 
-                                <div class="add-to-cart">
+                                <div v-if="qty[index] == 'Esaurito'" class="add-to-cart">
+                                    <h4
+                                        style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
+                                        {{
+                                            qty[index] }}</h4>
+                                </div>
+                                <div v-else class="add-to-cart">
                                     <button class="btn" style="flex: 33%; padding-left: 2%; padding-right: 2%;"
                                         value="minus" @click="qty[index]--, onQtyChange(index)"><i
                                             class="fa-solid fa-minus"></i></button>
                                     <h4 style="flex: 33%; background-color: white;">{{ qty[index] }}</h4>
                                     <button class="btn" style="flex: 33%; padding-left: 2%; padding-right: 2%;" value="plus"
                                         @click="qty[index]++, onQtyChange(index)"><i class="fa-solid fa-plus"></i></button>
-                                    <button name="conferma" class="btn"
-                                        style="margin-top: 30px; display: none; background-color: #f38609; padding: 2vh; padding-left: 3vh; padding-right: 3vh;"
-                                        @click="addToCart(index)" value="conferma">Conferma</button>
                                 </div>
                             </div>
                         </div>
@@ -116,12 +119,10 @@
                 </div>
             </div>
         </div>
-        <QuickView v-if="showQuickView" @childEvent="handleChildEvent"></QuickView>
     </div>
 </template>
 
 <script>
-import QuickView from "@/components/QuickView.vue";
 import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import axios from "axios";
@@ -132,6 +133,7 @@ import axios from "axios";
 // a = solo asporto
 // t = solo tavolo
 // at = entrambi
+// PRE = prenotazione
 
 export default {
     props: ["food"],
@@ -151,6 +153,7 @@ export default {
             showDropDown: false,
             matchUser: undefined,
             setqty: false,
+            prenotazione: false,
 
             sendId: null,
             showCounterCart: false,
@@ -163,6 +166,9 @@ export default {
     },
 
     created() {
+        if (this.foodObj.type === 'PRE') {
+            this.prenotazione = true
+        }
         this.buildArray()
         this.getAllCartItem()
         console.log('crea')
@@ -215,6 +221,22 @@ export default {
             var qtylenght = Object.keys(this.currentPageItems).length;
             for (var l = 0; l < qtylenght; l++) {
                 this.qty.push(0);
+            }
+            this.Chekesauriti()
+        },
+
+        Chekesauriti: function () {
+            let FoodID
+            var pageItem = Object.keys(this.currentPageItems).length;
+            for (var i = 0; i < this.allFoods.length; i++) {
+                FoodID = this.allFoods[i].food_id
+                for (var l = 0; l < pageItem; l++) {
+                    let Itemid = parseInt(this.currentPageItems[l].food_id)
+                    if (Itemid == FoodID) {
+                        this.qty[l] = 'Esaurto'
+                        break;
+                    }
+                }
             }
         },
 
@@ -285,24 +307,11 @@ export default {
             }
         },
         filterFoodBtn: function (e) {
-            let previousCategory = this.foodObj.category
-            let divControl1 = document.getElementsByName("conferma")
             var qtylenght = Object.keys(this.currentPageItems).length;
-            for (var l = 0; l < qtylenght; l++) {
-                console.log(divControl1[l].style.display)
-                if (divControl1[l].style.display == "block") {
-                    this.foodObj.category = previousCategory
-                    this.showQuickView = true
-                    return;
-                }
-            }
-
             this.pageNum = 0;
             this.foodObj.category = e.target.value;
             e.target.style.background = "#057835fa";
-
-
-            for (l = 0; l < qtylenght; l++) {
+            for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }
         },
@@ -325,8 +334,6 @@ export default {
 
         onQtyChange: function (index) {
             clearInterval(this.timerInterval);
-            // let divControl1 = document.getElementsByName("conferma");
-            //divControl1[index].style.display = "block";
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
             }
@@ -347,9 +354,6 @@ export default {
         },
 
         async addToCart(index) {
-            // let divControl1 = document.getElementsByName("conferma")
-            //divControl1[index].style.display = "none";
-
             this.sendId = parseInt(this.currentPageItems[index].food_id);
             this.showCounterCart = !this.showCounterCart;
             this.showQuickView = false
@@ -388,8 +392,7 @@ export default {
     },
 
     components: {
-        VueBasicAlert,
-        QuickView
+        VueBasicAlert
     }
 };
 </script>

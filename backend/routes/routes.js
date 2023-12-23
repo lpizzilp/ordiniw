@@ -44,8 +44,11 @@ import {
     deleteBill
 } from "../controllers/billstatus.js";
 
+import { getSagraSig } from "../controllers/catalogo.js";
+
 // init express router
 const router = express.Router();
+
 
 ////////////////////////// FOOD ////////////////////////////////
 // get all Food
@@ -118,6 +121,10 @@ router.put("/api/billstatus/:id", updateBillStatus);
 router.put("/api/billstatus/paid/:id", updateBillPaid);
 router.put("/api/billstatus/cancel/:id", cancelBillStatus);
 router.delete("/api/billstatus/delete/:id", deleteBill)
+
+////////////////////////// Catalogo /////////////////////////////
+//recupera sagra in base alla sigla
+router.get("/api/sagra/:sigla", getSagraSig);
 
 
 
