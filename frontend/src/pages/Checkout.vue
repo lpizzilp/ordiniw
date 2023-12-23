@@ -77,7 +77,7 @@ export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", paymentMethod: "cash" },
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Type: "", paymentMethod: "cash" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], payErr: [] },
             cartItem: [],
             itemQuantity: [],
@@ -241,7 +241,8 @@ export default {
                     bill_total: parseFloat(this.calculateSummaryPrice()[3]),
                     bill_paid: "false",
                     bill_status: 1,
-                    bill_nominativo: this.checkoutObj.Nominativo
+                    TipoCassa: sessionStorage.getItem('Type'),
+                    Nominativo: this.checkoutObj.Nominativo
                 };
 
                 axios.post("/billstatus", billStatus);

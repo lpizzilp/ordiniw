@@ -41,7 +41,7 @@
                                         </div>
 
                                         <div class="desc col-sm-4">
-                                            <h2 class="item-name">{{ f.food_name }}</h2>
+                                            <h2 class="item-name">{{ f.food_name.substring(0, 19)  }}</h2>
                                             <div class="item-desc">
                                                 <b>Descrizione</b>
                                                 <p>{{ f.food_desc.substring(0, 25) }}</p>

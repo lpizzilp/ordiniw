@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <router-link @click="scrollToTop()" to="/" class="logo"><img src="../assets/images/taco-logo.png" alt="" />
-            {{ sagra_name }}
+            {{ nav_name }}
         </router-link>
 
         <nav class="navbar">
@@ -38,7 +38,8 @@ export default {
     name: 'NavBar',
     data() {
         return {
-            sagra_name: 'Home ordini'
+            nav_name: 'Home ordini',
+            sagra_name: ''
         }
     },
 
@@ -66,16 +67,22 @@ export default {
 
         async getsagra() {
             if (!sessionStorage.getItem('Siglanav')) {
-                var sigla = await axios.get('/sagra/' + parametriObj.sigla)
-                console.log(sigla.data)
-                this.sagra_name = sigla.data[0].descrizione
-                sessionStorage.setItem('Siglanav', this.sagra_name)
-                if (history.replaceState) {
-                    var nuovoURL = window.location.pathname + window.location.hash;
-                    history.replaceState({}, document.title, nuovoURL);
+                var sagra = await axios.get('/sagra/' + parametriObj.id)
+                if (sagra.data.length == 0) {
+                    sessionStorage.setItem('SagraPren', 0)
+                } else {
+                    this.nav_name = sagra.data[0].descrizione
+                    this.sagra_name = "" + sagra.data[0].note + " " + sagra.data[0].descrizione
+                    sessionStorage.setItem('Siglanav', this.nav_name)
+                    sessionStorage.setItem('SiglaHome', this.sagra_name)
+                    sessionStorage.setItem('SagraPren', sagra.data[0].prenotazione)
+                    if (history.replaceState) {
+                        var nuovoURL = window.location.pathname + window.location.hash;
+                        history.replaceState({}, document.title, nuovoURL);
+                    }
                 }
             } else {
-                this.sagra_name = sessionStorage.getItem('Siglanav')
+                this.nav_name = sessionStorage.getItem('Siglanav')
             }
         },
 

@@ -5,7 +5,9 @@
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
-                <button @click="handleSubmit('')" class="btn">Inizia a ordinare</button>
+                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 15px;">Inizia a ordinare</button><br>
+                <span v-if="Prenotazione == 1" style="padding-left: 30px;">oppure</span><br>
+                <button v-if="Prenotazione == 1" @click="handleSubmit('PRE')" class="btn" style="margin-top: 15px;">Prenota specialità</button>
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
@@ -72,15 +74,6 @@
 </template>
 
 <script>
-var queryString = window.location.search;
-queryString = queryString.substring(1);
-var parametri = queryString.split("&");
-var parametriObj = {};
-for (var i = 0; i < parametri.length; i++) {
-    var coppia = parametri[i].split("=");
-    parametriObj[coppia[0]] = coppia[1];
-}
-
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import { mapMutations } from "vuex";
@@ -94,7 +87,8 @@ export default {
             errors: [],
             showQuickVue: false,
             Filtertype: undefined,
-            sagra_name: ""
+            sagra_name: "",
+            Prenotazione: ""
         };
     },
 
@@ -109,17 +103,11 @@ export default {
         },
 
         async getsagra() {
-            if (!sessionStorage.getItem('Sigla')) {
-                var sigla = await axios.get('/sagra/' + parametriObj.sigla)
-                this.sagra_name = "" + sigla.data[0].note + " " + sigla.data[0].descrizione
-                sessionStorage.setItem('Sigla', this.sagra_name)
-                if (history.replaceState) {
-                    var nuovoURL = window.location.pathname + window.location.hash;
-                    history.replaceState({}, document.title, nuovoURL);
-                }
-            } else{
-                this.sagra_name = sessionStorage.getItem('Sigla')
-            }
+            setTimeout(() => {
+                this.sagra_name = sessionStorage.getItem('SiglaHome')
+                this.Prenotazione = sessionStorage.getItem('SagraPren')
+                console.log(this.Prenotazione)
+            }, 150);
         },
 
         async handleChildEvent(type) {

@@ -28,6 +28,13 @@ export default {
         window.scrollTo(0, 0);
     },
 
+    created(){
+        console.log('pas')
+        if (this.typeData === 'PRE') {
+            this.DataParent(this.typeData)
+        }
+    },
+
     methods: {
         DataParent(where) {
             sessionStorage.setItem('Type', where)
