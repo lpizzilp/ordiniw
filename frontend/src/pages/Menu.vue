@@ -221,7 +221,6 @@ export default {
             for (var l = 0; l < qtylenght; l++) {
                 this.qty.push(0);
             }
-            console.log(this.allFoods[0].food_id)
         },
 
         ImagePresent: function () {
