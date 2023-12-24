@@ -167,12 +167,12 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `esauriti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
+-- db_restaurant.esauriti definition
+
 CREATE TABLE `esauriti` (
   `food_id` varchar(5) NOT NULL,
-  `esaurito` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`food_id`),
-  UNIQUE KEY `esauriti_primary` (`food_id`),
-  UNIQUE KEY `esauriti_un` (`food_id`)
+  `QtaDisponibile` int(10) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

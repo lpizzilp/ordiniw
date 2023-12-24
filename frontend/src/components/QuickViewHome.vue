@@ -5,8 +5,8 @@
             <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent('t')" style="width: 100%;">Tavolo</button>
-            <button class="btn" @click="DataParent('a')" style="width: 100%;">Asporto</button>
+            <button class="btn" @click="DataParent('W')" style="width: 100%;">Tavolo</button>
+            <button class="btn" @click="DataParent('Y')" style="width: 100%;">Asporto</button>
         </div>
     </div>
 </template>

@@ -66,8 +66,8 @@
                     <div v-for="(f, index) in currentPageItems" :key="index">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div v-if="f.food_src != null" class="image">
-                                <img :src="require(`../assets/images/${f.food_src}`)" alt="" />
+                            <div v-if="f.food_src != ''" class="image">
+                                <img :src="require(`../assets/images/${f.food_src}`)" v-on:error="require('../assets/images/no.png')" alt="" />
                             </div>
                             <div class="content">
                                 <h3>{{ f.food_name.substring(0, 19) }}</h3>
@@ -79,7 +79,7 @@
                                     <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
                                 </div>
 
-                                <div v-if="f.esaurito == 1" class="add-to-cart">
+                                <div v-if="f.QtaDisponibile == 0" class="add-to-cart">
                                     <h4 style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
                                         Esaurito
                                     </h4>
