@@ -66,8 +66,8 @@
                     <div v-for="(f, index) in currentPageItems" :key="index">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div v-if="f.food_src != null "  class="image">
-                                <img :src="require(`../assets/images/${f.food_src}`)" alt="" />
+                            <div v-if="f.food_src != ''" class="image">
+                                <img :src="require(`../assets/images/${f.food_src}`)" v-on:error="require('../assets/images/no.png')" alt="" />
                             </div>
                             <div class="content">
                                 <h3>{{ f.food_name.substring(0, 19) }}</h3>
@@ -79,11 +79,10 @@
                                     <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
                                 </div>
 
-                                <div v-if="qty[index] == 'Esaurito'" class="add-to-cart">
-                                    <h4
-                                        style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
-                                        {{
-                                            qty[index] }}</h4>
+                                <div v-if="f.QtaDisponibile == 0" class="add-to-cart">
+                                    <h4 style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
+                                        Esaurito
+                                    </h4>
                                 </div>
                                 <div v-else class="add-to-cart">
                                     <button class="btn" style="flex: 33%; padding-left: 2%; padding-right: 2%;"
@@ -203,7 +202,7 @@ export default {
             }
         },
         selectedFood: function () {
-            return this.allFoods.filter((f) => parseInt(f.food_id) == parseInt(this.food));
+            return this.allFoods.filter((f) => f.food_id == this.food);
         },
     },
     methods: {
@@ -222,26 +221,11 @@ export default {
             for (var l = 0; l < qtylenght; l++) {
                 this.qty.push(0);
             }
-            this.Chekesauriti()
         },
 
-        Chekesauriti: function () {
-           /* let FoodID
-            var pageItem = Object.keys(this.currentPageItems).length;
-            for (var i = 0; i < this.allFoods.length; i++) {
-                FoodID = this.allFoods[i].food_id
-                for (var l = 0; l < pageItem; l++) {
-                    let Itemid = parseInt(this.currentPageItems[l].food_id)
-                    if (Itemid == FoodID) {
-                        this.qty[l] = 'Esaurto'
-                        break;
-                    }
-                }
-            }*/
-        },
-        ImagePresent : function ()  {
+        ImagePresent: function () {
             console.log("------" + this.f.food_src);
-            if (this.f.food_src != null  ) {
+            if (this.f.food_src != null) {
                 return 1;
             }
         },
@@ -252,9 +236,9 @@ export default {
                     let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
-                        let FoodID = parseInt(existItem.data[ix].food_id)
+                        let FoodID = existItem.data[ix].food_id
                         for (var l = 0; l < pageItem; l++) {
-                            var Itempage = parseInt(this.currentPageItems[l].food_id)
+                            var Itempage = this.currentPageItems[l].food_id
                             if (Itempage == FoodID) {
                                 this.qty[l] = parseInt(existItem.data[ix].item_qty)
                                 break;
@@ -360,14 +344,14 @@ export default {
         },
 
         async addToCart(index) {
-            this.sendId = parseInt(this.currentPageItems[index].food_id);
+            this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
             this.showQuickView = false
 
-            let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + parseInt(this.sendId))
+            let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
             let data = {
                 user_id: parseInt(sessionStorage.getItem('Username')),
-                food_id: parseInt(this.sendId),
+                food_id: this.sendId,
                 item_qty: parseInt(this.qty[index])
             }
 

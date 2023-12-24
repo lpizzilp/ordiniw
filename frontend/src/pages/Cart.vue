@@ -35,7 +35,7 @@
                             <div v-else>
                                 <div v-for="(f, index) in filterFoods" :key="index">
                                     <div class="box-content row">
-                                        <div v-if="f.food_src != null" class="image-box col-sm-3" style="padding-left: 0;">
+                                        <div v-if="f.food_src != ''" class="image-box col-sm-3" style="padding-left: 0;">
                                             <img :src="require(`../assets/images/${f.food_src}`)" alt=""
                                                 class="cart-product-img" />
                                         </div>
@@ -165,7 +165,7 @@ export default {
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
-                if (parseInt(food.food_id) == element) {
+                if (food.food_id == element) {
                     temp = food
                 }
             });
@@ -202,7 +202,7 @@ export default {
 
             let data = {
                 user_id: parseInt(sessionStorage.getItem('Username')),
-                food_id: parseInt(this.cartItem[i]),
+                food_id: this.cartItem[i],
                 item_qty: this.itemQuantity[i]
             };
             await axios.put("/cartItem/", data)

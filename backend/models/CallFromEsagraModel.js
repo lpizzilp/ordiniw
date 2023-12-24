@@ -14,3 +14,15 @@ export const insertAnagrafica = (data,result) => {
         }
     });
 };
+
+// insert anagrafica articoli 
+export const deleteAnagrafica = (data,result) => {
+    db.query("DELETE FROM food",'' , (err,results)=> {        
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results[0]);
+        }
+    });
+};

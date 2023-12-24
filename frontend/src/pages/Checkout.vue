@@ -8,10 +8,10 @@
                 </div>
 
                 <div class="btn-type">
-                    <button v-if="type === 't'" class="btn">Al tavolo</button>
+                    <button v-if="type === 'W'" class="btn">Al tavolo</button>
                     <button v-else class="btn">Asporto</button>
                 </div>
-            <div v-if="type === 't'">
+            <div v-if="type === 'W'">
                 <div class="form-group details-group" id="Tavolo">
                     <h4>Dettagli dell'acquirente</h4>
                     <div class="form-group">
@@ -108,7 +108,7 @@ export default {
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
-                if (parseInt(food.food_id) == element) {
+                if (food.food_id == element) {
                     temp = food;
                 }
             });
@@ -167,7 +167,7 @@ export default {
 
         checkForm: function () {
             this.resetCheckErr();
-            if (this.type === 't') {
+            if (this.type === 'W') {
                 // Tavolo validate
                 if (!this.checkoutObj.Tavolo) {
                     this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
@@ -180,7 +180,7 @@ export default {
                     console.log('errore coperti')
                 }
 
-            } else if (this.type === 'a') {
+            } else if (this.type === 'Y') {
                 // Nominativo validate
                 if (!this.checkoutObj.Nominativo) {
                     this.errorObj.NominativoErr.push("Il campo coperti è oblligatorio");
@@ -194,7 +194,7 @@ export default {
         async sendBillDetails(billId, foodId, qty) {
             let billDetails = {
                 bill_id: parseInt(billId),
-                food_id: parseInt(foodId),
+                food_id: foodId,
                 item_qty: parseInt(qty)
             };
             await axios.post("/billdetails", billDetails);
