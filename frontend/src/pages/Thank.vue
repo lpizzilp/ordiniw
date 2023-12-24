@@ -1,7 +1,7 @@
 <template>
     <div class="thank-container">
         <h1> Grazie!</h1>
-        <span>Utilizza il codice pagare il tuo ordine</span>
+        <span>Utilizza il codice per pagare il tuo ordine</span>
 
         <div class="dot">
             {{ NumId }}

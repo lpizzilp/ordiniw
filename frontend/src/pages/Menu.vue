@@ -67,10 +67,11 @@
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
                             <div v-if="Artimage(f.food_src) != ''" class="image">
-                                <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')" />
+                                <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
+                                    @click="qty[index]++, onQtyChange(index)" />
                             </div>
                             <div class="content">
-                                <h3>{{ f.food_name.substring(0, 19) }}</h3>
+                                <h3>{{ f.food_name }}</h3>
                                 <div class="desc">
                                     <p>{{ f.food_desc }}</p>
                                 </div>
@@ -80,7 +81,8 @@
                                 </div>
 
                                 <div v-if="f.QtaDisponibile == 0" class="add-to-cart">
-                                    <h4 style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
+                                    <h4
+                                        style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
                                         Esaurito
                                     </h4>
                                 </div>
@@ -158,7 +160,7 @@ export default {
             showCounterCart: false,
             qty: [],
             CartItem: [],
-            perPage: 25,
+            perPage: 50,
             pageNum: 0,
             timer: 0.25
         };
@@ -212,15 +214,15 @@ export default {
         Artimage(food) {
             try {
                 return require(`../assets/images/${food}`);
-    
+
             } catch (ex) {
-                return '' ;//require(`../assets/images/no.png`);
+                return '';//require(`../assets/images/no.png`);
             }
-        },        
+        },
 
         errorImage(e) {
             e.target.src = require('../assets/images/no.png');
-        },        
+        },
         set(val) {
             this.pageNum = val;
         },

@@ -41,7 +41,6 @@ export const insertUser = (data, result) => {
 
 
 export const Emailsender = (data, result) => {
-    console.log('passo')
     const transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {

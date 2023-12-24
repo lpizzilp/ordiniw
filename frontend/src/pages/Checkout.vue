@@ -219,9 +219,6 @@ export default {
                 else {
                     billId = parseInt(billId.bill_id) + 1;
                 }
-                // this.cartItem.forEach((foodId, index) => {
-                //     this.sendBillDetails(billId, foodId, this.itemQuantity[index]);
-                // });
 
                 var now = new Date();
                 var day = ("0" + now.getDate()).slice(-2);

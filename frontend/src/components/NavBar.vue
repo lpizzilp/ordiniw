@@ -75,7 +75,7 @@ export default {
                     this.sagra_name = "" + sagra.data[0].note + " " + sagra.data[0].descrizione
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
-                    sessionStorage.setItem('SagraPren', sagra.data[0].prenotazione)
+                    sessionStorage.setItem('SagraPren', sagra.data[0].flgPrenotazioni)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;
                         history.replaceState({}, document.title, nuovoURL);

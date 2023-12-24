@@ -106,7 +106,7 @@ export default {
             setTimeout(() => {
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
                 this.Prenotazione = sessionStorage.getItem('SagraPren')
-                console.log(this.Prenotazione)
+                console.log(sessionStorage.getItem('SiglaHome'))
             }, 150);
         },
 

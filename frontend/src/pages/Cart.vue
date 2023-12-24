@@ -35,13 +35,13 @@
                             <div v-else>
                                 <div v-for="(f, index) in filterFoods" :key="index">
                                     <div class="box-content row">
-                                        <div v-if="f.food_src != ''" class="image-box col-sm-3" style="padding-left: 0;">
-                                            <img :src="require(`../assets/images/${f.food_src}`)" alt=""
+                                        <div v-if="Artimage(f.food_src) != ''" class="image-box col-sm-3" style="padding-left: 0;">
+                                            <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
                                                 class="cart-product-img" />
                                         </div>
 
                                         <div class="desc col-sm-4">
-                                            <h2 class="item-name">{{ f.food_name.substring(0, 19)  }}</h2>
+                                            <h2 class="item-name">{{ f.food_name }}</h2>
                                             <div class="item-desc">
                                                 <b>Descrizione</b>
                                                 <p>{{ f.food_desc.substring(0, 25) }}</p>
@@ -162,6 +162,17 @@ export default {
     },
 
     methods: {
+
+        Artimage(food) {
+            try {
+                return require(`../assets/images/${food}`);
+    
+            } catch (ex) {
+                return '' ;//require(`../assets/images/no.png`);
+            }
+        }, 
+
+
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
