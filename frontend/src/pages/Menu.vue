@@ -66,8 +66,8 @@
                     <div v-for="(f, index) in currentPageItems" :key="index">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div v-if="f.food_src != ''" class="image">
-                                <img :src="require(`../assets/images/${f.food_src}`)" v-on:error="require('../assets/images/no.png')" alt="" />
+                            <div v-if="Artimage(f.food_src) != ''" class="image">
+                                <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')" />
                             </div>
                             <div class="content">
                                 <h3>{{ f.food_name.substring(0, 19) }}</h3>
@@ -206,6 +206,21 @@ export default {
         },
     },
     methods: {
+
+        // return require(`../assets/images/${this.food_src}`);
+
+        Artimage(food) {
+            try {
+                return require(`../assets/images/${food}`);
+    
+            } catch (ex) {
+                return '' ;//require(`../assets/images/no.png`);
+            }
+        },        
+
+        errorImage(e) {
+            e.target.src = require('../assets/images/no.png');
+        },        
         set(val) {
             this.pageNum = val;
         },

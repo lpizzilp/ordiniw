@@ -69,12 +69,16 @@ CREATE TABLE `cart` (
 
 -- db_restaurant.catalogo_sagre definition
 
+-- db_restaurant.catalogo_sagre definition
+
 CREATE TABLE `catalogo_sagre` (
   `id_sagra` varchar(100) NOT NULL,
   `descrizione` varchar(255) NOT NULL,
   `sigla` varchar(100) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
-  `prenotazione` tinyint(1) NOT NULL DEFAULT 0,
+  `flgPrenotazioni` tinyint(1) NOT NULL DEFAULT 0,
+  `flgTavoli` tinyint(1) NOT NULL DEFAULT 0,
+  `flgAsporto` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id_sagra`),
   UNIQUE KEY `catalogo_sagre_unique` (`sigla`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
