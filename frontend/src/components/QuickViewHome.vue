@@ -1,52 +1,58 @@
 <template>
     <div class="quick-view">
-        <div class="quick-view-inner">
+        <div v-if="BtnAttivi[0] == 1" class="quick-view-inner">
             <h2>Scelgi il tipo ordine</h2><br>
             <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent('W')" style="width: 100%;">Tavolo</button>
-            <button class="btn" @click="DataParent('Y')" style="width: 100%;">Asporto</button>
+            <button v-if="BtnAttivi[1] == 1" class="btn" @click="DataParent('W')" style="width: 100%;">Tavolo</button>
+            <button v-if="BtnAttivi[2] == 1" class="btn" @click="DataParent('Y')" style="width: 100%;">Asporto</button>
+        </div>
+        <div v-else class="quick-view-inner">
+            <h2>Ordini non abilitati</h2><br>
+            <h3>In questa sagra non puoi ordinare online,<br>
+                Ma puoi uttilizzare i servizzi di:
+                <slot></slot>
+            </h3>
+            <button v-if="BtnAttivi[3] == 1" class="btn" @click="DataParent('PRE')" style="width: 100%;">Prenotazione</button>
+            <RouterLink to="/eliminacode" v-if="BtnAttivi[4] == 1" class="btn" style="width: 100%;">Eliminacode</RouterLink>
         </div>
     </div>
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
     name: "QuickView",
-
     data() {
-        return {
-        }
+        return {};
     },
-
     props: {
         typeData: String,
+        BtnAttivi: Array,
     },
-
     scrollToTop() {
         window.scrollTo(0, 0);
     },
-
-    created(){
-        console.log('pas')
+    created() {
+        console.log('pas');
         if (this.typeData === 'PRE') {
-            this.DataParent(this.typeData)
+            this.DataParent(this.typeData);
         }
     },
-
     methods: {
         DataParent(where) {
-            sessionStorage.setItem('Type', where)
-            console.log(sessionStorage.getItem('Type'))
+            sessionStorage.setItem('Type', where);
+            console.log(sessionStorage.getItem('Type'));
             const dataforParent = {
                 vis: false,
                 typefilter: this.typeData
-            }
+            };
             this.$emit('childEvent', dataforParent);
         },
     },
-
+    components: { RouterLink }
 };
 </script>
 

@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from '../pages/Login.vue';
 import Register from '../pages/Register.vue';
 import Home from '../pages/Home.vue';
-import Promo from '../pages/Promo.vue';
+import Eliminacode from '../pages/Eliminacode.vue';
 import Menu from '../pages/Menu.vue';
 import Table from '../pages/Table.vue';
 import Cart from '../pages/Cart.vue';
@@ -21,9 +21,9 @@ const routes = [
   },
 
   {
-    path: "/promotions",
-    name: "Promotions",
-    component: Promo,
+    path: "/eliminacode",
+    name: "Eliminacode",
+    component: Eliminacode,
   },
   {
     path: "/menu",

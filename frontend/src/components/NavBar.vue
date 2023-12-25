@@ -69,13 +69,18 @@ export default {
             if (!sessionStorage.getItem('Siglanav')) {
                 var sagra = await axios.get('/sagra/' + parametriObj.id)
                 if (sagra.data.length == 0) {
-                    sessionStorage.setItem('SagraPren', 0)
+                    sessionStorage.setItem('SagraButt', 0)
                 } else {
                     this.nav_name = sagra.data[0].descrizione
                     this.sagra_name = "" + sagra.data[0].note + " " + sagra.data[0].descrizione
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
-                    sessionStorage.setItem('SagraPren', sagra.data[0].flgPrenotazioni)
+                    if (sagra.data[0].flgTavoli == 1 || sagra.data[0].flgTavoli == 1) {
+                        var ordini = 1
+                    }
+                    const flgdata = ordini + '/' + sagra.data[0].flgTavoli + '/' + sagra.data[0].flgAsporto + '/' + sagra.data[0].flgPrenotazioni + '/' + sagra.data[0].flgEliminacode
+                    sessionStorage.setItem('SagraButt', flgdata)
+                    console.log(flgdata)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;
                         history.replaceState({}, document.title, nuovoURL);
@@ -154,14 +159,14 @@ export default {
 }
 
 .header .icons div {
-    height: 4.5rem;
-    width: 4.5rem;
-    line-height: 4.5rem;
+    height: 5.5rem;
+    width: 5.5rem;
+    line-height: 5.5rem;
     font-size: 2rem;
     background: #f7f7f7;
     color: #130f40;
     border-radius: .5rem;
-    margin-left: .3rem;
+    margin-left: .4rem;
     cursor: pointer;
     text-align: center;
 }
