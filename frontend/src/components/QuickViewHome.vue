@@ -10,11 +10,12 @@
         </div>
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
-            <h3>In questa sagra non puoi ordinare online,<br>
-                Ma puoi uttilizzare i servizzi di:
+            <h3>In questa sagra non puoi ordinare online.</h3><br>
+            <h3 v-if="BtnAttivi[3] == 1 || BtnAttivi[4] == 1">Puoi uttilizzare i servizi di:
                 <slot></slot>
             </h3>
-            <button v-if="BtnAttivi[3] == 1" class="btn" @click="DataParent('PRE')" style="width: 100%;">Prenotazione</button>
+            <button v-if="BtnAttivi[3] == 1" class="btn" @click="DataParent('PRE')"
+                style="width: 100%;">Prenotazione</button>
             <RouterLink to="/eliminacode" v-if="BtnAttivi[4] == 1" class="btn" style="width: 100%;">Eliminacode</RouterLink>
         </div>
     </div>

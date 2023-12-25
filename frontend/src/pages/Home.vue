@@ -85,7 +85,7 @@ export default {
         },
 
         async getsagra() {
-            setTimeout(() => {
+            setInterval(() => {
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
                 this.Btn = sessionStorage.getItem('SagraButt').split("/")
             }, 500);

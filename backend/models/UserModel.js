@@ -1,6 +1,6 @@
 // import connection
 import db from "../config/database.js";
-import nodemailer from 'nodemailer'
+import emaildata from "../config/emaildata.js";
 
 // get all user
 export const getAllUser = (result) => {
@@ -41,13 +41,7 @@ export const insertUser = (data, result) => {
 
 
 export const Emailsender = (data, result) => {
-    const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'giulio.pizzinato@gmail.com',
-            pass: 'cqjl dyeg vzlo rxgc'
-        },
-    });
+    const transporter = emaildata
 
 
     const emailText = `
