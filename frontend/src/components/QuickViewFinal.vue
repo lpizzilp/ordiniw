@@ -6,8 +6,7 @@
                 inviare un email o in alternativa di fare uno screenshot.
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent('I')" style="margin-right: 5%;">Indietro</button>
-            <button class="btn" @click="DataParent('E')" style="margin-left: 5%;">Invia email</button>
+            <button class="btn" @click="DataParent('E')" style="width: 100%;">Invia email</button>
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'E'" class="quick-view-inner">
@@ -96,7 +95,7 @@ export default {
         //this.from                 DataParent                          this.Error
         //H = Banner Home           //H = Rotta Home                    //Si = errore
         //E = Banner Email          //E = Valorizza From con E
-        //I = Banner Successo       //I = Indietro
+        //I = Banner Successo
         //D = Banner Errore
 
 
@@ -104,8 +103,6 @@ export default {
             if (where === 'E') {
                 this.from = 'E'
                 this.error = err
-            } else if (where === 'I') {
-                this.$emit('childEvent', false);
             } else if (where === 'H') {
                 sessionStorage.removeItem('MatchUser')
                 sessionStorage.removeItem('Username')

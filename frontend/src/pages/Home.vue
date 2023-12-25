@@ -5,9 +5,13 @@
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
-                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 15px;">Inizia a ordinare</button><br>
-                <span v-if="Prenotazione == 1" style="padding-left: 30px;">oppure</span><br>
-                <button v-if="Prenotazione == 1" @click="handleSubmit('PRE')" class="btn" style="margin-top: 15px;">Prenota specialità</button>
+                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a ordinare</button><br>
+                <span v-if="Btn[3] == 1" style="padding-left: 30px;">oppure</span><br>
+                <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn" style="margin-top: 10px; margin-bottom: 10px;">Prenota
+                    specialità</button><br>
+                <span v-if="Btn[4] == 1" style="padding-left: 30px;">oppure</span><br>
+                <RouterLink to="/eliminacode" v-if="Btn[4] == 1" class="btn" style="margin-top: 10px;">Tabellone eliminacode
+                </RouterLink>
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
@@ -16,7 +20,7 @@
         </div>
 
 
-        <div class="home-category">
+       <!--<div class="home-category">
             <button @click="handleSubmit('P')" class="box">
                 <img src="../assets/images/pasta-img.png" alt="">
                 <h3>Primi</h3>
@@ -31,45 +35,23 @@
                 <img src="../assets/images/coca-img.png" alt="">
                 <h3>Bevande</h3>
             </button>
-        </div>
+        </div>-->
 
         <div class="home-about">
-            <div class="image">
-                <img src="../assets/images/Riservato.png" alt="">
+        <!--    <div class="image">
+                <img src="../assets/images/Riservato.png" alt="logo Esagra">
             </div>
             <div class="content">
                 <span>Esagra, il gestionale sagre</span>
                 <h3 class="title">Esagra, il gestionale sagre per tutte le esigenze</h3>
-                <p>Cerchi un software completo ed efficente per gestire al meglio la tua sagra? Esagra è gestionale per
-                    feste paesane ed eventi che offrono al pubblico un servizio di ristorazione. È stato progettato
-                    all’insegna della massima flessibilità e semplicità d'utilizzo,in modo da adattarsi alle necessità della
-                    manifestazione.
+               <p>Cerchi un software completo ed efficente per gestire al meglio la tua sagra? Esagra è gestionale per
+                    feste paesane ed eventi che offrono al pubblico un servizio di ristorazione.
                 </p>
-                <a href="http://esagra.it" target="_blank" @click="scrollToTop()" class="btn">Scoprì di più</a>
-
-                <!-- <div class="icons-container">
-                    <div class="icons">
-                        <img src="../assets/images/serv-2.png" alt="">
-                        <h3>Ottimo cibo</h3>
-                    </div>
-
-                    <div class="icons">
-                        <img src="../assets/images/serv-1.png" alt="">
-                        <h3>Preparazione veloce</h3>
-                    </div>
-
-                    <div class="icons">
-                        <img src="../assets/images/serv-3.png" alt="">
-                        <h3>Qualità grantita</h3>
-                    </div>
-                    <div class="icons">
-                        <img src="../assets/images/serv-4.png" alt="">
-                        <h3>Ottimo servizio</h3>
-                    </div>
-                </div>-->
-            </div>
+                <a href="http://esagra.it" target="_blank" @click="scrollToTop()" style="margin-top: 1rem;" class="btn">Scoprì di più</a>
+            </div>-->
         </div>
-        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :typeData="Filtertype"></QuickViewHome>
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :typeData="Filtertype" :BtnAttivi="Btn">
+        </QuickViewHome>
     </div>
 </template>
 
@@ -88,7 +70,7 @@ export default {
             showQuickVue: false,
             Filtertype: undefined,
             sagra_name: "",
-            Prenotazione: ""
+            Btn: [],
         };
     },
 
@@ -103,11 +85,10 @@ export default {
         },
 
         async getsagra() {
-            setTimeout(() => {
+            setInterval(() => {
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
-                this.Prenotazione = sessionStorage.getItem('SagraPren')
-                console.log(sessionStorage.getItem('SiglaHome'))
-            }, 150);
+                this.Btn = sessionStorage.getItem('SagraButt').split("/")
+            }, 500);
         },
 
         async handleChildEvent(type) {
@@ -356,7 +337,7 @@ export default {
 }
 
 .home-about .image img {
-    width: 100%;
+    width: 50%;
 }
 
 .home-about .content {
@@ -371,7 +352,7 @@ export default {
 }
 
 .home-about .content .title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     padding-top: .5rem;
     color: #130f40;
 }
