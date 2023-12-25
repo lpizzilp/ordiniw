@@ -242,7 +242,7 @@ export default {
                     Nominativo: this.checkoutObj.Nominativo
                 };
 
-                axios.post("/billstatus", billStatus);
+                await axios.post("/billstatus", billStatus);
 
                 this.cartItem.forEach((foodId, index) => {
                     this.sendBillDetails(billId, foodId, this.itemQuantity[index]);

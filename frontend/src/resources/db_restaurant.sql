@@ -79,6 +79,7 @@ CREATE TABLE `catalogo_sagre` (
   `flgPrenotazioni` tinyint(1) NOT NULL DEFAULT 0,
   `flgTavoli` tinyint(1) NOT NULL DEFAULT 0,
   `flgAsporto` tinyint(1) NOT NULL DEFAULT 0,
+ `flgEliminacode` tinyint(1) NOT NULL DEFAULT 0,  
   PRIMARY KEY (`id_sagra`),
   UNIQUE KEY `catalogo_sagre_unique` (`sigla`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -138,5 +139,4 @@ CREATE TABLE `billdetails` (
   `food_id` varchar(5) NOT NULL,
   `item_qty` int(11) DEFAULT NULL,
   PRIMARY KEY (`bill_id`,`food_id`),
-  CONSTRAINT `billdetails_FK` FOREIGN KEY (`bill_id`) REFERENCES `billstatus` (`bill_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
