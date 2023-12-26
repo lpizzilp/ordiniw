@@ -15,9 +15,34 @@ export const insertAnagrafica = (data,result) => {
     });
 };
 
-// insert anagrafica articoli 
+// delete anagrafica articoli 
 export const deleteAnagrafica = (data,result) => {
     db.query("DELETE FROM food",'' , (err,results)=> {        
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results[0]);
+        }
+    });
+};
+
+//------------------------------------------
+// insert esauriti 
+export const insertEsauriti = (data,result) => {
+    db.query("INSERT INTO esauriti SET ?",data, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results[0]);
+        }
+    });
+};
+
+// delete  esauriti
+export const deleteEsauriti = (data,result) => {
+    db.query("DELETE FROM esauriti",'' , (err,results)=> {        
         if (err){
             console.log(err);
             result(err,null);

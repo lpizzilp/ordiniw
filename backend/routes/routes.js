@@ -48,6 +48,11 @@ import {
     importAnagrafica
 } from "../controllers/callFromEsagra.js";
 
+import {
+    importEsauriti
+} from "../controllers/callFromEsagra.js";
+
+
 import { getSagraSig } from "../controllers/catalogo.js";
 
 // init express router
@@ -134,6 +139,9 @@ router.get("/api/sagra/:sigla", getSagraSig);
 ////////////////////////// Bill Details ////////////////////////////////
 router.post("/api/importfood", importAnagrafica);
 
+
+////////////////////////// Esauriti ////////////////////////////////
+router.post("/api/importesauriti", importEsauriti);
 
 
 // export default router
