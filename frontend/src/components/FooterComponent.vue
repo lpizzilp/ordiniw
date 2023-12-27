@@ -8,7 +8,7 @@
             </div>
 
             <div class="box">
-                <a href="http://esagra.it" target="_blank" title="Link esagra">http://esagra.it</a>
+                <a href="https://www.esagra.it" target="_blank" title="Link esagra">https://esagra.it</a>
             </div>
         </div> 
 
