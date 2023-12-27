@@ -100,7 +100,7 @@
                     <div v-if="!filterFoods.length">
                         <div class="box">
                             <div class="content">
-                                <h1 style="color: #057835fa;">Nessun articolo trovato!</h1>
+                                <h1 style="color: #057835fa;">Nessun articolo! <br>Scegli un altro Reparto</h1>
                             </div>
                             <div class="image">
                                 <img src="../assets/images/notfound.png" alt="" />

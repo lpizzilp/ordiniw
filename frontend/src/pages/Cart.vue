@@ -24,7 +24,7 @@
                                 <div class="box-content row no-food">
                                     <div class="content">
                                         <h2 style="color: #057835fa;">Non ci sono ancora articoli nel carrello.
-                                            <br>Va a comprare qualcosa!
+                                            <br>Ritorna al Menu!
                                         </h2>
                                     </div>
                                     <div class="image">

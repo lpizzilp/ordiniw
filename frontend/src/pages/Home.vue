@@ -47,7 +47,7 @@
                <p>Cerchi un software completo ed efficente per gestire al meglio la tua sagra? Esagra è gestionale per
                     feste paesane ed eventi che offrono al pubblico un servizio di ristorazione.
                 </p>
-                <a href="http://esagra.it" target="_blank" @click="scrollToTop()" style="margin-top: 1rem;" class="btn">Scoprì di più</a>
+                <a href="https://esagra.it" target="_blank" @click="scrollToTop()" style="margin-top: 1rem;" class="btn">Scoprì di più</a>
             </div>-->
         </div>
         <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :typeData="Filtertype" :BtnAttivi="Btn">
