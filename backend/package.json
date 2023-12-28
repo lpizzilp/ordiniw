@@ -1,12 +1,12 @@
 {
-  "name": "nodejs-api-exmaple",
-  "version": "1.0.0",
-  "description": "",
+  "name": "nodejs-api-ordiniesagra",
+  "version": "2.0.0",
+  "description": "Api per la gestioni ordini Esagra",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prod": "node index.js"
   },
   "keywords": [],
   "author": "",
