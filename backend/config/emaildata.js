@@ -1,11 +1,18 @@
 import nodemailer from 'nodemailer'
 
-const emaildata = nodemailer.createTransport({
-    service: 'Gmail',
+export const emaildata = nodemailer.createTransport({
+    host: 'mail.esagra.it',
+    port: '465',
     auth: {
-        user: 'giulio.pizzinato@gmail.com',
-        pass: 'cqjl dyeg vzlo rxgc'
+        user: 'info@esagra.it',
+        pass: 'Giulio2008.E'
     },
 });
 
-export default emaildata
+export const mailOptions = {
+    from: 'Ordini@esagra.it',
+    to: '',
+    subject: "Il tuo codice dell' Ordine web",
+    html: '',
+};
+

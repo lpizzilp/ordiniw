@@ -34,8 +34,8 @@
                             </div>
                             <div v-else>
                                 <div v-for="(f, index) in filterFoods" :key="index">
-                                    <div class="box-content row">
-                                        <div v-if="Artimage(f.food_src) != ''" class="image-box col-sm-3" style="padding-left: 0;">
+                                    <div v-if="Artimage(f.food_src) != ''" class="box-content row">
+                                        <div class="image-box col-sm-3" style="padding-left: 0;">
                                             <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
                                                 class="cart-product-img" />
                                         </div>
@@ -43,11 +43,11 @@
                                         <div class="desc col-sm-4">
                                             <h2 class="item-name">{{ f.food_name }}</h2>
                                             <div class="item-desc">
-                                                <b>Descrizione</b>
+                                                <b>&nbsp;</b>
                                                 <p>{{ f.food_desc.substring(0, 25) }}</p>
                                             </div>
                                             <button class="btn remove-btn" @click="cancelBtn(index)"><i
-                                                    class="fa fa-trash"></i>Rimuovi</button>
+                                                    class="fa fa-trash" @click="cancelBtn(index)"></i>Rimuovi</button>
                                         </div>
 
                                         <div class="item-price col-sm-1">
@@ -82,6 +82,51 @@
                                             </h4>
                                         </div>
                                     </div>
+
+                                    <div v-else class="box-content row">
+                                        <div class="desc col-sm-4">
+                                            <h2 class="item-name" style="color: #146c39">{{ f.food_name }}</h2>
+                                            <div class="item-desc" style="color: black;">
+                                                <b>&nbsp;</b>
+                                                <p style="color: black;">{{ f.food_desc.substring(0, 25) }}</p>
+                                            </div>
+                                            <button class="btn remove-btn" @click="cancelBtn(index)"><i
+                                                    class="fa fa-trash"></i>Rimuovi</button>
+                                        </div>
+
+                                        <div class="item-price col-sm-1">
+                                            <span class="sale-price" style="color: black;">{{ parseFloat(f.food_price) -
+                                                parseFloat(f.food_discount)
+                                            }}€</span>
+                                            <p class="text-muted first-price" v-if="parseFloat(f.food_discount) != 0.00" style="color: black;">
+                                                {{
+                                                    parseFloat(f.food_price)
+                                                }}€
+
+                                            </p>
+                                        </div>
+
+                                        <div class="item-qty col-sm-2 d-inline">
+                                            <button class="btn" value="plus"
+                                                style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
+                                                @click="itemQuantity[index]++, onQtyChange(index)"><i
+                                                    class="fa-solid fa-plus"></i></button>
+                                            <label id="iQuantity" class="form-control item-quantity">{{ itemQuantity[index]
+                                            }}</label>
+                                            <button class="btn" value="minus"
+                                                style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+                                                @click="itemQuantity[index]--, onQtyChange(index)"><i
+                                                    class="fa-solid fa-minus"></i></button>
+                                        </div>
+
+                                        <div class="cal-total col-sm-2">
+                                            <h4 class="item-total">{{
+                                                calculateItemPrice(index)
+                                            }}€
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <hr style="border-width: 2px; background-color: #27ae60;">
                                 </div>
                             </div>
 
@@ -307,8 +352,6 @@ export default {
     padding: 15px 20px 20px 20px;
     border-color: #e7eaec;
     border-image: none;
-    border-style: solid solid none;
-    border-width: 1px 0;
 
 }
 
@@ -450,14 +493,14 @@ export default {
 
     .desc .remove-btn {
         font-size: 12px;
-        margin-top: 25px;
+        margin-top: 27px;
         position: relative;
 
     }
 
     .item-price {
         position: absolute;
-        margin-top: 55px;
+        margin-top: 50px;
     }
 
     .item-price .first-price {

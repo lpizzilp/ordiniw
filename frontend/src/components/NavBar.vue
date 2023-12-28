@@ -73,6 +73,7 @@ export default {
                 } else {
                     this.nav_name = sagra.data[0].descrizione
                     this.sagra_name = "" + sagra.data[0].note + " " + sagra.data[0].descrizione
+                    sessionStorage.setItem('SagraId', parametriObj.id)
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
                     if (sagra.data[0].flgTavoli == 1 || sagra.data[0].flgTavoli == 1) {
@@ -163,7 +164,7 @@ export default {
     width: 5.5rem;
     line-height: 5.5rem;
     font-size: 2rem;
-    background: #f7f7f7;
+    background: #27ae60;
     color: #130f40;
     border-radius: .5rem;
     margin-left: .4rem;
@@ -171,13 +172,17 @@ export default {
     text-align: center;
 }
 
+.header .icons .cart {
+    color: #fff;
+}
+
 .header .icons div:hover {
     color: #fff;
-    background: #27ae60 !important;
+    background: #f38609 !important;
 }
 
 .header .icons a.router-link-exact-active .cart {
-    background: #f38609;
+    background: #f38609 ;
     color: white;
 }
 
