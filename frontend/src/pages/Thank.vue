@@ -47,6 +47,7 @@ export default {
         sessionStorage.removeItem('Username')
         sessionStorage.removeItem('Type')
         sessionStorage.removeItem('Bill')
+        sessionStorage.removeItem('SagraId')
     },
 
     methods: {

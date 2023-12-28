@@ -244,13 +244,6 @@ export default {
 
 
 /* home banner */
-.home-banner .row-banner {
-    background: url(../assets/images/row-banner.png) no-repeat;
-    height: 45rem;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
 
 .home-banner .row-banner .content {
     position: absolute;

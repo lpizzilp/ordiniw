@@ -1,6 +1,7 @@
 // import connection
 import db from "../config/database.js";
-import emaildata from "../config/emaildata.js";
+import { emaildata } from "../config/emaildata.js";
+import { mailOptions } from "../config/emaildata.js";
 
 // get all user
 export const getAllUser = (result) => {
@@ -49,7 +50,7 @@ export const Emailsender = (data, result) => {
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Grazie</p>
             <p style="text-align: center; font-size:16px;">Buon giorno gentile cliente.<br>Il tuo numero ordine è:</p>
             <h2 style="text-align:center; font-size:60px; padding-top: 5px; padding-botton: 5px; color:#27ae60; whidth:100%; background-color: #fff;">N.`  + data.ord_id + `</h2>
-            <p style="text-align: left; font-size:16px;">Questa email inviata da ordini.esagra.it per l'ordine inserito alle ore ` + data.ord_data + `<br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
+            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.ord_data + `<br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
             <hr style="border: 2px dashed #27ae60;">
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
@@ -67,22 +68,17 @@ export const Emailsender = (data, result) => {
             <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item + `</td></tr></table>
         </div>`;
 
-    const mailOptions = {
-        from: 'giulio.pizzinato@gmail.com',
-        to: data.user_email,
-        subject: "Il tuo codice dell' Ordine web",
-        html: emailText,
-    };
 
-    console.log(transporter)
+    mailOptions.to = data.user_email
+    mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log('passerr')
+            console.log('errore')
             console.log('Errore durante l\'invio dell\'email:', error);
             result(error, null);
         } else {
-            console.log('inv')
+            console.log('invio')
             console.log('Email inviata:', info.response);
             result(null, result[0]);
         }

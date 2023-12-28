@@ -31,10 +31,11 @@
             </form>
         </div>
         <div v-else-if="from === 'I'" class="quick-view-inner">
-            <h2 style="color: #27ae60;">Successo</h2><br>
+            <h2 style="color: #27ae60;">Inviata!</h2><br>
             <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.<br>Puoi abbandonare la pagina
                 <slot></slot>
             </h3>
+            <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
             <button @click="DataParent('E', 'Si')"
                 style="width: 100%; margin-top: 20px; background-color: white; text-align: center; color: #f38304; text-decoration: underline;">
                 <h4>L'email non è arrivata?</h4>
@@ -103,9 +104,12 @@ export default {
             if (where === 'E') {
                 this.from = 'E'
                 this.error = err
+            } else if (where === 'I') {
+                this.$emit('childEvent', false);
             } else if (where === 'H') {
                 sessionStorage.removeItem('MatchUser')
                 sessionStorage.removeItem('Username')
+                sessionStorage.removeItem('SagraId')
                 sessionStorage.removeItem('Type')
                 this.$router.push("/");
             }
@@ -115,13 +119,14 @@ export default {
             let billitem = await axios.get('/billdetails/' + this.Dataform.id)
             billitem.data.forEach(element => {
                 console.log(element)
-                    this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">' + parseInt(element.item_qty));
+                this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">' + parseInt(element.item_qty));
             });
 
 
             let data = {
                 user_email: this.Dataform.email,
-                user_data: "http://" + window.location.hostname.toString() + ":8082/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('Type') + "&bill_id=" + sessionStorage.getItem('Bill'),
+                sagra_link: "http://" + window.location.hostname.toString() + "?id=" + sessionStorage.getItem('SagraId'),
+                user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('Type') + "&bill_id=" + sessionStorage.getItem('Bill'),
                 ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,
