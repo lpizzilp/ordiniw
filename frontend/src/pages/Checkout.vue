@@ -4,47 +4,49 @@
             <form id="checkoutForm" @submit="handleSubmit" novalidate autocomplete="off">
                 <div class="checkout-heading">
                     <h3>Manca solo un passaggio</h3>
-                    <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
                 </div>
 
-                <div class="btn-type">
-                    <button v-if="type === 'W'" class="btn">Al tavolo</button>
-                    <button v-else class="btn">Asporto</button>
-                </div>
-            <div v-if="type === 'W'">
-                <div class="form-group details-group" id="Tavolo">
-                    <h4>Dettagli dell'acquirente</h4>
-                    <div class="form-group">
-                        <input type="text" name="Tavolo" id="Tavolo" placeholder="Inserisci il numero del tavolo"
-                            class="form-control" v-model="checkoutObj.Tavolo" />
-                        <p class="error-mess" v-if="errorObj.TavoloErr.length > 0">{{ errorObj.TavoloErr[0] }}</p>
-                    </div>
+                <div v-if="type === 'W'">
+                    <div class="form-group details-group" id="Tavolo">
+                        <h4>Completa dettagli ordine</h4>
+                        <div class="form-group">
+                            <input type="text" name="Tavolo" id="Tavolo" placeholder="Inserisci il numero del tavolo"
+                                class="form-control" v-model="checkoutObj.Tavolo" />
+                            <p class="error-mess" v-if="errorObj.TavoloErr.length > 0">{{ errorObj.TavoloErr[0] }}</p>
+                        </div>
 
-                    <div class="form-group">
-                        <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
-                            class="form-control" v-model="checkoutObj.Coperti" />
-                        <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
-                    </div>
+                        <div class="form-group">
+                            <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
+                                class="form-control" v-model="checkoutObj.Coperti" />
+                            <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
+                        </div>
 
-                    <div class="form-group">
-                        <input type="text" name="Nominativo" id="Nominativo" placeholder="Campo nominativo, non obbligatorio"
-                            class="form-control" v-model="checkoutObj.Nominativo" />
-                        <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}</p>
-                    </div>
+                        <div class="form-group">
+                            <input type="text" name="Nominativo" id="Nominativo"
+                                placeholder="Campo nominativo, non obbligatorio" class="form-control"
+                                v-model="checkoutObj.Nominativo" />
+                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
+                            </p>
+                        </div>
 
-                </div>
-            </div>
-            <div v-else>
-                <div class="form-group details-group" id="Asporto">
-                    <h4>Dettagli dell'acquirente</h4>
-                    <div class="form-group">
-                        <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
-                            class="form-control" v-model="checkoutObj.Nominativo" />
-                        <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}</p>
                     </div>
                 </div>
-            </div>
+                <div v-else>
+                    <div class="form-group details-group" id="Asporto">
+                        <h4>Dettagli dell'acquirente</h4>
+                        <div class="form-group">
+                            <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
+                                class="form-control" v-model="checkoutObj.Nominativo" />
+                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group details-group" id="General">
+                    <div class="checkout-headings">
+                        <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
+                    </div>
                     <h4>Pagamento</h4>
                     <div class="form-group">
                         <div class="form-group">
@@ -55,7 +57,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" >
+                <div class="form-group">
                     <input type="submit" value="Conferma" class="btn" />
                 </div>
                 <div>
@@ -104,7 +106,7 @@ export default {
             document.getElementById("coCardEx").setAttribute("min", minRange);
             document.getElementById("coCardEx").setAttribute("max", maxRange);
         },
-        
+
         matchID: function (food, cartArray) {
             let temp = "";
             cartArray.forEach(element => {
@@ -149,7 +151,7 @@ export default {
         typeOrd: function (click) {
             if (click === "C") {
                 this.showQuickView = true
-            } 
+            }
         },
 
         checkEmptyErr: function () {
@@ -210,7 +212,7 @@ export default {
                 if (sessionStorage.getItem('Bill') != "" || null || undefined) {
                     axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
                     axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
-                } 
+                }
                 e.preventDefault();
                 let billId = (await axios.get("/billstatus/new")).data;
                 if (billId == "") {
@@ -349,7 +351,8 @@ export default {
 
 .checkout-container .checkout-form-container form .form-group.details-group {
     display: block;
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .checkout-container .checkout-form-container form .form-group .error-mess {
@@ -360,15 +363,10 @@ export default {
     padding: 0;
 }
 
-.checkout-container .checkout-form-container form .checkout-heading h3 {
-    display: flex;
-    justify-content: space-between;
-}
-
-.checkout-container .checkout-form-container form .checkout-heading h3 span {
-    padding-right: 0px;
+.checkout-container .checkout-form-container form .checkout-headings h3 span {
     color: #f38609;
 }
+
 
 .checkout-container .checkout-form-container form .checkout-heading h3:first-of-type span {
     padding-right: 0px;
