@@ -88,7 +88,7 @@ export default {
             setInterval(() => {
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
                 this.Btn = sessionStorage.getItem('SagraButt').split("/")
-            }, 500);
+            }, 200);
         },
 
         async handleChildEvent(type) {
