@@ -1,27 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
---
--- Host: localhost    Database: db_restaurant
--- ------------------------------------------------------
--- Server version	5.5.5-10.4.28-MariaDB
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
---CREATE DATABASE `db_restaurant` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
-
---
--- Table structure for table `billdetails`
---
-
 -- db_restaurant.billstatus definition
 
 CREATE TABLE `billstatus` (
@@ -69,19 +45,18 @@ CREATE TABLE `cart` (
 
 -- db_restaurant.catalogo_sagre definition
 
--- db_restaurant.catalogo_sagre definition
-
 CREATE TABLE `catalogo_sagre` (
-  `id_sagra` varchar(100) NOT NULL,
+  `id_sagra` varchar(5) NOT NULL,
   `descrizione` varchar(255) NOT NULL,
-  `sigla` varchar(100) NOT NULL,
-  `note` varchar(255) DEFAULT NULL,
+  `desc_prefix` varchar(10) DEFAULT NULL,
   `flgPrenotazioni` tinyint(1) NOT NULL DEFAULT 0,
   `flgTavoli` tinyint(1) NOT NULL DEFAULT 0,
   `flgAsporto` tinyint(1) NOT NULL DEFAULT 0,
- `flgEliminacode` tinyint(1) NOT NULL DEFAULT 0,  
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `catalogo_sagre_unique` (`sigla`)
+  `flgEliminacode` tinyint(1) NOT NULL DEFAULT 0,
+  `info` varchar(255) NOT NULL,
+  `flgInfo` tinyint(1) NOT NULL DEFAULT 0,
+  `numcoda` int(10) unsigned NOT NULL DEFAULT 99,
+  PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -139,4 +114,5 @@ CREATE TABLE `billdetails` (
   `food_id` varchar(5) NOT NULL,
   `item_qty` int(11) DEFAULT NULL,
   PRIMARY KEY (`bill_id`,`food_id`),
+  CONSTRAINT `billdetails_FK` FOREIGN KEY (`bill_id`) REFERENCES `billstatus` (`bill_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
