@@ -53,7 +53,12 @@ import {
 } from "../controllers/callFromEsagra.js";
 
 
-import { getSagraSig } from "../controllers/catalogo.js";
+import {
+    getSagraSig,
+    createSagra,
+    updateSagraCodaeInfo
+
+ } from "../controllers/catalogo.js";
 
 // init express router
 const router = express.Router();
@@ -134,6 +139,9 @@ router.delete("/api/billstatus/delete/:id", deleteBill)
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
 router.get("/api/sagra/:sigla", getSagraSig);
+router.post("/api/catalogosagre", createSagra);
+router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);
+
 
 
 ////////////////////////// Bill Details ////////////////////////////////
