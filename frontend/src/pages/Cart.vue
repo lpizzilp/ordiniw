@@ -46,8 +46,8 @@
                                                 <b>&nbsp;</b>
                                                 <p>{{ f.food_desc.substring(0, 25) }}</p>
                                             </div>
-                                            <button class="btn remove-btn" @click="cancelBtn(index)"><i
-                                                    class="fa fa-trash" @click="cancelBtn(index)"></i>Rimuovi</button>
+                                            <button class="btn remove-btn" @click="cancelBtn(index)" @touchstart="cancelBtn(index)"><i
+                                                    class="fa fa-trash"></i>Rimuovi</button>
                                         </div>
 
                                         <div class="item-price col-sm-1">
@@ -170,14 +170,11 @@
                 </div>
             </div>
         </div>
-
-        <quick-view-cart v-if="showQuickView" @childEvent="handleChildEvent" :parentData="dataFromParent"></quick-view-cart>
     </div>
 </template>
 
 <script>
 import axios from "axios";
-import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
 export default {
     name: "Cart",
@@ -289,17 +286,13 @@ export default {
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
+                    console.log('art ' + element.food_id + ' quantità ' + element.item_qty )
                 });
             }
         }
 
 
     },
-
-    components: {
-        QuickViewCart
-    }
-
 }
 </script>
 
@@ -512,7 +505,7 @@ export default {
     .item-qty {
         position: absolute;
         margin-top: 15px;
-        padding-left: 200px;
+        margin-left: 200px;
     }
 
     .cal-total {
