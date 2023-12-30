@@ -351,7 +351,6 @@ export default {
                 } else {
                     // Quando il timer raggiunge zero, ferma l'intervallo e inserisci nel carrello
                     clearInterval(this.timerInterval);
-                    console.log(index + ' art confermato ' + this.qty[index] + ' con questa quantità')
                     this.addToCart(index)
                 }
             }, 250);
@@ -373,6 +372,7 @@ export default {
             }
 
             this.setqty = false
+            console.log( 'art' + this.sendId + ' confermato con ' + this.qty[index] + ' con questa quantità')
 
             switch (existItem.data.length) {
                 case 1:

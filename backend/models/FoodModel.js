@@ -3,7 +3,7 @@ import db from "../config/database.js";
 
 // get all Foods
 export const getFoods = (result) => {
-    db.query("SELECT f.*, e.QtaDisponibile  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id ORDER BY f.food_id desc;", (err,results)=> {
+    db.query("SELECT f.*, e.QtaDisponibile  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id ORDER BY f.food_category desc, f.food_name asc;", (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
