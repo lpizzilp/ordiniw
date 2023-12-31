@@ -46,8 +46,8 @@
                                                 <b>&nbsp;</b>
                                                 <p>{{ f.food_desc.substring(0, 25) }}</p>
                                             </div>
-                                            <button class="btn remove-btn" @click="cancelBtn(index)" @touchstart="cancelBtn(index)"><i
-                                                    class="fa fa-trash"></i>Rimuovi</button>
+                                            <button class="btn remove-btn" @click="cancelBtn(index)"
+                                                @touchstart="cancelBtn(index)"><i class="fa fa-trash"></i>Rimuovi</button>
                                         </div>
 
                                         <div class="item-price col-sm-1">
@@ -98,7 +98,8 @@
                                             <span class="sale-price" style="color: black;">{{ parseFloat(f.food_price) -
                                                 parseFloat(f.food_discount)
                                             }}€</span>
-                                            <p class="text-muted first-price" v-if="parseFloat(f.food_discount) != 0.00" style="color: black;">
+                                            <p class="text-muted first-price" v-if="parseFloat(f.food_discount) != 0.00"
+                                                style="color: black;">
                                                 {{
                                                     parseFloat(f.food_price)
                                                 }}€
@@ -170,11 +171,13 @@
                 </div>
             </div>
         </div>
+        <quick-view-cart v-if="showQuickView" @childEvent="handleChildEvent" :parentData="dataFromParent"></quick-view-cart>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
 export default {
     name: "Cart",
@@ -208,11 +211,11 @@ export default {
         Artimage(food) {
             try {
                 return require(`../assets/images/${food}`);
-    
+
             } catch (ex) {
-                return '' ;//require(`../assets/images/no.png`);
+                return '';//require(`../assets/images/no.png`);
             }
-        }, 
+        },
 
 
         matchID: function (food, cartArray) {
@@ -286,12 +289,14 @@ export default {
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
-                    console.log('art ' + element.food_id + ' quantità ' + element.item_qty )
+                    console.log('art ' + element.food_id + ' quantità ' + element.item_qty)
                 });
             }
         }
+    },
 
-
+    components: {
+        QuickViewCart
     },
 }
 </script>
