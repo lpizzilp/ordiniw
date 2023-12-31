@@ -72,7 +72,7 @@ export default {
                     sessionStorage.setItem('SagraButt', 0)
                 } else {
                     this.nav_name = sagra.data[0].descrizione
-                    this.sagra_name = "" + sagra.data[0].note + " " + sagra.data[0].descrizione
+                    this.sagra_name = "" + sagra.data[0].desc_prefix + " " + sagra.data[0].descrizione
                     sessionStorage.setItem('SagraId', parametriObj.id)
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
