@@ -44,7 +44,7 @@ export const deleteSagra = (id,result) => {
 //UPDATE delle informazioni numcoda E info 
 //-------------------------------------------------------
 export const updateSagraCodaeInfoByID = (data,id,result) => {
-    db.query("UPDATE catalogo_sagre SET numcoda  = ?, info = ? WHERE id_sagra = ?",[data.numcoda, data.info, id], (err,results)=> {
+    db.query("UPDATE catalogo_sagre SET flgEliminacode = ? , flgInfo = ? , numcoda  = ?, info = ? WHERE id_sagra = ?",[data.flgEliminacode, data.flgInfo, data.numcoda, data.info, id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
