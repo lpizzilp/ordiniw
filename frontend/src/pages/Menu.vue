@@ -87,12 +87,17 @@
                                     </h4>
                                 </div>
                                 <div v-else class="add-to-cart">
-                                    <button class="btn" style="flex: 33%; padding-left: 2%; padding-right: 2%;"
+                                    <button class="btn"
+                                        style="border-right-color: black; border-bottom-right-radius: 0%;  border-top-right-radius: 0%;"
                                         value="minus" @click="qty[index]--, onQtyChange(index)"><i
                                             class="fa-solid fa-minus"></i></button>
-                                    <h4 style="flex: 33%; background-color: white;">{{ qty[index] }}</h4>
-                                    <button class="btn" style="flex: 33%; padding-left: 2%; padding-right: 2%;" value="plus"
-                                        @click="qty[index]++, onQtyChange(index)"><i class="fa-solid fa-plus"></i></button>
+                                    <h4 v-if="qty[index] == 0">{{ qty[index] }}</h4>
+                                    <h4 v-else style="background-color: #f38609f4; color: white;">{{ qty[index] }}
+                                    </h4>
+                                    <button class="btn"
+                                        style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
+                                        value="plus" @click="qty[index]++, onQtyChange(index)"><i
+                                            class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -119,6 +124,11 @@
                             </button>
                 </div>
             </div>
+        </div>
+        <div class="to-cart">
+            <router-link @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
+                <i class="fas fa-shopping-cart cart"></i> Vai al carrello
+            </router-link>
         </div>
     </div>
 </template>
@@ -372,7 +382,7 @@ export default {
             }
 
             this.setqty = false
-            console.log( 'art' + this.sendId + ' confermato con ' + this.qty[index] + ' con questa quantità')
+            console.log('art' + this.sendId + ' confermato con ' + this.qty[index] + ' con questa quantità')
 
             switch (existItem.data.length) {
                 case 1:
@@ -549,9 +559,22 @@ hr {
 
 }
 
+.menu-section .box-container .box .content .add-to-cart .btn {
+    flex: 33%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.menu-section .box-container .box .content .add-to-cart .btn:hover {
+    background-color: #27ae60;
+}
+
 .menu-section .box-container .box .content .add-to-cart h4 {
     font-size: 2.0rem;
-    text-align: center;
+    flex: 33%;
+    margin: 0px;
+    padding-top: 0.5rem;
+    background-color: white;
     color: #130f40;
 }
 
@@ -589,6 +612,13 @@ hr {
 
 .filter-drop-down {
     display: none;
+}
+
+.to-cart {
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 5vh;
 }
 
 @media (min-width: 576px) {
@@ -693,5 +723,10 @@ hr {
         color: #130f40;
     }
 
-}
-</style>
+    .to-cart {
+        width: 100%;
+        margin: 0%;
+        margin-top: 5vh;
+    }
+
+}</style>

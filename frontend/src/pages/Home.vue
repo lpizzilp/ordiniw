@@ -7,7 +7,8 @@
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
                 <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a ordinare</button><br>
                 <span v-if="Btn[3] == 1" style="padding-left: 30px;">oppure</span><br>
-                <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn" style="margin-top: 10px; margin-bottom: 10px;">Prenota
+                <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn"
+                    style="margin-top: 10px; margin-bottom: 10px;">Prenota
                     specialità</button><br>
                 <span v-if="Btn[4] == 1" style="padding-left: 30px;">oppure</span><br>
                 <RouterLink to="/eliminacode" v-if="Btn[4] == 1" class="btn" style="margin-top: 10px;">Tabellone eliminacode
@@ -20,7 +21,7 @@
         </div>
 
 
-       <!--<div class="home-category">
+        <!--<div class="home-category">
             <button @click="handleSubmit('P')" class="box">
                 <img src="../assets/images/pasta-img.png" alt="">
                 <h3>Primi</h3>
@@ -38,7 +39,7 @@
         </div>-->
 
         <div class="home-about">
-        <!--    <div class="image">
+            <!--    <div class="image">
                 <img src="../assets/images/Riservato.png" alt="logo Esagra">
             </div>
             <div class="content">
@@ -56,10 +57,10 @@
 </template>
 
 <script>
+
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import { mapMutations } from "vuex";
-
 export default {
     name: "Home",
     data() {

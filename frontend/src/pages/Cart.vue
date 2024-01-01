@@ -107,7 +107,7 @@
                                             </p>
                                         </div>
 
-                                        <div class="item-qty col-sm-2 d-inline">
+                                        <div class="item-qty">
                                             <button class="btn" value="plus"
                                                 style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
                                                 @click="itemQuantity[index]++, onQtyChange(index)"><i
