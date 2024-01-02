@@ -11,12 +11,12 @@
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
             <h3>In questa sagra non puoi ordinare online.</h3><br>
-            <h3 v-if="BtnAttivi[3] == 1 || BtnAttivi[4] == 1">Puoi uttilizzare i servizi di:
+            <h3 v-if="BtnAttivi[3] == 1 || BtnAttivi[4] == 1 || BtnAttivi[6] == 1">Puoi uttilizzare i servizi di:
                 <slot></slot>
             </h3>
             <button v-if="BtnAttivi[3] == 1" class="btn" @click="DataParent('PRE')"
                 style="width: 100%;">Prenotazione</button>
-            <RouterLink to="/eliminacode" v-if="BtnAttivi[4] == 1" class="btn" style="width: 100%;">Eliminacode</RouterLink>
+            <RouterLink to="/eliminacode" v-if="BtnAttivi[4] == 1 || BtnAttivi[6] == 1" class="btn" style="width: 100%;">Eliminacode</RouterLink>
         </div>
     </div>
 </template>
@@ -37,7 +37,6 @@ export default {
         window.scrollTo(0, 0);
     },
     created() {
-        console.log('pas');
         if (this.typeData === 'PRE') {
             this.DataParent(this.typeData);
         }
@@ -45,7 +44,6 @@ export default {
     methods: {
         DataParent(where) {
             sessionStorage.setItem('Type', where);
-            console.log(sessionStorage.getItem('Type'));
             const dataforParent = {
                 vis: false,
                 typefilter: this.typeData

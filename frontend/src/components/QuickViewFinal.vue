@@ -118,7 +118,6 @@ export default {
         async submitForm() {
             let billitem = await axios.get('/billdetails/' + this.Dataform.id)
             billitem.data.forEach(element => {
-                console.log(element)
                 this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">' + parseInt(element.item_qty));
             });
 
@@ -133,7 +132,6 @@ export default {
             }
             await axios.post('/mail/', data)
                 .then(response => {
-                    console.log(response.data);
                     if (response.data === '') {
                         this.from = 'I'
                         this.startTimer()

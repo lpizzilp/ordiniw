@@ -286,7 +286,6 @@ export default {
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
-                    console.log('art ' + element.food_id + ' quantità ' + element.item_qty )
                 });
             }
         }

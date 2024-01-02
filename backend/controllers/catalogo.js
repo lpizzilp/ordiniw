@@ -21,7 +21,6 @@ export const getSagraSig=(req,res)=>{
 //-------------------------------------------------
 export const createSagra=(req,res)=>{
     const data = req.body;
-    //console.log(data[0].id_sagra); 
     //Cancellazione preventiva del  record prima della immissione 
     deleteSagra(data[0].id_sagra,(err,results)=> {
         if (err) {

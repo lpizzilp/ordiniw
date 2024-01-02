@@ -7,11 +7,14 @@
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
                 <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a ordinare</button><br>
                 <span v-if="Btn[3] == 1" style="padding-left: 30px;">oppure</span><br>
-                <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn" style="margin-top: 10px; margin-bottom: 10px;">Prenota
+                <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn"
+                    style="margin-top: 10px; margin-bottom: 10px;">Prenota
                     specialità</button><br>
-                <span v-if="Btn[4] == 1" style="padding-left: 30px;">oppure</span><br>
-                <RouterLink to="/eliminacode" v-if="Btn[4] == 1" class="btn" style="margin-top: 10px;">Tabellone eliminacode
-                </RouterLink>
+                <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
+                <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
+                    style="margin-top: 10px;">Tabellone
+                    eliminacode
+                </button>
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
@@ -20,7 +23,7 @@
         </div>
 
 
-       <!--<div class="home-category">
+        <!--<div class="home-category">
             <button @click="handleSubmit('P')" class="box">
                 <img src="../assets/images/pasta-img.png" alt="">
                 <h3>Primi</h3>
@@ -38,17 +41,31 @@
         </div>-->
 
         <div class="home-about">
-        <!--    <div class="image">
-                <img src="../assets/images/Riservato.png" alt="logo Esagra">
+            <div class="tabelloni">
+                <div v-if="Btn[4] == 1" class="eliminacode">
+                    <span>Eliminacode</span>
+                    <div class="display" @click="handleSubmit('TAB')">
+                        <sevenSegmentDisplay :value="Display[0][0]" :rounded="true" :segment-width="50" :segment-height="7"
+                            on-color="#f00" off-color="transparent" />
+                        <sevenSegmentDisplay v-if="Display[0][1] != undefined"  style="margin-left: 15px;" :value="Display[0][1]" :rounded="true"
+                            :segment-width="50" :segment-height="7" on-color="#f00" off-color="transparent" />
+                        <sevenSegmentDisplay v-if="Display[0][2] != undefined"  style="margin-left: 15px;" :value="Display[0][2]" :rounded="true"
+                            :segment-width="50" :segment-height="7" on-color="#f00" off-color="transparent" />
+                    </div>
+                </div>
+                <div v-if="Btn[6] == 1" class="info">
+                    <span>Tabellone Info</span>
+                    <div class="display" @click="handleSubmit('TAB')">
+                        <p>{{ Display[1] }} </p>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <p v-if='Btn[4] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
+                    <p v-if='Btn[6] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
+                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;"><i class="fa-solid fa-retweet" style="margin-right: 5px;"></i>Aggiorna</button>
+                </div>
             </div>
-            <div class="content">
-                <span>Esagra, il gestionale sagre</span>
-                <h3 class="title">Esagra, il gestionale sagre per tutte le esigenze</h3>
-               <p>Cerchi un software completo ed efficente per gestire al meglio la tua sagra? Esagra è gestionale per
-                    feste paesane ed eventi che offrono al pubblico un servizio di ristorazione.
-                </p>
-                <a href="https://esagra.it" target="_blank" @click="scrollToTop()" style="margin-top: 1rem;" class="btn">Scoprì di più</a>
-            </div>-->
         </div>
         <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :typeData="Filtertype" :BtnAttivi="Btn">
         </QuickViewHome>
@@ -58,6 +75,7 @@
 <script>
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
+import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
 import { mapMutations } from "vuex";
 
 export default {
@@ -71,6 +89,7 @@ export default {
             Filtertype: undefined,
             sagra_name: "",
             Btn: [],
+            Display: [[]],
         };
     },
 
@@ -85,16 +104,17 @@ export default {
         },
 
         async getsagra() {
-            setInterval(() => {
+            setTimeout(() => {
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
-                this.Btn = sessionStorage.getItem('SagraButt').split("/")
+                this.Btn = sessionStorage.getItem('SagraBottoni').split("/")
+                this.Display[0] = this.Btn[5].split('')
+                this.Display[1] = this.Btn[7]
             }, 200);
         },
 
         async handleChildEvent(type) {
             this.showQuickVue = type.vis
             this.errors = [];
-            console.log("passo handle");
             var idR = this.randomizza();
             this.loginObj.name = "Utente" + idR;
             let datareg = {
@@ -118,7 +138,6 @@ export default {
                     this.setUser(this.matchUser);
                     sessionStorage.setItem('Username', this.matchUser.user_id);
                     sessionStorage.setItem('MatchUser', this.matchUser);
-                    console.log(sessionStorage.getItem('Username'));
                     sessionStorage.setItem('filtro', type.typefilter);
                     this.$router.push("/menu");
                 }
@@ -143,11 +162,28 @@ export default {
         },
         // Punto dove inserisce user
         async handleSubmit(type) {
-            this.Filtertype = type
-            this.showQuickVue = true
+            let div = document.getElementsByClassName('tabelloni')
+            if (type === 'TAB') {
+                div[0].style.display = 'block'
+                var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+                if (sagra.data[0].flgEliminacode == 1) {
+                    this.Btn[4] = 1
+                    this.Btn[6] = 0
+                    let num = sagra.data[0].numcoda.toString()
+                    this.Display[0] = num.split('')
+                } else if (sagra.data[0].flgInfo == 1) {
+                    this.Btn[6] = 1
+                    this.Btn[4] = 0
+                    this.Display[1] = sagra.data[0].info
+                }
+            } else {
+                div[0].style.display = 'none'
+                this.Filtertype = type
+                this.showQuickVue = true
+            }
         },
     },
-    components: { QuickViewHome }
+    components: { QuickViewHome, sevenSegmentDisplay }
 };
 </script>
 
@@ -242,144 +278,56 @@ export default {
     color: #130f40;
 }
 
-
-/* home banner */
-
-.home-banner .row-banner .content {
-    position: absolute;
-    top: 50%;
-    left: 7%;
-    transform: translateY(-50%);
-}
-
-.home-banner .row-banner .content span {
-    font-family: 'Satisfy', cursive;
-    font-size: 4rem;
-    color: #27ae60;
-    color: #130f40;
-}
-
-.home-banner .row-banner .content h3 {
-    font-size: 6rem;
-    color: red;
-    text-transform: uppercase;
-}
-
-.home-banner .row-banner .content p {
-    font-size: 2rem;
-    padding-bottom: 1rem;
-}
-
-
-.home-banner .grid-banner .grid {
-    border-radius: 1rem;
-    overflow: hidden;
-    height: 45rem;
-}
-
-.home-banner .grid-banner .grid:hover img {
-    transform: scale(1.2);
-}
-
-.home-banner .grid-banner .grid img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-}
-
-.home-banner .grid-banner .grid .content {
-    position: absolute;
-    top: 2rem;
-    padding: 0 2rem;
-}
-
-.home-banner .grid-banner .grid .content.center {
-    text-align: center;
-    width: 100%;
-}
-
-.home-banner .grid-banner .grid .content.center span {
-    color: #666;
-}
-
-.home-banner .grid-banner .grid .content.center h3 {
-    color: #130f40;
-}
-
-.home-banner .grid-banner .grid .content span {
-    font-size: 2.5rem;
-    color: #fff;
-}
-
-.home-banner .grid-banner .grid .content h3 {
-    font-size: 3rem;
-    color: #fff;
-    padding-top: .5rem;
-}
+/* home about */
 
 .home-about {
-    display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 2rem;
     background: #f7f7f7;
 }
 
-.home-about .image {
-    flex: 1 1 40rem;
+.home-about .tabelloni {
+    display: none;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #27ae60;
 }
 
-.home-about .image img {
-    width: 50%;
-}
-
-.home-about .content {
-
-    flex: 1 1 40rem;
-}
-
-.home-about .content span {
+.home-about .tabelloni span {
     font-family: 'Satisfy', cursive;
     font-size: 3rem;
     color: #27ae60;
 }
 
-.home-about .content .title {
-    font-size: 2.5rem;
-    padding-top: .5rem;
-    color: #130f40;
+.home-about .tabelloni .display {
+    margin: 1rem;
+    padding: 2rem;
+    background-color: #000000;
+    border-style: outset;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color: #27ae60;
 }
 
-.home-about .content p {
+.home-about .tabelloni .display p {
     padding: 1rem 0;
     line-height: 2;
     font-size: 2rem;
-    color: #000000d1;
+    color: #fff;
     text-transform: none;
 }
 
-.home-about .content .icons-container {
-    margin-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+.home-about .content p {
+    font-size: 1.8rem;
+    text-transform: none;
+    color: #000000a8;
+    line-height: 1.5;
+    padding: 1rem 0;
 }
 
-.home-about .content .icons-container .icons {
-    flex: 1 1 20rem;
-    border-radius: .5rem;
-    background: #fff;
-    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.05);
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    padding: 2rem;
-}
-
-.home-about .content .icons-container .icons h3 {
-    font-size: 1.7rem;
-    color: #130f40;
-}
 
 @media (max-width: 768px) {
     #menu-btn {

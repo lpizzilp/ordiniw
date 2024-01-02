@@ -172,13 +172,11 @@ export default {
         }
         this.buildArray()
         this.getAllCartItem()
-        console.log('crea')
     },
 
     updated() {
         this.buildArray()
         this.getAllCartItem()
-        console.log('up')
     },
 
     computed: {
@@ -241,7 +239,6 @@ export default {
         },
 
         ImagePresent: function () {
-            console.log("------" + this.f.food_src);
             if (this.f.food_src != null) {
                 return 1;
             }
@@ -372,8 +369,6 @@ export default {
             }
 
             this.setqty = false
-            console.log( 'art' + this.sendId + ' confermato con ' + this.qty[index] + ' con questa quantità')
-
             switch (existItem.data.length) {
                 case 1:
                     if (data.item_qty <= 0) {
