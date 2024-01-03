@@ -10,13 +10,7 @@
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'E'" class="quick-view-inner">
-            <div v-if="error === 'Si'">
-                <h2>Riprova</h2><br>
-                <h3>Controlla che l'email sia corretta
-                    <slot></slot>
-                </h3>
-            </div>
-            <div v-else>
+            <div>
                 <h2>Invio Email</h2>
                 <h3>Inserisci la tua Email
                     <slot></slot>
@@ -36,10 +30,6 @@
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
-            <button @click="DataParent('E', 'Si')"
-                style="width: 100%; margin-top: 20px; background-color: white; text-align: center; color: #f38304; text-decoration: underline;">
-                <h4>L'email non è arrivata?</h4>
-            </button>
         </div>
         <div v-else-if="from === 'D'" class="quick-view-inner">
             <h2 style="color: #c71b1b;">Errore</h2><br>
@@ -60,7 +50,6 @@ export default {
         return {
             from: 'H',
             Dataform: { email: "", id: "", data: "" },
-            error: 'N',
             Item: [],
             itemQuantity: [],
             timer: 7
@@ -93,8 +82,8 @@ export default {
     },
     methods: {
         //Codici
-        //this.from                 DataParent                          this.Error
-        //H = Banner Home           //H = Rotta Home                    //Si = errore
+        //this.from                 DataParent
+        //H = Banner Home           //H = Rotta Home
         //E = Banner Email          //E = Valorizza From con E
         //I = Banner Successo
         //D = Banner Errore

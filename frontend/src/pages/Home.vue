@@ -41,6 +41,7 @@
         </div>-->
 
         <div class="home-about">
+
             <div class="tabelloni">
                 <div v-if="Btn[4] == 1" class="eliminacode">
                     <span>Eliminacode</span>
@@ -73,11 +74,11 @@
 </template>
 
 <script>
+
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
 import { mapMutations } from "vuex";
-
 export default {
     name: "Home",
     data() {
