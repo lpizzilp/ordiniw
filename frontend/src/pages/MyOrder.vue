@@ -43,7 +43,7 @@ export default {
             sessionStorage.setItem('MatchUser', parametriObj.match)
             sessionStorage.setItem('Username', parametriObj.user)
             sessionStorage.setItem('filtro', "")
-            sessionStorage.setItem('Type', parametriObj.type)
+            sessionStorage.setItem('TipoOrdine', parametriObj.type)
             sessionStorage.setItem('Bill', parametriObj.bill_id)
             let billitem = await axios.get('/billdetails/' + parametriObj.id)
             for (let i = 0; i < billitem.data.length; i++) {

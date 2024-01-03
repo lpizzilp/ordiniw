@@ -85,7 +85,7 @@ export default {
             itemQuantity: [],
             showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
-            type: sessionStorage.getItem('Type')
+            type: sessionStorage.getItem('TipoOrdine')
         };
     },
     created() {
@@ -183,7 +183,7 @@ export default {
             } else if (this.type === 'Y') {
                 // Nominativo validate
                 if (!this.checkoutObj.Nominativo) {
-                    this.errorObj.NominativoErr.push("Il campo coperti è oblligatorio");
+                    this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
                 }
 
             }
@@ -236,7 +236,7 @@ export default {
                     bill_total: parseFloat(this.calculateSummaryPrice()[3]),
                     bill_paid: "false",
                     bill_status: 1,
-                    TipoCassa: sessionStorage.getItem('Type'),
+                    TipoCassa: sessionStorage.getItem('TipoOrdine'),
                     Nominativo: this.checkoutObj.Nominativo
                 };
 
@@ -300,11 +300,11 @@ export default {
     border-radius: 0.5rem;
     background: #f7f7f7;
     padding: 2.2rem 1.2rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #130f40;
     text-transform: none;
     width: 100%;
-    border: none;
+    border: solid;
 }
 
 .checkout-container .checkout-form-container form label {
@@ -352,7 +352,8 @@ export default {
 }
 
 .checkout-container .checkout-form-container form .form-group .error-mess {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
     position: relative;
     color: rgb(243, 47, 47);
     margin: 0;

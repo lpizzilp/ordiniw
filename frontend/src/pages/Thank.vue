@@ -45,7 +45,7 @@ export default {
     beforeUnmount() {
         sessionStorage.removeItem('MatchUser')
         sessionStorage.removeItem('Username')
-        sessionStorage.removeItem('Type')
+        sessionStorage.removeItem('TipoOrdine')
         sessionStorage.removeItem('Bill')
         sessionStorage.removeItem('SagraId')
     },

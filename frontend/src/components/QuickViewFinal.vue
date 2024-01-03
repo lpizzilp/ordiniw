@@ -110,7 +110,7 @@ export default {
                 sessionStorage.removeItem('MatchUser')
                 sessionStorage.removeItem('Username')
                 sessionStorage.removeItem('SagraId')
-                sessionStorage.removeItem('Type')
+                sessionStorage.removeItem('TipoOrdine')
                 this.$router.push("/");
             }
         },
@@ -125,7 +125,7 @@ export default {
             let data = {
                 user_email: this.Dataform.email,
                 sagra_link: "http://" + window.location.hostname.toString() + "?id=" + sessionStorage.getItem('SagraId'),
-                user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('Type') + "&bill_id=" + sessionStorage.getItem('Bill'),
+                user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&bill_id=" + sessionStorage.getItem('Bill'),
                 ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,
