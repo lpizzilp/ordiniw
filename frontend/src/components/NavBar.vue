@@ -39,7 +39,9 @@ export default {
     data() {
         return {
             nav_name: 'Home ordini',
-            sagra_name: ''
+            sagra_name: '',
+            info: '',
+            numcoda: '',
         }
     },
 
@@ -69,19 +71,23 @@ export default {
             if (!sessionStorage.getItem('Siglanav')) {
                 var sagra = await axios.get('/sagra/' + parametriObj.id)
                 if (sagra.data.length == 0) {
-                    sessionStorage.setItem('SagraButt', 0)
+                    sessionStorage.setItem('SagraBottoni', 0)
                 } else {
                     this.nav_name = sagra.data[0].descrizione
                     this.sagra_name = "" + sagra.data[0].desc_prefix + " " + sagra.data[0].descrizione
                     sessionStorage.setItem('SagraId', parametriObj.id)
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
+
                     if (sagra.data[0].flgTavoli == 1 || sagra.data[0].flgTavoli == 1) {
                         var ordini = 1
                     }
-                    const flgdata = ordini + '/' + sagra.data[0].flgTavoli + '/' + sagra.data[0].flgAsporto + '/' + sagra.data[0].flgPrenotazioni + '/' + sagra.data[0].flgEliminacode
-                    sessionStorage.setItem('SagraButt', flgdata)
-                    console.log(flgdata)
+
+                    sagra.data[0].flgInfo == 1 ? this.info = sagra.data[0].info : this.info = ''
+                    sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
+
+                    const flgdata = ordini + '/' + sagra.data[0].flgTavoli + '/' + sagra.data[0].flgAsporto + '/' + sagra.data[0].flgPrenotazioni + '/' + sagra.data[0].flgEliminacode + '/' + this.numcoda  + '/' + sagra.data[0].flgInfo + '/' + this.info
+                    sessionStorage.setItem('SagraBottoni', flgdata)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;
                         history.replaceState({}, document.title, nuovoURL);

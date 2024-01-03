@@ -30,7 +30,6 @@ export default {
 
     methods: {
         DataParent(where) {
-            console.log('paso con' + this.parentData)
             const eventData = {
                 event: false,
                 type: where,

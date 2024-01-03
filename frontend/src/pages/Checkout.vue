@@ -133,7 +133,6 @@ export default {
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
-                    console.log('art ' + element.food_id + ' quantità ' + element.item_qty )
                 });
             }
         },
@@ -174,20 +173,17 @@ export default {
                 // Tavolo validate
                 if (!this.checkoutObj.Tavolo) {
                     this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
-                    console.log('errore tavolo')
                 }
 
                 // Coperti validate
                 if (!this.checkoutObj.Coperti) {
                     this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
-                    console.log('errore coperti')
                 }
 
             } else if (this.type === 'Y') {
                 // Nominativo validate
                 if (!this.checkoutObj.Nominativo) {
                     this.errorObj.NominativoErr.push("Il campo coperti è oblligatorio");
-                    console.log('errore nominativo')
                 }
 
             }
@@ -204,7 +200,6 @@ export default {
         },
 
         async handleSubmit(e) {
-            console.log('pasos')
             this.checkForm();
             if (!this.checkEmptyErr()) {
                 e.preventDefault();

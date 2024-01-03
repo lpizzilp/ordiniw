@@ -11,8 +11,6 @@
 
 // Ottieni la query string dall'URL
 var queryString = window.location.search;
-
-// Rimuovi il "?" iniziale
 queryString = queryString.substring(1);
 
 // Dividi la stringa in un array di coppie nome=valore
@@ -25,13 +23,6 @@ for (var i = 0; i < parametri.length; i++) {
     parametriObj[coppia[0]] = coppia[1];
 }
 
-// Ora puoi accedere ai valori dei parametri
-console.log(parametriObj.match);
-console.log(parametriObj.user);
-console.log(parametriObj.id)
-console.log(parametriObj.type)
-console.log(parametriObj.bill_id)
-
 import axios from 'axios';
 export default {
     name: 'MyOrder',
@@ -43,7 +34,6 @@ export default {
     },
 
     created() {
-        console.log('ciao')
         this.getBillItem()
     },
 
@@ -56,14 +46,12 @@ export default {
             sessionStorage.setItem('Type', parametriObj.type)
             sessionStorage.setItem('Bill', parametriObj.bill_id)
             let billitem = await axios.get('/billdetails/' + parametriObj.id)
-            console.log(billitem.data.length)
             for (let i = 0; i < billitem.data.length; i++) {
                 let data = {
                     user_id: parseInt(sessionStorage.getItem('Username')),
                     food_id: billitem.data[i].food_id,
                     item_qty: parseInt(billitem.data[i].item_qty)
                 }
-                console.log(data)
                 await axios.post("/cartItem/", data);
             }
 
