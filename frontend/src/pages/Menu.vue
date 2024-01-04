@@ -141,7 +141,9 @@ export default {
         switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
+                console.log(sessionStorage.getItem('filtro'))
                 break;
+
 
             default:
                 sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
