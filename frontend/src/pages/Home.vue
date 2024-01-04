@@ -48,10 +48,12 @@
                     <div class="display" @click="handleSubmit('TAB')">
                         <sevenSegmentDisplay :value="Display[0][0]" :rounded="true" :segment-width="50" :segment-height="7"
                             on-color="#f00" off-color="transparent" />
-                        <sevenSegmentDisplay v-if="Display[0][1] != undefined"  style="margin-left: 15px;" :value="Display[0][1]" :rounded="true"
-                            :segment-width="50" :segment-height="7" on-color="#f00" off-color="transparent" />
-                        <sevenSegmentDisplay v-if="Display[0][2] != undefined"  style="margin-left: 15px;" :value="Display[0][2]" :rounded="true"
-                            :segment-width="50" :segment-height="7" on-color="#f00" off-color="transparent" />
+                        <sevenSegmentDisplay v-if="Display[0][1] != undefined" style="margin-left: 15px;"
+                            :value="Display[0][1]" :rounded="true" :segment-width="50" :segment-height="7" on-color="#f00"
+                            off-color="transparent" />
+                        <sevenSegmentDisplay v-if="Display[0][2] != undefined" style="margin-left: 15px;"
+                            :value="Display[0][2]" :rounded="true" :segment-width="50" :segment-height="7" on-color="#f00"
+                            off-color="transparent" />
                     </div>
                 </div>
                 <div v-if="Btn[6] == 1" class="info">
@@ -64,11 +66,12 @@
                 <div class="content">
                     <p v-if='Btn[4] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
                     <p v-if='Btn[6] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
-                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;"><i class="fa-solid fa-retweet" style="margin-right: 5px;"></i>Aggiorna</button>
+                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;"><i class="fa-solid fa-retweet"
+                            style="margin-right: 5px;"></i>Aggiorna</button>
                 </div>
             </div>
         </div>
-        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :typeData="Filtertype" :BtnAttivi="Btn">
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="Btn">
         </QuickViewHome>
     </div>
 </template>
@@ -87,7 +90,7 @@ export default {
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
-            Filtertype: undefined,
+            Category: undefined,
             sagra_name: "",
             Btn: [],
             Display: [[]],
@@ -139,7 +142,7 @@ export default {
                     this.setUser(this.matchUser);
                     sessionStorage.setItem('Username', this.matchUser.user_id);
                     sessionStorage.setItem('MatchUser', this.matchUser);
-                    sessionStorage.setItem('filtro', type.typefilter);
+                    sessionStorage.setItem('filtro', type.category);
                     this.$router.push("/menu");
                 }
             }
@@ -164,23 +167,39 @@ export default {
         // Punto dove inserisce user
         async handleSubmit(type) {
             let div = document.getElementsByClassName('tabelloni')
-            if (type === 'TAB') {
-                div[0].style.display = 'block'
-                var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
-                if (sagra.data[0].flgEliminacode == 1) {
-                    this.Btn[4] = 1
-                    this.Btn[6] = 0
-                    let num = sagra.data[0].numcoda.toString()
-                    this.Display[0] = num.split('')
-                } else if (sagra.data[0].flgInfo == 1) {
-                    this.Btn[6] = 1
-                    this.Btn[4] = 0
-                    this.Display[1] = sagra.data[0].info
-                }
-            } else {
-                div[0].style.display = 'none'
-                this.Filtertype = type
-                this.showQuickVue = true
+            switch (type) {
+                case 'TAB':
+
+                    div[0].style.display = 'block'
+                    var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+                    if (sagra.data[0].flgEliminacode == 1) {
+                        this.Btn[4] = 1
+                        this.Btn[6] = 0
+                        let num = sagra.data[0].numcoda.toString()
+                        this.Display[0] = num.split('')
+                    } else if (sagra.data[0].flgInfo == 1) {
+                        this.Btn[6] = 1
+                        this.Btn[4] = 0
+                        this.Display[1] = sagra.data[0].info
+                    }
+                    break;
+
+                case 'PRE':
+
+                    var data = {
+                        vis: false,
+                        category: type
+                    }
+                    sessionStorage.setItem('TipoOrdine', 'W');
+                    this.handleChildEvent(data)
+                    break;
+
+                default:
+
+                    div[0].style.display = 'none'
+                    this.Category = type
+                    this.showQuickVue = true
+                    break;
             }
         },
     },

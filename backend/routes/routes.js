@@ -29,12 +29,12 @@ import {
 } from "../controllers/booktable.js";
 
 import {
-    createBillDetails,deleteBillById,getBillDetailsById
+    createBillDetails, deleteBillById, getBillDetailsById
 } from "../controllers/billdetails.js";
 
 import {
     showNewestStatusId,
-    createBillStatus, 
+    createBillStatus,
     getAllBillsByUser,
     getAllBillsByBill,
     getAllBills,
@@ -58,7 +58,13 @@ import {
     createSagra,
     updateSagraCodaeInfo
 
- } from "../controllers/catalogo.js";
+} from "../controllers/catalogo.js";
+
+import {
+    PredinuovoId,
+    createDettaglio,
+    createPrenotazione 
+} from "../controllers/prenotazioni.js";
 
 // init express router
 const router = express.Router();
@@ -116,6 +122,11 @@ router.delete("/api/cartItem/:id", deleteItems);
 ////////////////////////// Booking ////////////////////////////////
 router.post("/api/booking", createBooking);
 
+////////////////////////// Prenotazione ////////////////////////////////
+router.post("/api/prenotazione", createPrenotazione)
+router.get("/api/prenotazione/new", PredinuovoId)
+
+router.post("/api/prenotazione/dettaglio", createDettaglio)
 
 
 ////////////////////////// Bill Details ////////////////////////////////

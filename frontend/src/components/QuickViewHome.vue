@@ -30,23 +30,18 @@ export default {
         return {};
     },
     props: {
-        typeData: String,
+        Categoria: String,
         BtnAttivi: Array,
     },
     scrollToTop() {
         window.scrollTo(0, 0);
     },
-    created() {
-        if (this.typeData === 'PRE') {
-            this.DataParent(this.typeData);
-        }
-    },
     methods: {
-        DataParent(where) {
-            sessionStorage.setItem('Type', where);
+        DataParent(Tipo) {
+            sessionStorage.setItem('TipoOrdine', Tipo);
             const dataforParent = {
                 vis: false,
-                typefilter: this.typeData
+                category: this.Categoria
             };
             this.$emit('childEvent', dataforParent);
         },

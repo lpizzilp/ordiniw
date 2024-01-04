@@ -13,51 +13,53 @@
                     <input type="text" class="search-input" v-model="foodObj.name" placeholder="Cerca.." />
                 </div>
 
-                <div class="row filter-drop-down">
-                    <p @click="displayFilterDrop">Filtri<span v-if="showDropDown">V</span><span v-else>X</span></p>
-                </div>
+                <div v-if="Prenotazione == '0'">
+                    <div class="row filter-drop-down">
+                        <p @click="displayFilterDrop">Filtri<span v-if="showDropDown">V</span><span v-else>X</span></p>
+                    </div>
 
-                <div class="row filter-heading">
-                    <h1>Tipo</h1>
-                </div>
+                    <div class="row filter-heading">
+                        <h1>Tipo</h1>
+                    </div>
 
-                <div class="row filter-section">
-                    <ul class="filter-option">
-                        <li>
-                            <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
-                                @click="filterFoodBtn($event)" />
-                            <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
-                        </li>
-
-
-                        <li>
-                            <input type="button" name="cbStatus" id="ooStatus" value="P" hidden
-                                @click="filterFoodBtn($event)" />
-                            <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
-                        </li>
+                    <div class="row filter-section">
+                        <ul class="filter-option">
+                            <li>
+                                <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
+                                    @click="filterFoodBtn($event)" />
+                                <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
+                            </li>
 
 
-                        <li>
-                            <input type="button" name="cbStatus" id="soStatus" value="C" hidden
-                                @click="filterFoodBtn($event)" />
-                            <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
-                        </li>
+                            <li>
+                                <input type="button" name="cbStatus" id="ooStatus" value="P" hidden
+                                    @click="filterFoodBtn($event)" />
+                                <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
+                            </li>
 
 
-                        <!-- <li>
+                            <li>
+                                <input type="button" name="cbStatus" id="soStatus" value="C" hidden
+                                    @click="filterFoodBtn($event)" />
+                                <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
+                            </li>
+
+
+                            <!-- <li>
                             <input type="button" name="cbStatus" id="sdStatus" value="pesce" hidden
                                 @click="filterFoodBtn($event)" />
                             <label for="sdStatus" class="d-flex justify-content-between">Pesce</label>
                         </li> -->
 
-                        <li>
-                            <input type="button" name="cbStatus" id="ndStatus" value="B" hidden
-                                @click="filterFoodBtn($event)" />
-                            <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
-                        </li>
+                            <li>
+                                <input type="button" name="cbStatus" id="ndStatus" value="B" hidden
+                                    @click="filterFoodBtn($event)" />
+                                <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
+                            </li>
 
-                    </ul>
-                    <hr />
+                        </ul>
+                        <hr />
+                    </div>
                 </div>
             </div>
 
@@ -138,33 +140,32 @@ import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import axios from "axios";
 
-//Sul database
-// Se si aggiunge una nuova category sul database ricordarsi di cambiare il value del rispettivo pulsante
-//Codici database per type:
-// a = solo asporto
-// t = solo tavolo
-// at = entrambi
-// PRE = prenotazione
-
 export default {
     props: ["food"],
     name: "Menu",
 
     data() {
-        let categorytype = sessionStorage.getItem('filtro')
-        let Ordertype = sessionStorage.getItem('Type')
-        if (categorytype == null || undefined || "") {
-            categorytype = ""
-        } else {
-            sessionStorage.removeItem('filtro')
+        let categorytype = ""
+        let flgartprenotabile = "0"
+        let Ordertype = sessionStorage.getItem('TipoOrdine')
+        switch (sessionStorage.getItem('filtro')) {
+            case 'PRE':
+                flgartprenotabile = "1"
+                break;
+
+            default:
+                sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
+                sessionStorage.removeItem('filtro')
+                break;
         }
+
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile },
             showQuickView: false,
             showDropDown: false,
             matchUser: undefined,
             setqty: false,
-            prenotazione: false,
+            Prenotazione: flgartprenotabile,
 
             sendId: null,
             showCounterCart: false,
@@ -177,9 +178,6 @@ export default {
     },
 
     created() {
-        if (this.foodObj.type === 'PRE') {
-            this.prenotazione = true
-        }
         this.buildArray()
         this.getAllCartItem()
     },
@@ -196,7 +194,8 @@ export default {
                 (f.food_category.match(this.foodObj.category) || this.foodObj.category == "all" || this.foodObj.category == "") &&
                 (this.evaluatePrice(f, this.foodObj.price)) &&
                 f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
-                (this.evaluateStatus(f, this.foodObj.status)));
+                (this.evaluateStatus(f, this.foodObj.status)) &&
+                f.FlgPrenotabile.toString().match(this.foodObj.prenotazioni.toString()));
         },
 
         currentPageItems: function () {
@@ -401,6 +400,18 @@ export default {
                     }
             }
 
+            if (this.Prenotazione === "1") {
+                let Itemprenotabili = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                if (Itemprenotabili.data.length > 1) {
+                    await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
+                    this.qty[index] = 0
+                    this.$refs.alert.showAlert("Errore", "Riprovare!", "Puoi prenotare solo una articolo per ordine!");
+                } else {
+                    await axios.put("/cartItem/", data);
+                    this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
+                }
+            }
+
         },
     },
 
@@ -470,6 +481,7 @@ hr {
     justify-content: center;
     position: relative;
     display: flex;
+    margin-bottom: 10px;
 }
 
 .search-input {
