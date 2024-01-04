@@ -191,12 +191,23 @@ export default {
         },
 
         async sendBillDetails(billId, foodId, qty) {
-            let billDetails = {
-                bill_id: parseInt(billId),
-                food_id: foodId,
-                item_qty: parseInt(qty)
-            };
-            await axios.post("/billdetails", billDetails);
+
+            if (sessionStorage.getItem('Filtro') === 'PRE') {
+                let bookDetails = {
+                    book_id: parseInt(billId),
+                    food_id: foodId,
+                    item_qty: parseInt(qty)
+                };
+                await axios.post("/prenotazione/dettaglio", bookDetails);
+            } else {
+
+                let billDetails = {
+                    bill_id: parseInt(billId),
+                    food_id: foodId,
+                    item_qty: parseInt(qty)
+                };
+                await axios.post("/billdetails", billDetails);
+            }
         },
 
         async handleSubmit(e) {
@@ -205,18 +216,6 @@ export default {
                 e.preventDefault();
             }
             else {
-                if (sessionStorage.getItem('Bill') != "" || null || undefined) {
-                    axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
-                    axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
-                }
-                e.preventDefault();
-                let billId = (await axios.get("/billstatus/new")).data;
-                if (billId == "") {
-                    billId = 1;
-                }
-                else {
-                    billId = parseInt(billId.bill_id) + 1;
-                }
 
                 var now = new Date();
                 var day = ("0" + now.getDate()).slice(-2);
@@ -224,33 +223,80 @@ export default {
                 var hour = ("0" + (now.getHours())).slice(-2);
                 var min = ("0" + (now.getMinutes())).slice(-2);
                 var currentTime = now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
-                let billStatus = {
-                    bill_id: parseInt(billId),
-                    user_id: parseInt(sessionStorage.getItem('Username')),
-                    bill_tavolo: this.checkoutObj.Tavolo,
-                    bill_coperti: this.checkoutObj.Coperti,
-                    bill_when: currentTime,
-                    bill_method: this.checkoutObj.paymentMethod,
-                    bill_discount: parseInt(this.calculateSummaryPrice()[1]),
-                    bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
-                    bill_total: parseFloat(this.calculateSummaryPrice()[3]),
-                    bill_paid: "false",
-                    bill_status: 1,
-                    TipoCassa: sessionStorage.getItem('TipoOrdine'),
-                    Nominativo: this.checkoutObj.Nominativo
-                };
 
-                await axios.post("/billstatus", billStatus);
+                if (sessionStorage.getItem('Filtro') === 'PRE') {
+                    let bookId = (await axios.get("/prenotazione/new")).data;
+                    if (bookId == "") {
+                        bookId = 1;
+                    }
+                    else {
+                        bookId = parseInt(bookId.book_id) + 1;
+                    }
 
-                this.cartItem.forEach((foodId, index) => {
-                    this.sendBillDetails(billId, foodId, this.itemQuantity[index]);
-                });
+                    let dataprenotazione = {
+                        book_id: parseInt(bookId),
+                        user_id: parseInt(sessionStorage.getItem('Username')),
+                        tavolo: this.checkoutObj.Tavolo,
+                        coperti: this.checkoutObj.Coperti,
+                        bill_when: currentTime,
+                        bill_method: this.checkoutObj.paymentMethod,
+                        bill_discount: parseInt(this.calculateSummaryPrice()[1]),
+                        bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
+                        bill_total: parseFloat(this.calculateSummaryPrice()[3]),
+                        bill_paid: "false",
+                        bill_status: 1,
+                        TipoCassa: sessionStorage.getItem('Filtro'),
+                        Nominativo: this.checkoutObj.Nominativo
+                    };
 
+                    await axios.post("/booking", dataprenotazione);
+                    sessionStorage.setItem('Bill', dataprenotazione.book_id)
+
+                    this.cartItem.forEach((foodId, index) => {
+                        this.sendBillDetails(bookId, foodId, this.itemQuantity[index]);
+                    });
+
+                } else {
+                    if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                        axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
+                        axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
+                    }
+                    e.preventDefault();
+                    let billId = (await axios.get("/billstatus/new")).data;
+                    if (billId == "") {
+                        billId = 1;
+                    }
+                    else {
+                        billId = parseInt(billId.bill_id) + 1;
+                    }
+
+                    let billStatus = {
+                        bill_id: parseInt(billId),
+                        user_id: parseInt(sessionStorage.getItem('Username')),
+                        bill_tavolo: this.checkoutObj.Tavolo,
+                        bill_coperti: this.checkoutObj.Coperti,
+                        bill_when: currentTime,
+                        bill_method: this.checkoutObj.paymentMethod,
+                        bill_discount: parseInt(this.calculateSummaryPrice()[1]),
+                        bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
+                        bill_total: parseFloat(this.calculateSummaryPrice()[3]),
+                        bill_paid: "false",
+                        bill_status: 1,
+                        TipoCassa: sessionStorage.getItem('TipoOrdine'),
+                        Nominativo: this.checkoutObj.Nominativo
+                    };
+
+                    await axios.post("/billstatus", billStatus);
+                    sessionStorage.setItem('Bill', billStatus.bill_id)
+
+                    this.cartItem.forEach((foodId, index) => {
+                        this.sendBillDetails(billId, foodId, this.itemQuantity[index]);
+                    });
+                }
 
                 axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
                 this.itemQuantity = [];
-                sessionStorage.setItem('Bill', billStatus.bill_id)
                 this.$router.push("/thank");
             }
 
