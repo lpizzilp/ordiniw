@@ -114,6 +114,7 @@ export default {
             let data = {
                 user_email: this.Dataform.email,
                 sagra_link: "http://" + window.location.hostname.toString() + "?id=" + sessionStorage.getItem('SagraId'),
+                prenotazione: sessionStorage.getItem('filtro'),
                 user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&bill_id=" + sessionStorage.getItem('Bill'),
                 ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
@@ -138,6 +139,7 @@ export default {
             sessionStorage.removeItem('MatchUser')
             sessionStorage.removeItem('Username')
             sessionStorage.removeItem('Bill')
+            sessionStorage.removeItem('filtro')
             // Decrementa il timer ogni secondo
             this.timerInterval = setInterval(() => {
                 if (this.timer > 0) {

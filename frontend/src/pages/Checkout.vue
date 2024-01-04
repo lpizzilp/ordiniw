@@ -191,14 +191,15 @@ export default {
         },
 
         async sendBillDetails(billId, foodId, qty) {
-
-            if (sessionStorage.getItem('Filtro') === 'PRE') {
+            console.log(billId)
+            if (sessionStorage.getItem('filtro') === 'PRE') {
                 let bookDetails = {
                     book_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
                 };
                 await axios.post("/prenotazione/dettaglio", bookDetails);
+                console.log('fe')
             } else {
 
                 let billDetails = {
@@ -223,8 +224,9 @@ export default {
                 var hour = ("0" + (now.getHours())).slice(-2);
                 var min = ("0" + (now.getMinutes())).slice(-2);
                 var currentTime = now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
-
-                if (sessionStorage.getItem('Filtro') === 'PRE') {
+                e.preventDefault(); //importante
+                
+                if (sessionStorage.getItem('filtro') === 'PRE') {
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
                         bookId = 1;
@@ -233,6 +235,7 @@ export default {
                         bookId = parseInt(bookId.book_id) + 1;
                     }
 
+                    console.log(bookId)
                     let dataprenotazione = {
                         book_id: parseInt(bookId),
                         user_id: parseInt(sessionStorage.getItem('Username')),
@@ -245,11 +248,11 @@ export default {
                         bill_total: parseFloat(this.calculateSummaryPrice()[3]),
                         bill_paid: "false",
                         bill_status: 1,
-                        TipoCassa: sessionStorage.getItem('Filtro'),
+                        TipoCassa: sessionStorage.getItem('filtro'),
                         Nominativo: this.checkoutObj.Nominativo
                     };
 
-                    await axios.post("/booking", dataprenotazione);
+                    await axios.post("/prenotazione", dataprenotazione);
                     sessionStorage.setItem('Bill', dataprenotazione.book_id)
 
                     this.cartItem.forEach((foodId, index) => {
@@ -261,6 +264,7 @@ export default {
                         axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
                         axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
                     }
+
                     e.preventDefault();
                     let billId = (await axios.get("/billstatus/new")).data;
                     if (billId == "") {

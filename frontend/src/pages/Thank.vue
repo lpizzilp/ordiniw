@@ -48,6 +48,7 @@ export default {
         sessionStorage.removeItem('TipoOrdine')
         sessionStorage.removeItem('Bill')
         sessionStorage.removeItem('SagraId')
+        sessionStorage.removeItem('filtro')
     },
 
     methods: {
