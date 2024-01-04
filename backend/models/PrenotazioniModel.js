@@ -26,3 +26,14 @@ export const insertPrenotazione = (data,result) => {
         }
     });
 };
+
+export const insertDettaglio = (data,result) => {
+    db.query("INSERT INTO dettaglioprenotazioni SET ?",data, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results[0]);
+        }
+    });
+};

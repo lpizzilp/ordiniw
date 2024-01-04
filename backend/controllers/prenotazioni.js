@@ -1,5 +1,6 @@
 import {
     PrendiId,
+    insertDettaglio,
     insertPrenotazione
 } from "../models/PrenotazioniModel.js";
 
@@ -30,7 +31,7 @@ export const createPrenotazione=(req,res)=>{
 // crea dettaglio
 export const createDettaglio=(req,res)=>{
     const data = req.body;
-    insert(data,(err,results)=> {
+    insertDettaglio(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
