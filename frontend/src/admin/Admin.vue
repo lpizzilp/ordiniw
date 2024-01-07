@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <input type="text" id="uName" name="uName" class="form-control"
-                        placeholder="enter admin password" v-model="adminObj.pass" />
+                        placeholder="enter admin password" v-model="adminObj.ute" />
 
                     <input type="password" id="uPass" name="uPass" class="form-control"
                         placeholder="enter admin password" v-model="adminObj.pass" />
@@ -34,7 +34,7 @@ export default {
 
     data() {
         return {
-            adminObj: { pass: "" },
+            adminObj: {ute: "", pass: "" },
             key: "giupizzi2008",
             errors: [],
         }
@@ -45,8 +45,12 @@ export default {
 
         handleSubmit(e) {
             this.errors = [];
+            if (!this.adminObj.ute) {
+                this.errors.push('Il campo Utente è obbligatorio');
+            }
+
             if (!this.adminObj.pass) {
-                this.errors.push('Password is required');
+                this.errors.push('Il campo Password è obbgligatorio');
             }
 
             if (!this.errors.length == 0) {

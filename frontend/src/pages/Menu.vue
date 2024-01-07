@@ -234,6 +234,10 @@ export default {
             }
         },
 
+        scrollToTop() {
+            window.scrollTo(0, 0);
+        },
+
         errorImage(e) {
             e.target.src = require('../assets/images/no.png');
         },

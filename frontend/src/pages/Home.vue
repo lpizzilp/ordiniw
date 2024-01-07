@@ -133,6 +133,8 @@ export default {
             };
             await axios.post("/users/", datareg);
             let data = await axios.get('/users/' + this.loginObj.name);
+            console.log(datareg)
+            console.log(data.data)
             this.matchUser = data.data;
             if (!this.matchUser) {
                 this.errors.push("Incorrect email or password!");
