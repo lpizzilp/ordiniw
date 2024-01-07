@@ -37,3 +37,15 @@ export const insertDettaglio = (data,result) => {
         }
     });
 };
+
+export const checkfood = (result) => {
+    db.query("SELECT food_id, sum(item_qty) from dettaglioprenotazioni group by food_id ", (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }
+        else{
+            result(null,results[0]);
+        }
+    });
+};

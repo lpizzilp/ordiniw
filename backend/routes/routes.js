@@ -62,6 +62,7 @@ import {
 
 import {
     PredinuovoId,
+    checkquantita,
     createDettaglio,
     createPrenotazione 
 } from "../controllers/prenotazioni.js";
@@ -125,6 +126,7 @@ router.post("/api/booking", createBooking);
 ////////////////////////// Prenotazione ////////////////////////////////
 router.post("/api/prenotazione", createPrenotazione)
 router.get("/api/prenotazione/new", PredinuovoId)
+router.get("/api/prenotazione/check", checkquantita)
 
 router.post("/api/prenotazione/dettaglio", createDettaglio)
 

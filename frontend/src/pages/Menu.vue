@@ -4,7 +4,8 @@
     <div class="menu-section">
         <div class="heading">
             <span>menu</span>
-            <h3>Vi presentiamo i nostri piatti</h3>
+            <h3 v-if="Prenotazione == '0'">Vi presentiamo i nostri piatti</h3>
+            <h3 v-else>Prenotazione serate speciali</h3>
         </div>
 
         <div class="row">
@@ -107,7 +108,8 @@
                     <div v-if="!filterFoods.length">
                         <div class="box">
                             <div class="content">
-                                <h1 style="color: #057835fa;">Nessun articolo! <br>Scegli un altro Reparto</h1>
+                                <h1 v-if="Prenotazione == '1'" style="color: #057835fa;">Nessun articolo! <br>Prenotazioni chiuse</h1>
+                                <h1 v-else style="color: #057835fa;">Nessun articolo! <br>Scegli un altro Reparto</h1>
                             </div>
                             <div class="image">
                                 <img src="../assets/images/notfound.png" alt="" />
@@ -182,6 +184,9 @@ export default {
     created() {
         this.buildArray()
         this.getAllCartItem()
+        if (this.Prenotazione == '1') {
+            this.chekPrenotazioni()
+        }
     },
 
     updated() {
@@ -253,6 +258,10 @@ export default {
             if (this.f.food_src != null) {
                 return 1;
             }
+        },
+
+        chekPrenotazioni() {
+            //ee
         },
 
         async getAllCartItem() {

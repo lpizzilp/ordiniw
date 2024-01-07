@@ -31,7 +31,7 @@
 
                     </div>
                 </div>
-                <div v-else>
+                <div v-else-if=" type === 'Y'">
                     <div class="form-group details-group" id="Asporto">
                         <h4>Dettagli dell'acquirente</h4>
                         <div class="form-group">
@@ -39,6 +39,21 @@
                                 class="form-control" v-model="checkoutObj.Nominativo" />
                             <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
                             </p>
+                        </div>
+                    </div>
+                </div>
+                <div v-else-if=" type === 'PRE'">
+                    <div class="form-group details-group" id="Asporto">
+                        <h4>Dettagli dell'acquirente</h4>
+                        <div class="form-group">
+                            <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
+                                class="form-control" v-model="checkoutObj.Nominativo" />
+                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" name="Telefono" id="Telefono" placeholder="Inserisci un numero di telefono, non obbligatorio"
+                                class="form-control" v-model="checkoutObj.Telefono" />
                         </div>
                     </div>
                 </div>
@@ -79,13 +94,13 @@ export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Type: "", paymentMethod: "cash" },
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Telefono: "", Type: "", paymentMethod: "cash" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], payErr: [] },
             cartItem: [],
             itemQuantity: [],
             showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
-            type: sessionStorage.getItem('TipoOrdine')
+            type: sessionStorage.getItem('filtro') == 'PRE' ? sessionStorage.getItem('filtro') : sessionStorage.getItem('TipoOrdine')
         };
     },
     created() {
@@ -180,13 +195,13 @@ export default {
                     this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
                 }
 
-            } else if (this.type === 'Y') {
+            } else if (this.type === 'Y' || this.type === 'PRE' ) {
                 // Nominativo validate
                 if (!this.checkoutObj.Nominativo) {
                     this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
                 }
 
-            }
+            } 
 
         },
 
@@ -226,7 +241,7 @@ export default {
                 var currentTime = now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
                 e.preventDefault(); //importante
                 
-                if (sessionStorage.getItem('filtro') === 'PRE') {
+                if (this.type === 'PRE') {
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
                         bookId = 1;
@@ -239,8 +254,8 @@ export default {
                     let dataprenotazione = {
                         book_id: parseInt(bookId),
                         user_id: parseInt(sessionStorage.getItem('Username')),
-                        tavolo: this.checkoutObj.Tavolo,
-                        coperti: this.checkoutObj.Coperti,
+                        telefono: this.checkoutObj.Telefono,
+                        nominativo: this.checkoutObj.Nominativo,
                         bill_when: currentTime,
                         bill_method: this.checkoutObj.paymentMethod,
                         bill_discount: parseInt(this.calculateSummaryPrice()[1]),
@@ -249,7 +264,6 @@ export default {
                         bill_paid: "false",
                         bill_status: 1,
                         TipoCassa: sessionStorage.getItem('filtro'),
-                        Nominativo: this.checkoutObj.Nominativo
                     };
 
                     await axios.post("/prenotazione", dataprenotazione);
@@ -354,7 +368,7 @@ export default {
     color: #130f40;
     text-transform: none;
     width: 100%;
-    border: solid;
+    border-color: black;
 }
 
 .checkout-container .checkout-form-container form label {

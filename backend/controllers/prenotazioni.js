@@ -1,5 +1,6 @@
 import {
     PrendiId,
+    checkfood,
     insertDettaglio,
     insertPrenotazione
 } from "../models/PrenotazioniModel.js";
@@ -32,6 +33,17 @@ export const createPrenotazione=(req,res)=>{
 export const createDettaglio=(req,res)=>{
     const data = req.body;
     insertDettaglio(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// controllo quantità
+export const checkquantita=(req,res)=>{
+    checkfood((err,results)=> {
         if (err) {
             res.send(err);
         }else {
