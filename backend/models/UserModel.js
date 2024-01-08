@@ -3,6 +3,20 @@ import db from "../config/database.js";
 import { emaildata } from "../config/emaildata.js";
 import { mailOptions } from "../config/emaildata.js";
 
+
+// prendi nuovo id
+export const NuovoId = (result) => {
+    db.query("SELECT user_id FROM user ORDER BY user_id DESC LIMIT 0, 1", (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }
+        else{
+            result(null,results[0]);
+        }
+    });
+};
+
 // get all user
 export const getAllUser = (result) => {
     db.query("SELECT * FROM user", (err, results) => {
@@ -18,7 +32,7 @@ export const getAllUser = (result) => {
 
 // get single user
 export const getUserByEmail = (data, result) => {
-    db.query("SELECT user_id, user_email, user_password FROM user WHERE user_name = ?", [data], (err, results) => {
+    db.query("SELECT user_id, user_name, user_password FROM user WHERE user_email = ?", [data], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);

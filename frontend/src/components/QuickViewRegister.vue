@@ -1,11 +1,21 @@
 <template>
-    <div class="quick-view">
+    <div v-if="display === true" class="quick-view">
         <div class="quick-view-inner">
-            <h2>Attenzione</h2><br>
-            <h3> Non puoi cambiare pagina se tutti gli articoli non sono confermati
+            <h2>Utente in attesa di conferma</h2><br>
+            <h3>Ti abbiamo inviato un email con tutte le informazioni neccessarie
                 <slot></slot>
             </h3>
-            <button class="btn" @click="sendEventToParent">Ritorna e Conferma</button>
+            <RouterLink to="/" class="btn">Continua</RouterLink>
+        </div>
+    </div>
+
+    <div v-else class="quick-view">
+        <div class="quick-view-inner">
+            <h2>Errore</h2><br>
+            <h3>Non puoi accedere alla registrazione senza essere collegato a una sagra
+                <slot></slot>
+            </h3>
+            <RouterLink to="Home" class="btn">Esci</RouterLink>
         </div>
     </div>
 </template>
@@ -19,14 +29,12 @@ export default {
         }
     },
 
-    scrollToTop() {
-        window.scrollTo(0, 0);
+    props: {
+        display: Boolean
     },
 
-    methods: {
-        sendEventToParent() {
-            this.$emit('childEvent', false);
-        },
+    scrollToTop() {
+        window.scrollTo(0, 0);
     },
 
 };
@@ -58,7 +66,7 @@ export default {
 .quick-view .quick-view-inner h2 {
     text-align: center;
     font-size: 35px;
-    color: #f38304;
+    color: #27ae60;
 }
 
 .quick-view .quick-view-inner h3 {

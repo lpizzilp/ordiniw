@@ -32,7 +32,6 @@ for (var i = 0; i < parametri.length; i++) {
     parametriObj[coppia[0]] = coppia[1];
 }
 
-import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 export default {
     name: 'NavBar',
@@ -45,9 +44,9 @@ export default {
         }
     },
 
-    computed: {
+   /* computed: {
         ...mapState(["user"])
-    },
+    },*/
 
     created() {
         this.getsagra();
@@ -61,7 +60,6 @@ export default {
     },
 
     methods: {
-        ...mapMutations(["setUser"]),
 
         scrollToTop() {
             window.scrollTo(0, 0);
@@ -118,9 +116,9 @@ export default {
              log.classList.remove('active');*/
         },
 
-        handleLogout: function () {
+       /* handleLogout: function () {
             this.setUser("");
-        }
+        }*/
     }
 }
 </script>

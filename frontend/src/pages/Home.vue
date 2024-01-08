@@ -81,12 +81,11 @@
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
-import { mapMutations } from "vuex";
 export default {
     name: "Home",
     data() {
         return {
-            loginObj: { name: "", email: "exemple.exemple@gmail.com", phone: "+390000000000", pass: "Utente1", birth: "11223333", gen: "male" },
+            loginObj: {email: "exemple.exemple@gmail.com", pass: "Utente1"},
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
@@ -102,7 +101,6 @@ export default {
     },
 
     methods: {
-        ...mapMutations(["setUser"]),
         scrollToTop() {
             window.scrollTo(0, 0);
         },
@@ -121,34 +119,16 @@ export default {
             this.showQuickVue = type.vis
             this.errors = [];
             var idR = this.randomizza();
-            this.loginObj.name = "Utente" + idR;
             let datareg = {
                 user_id: idR,
-                user_name: this.loginObj.name,
                 user_email: this.loginObj.email,
-                user_phone: this.loginObj.phone,
                 user_password: this.loginObj.pass,
-                user_birth: this.loginObj.birth,
-                user_gender: this.loginObj.gen
             };
-            await axios.post("/users/", datareg);
-            let data = await axios.get('/users/' + this.loginObj.name);
-            console.log(datareg)
-            console.log(data.data)
-            this.matchUser = data.data;
-            if (!this.matchUser) {
-                this.errors.push("Incorrect email or password!");
-            }
-            else {
-                if (this.matchUser.user_password === this.loginObj.pass) {
-                    this.matchUser.user_password = "";
-                    this.setUser(this.matchUser);
+            this.matchUser = datareg;
                     sessionStorage.setItem('Username', this.matchUser.user_id);
                     sessionStorage.setItem('MatchUser', this.matchUser);
                     sessionStorage.setItem('filtro', type.category);
                     this.$router.push("/menu");
-                }
-            }
         },
 
         randomizza() {

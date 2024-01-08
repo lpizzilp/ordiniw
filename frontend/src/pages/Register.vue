@@ -2,25 +2,32 @@
     <div class="register-container">
         <div class="register-form-container">
             <form id="registerForm" @submit="handleSubmit" novalidate autocomplete="off">
-                <h3>Create your account</h3>
+                <h3>Crea il tuo account</h3>
+                
+                <div v-if="errors.length != 0" class="error-box">
+                    <ul>
+                        <li v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
+                </div>
+
                 <div class="form-group">
-                    <label for="uName">Enter your name:
+                    <label for="uName">Inserisci il tuo nome completo:
                     </label>
-                    <input type="text" name="uName" placeholder="your full name" id="uName" class="form-control"
+                    <input type="text" name="uName" placeholder="Inserisci nome e cognome" id="uName" class="form-control"
                         v-model="registerObj.name" />
                     <p class="error-mess" v-if="errorObj.nameErr.length > 0">{{ errorObj.nameErr[0] }}</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="uEmail">Enter your email:
+                    <label for="uEmail">Inserisci l'email:
                     </label>
-                    <input type="email" name="uEmail" placeholder="example@gmail.com" id="uEmail" class="form-control"
+                    <input type="email" name="uEmail" placeholder="L'email diventerà il tuo nome utente" id="uEmail" class="form-control"
                         v-model="registerObj.email" />
                     <p class="error-mess" v-if="errorObj.emailErr.length > 0">{{ errorObj.emailErr[0] }}</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="uPass">Enter your password:
+                    <label for="uPass">Inserisci una password:
                     </label>
                     <input type="password" name="uPass" placeholder="enter your password" id="uPass"
                         class="form-control" v-model="registerObj.pass" />
@@ -28,7 +35,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="uPassConfirm">Check your password again:
+                    <label for="uPassConfirm">Reinserisci la password:
                     </label>
                     <input type="password" name="uPassConfirm" placeholder="enter your password again" id="uPassConfirm"
                         class="form-control" v-model="registerObj.confirm" />
@@ -36,76 +43,42 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="uPhone">Enter your phone number:
-                    </label>
-                    <input type="tel" name="uPhone" placeholder="enter your phone number" id="uPhone"
-                        class="form-control" v-model="registerObj.phone" />
-                    <p class="error-mess" v-if="errorObj.phoneErr.length > 0">{{ errorObj.phoneErr[0] }}</p>
-                </div>
-
-                <div class="form-group">
-                    <label for="uBirth">Enter your birthday:
-                    </label>
-                    <input type="date" name="uBirth" id="uBirth" class="form-control" @click="availableTime()"
-                        v-model="registerObj.birth" />
-                    <p class="error-mess" v-if="errorObj.birthErr.length > 0">{{ errorObj.birthErr[0] }}</p>
-                </div>
-
-                <div class="form-group">
-                    <label for="">Select your gender:
-                    </label>
-                    <div class="form-group">
-                        <input type="radio" name="gender" value="male" id="genderMale"
-                            v-model="registerObj.gender" /><span>Male</span>
-                        <input type="radio" name="gender" value="female" id="genderFemale"
-                            v-model="registerObj.gender" /><span>Female</span>
-                    </div>
-                    <p class="error-mess" v-if="errorObj.genderErr.length > 0">{{ errorObj.genderErr[0] }}</p>
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" value="join us" class="btn" />
-                    <p>have an account? <router-link @click="scrollToTop()" to="/login">login</router-link>
+                    <input type="submit" value="Registrati" class="btn" />
+                    <p>hai un account? <router-link @click="scrollToTop()" to="/login">login</router-link>
                     </p>
                 </div>
             </form>
         </div>
+        <quick-view-register v-if="showQuickVue" :display="Isuser"></quick-view-register>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import QuickViewRegister from '@/components/QuickViewRegister.vue';
 export default {
     name: "Register",
 
     data() {
         return {
-            registerObj: { name: "", email: "", pass: "", confirm: "", phone: "", birth: "", gender: "" },
-            errorObj: { nameErr: [], emailErr: [], passErr: [], confirmErr: [], phoneErr: [], birthErr: [], genderErr: [] },
-            matchUser: undefined,
+            registerObj: { name: "", email: "", pass: "", confirm: ""},
+            errorObj: { nameErr: [], emailErr: [], passErr: [], confirmErr: []},
+            errors: [],
+            showQuickVue: false,
+            Isuser: true,
+        }
+    },
 
+    created(){
+        if (sessionStorage.getItem('SagraId') == null || undefined || "") {
+            this.Isuser = false
+            this.showQuickVue = true
         }
     },
 
     methods: {
-        async getMatchUser(email) {
-            let data = await axios.get('/users/' + email);
-            this.matchUser = data.data;
-        },
-
         scrollToTop() {
             window.scrollTo(0, 0);
-        },
-
-        availableTime: function () {
-            var now = new Date();
-            var day = ("0" + now.getDate()).slice(-2);
-            var currentMonth = ("0" + (now.getMonth() + 1)).slice(-2);
-            var minRange = (now.getFullYear() - 150) + "-" + currentMonth + "-" + day;
-            var maxRange = now.getFullYear() + "-" + currentMonth + "-" + day;
-
-            document.getElementById("uBirth").setAttribute("min", minRange);
-            document.getElementById("uBirth").setAttribute("max", maxRange);
         },
 
         resetCheckErr: function () {
@@ -113,9 +86,59 @@ export default {
             this.errorObj.emailErr = [];
             this.errorObj.passErr = [];
             this.errorObj.confirmErr = [];
-            this.errorObj.phoneErr = [];
-            this.errorObj.birthErr = [];
-            this.errorObj.genderErr = [];
+            this.errors = [];
+        },
+
+        checkForm: function () {
+            this.resetCheckErr();
+
+            // Name validate
+            if (!this.registerObj.name) {
+                this.errorObj.nameErr.push("Il nome è obbligatorio");
+                this.errors.push("Il nome è obbligatorio");
+            }
+            else {
+                if (!/^[a-zA-Z]+(\s[a-zA-Z]+)+$/.test(this.registerObj.name)) {
+                    this.errorObj.nameErr.push('Inserisci nome e cognome');
+                    this.errors.push('Inserisci nome e cognome');
+                }
+            }
+
+            // Email validate
+            if (!this.registerObj.email) {
+                this.errorObj.emailErr.push("L'email è obbligatoria, sarà il tuo futuro nome Utente");
+                this.errors.push("L'email è obbligatoria, sarà il tuo futuro nome Utente");
+            }
+            else {
+                if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/.test(this.registerObj.email)) {
+                    this.errorObj.emailErr.push("L'email deve essere valida");
+                    this.errors.push("L'email deve essere valida");
+                }
+            }
+
+            // Pass validate
+            if (!this.registerObj.pass) {
+                this.errorObj.passErr.push('la password è obbligatoria');
+                this.errors.push('la password è obbligatoria');
+            }
+            else {
+                if (this.registerObj.pass.length < 3) {
+                    this.errorObj.passErr.push('La password deve avere almeno 4 caratteri');
+                    this.errors.push('La password deve avere almeno 4 caratteri');
+                }
+            }
+
+            // Confirm Pass validate
+            if (!this.registerObj.confirm) {
+                this.errorObj.confirmErr.push('Reinserisci la password');
+                this.errors.push('Reinserisci la password');
+            }
+            else {
+                if (this.registerObj.pass !== this.registerObj.confirm) {
+                    this.errorObj.confirmErr.push('Le password devono essere uguali');
+                    this.errors.push('Le password devono essere uguali');
+                }
+            }
         },
 
         checkEmptyErr: function () {
@@ -127,121 +150,38 @@ export default {
             return true;
         },
 
-        checkForm: function () {
-            this.resetCheckErr();
-
-            // Name validate
-            if (!this.registerObj.name) {
-                this.errorObj.nameErr.push("Entering a name is required");
-            }
-            else {
-                if (!/^[A-Za-z]+$/.test(this.registerObj.name.replace(/\s/g, ""))) {
-                    this.errorObj.nameErr.push('A name can only contain letters');
-                }
-            }
-
-            // Email validate
-            if (!this.registerObj.email) {
-                this.errorObj.emailErr.push("Entering a email is required");
-            }
-            else {
-                if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/.test(this.registerObj.email)) {
-                    this.errorObj.emailErr.push('Email must be valid');
-                }
-            }
-
-            // Pass validate
-            if (!this.registerObj.pass) {
-                this.errorObj.passErr.push('Password is required');
-            }
-            else {
-                if (!/[0-9]/.test(this.registerObj.pass)) {
-                    this.errorObj.passErr.push('Password must contain at least 1 number');
-                }
-
-                if (this.registerObj.pass.length < 4) {
-                    this.errorObj.passErr.push('Password must be more than or equal 4 characters');
-                }
-            }
-
-            // Confirm Pass validate
-            if (!this.registerObj.confirm) {
-                this.errorObj.confirmErr.push('Confirm password is required');
-            }
-            else {
-                if (this.registerObj.pass !== this.registerObj.confirm) {
-                    this.errorObj.confirmErr.push('Confirm password must be match with password');
-                }
-            }
-
-
-            // Phone validate
-            if (!this.registerObj.phone) {
-                this.errorObj.phoneErr.push('Entering phone number is required');
-            }
-            else {
-                if (!this.registerObj.phone.startsWith('+39')) {
-                    this.errorObj.phoneErr.push('Phone numbers must start with 39');
-                }
-
-                if (this.registerObj.phone.length != 13) {
-                    this.errorObj.phoneErr.push('Phone numbers must have exactly 12 digits');
-                }
-
-            }
-
-            // Birth validate
-            if (!this.registerObj.birth) {
-                this.errorObj.birthErr.push("Entering birthday is required");
-            }
-            else {
-                let minRange = document.getElementById("uBirth").getAttribute("min");
-                let maxRange = document.getElementById("uBirth").getAttribute("max");
-                let dateMin = new Date(minRange);
-                let dateMax = new Date(maxRange);
-                let dateInput = new Date(this.registerObj.birth);
-
-                if (dateInput === "Invalid Date") {
-                    this.errorObj.birthErr.push("Invalid date input");
-                }
-
-                if (dateInput.getTime() < dateMin.getTime() || dateInput.getTime() > dateMax.getTime()) {
-                    this.errorObj.birthErr.push("Available birthday range is from pass 150 years to now");
-                }
-            }
-
-            // Gender validate
-            if (!this.registerObj.gender) {
-                this.errorObj.genderErr.push("Please select a gender");
-            }
-        },
-
         async handleSubmit(e) {
             this.checkForm();
-
             if (!this.checkEmptyErr()) {
                 e.preventDefault();
             } else {
                 e.preventDefault();
-                await this.getMatchUser(this.registerObj.email);
-                if (this.matchUser) {
-                    this.errorObj.emailErr.push("Account already exist")
+                let data = await axios.get('/users/' + this.registerObj.email);
+                if (data.data) {
+                    this.errorObj.emailErr.push("Questa email è associata a un account esistente");
+                    this.errors.push("Questa email è associata a un account esistente");
                 }
                 else {
+                    let dataid = (await axios.get("/users/new")).data
+                    let id = dataid.user_id
+                    id == null || undefined ? id = 0 : id == 0 ? id = 1 : id = id + 1
                     let data = {
-                        user_name: this.registerObj.name,
+                        user_id: id,
                         user_email: this.registerObj.email,
-                        user_phone: this.registerObj.phone,
                         user_password: this.registerObj.pass,
-                        user_birth: this.registerObj.birth,
-                        user_gender: this.registerObj.gender
+                        id_sagra: sessionStorage.getItem('SagraId'),
+                        user_name: this.registerObj.name,
+                        authlevel: "0",
+                        user_confirm: "0"
                     }
                     await axios.post("/users/", data);
-                    this.$router.push("/login");
+                    this.showQuickVue = true
                 }
             }
         }
     },
+
+    components:{QuickViewRegister}
 
 };
 </script>
@@ -287,12 +227,13 @@ export default {
     color: #130f40;
     text-transform: none;
     width: 100%;
-    border: none;
+    border-color: black;
 }
 
 .register-container .register-form-container form label {
     font-size: 2rem;
-    margin: 0;
+    margin-top: 10px;
+    margin-bottom: 0px;
     padding: 0;
 }
 
@@ -334,5 +275,25 @@ export default {
     color: rgb(243, 47, 47);
     margin: 0;
     padding: 0;
+}
+
+.register-container .register-form-container form .error-box {
+    background-color: #fff9fa;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 66, 79, .2);
+    border-radius: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.register-container .register-form-container form .error-box ul {
+    margin: 0;
+    padding: 10px 0px;
+}
+
+.register-container .register-form-container form .error-box ul li {
+    padding: 5px 10px;
+    list-style-type: square;
+    color: black;
 }
 </style>

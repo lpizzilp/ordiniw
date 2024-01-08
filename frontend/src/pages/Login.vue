@@ -4,7 +4,7 @@
             <form id="loginForm" @submit="handleSubmit" novalidate autocomplete="off">
                 <h3>LOGIN</h3>
 
-                <div v-if="errors.length" class="error-box">
+                <div v-if="errors.length" class="error-box" >
                     <ul>
                         <li v-for="error in errors" :key="error">{{ error }}</li>
                     </ul>
@@ -40,14 +40,14 @@ export default {
 
     data() {
         return {
-            loginObj: { email: "giulio.pizzinato@gmail.com", pass: "Utente1" },
+            loginObj: { email: "", pass: "" },
             matchUser: undefined,
             errors: [],
         }
     },
 
     methods: {
-        ...mapMutations(["setUser"]),
+        ...mapMutations(["setAdmin"]),
 
         scrollToTop() {
             window.scrollTo(0, 0);
@@ -90,7 +90,7 @@ export default {
                 else {
                     if (this.matchUser.user_password === this.loginObj.pass) {
                         this.matchUser.user_password = "";
-                        this.setUser(this.matchUser);
+                        this.setAdmin(this.matchUser);
                         this.$router.push("/");
                     }
                     else {
