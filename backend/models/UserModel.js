@@ -32,7 +32,7 @@ export const getAllUser = (result) => {
 
 // get single user
 export const getUserByEmail = (data, result) => {
-    db.query("SELECT user_id, user_name, user_password FROM user WHERE user_email = ?", [data], (err, results) => {
+    db.query("SELECT id_sagra, authlevel, user_confirm, user_password FROM user WHERE user_email = ?", [data], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);

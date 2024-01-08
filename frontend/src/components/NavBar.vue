@@ -8,8 +8,8 @@
             <router-link @click="scrollToTop()" to="/">home</router-link>
             <!--<router-link @click="scrollToTop()" to="/menu">menu</router-link>
             <router-link @click="scrollToTop()" to="/table">table</router-link>
-            <router-link @click="scrollToTop()" to="/promotions">Serate speciali</router-link>
-            <router-link @click="scrollToTop()" to="/login">login</router-link>-->
+            <router-link @click="scrollToTop()" to="/promotions">Serate speciali</router-link>-->
+            <router-link @click="scrollToTop()" to="/admin">Admin</router-link>
         </nav>
 
         <div class="icons">
