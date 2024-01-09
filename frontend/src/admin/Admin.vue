@@ -56,13 +56,6 @@ export default {
             window.scrollTo(0, 0);
         },
 
-        async getMatchUser(email) {
-            let data = await axios.get('/users/' + email);
-            this.matchUser = data.data;
-            console.log(this.matchUser)
-        },
-
-
         async checkForm() {
             this.errors = [];
 
@@ -72,11 +65,6 @@ export default {
             else {
                 if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/.test(this.loginObj.email)) {
                     this.errors.push("Inserisci un email valida, è la stessa che hai usato nella registrazione");
-                } else {
-                    await this.getMatchUser(this.loginObj.email);
-                    if (!this.matchUser) {
-                        this.errors.push("Password o email sbagliate!")
-                    }
                 }
             }
 
@@ -88,27 +76,52 @@ export default {
         },
 
 
-        // Punto dove inserisce user
+        async validateuser() {
+            let Adminuser = await axios.get('/users/' + this.loginObj.email);
+
+            if (Adminuser.data.length == 0) {
+                this.matchUser = null
+
+            } else if (Adminuser.data.user_confirm != 0) {
+                if (Adminuser.data.user_password === this.loginObj.pass) {
+                    Adminuser.data.user_password = "";
+                    this.matchUser = true
+                } else {
+                    this.matchUser = false
+                }
+
+            } else {
+                this.matchUser = undefined
+            }
+        },
 
         async handleSubmit(e) {
             this.checkForm();
             e.preventDefault();
-            if (this.matchUser.user_confirm == 0) {
-                this.showQuickVue = true
-                console.log(this.showQuickVue)
-            } else {
-                if (this.errors.length != 0) {
-                    e.preventDefault();
-                }
-                else {
-                    e.preventDefault();
-                    if (this.matchUser.user_password === this.loginObj.pass) {
-                        this.matchUser.user_password = "";
+            if (this.errors.length != 0) {
+                e.preventDefault();
+            }
+            else {
+                e.preventDefault();
+                await this.validateuser()
+                console.log(this.matchUser)
+                switch (this.matchUser) {
+                    case false:
+                        this.errors.push("Password o email sbagliate!")
+                        break;
+
+                    case true:
                         this.setAdmin("admin");
                         this.$router.push("/admin/dashboard");
-                    } else {
-                        this.errors.push("Password o email sbagliate!")
-                    }
+                        break;
+
+                    case undefined:
+                        this.showQuickVue = true
+                        break;
+
+                    case null:
+                        this.errors.push("Utente non registrato!")
+                        break;
                 }
             }
         }
