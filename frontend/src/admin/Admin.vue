@@ -104,7 +104,6 @@ export default {
             else {
                 e.preventDefault();
                 await this.validateuser()
-                console.log(this.matchUser)
                 switch (this.matchUser) {
                     case false:
                         this.errors.push("Password o email sbagliate!")

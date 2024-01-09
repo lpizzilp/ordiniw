@@ -44,10 +44,6 @@ export default {
         }
     },
 
-   /* computed: {
-        ...mapState(["user"])
-    },*/
-
     created() {
         this.getsagra();
     },
@@ -115,10 +111,6 @@ export default {
             /* let log = document.querySelector('.drop-down-select');
              log.classList.remove('active');*/
         },
-
-       /* handleLogout: function () {
-            this.setUser("");
-        }*/
     }
 }
 </script>
