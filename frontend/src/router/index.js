@@ -11,6 +11,7 @@ import Thank from '../pages/Thank.vue';
 import MyOrder from '../pages/MyOrder.vue';
 import Admin from '../admin/Admin.vue';
 import Dashboard from '../admin/Dashboard.vue';
+import Confirm from '../admin/Confirm.vue';
 
 
 const routes = [
@@ -69,6 +70,11 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: Admin,
+  },
+  {
+    path: "/admin/confirm",
+    name: "Confirm",
+    component: Confirm,
   },
   {
     path: "/admin/dashboard",
