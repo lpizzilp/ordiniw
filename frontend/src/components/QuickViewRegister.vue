@@ -15,7 +15,7 @@
             <h3>Non puoi accedere alla registrazione senza essere collegato a una sagra
                 <slot></slot>
             </h3>
-            <RouterLink to="Home" class="btn">Esci</RouterLink>
+            <RouterLink to="/" class="btn">Esci</RouterLink>
         </div>
     </div>
 </template>
@@ -66,7 +66,7 @@ export default {
 .quick-view .quick-view-inner h2 {
     text-align: center;
     font-size: 35px;
-    color: #27ae60;
+    color: #f38609;
 }
 
 .quick-view .quick-view-inner h3 {

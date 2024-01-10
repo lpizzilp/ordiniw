@@ -44,7 +44,7 @@
                     <label for="uauthlevel">Autorizzaizione:
                     </label>
                     <input type="number" name="uauthlevel" :placeholder="ConfirmObj.authlevel" id="uauthlevel"
-                        class="form-control" v-model="ConfirmObj.authlevel" />
+                        class="form-control" min="0" max="9" v-model="ConfirmObj.authlevel" />
                 </div>
 
                 <div class="form-group">
@@ -90,6 +90,7 @@ export default {
         async getuser() {
             let Adminuser = await axios.get('/users/' + parametriObj.email);
             let Sagra = await axios.get('/sagra/' + parametriObj.id)
+            console.log(Sagra.data)
             this.ConfirmObj.name = Adminuser.data.user_name,
                 this.ConfirmObj.email = Adminuser.data.user_email,
                 this.ConfirmObj.pass = Adminuser.data.user_password,

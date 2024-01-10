@@ -14,7 +14,8 @@ import {
     createAccount,
     SendMail,
     allUsers,
-    getId
+    getId,
+    SendRegistrazione
 } from "../controllers/user.js";
 
 import {
@@ -110,7 +111,7 @@ router.post("/api/users/", createAccount);
 router.post("/api/mail/", SendMail)
 
 // send mail registrazione
-router.post("/api/mail/registrazione", )
+router.post("/api/mail/registrazione/", SendRegistrazione)
 
 
 ////////////////////////// CART ////////////////////////////////

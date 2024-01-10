@@ -82,7 +82,7 @@ export default {
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
 
-            } else if (Adminuser.data.user_confirm != 0) {
+            } else if (Adminuser.data.authlevel != 0) {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
                     this.matchUser = true

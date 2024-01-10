@@ -126,15 +126,15 @@ CREATE TABLE `food` (
 -- db_restaurant.`user` definition
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(255) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
   `user_email` varchar(255) DEFAULT NULL,
-  `user_phone` varchar(255) DEFAULT NULL,
   `user_password` varchar(255) DEFAULT NULL,
-  `user_birth` varchar(255) DEFAULT NULL,
-  `user_gender` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2147483648 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id_sagra` varchar(3) NOT NULL,
+  `user_name` varchar(255) DEFAULT NULL,
+  `authlevel` int(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_un` (`user_email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition

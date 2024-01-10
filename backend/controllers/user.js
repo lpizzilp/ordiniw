@@ -1,6 +1,7 @@
 // import functions from User model
 
 import {
+    Emailregistrazione,
     Emailsender,
     NuovoId,
     getAllUser,
@@ -59,6 +60,18 @@ export const createAccount=(req,res)=>{
 export const SendMail =(req,res)=>{
     let Uemail = req.body;
     Emailsender(Uemail,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+
+export const SendRegistrazione =(req,res)=>{
+    let Uemail = req.body;
+    Emailregistrazione(Uemail,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
