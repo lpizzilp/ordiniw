@@ -2,7 +2,8 @@ import {
     PrendiId,
     checkfood,
     insertDettaglio,
-    insertPrenotazione
+    insertPrenotazione,
+    getPrenotGtId
 } from "../models/PrenotazioniModel.js";
 
 
@@ -51,3 +52,16 @@ export const checkquantita=(req,res)=>{
         }
     });
 };
+
+// get tutte le prenotazioni inserite maggiori un determinato id 
+// ...Se l'id non viene passato  vengono fornite tutte  
+export const getAllPrenotGtId=(req,res)=>{
+    getPrenotGtId(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+

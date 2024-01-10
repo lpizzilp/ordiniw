@@ -225,6 +225,15 @@ export default {
                 await axios.post("/billdetails", billDetails);
             }
         },
+        currentTime: function () {
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var hour = ("0" + (now.getHours())).slice(-2);
+            var min = ("0" + (now.getMinutes())).slice(-2);
+            return  now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
+
+        },
 
         async handleSubmit(e) {
             this.checkForm();
@@ -232,19 +241,12 @@ export default {
                 e.preventDefault();
             }
             else {
-
-                var now = new Date();
-                var day = ("0" + now.getDate()).slice(-2);
-                var month = ("0" + (now.getMonth() + 1)).slice(-2);
-                var hour = ("0" + (now.getHours())).slice(-2);
-                var min = ("0" + (now.getMinutes())).slice(-2);
-                var currentTime = now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
                 e.preventDefault(); //importante
                 
                 if (this.type === 'PRE') {
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
-                        bookId = 1;
+                        bookId = 500;
                     }
                     else {
                         bookId = parseInt(bookId.book_id) + 1;
@@ -254,16 +256,19 @@ export default {
                     let dataprenotazione = {
                         book_id: parseInt(bookId),
                         user_id: parseInt(sessionStorage.getItem('Username')),
-                        telefono: this.checkoutObj.Telefono,
-                        nominativo: this.checkoutObj.Nominativo,
-                        bill_when: currentTime,
-                        bill_method: this.checkoutObj.paymentMethod,
-                        bill_discount: parseInt(this.calculateSummaryPrice()[1]),
-                        bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
-                        bill_total: parseFloat(this.calculateSummaryPrice()[3]),
-                        bill_paid: "false",
-                        bill_status: 1,
-                        TipoCassa: sessionStorage.getItem('filtro'),
+                        book_tavolo: this.checkoutObj.Tavolo,
+                        book_coperti: this.checkoutObj.Coperti,
+                        book_when: this.currentTime(),
+                        book_method: this.checkoutObj.paymentMethod,
+                        book_discount: parseInt(this.calculateSummaryPrice()[1]),
+                        book_delivery: parseInt(this.calculateSummaryPrice()[2]),
+                        book_total: parseFloat(this.calculateSummaryPrice()[3]),
+                        book_paid: "false",
+                        book_status: 1,
+                        book_tipocassa: sessionStorage.getItem('filtro'),
+                        book_nominativo: this.checkoutObj.Nominativo,
+                        book_phone: this.checkoutObj.Telefono,
+
                     };
 
                     await axios.post("/prenotazione", dataprenotazione);
@@ -293,7 +298,7 @@ export default {
                         user_id: parseInt(sessionStorage.getItem('Username')),
                         bill_tavolo: this.checkoutObj.Tavolo,
                         bill_coperti: this.checkoutObj.Coperti,
-                        bill_when: currentTime,
+                        bill_when: this.currentTime(),
                         bill_method: this.checkoutObj.paymentMethod,
                         bill_discount: parseInt(this.calculateSummaryPrice()[1]),
                         bill_delivery: parseInt(this.calculateSummaryPrice()[2]),
