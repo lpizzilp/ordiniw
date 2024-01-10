@@ -1,11 +1,9 @@
--- db_restaurant.administrator definition
+-- db_restaurant.availability definition
 
-CREATE TABLE `administrator` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) DEFAULT NULL,
-  `password` varchar(25) DEFAULT NULL,
-  `autorizzazione` int(1) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `availability` (
+  `food_id` varchar(5) NOT NULL,
+  `QtaDisponibile` int(10) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -26,6 +24,27 @@ CREATE TABLE `billstatus` (
   `TipoCassa` varchar(1) DEFAULT NULL,
   `Nominativo` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`bill_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.bookstatus definition
+
+CREATE TABLE `bookstatus` (
+  `book_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `book_tavolo` varchar(255) DEFAULT NULL,
+  `book_coperti` text DEFAULT NULL,
+  `book_when` varchar(255) DEFAULT NULL,
+  `book_method` varchar(255) DEFAULT NULL,
+  `book_discount` int(11) DEFAULT NULL,
+  `book_delivery` int(11) DEFAULT NULL,
+  `book_total` int(11) DEFAULT NULL,
+  `book_paid` varchar(255) DEFAULT NULL,
+  `book_status` int(11) DEFAULT NULL,
+  `book_tipocassa` varchar(1) DEFAULT NULL,
+  `book_nominativo` varchar(50) DEFAULT NULL,
+  `book_phone` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`book_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -71,16 +90,6 @@ CREATE TABLE `catalogo_sagre` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- db_restaurant.dettaglioprenotazioni definition
-
-CREATE TABLE `dettaglioprenotazioni` (
-  `book_id` int(11) NOT NULL,
-  `food_id` varchar(5) NOT NULL,
-  `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`book_id`,`food_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 -- db_restaurant.esauriti definition
 
 CREATE TABLE `esauriti` (
@@ -114,34 +123,6 @@ CREATE TABLE `food` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- db_restaurant.prenotazioni definition
-
-CREATE TABLE `prenotazioni` (
-  `book_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `telefono` varchar(255) DEFAULT NULL,
-  `nominativo` varchar(50) DEFAULT NULL,
-  `bill_when` varchar(255) DEFAULT NULL,
-  `bill_method` varchar(255) DEFAULT NULL,
-  `bill_discount` int(11) DEFAULT NULL,
-  `bill_delivery` int(11) DEFAULT NULL,
-  `bill_total` int(11) DEFAULT NULL,
-  `bill_paid` varchar(255) DEFAULT NULL,
-  `bill_status` int(11) DEFAULT NULL,
-  `TipoCassa` varchar(1) DEFAULT NULL,
-  PRIMARY KEY (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
--- db_restaurant.quantita_prenotabili definition
-
-CREATE TABLE `quantita_prenotabili` (
-  `food_id` varchar(5) NOT NULL,
-  `QtaDisponibile` int(10) unsigned NOT NULL DEFAULT 1,
-  PRIMARY KEY (`food_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 -- db_restaurant.`user` definition
 
 CREATE TABLE `user` (
@@ -164,4 +145,15 @@ CREATE TABLE `billdetails` (
   `item_qty` int(11) DEFAULT NULL,
   PRIMARY KEY (`bill_id`,`food_id`),
   CONSTRAINT `billdetails_FK` FOREIGN KEY (`bill_id`) REFERENCES `billstatus` (`bill_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.bookdetails definition
+
+CREATE TABLE `bookdetails` (
+  `book_id` int(11) NOT NULL,
+  `food_id` varchar(5) NOT NULL,
+  `item_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`book_id`,`food_id`),
+  CONSTRAINT `bookdetails_FK` FOREIGN KEY (`book_id`) REFERENCES `bookstatus` (`book_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
