@@ -98,8 +98,8 @@ export const Emailsender = (data, result) => {
         </div>`;
     }
 
-
     mailOptions.to = data.user_email
+    mailOptions.subject = "Il tuo codice dell' Ordine web"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -142,6 +142,7 @@ export const Emailregistrazione = (data, result) => {
         </div>`;
 
     mailOptions.to = data.admin_email
+    mailOptions.subject = "Info utente per ordini.esagra.it"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -180,7 +181,8 @@ export const Emailregistrazione = (data, result) => {
         </div>`;
 
 
-    mailOptions.to = "giulio.pizzinato@gmail.com"
+    mailOptions.to = "info@esagra.it"
+    mailOptions.subject = "Rischiesta accesso come amministratore"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {

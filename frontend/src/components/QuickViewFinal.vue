@@ -98,7 +98,6 @@ export default {
             } else if (where === 'H') {
                 sessionStorage.removeItem('MatchUser')
                 sessionStorage.removeItem('Username')
-                sessionStorage.removeItem('SagraId')
                 sessionStorage.removeItem('TipoOrdine')
                 this.$router.push("/");
             }

@@ -19,7 +19,7 @@ export const getSagraSig=(req,res)=>{
 
 // recupera tutte le sagre
 export const allSagre=(req,res)=>{
-    getAllSagre((err,results)=> {
+    getAllSagre(req.params.ordine,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

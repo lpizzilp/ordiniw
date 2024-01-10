@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <label for="uIdSagra">Sagra:
                     </label>
-                    <select name="IdSagra" id="IdSagra" class="form-control">
+                    <select name="IdSagra" id="IdSagra" :placeholder="ConfirmObj.id_sagra" class="form-select">
                        <option v-for="sagra in sagre" :key="sagra" :value="sagra">{{ sagra }}</option>
                     </select>
                     <input type="text" name="uIdSagra" :placeholder="ConfirmObj.id_sagra" id="uIdSagra" class="form-control"
@@ -100,7 +100,9 @@ export default {
                 this.ConfirmObj.id_sagra = Sagra.data[0].descrizione
                 this.ConfirmObj.authlevel = Adminuser.data.authlevel
 
-            let sagredata = await axios.get('/sagra')
+            let sagredata = await axios.get('/sagra/ute/' + parametriObj.id)
+
+            console.log(sagredata)
             sagredata.data.forEach(element => {
                 this.sagre.push(element.descrizione)          
             });
@@ -193,6 +195,18 @@ export default {
     text-transform: none;
     width: 100%;
     border-color: black;
+}
+
+.register-container .register-form-container form .form-select {
+    margin: 0.7rem 0;
+    border-radius: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.6rem;
+    color: #130f40;
+    text-transform: none;
+    width: 100%;
+    background: #f7f7f7;
+    border: 2px inset black;
 }
 
 .register-container .register-form-container form label {
