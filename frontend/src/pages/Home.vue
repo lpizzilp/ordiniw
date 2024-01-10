@@ -9,7 +9,7 @@
                 <span v-if="Btn[3] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Prenota
-                    specialità</button><br>
+                    serata</button><br>
                 <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
                     style="margin-top: 10px;">Tabellone
@@ -109,11 +109,12 @@ export default {
 
         async getsagra() {
             setTimeout(() => {
+                console.log(sessionStorage.getItem('SagraBottoni').split("/"))
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("/")
                 this.Display[0] = this.Btn[5].split('')
                 this.Display[1] = this.Btn[7]
-            }, 200);
+            }, 300);
         },
 
         async handleChildEvent(type) {

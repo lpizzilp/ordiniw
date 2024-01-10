@@ -2,7 +2,7 @@
     <div class="admin-container">
         <div class="admin-form-container">
             <form id="adminForm" @submit="handleSubmit" novalidate autocomplete="off">
-                <h3>ADMIN</h3>
+                <h3>Login</h3>
 
                 <div v-if="errors.length" class="error-box">
                     <ul>
@@ -11,12 +11,15 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="text" id="uName" name="uName" class="form-control"
+                        placeholder="enter admin password" v-model="adminObj.pass" />
+
                     <input type="password" id="uPass" name="uPass" class="form-control"
                         placeholder="enter admin password" v-model="adminObj.pass" />
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="admin access" class="btn">
+                    <input type="submit" value="Accedi" class="btn">
                 </div>
             </form>
         </div>
@@ -107,7 +110,7 @@ export default {
     color: #130f40;
     text-transform: none;
     width: 100%;
-    border: none;
+    border-color: black;
 }
 
 .admin-container .admin-form-container form .btn {

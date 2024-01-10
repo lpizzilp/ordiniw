@@ -62,8 +62,10 @@ import {
 
 import {
     PredinuovoId,
+    checkquantita,
     createDettaglio,
-    createPrenotazione 
+    createPrenotazione,
+    getAllPrenotGtId
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -123,10 +125,12 @@ router.delete("/api/cartItem/:id", deleteItems);
 router.post("/api/booking", createBooking);
 
 ////////////////////////// Prenotazione ////////////////////////////////
-router.post("/api/prenotazione", createPrenotazione)
-router.get("/api/prenotazione/new", PredinuovoId)
+router.post("/api/prenotazione", createPrenotazione);
+router.get("/api/prenotazione/new", PredinuovoId);
+router.get("/api/prenotazione/check", checkquantita);
 
-router.post("/api/prenotazione/dettaglio", createDettaglio)
+router.post("/api/prenotazione/dettaglio", createDettaglio);
+router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
 
 
 ////////////////////////// Bill Details ////////////////////////////////
