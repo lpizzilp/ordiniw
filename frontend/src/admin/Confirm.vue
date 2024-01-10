@@ -36,6 +36,9 @@
                 <div class="form-group">
                     <label for="uIdSagra">Sagra:
                     </label>
+                    <select name="IdSagra" id="IdSagra" class="form-control">
+                       <option v-for="sagra in sagre" :key="sagra" :value="sagra">{{ sagra }}</option>
+                    </select>
                     <input type="text" name="uIdSagra" :placeholder="ConfirmObj.id_sagra" id="uIdSagra" class="form-control"
                         v-model="ConfirmObj.id_sagra" />
                 </div>
@@ -72,6 +75,7 @@ export default {
     data() {
         return {
             ConfirmObj: { name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
+            sagre: [],
             errors: [],
             showQuickVue: false,
             Isuser: true,
@@ -90,17 +94,23 @@ export default {
         async getuser() {
             let Adminuser = await axios.get('/users/' + parametriObj.email);
             let Sagra = await axios.get('/sagra/' + parametriObj.id)
-            console.log(Sagra.data)
-            this.ConfirmObj.name = Adminuser.data.user_name,
-                this.ConfirmObj.email = Adminuser.data.user_email,
-                this.ConfirmObj.pass = Adminuser.data.user_password,
-                this.ConfirmObj.id_sagra = Sagra.data[0].descrizione,
+                this.ConfirmObj.name = Adminuser.data.user_name
+                this.ConfirmObj.email = Adminuser.data.user_email
+                this.ConfirmObj.pass = Adminuser.data.user_password
+                this.ConfirmObj.id_sagra = Sagra.data[0].descrizione
                 this.ConfirmObj.authlevel = Adminuser.data.authlevel
+
+            let sagredata = await axios.get('/sagra')
+            sagredata.data.forEach(element => {
+                this.sagre.push(element.descrizione)          
+            });
+
+            console.log(this.sagre)
         },
 
         async checkForm() {
             this.errors = [];
-            
+
             // Authlevel
             if (!/[0-9]{1}$/.test(this.ConfirmObj.authlevel)) {
                 this.errors.push("L'autorizzazione deve essere un numero");

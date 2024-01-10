@@ -13,6 +13,17 @@ export const getSagrabySig = (sig,result) => {
     });
 };
 
+// recupera sagre
+export const getAllSagre = (result) => {
+    db.query("SELECT id_sagra, descrizione  FROM catalogo_sagre order by id_sagra asc", (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
 
 //------------------------------------------
 // insert catalogo sagra 

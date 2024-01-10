@@ -59,7 +59,8 @@ import {
 import {
     getSagraSig,
     createSagra,
-    updateSagraCodaeInfo
+    updateSagraCodaeInfo,
+    allSagre
 
 } from "../controllers/catalogo.js";
 
@@ -165,6 +166,7 @@ router.delete("/api/billstatus/delete/:id", deleteBill)
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
+router.get("/api/sagra", allSagre)
 router.get("/api/sagra/:sigla", getSagraSig);
 router.post("/api/catalogosagre", createSagra);
 router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);

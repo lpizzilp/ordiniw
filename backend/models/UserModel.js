@@ -123,7 +123,7 @@ export const Emailregistrazione = (data, result) => {
     var emailText = ""
     emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Info registrazione</p>
-            <p style="text-align: left; font-size:16px;">Buon giorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che l'utente da te creato non è ancora attivo e per essere uttilizzado dovrà essere confermato da noi.<br>Ti preghiamo di attendere un ulteriore email dove ti informeremo che il tuo utente è stato attivato.</p>
+            <p style="text-align: left; font-size:16px;">Buon giorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che l'utente da te creato non è ancora attivo e per essere uttilizzado dovrà essere confermato da noi.<br><br>Ti preghiamo di attendere un ulteriore email dove ti informeremo che il tuo utente è stato attivato.</p>
             <hr style="border: 2px dashed #27ae60;">
             </div>
             <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
