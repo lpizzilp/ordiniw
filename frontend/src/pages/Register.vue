@@ -3,7 +3,7 @@
         <div class="register-form-container">
             <form id="registerForm" @submit="handleSubmit" novalidate autocomplete="off">
                 <h3>Crea il tuo account</h3>
-                
+
                 <div v-if="errors.length != 0" class="error-box">
                     <ul>
                         <li v-for="error in errors" :key="error">{{ error }}</li>
@@ -21,16 +21,16 @@
                 <div class="form-group">
                     <label for="uEmail">Inserisci l'email:
                     </label>
-                    <input type="email" name="uEmail" placeholder="L'email diventerà il tuo nome utente" id="uEmail" class="form-control"
-                        v-model="registerObj.email" />
+                    <input type="email" name="uEmail" placeholder="L'email diventerà il tuo nome utente" id="uEmail"
+                        class="form-control" v-model="registerObj.email" />
                     <p class="error-mess" v-if="errorObj.emailErr.length > 0">{{ errorObj.emailErr[0] }}</p>
                 </div>
 
                 <div class="form-group">
                     <label for="uPass">Inserisci una password:
                     </label>
-                    <input type="password" name="uPass" placeholder="enter your password" id="uPass"
-                        class="form-control" v-model="registerObj.pass" />
+                    <input type="password" name="uPass" placeholder="enter your password" id="uPass" class="form-control"
+                        v-model="registerObj.pass" />
                     <p class="error-mess" v-if="errorObj.passErr.length > 0">{{ errorObj.passErr[0] }}</p>
                 </div>
 
@@ -61,15 +61,15 @@ export default {
 
     data() {
         return {
-            registerObj: { name: "", email: "", pass: "", confirm: ""},
-            errorObj: { nameErr: [], emailErr: [], passErr: [], confirmErr: []},
+            registerObj: { name: "", email: "", pass: "", confirm: "" },
+            errorObj: { nameErr: [], emailErr: [], passErr: [], confirmErr: [] },
             errors: [],
             showQuickVue: false,
             Isuser: true,
         }
     },
 
-    created(){
+    created() {
         if (sessionStorage.getItem('SagraId') == null || undefined || "") {
             this.Isuser = false
             this.showQuickVue = true
@@ -139,6 +139,7 @@ export default {
                     this.errors.push('Le password devono essere uguali');
                 }
             }
+            this.scrollToTop();
         },
 
         checkEmptyErr: function () {
@@ -153,6 +154,7 @@ export default {
         async handleSubmit(e) {
             this.checkForm();
             if (!this.checkEmptyErr()) {
+                this.scrollToTop();
                 e.preventDefault();
             } else {
                 e.preventDefault();
@@ -172,16 +174,35 @@ export default {
                         id_sagra: sessionStorage.getItem('SagraId'),
                         user_name: this.registerObj.name,
                         authlevel: "0",
-                        user_confirm: "0"
                     }
                     await axios.post("/users/", data);
+
+                    // ora
+                    var now = new Date();
+                    var day = ("0" + now.getDate()).slice(-2);
+                    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                    var hour = ("0" + (now.getHours())).slice(-2);
+                    var min = ("0" + (now.getMinutes())).slice(-2);
+                    let ora = hour + ":" + min + ' del giorno ' + day + '/' + month + '/' + now.getFullYear();
+
+                    data = {
+                        sagra_link: "http://ordini.esagra.it",
+                        reg_ora: ora,
+                        admin_name: this.registerObj.name,
+                        admin_email: this.registerObj.email,
+                        admin_password: this.registerObj.pass,
+                        admin_sagra: sessionStorage.getItem('Sagranav'),
+                        confirm_link: "http://" + window.location.hostname + "/admin/confirm/?email=" + this.registerObj.email + "&id=" + sessionStorage.getItem('SagraId')
+                    }
+                    console.log(data)
+                    await axios.post("/mail/registrazione/", data)
                     this.showQuickVue = true
                 }
             }
         }
     },
 
-    components:{QuickViewRegister}
+    components: { QuickViewRegister }
 
 };
 </script>

@@ -123,12 +123,25 @@ export const Emailregistrazione = (data, result) => {
     var emailText = ""
     emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Info registrazione</p>
-            <p style="text-align: center; font-size:16px;">Buon giorno nuovo amministratore,<br> ti abbiamo inviato questa email per informarti che l'utente da te creato non è ancora attivo ma dovra essere confermato da noi. Ti preghiamo di attendere un ulterio email dove ti informeremo che il tuo utente è stato confermato</p>
-            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione effettuata alle ` + data.reg_data + `.</p>
-            </div>`;
+            <p style="text-align: left; font-size:16px;">Buon giorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che l'utente da te creato non è ancora attivo e per essere uttilizzado dovrà essere confermato da noi.<br>Ti preghiamo di attendere un ulteriore email dove ti informeremo che il tuo utente è stato attivato.</p>
+            <hr style="border: 2px dashed #27ae60;">
+            </div>
+            <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
+                <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Dati inseriti</p>
+                <p style="text-align: center; font-size:16px;">Ti presentiamo la lista dei dati che hai inserito:</p>
+                <ul style="padding: 10px; list-style-type: none;">
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Nome: `+ data.admin_name + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Email: `+ data.admin_email + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Password: `+ data.admin_password + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Sagra: `+ data.admin_sagra + `<li>
+                </ul>
+        </div>
+        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
+            <hr style="border: 2px dashed #27ae60;">
+            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
+        </div>`;
 
-
-    mailOptions.to = emailText
+    mailOptions.to = data.admin_email
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -150,28 +163,24 @@ export const Emailregistrazione = (data, result) => {
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
                 <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Info utente</p>
-                <p style="text-align: center; font-size:16px;">Ecco i dati dell'utente:</p>
-                <ul style="padding: 10px;">
-                    <li style="padding: 5px 10px; list-style-type: square; color: black;">Nome:`+ data.admin_name + `<li>
-                    <li style="padding: 5px 10px; list-style-type: square; color: black;">Email:`+ data.admin_email + `<li>
-                    <li style="padding: 5px 10px; list-style-type: square; color: black;">Password:`+ data.admin_password + `<li>
-                    <li style="padding: 5px 10px; list-style-type: square; color: black;">Sagra:`+ data.admin_sagra + `<li>
+                <p style="text-align: center; font-size:16px;">Ecco i dati inseriti dall'utente:</p>
+                <ul style="padding: 10px; list-style-type: none;">
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Nome: `+ data.admin_name + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Email: `+ data.admin_email + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Password: `+ data.admin_password + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Sagra: `+ data.admin_sagra + `<li>
                 </ul>
                 <p style="margin-top:5px;">ㅤ</p>
-                <a href="` + data.user_data + `" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #27ae60; border-radius: 10px;">Conferma l'utente</a>
+                <a href="` + data.confirm_link + `" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #27ae60; border-radius: 10px;">Conferma l'utente</a>
                 <p style="margin-top:5px;">ㅤ</p>
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
             <hr style="border: 2px dashed #27ae60;">
-            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Articoli Ordinati</p>
-            <p style="text-align:center; font-size:16px;">Riportiamo gli articoli che hai ordinato:</p>
-            <br>
-            <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item + `</td></tr></table><br>
-            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.ord_data + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
+            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
         </div>`;
 
 
-    mailOptions.to = emaildata.auth.user
+    mailOptions.to = "giulio.pizzinato@gmail.com"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
