@@ -1,6 +1,6 @@
 <template>
-    <div class="login-container">
-        <div class="login-form-container">
+   <div class="login-container">
+   <!-- <div class="login-form-container">
             <form id="loginForm" @submit="handleSubmit" novalidate autocomplete="off">
                 <h3>LOGIN</h3>
 
@@ -11,43 +11,46 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="email" id="uEmail" name="uEmail" class="form-control" placeholder="enter your email"
+                    <input type="email" id="uEmail" name="uEmail" class="form-control" placeholder="Inserisci l'email"
                         v-model="loginObj.email" />
                 </div>
 
                 <div class="form-group">
                     <input type="password" id="uPass" name="uPass" class="form-control"
-                        placeholder="enter your password" v-model="loginObj.pass" />
+                        placeholder="Inserisci la tua password" v-model="loginObj.pass" />
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="login now" class="btn">
-                    <p>don't have an account? <router-link @click="scrollToTop()" to="/register">create one
+                    <input type="submit" value="Accedi" class="btn">
+                    <p>Non hai un account? <router-link @click="scrollToTop()" to="/register">Creane uno
                         </router-link>
                     </p>
                 </div>
             </form>
-        </div>
+        </div>-->
+        <quick-view-login v-if="showQuickVue"></quick-view-login>
     </div>
 </template>
 
 
 <script>
 import axios from "axios";
+import QuickViewLogin from "@/components/QuickViewLogin.vue";
 import { mapMutations } from "vuex";
 export default {
     name: 'Login',
 
     data() {
         return {
-            loginObj: { email: "giulio.pizzinato@gmail.com", pass: "Utente1" },
+            loginObj: { email: "", pass: "" },
             matchUser: undefined,
             errors: [],
+            showQuickVue: false,
         }
     },
 
     methods: {
-        ...mapMutations(["setUser"]),
+        ...mapMutations(["setAdmin"]),
 
         scrollToTop() {
             window.scrollTo(0, 0);
@@ -56,51 +59,57 @@ export default {
         async getMatchUser(email) {
             let data = await axios.get('/users/' + email);
             this.matchUser = data.data;
+            console.log(this.matchUser)
         },
 
 
-// Punto dove inserisce user
-
-        async handleSubmit(e) {
+        async checkForm() {
             this.errors = [];
 
             if (!this.loginObj.email) {
-                this.errors.push("Entering a email is required");
+                this.errors.push("L'email è obbligatoria");
             }
             else {
                 if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/.test(this.loginObj.email)) {
-                    this.errors.push('Email must be valid');
+                    this.errors.push("Inserisci un email valida, è la stessa che hai usato nella registrazione");
+                } else {
+                    await this.getMatchUser(this.loginObj.email);
+                    if (!this.matchUser) {
+                        this.errors.push("Password o email sbagliate!")
+                    }
                 }
             }
 
-
             if (!this.loginObj.pass) {
-                this.errors.push('Password is required');
+                this.errors.push('La password è obbligatoria');
             }
 
-            if (!this.errors.length == 0) {
+
+        },
+
+
+        // Punto dove inserisce user
+
+        async handleSubmit(e) {
+            this.checkForm();
+            if (this.errors.length != 0) {
                 e.preventDefault();
             }
             else {
                 e.preventDefault();
-                await this.getMatchUser(this.loginObj.email);
-                if (!this.matchUser) {
-                    this.errors.push("Incorrect email or password!")
-                }
-                else {
-                    if (this.matchUser.user_password === this.loginObj.pass) {
-                        this.matchUser.user_password = "";
-                        this.setUser(this.matchUser);
-                        this.$router.push("/");
-                    }
-                    else {
-                        this.errors.push("Incorrect email or password!")
-                    }
+                if (this.matchUser.user_password === this.loginObj.pass) {
+                    this.matchUser.user_password = "";
+                    this.setAdmin(this.matchUser);
+                    this.$router.push("/admin/dashboard");
+                } else {
+                    this.errors.push("Password o email sbagliate!")
                 }
             }
         }
 
-    }
+    },
+
+    components: { QuickViewLogin }
 
 }
 </script>
@@ -147,7 +156,7 @@ export default {
     color: #130f40;
     text-transform: none;
     width: 100%;
-    border: none;
+    border-color: black;
 }
 
 .login-container .login-form-container form .btn {
@@ -176,19 +185,19 @@ export default {
     background-color: #fff9fa;
     box-sizing: border-box;
     border: 2px solid rgba(255, 66, 79, .2);
-    border-radius: 2px;
-    font-size: 12px;
+    border-radius: 10px;
+    font-size: 16px;
     margin-bottom: 20px;
 }
 
 .login-container .login-form-container form .error-box ul {
-    list-style-type: none;
     margin: 0;
     padding: 10px 0px;
 }
 
 .login-container .login-form-container form .error-box ul li {
-    padding-left: 10px;
-    color: rgb(182, 0, 0);
+    padding: 5px 10px;
+    list-style-type: square;
+    color: black;
 }
 </style>

@@ -12,7 +12,9 @@ import {
 import {
     showAUser,
     createAccount,
-    SendMail
+    SendMail,
+    allUsers,
+    getId
 } from "../controllers/user.js";
 
 import {
@@ -91,14 +93,25 @@ router.delete("/api/foods/:id", deleteFood);
 
 
 ////////////////////////// USER ////////////////////////////////
+
+// get new id
+router.get("/api/users/new", getId)
+
 // get all user
+router.get("/api/users", allUsers)
+
+// get user
 router.get("/api/users/:name", showAUser);
 
 // create account
 router.post("/api/users/", createAccount);
 
-// send mail
+// send mail ordine completato
 router.post("/api/mail/", SendMail)
+
+// send mail registrazione
+router.post("/api/mail/registrazione", )
+
 
 ////////////////////////// CART ////////////////////////////////
 // add to cart

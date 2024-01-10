@@ -1,11 +1,11 @@
 <template>
     <div class="quick-view">
         <div class="quick-view-inner">
-            <h2>Attenzione</h2><br>
-            <h3> Non puoi cambiare pagina se tutti gli articoli non sono confermati
+            <h2>Utente in attesa di conferma</h2><br>
+            <h3>Il tuo utente non è ancora stato confermato.<br>Per il momento non potrai accedere
                 <slot></slot>
             </h3>
-            <button class="btn" @click="sendEventToParent">Ritorna e Conferma</button>
+            <RouterLink to="/" class="btn">Continua</RouterLink>
         </div>
     </div>
 </template>
@@ -21,12 +21,6 @@ export default {
 
     scrollToTop() {
         window.scrollTo(0, 0);
-    },
-
-    methods: {
-        sendEventToParent() {
-            this.$emit('childEvent', false);
-        },
     },
 
 };
@@ -58,7 +52,7 @@ export default {
 .quick-view .quick-view-inner h2 {
     text-align: center;
     font-size: 35px;
-    color: #f38304;
+    color: #f38609;
 }
 
 .quick-view .quick-view-inner h3 {

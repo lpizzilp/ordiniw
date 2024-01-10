@@ -5,7 +5,6 @@ const store = createStore({
     state() {
         return {
             allFoods: [],
-            user: undefined,
             admin: undefined,
         }
     },
@@ -13,9 +12,7 @@ const store = createStore({
         setFoodsData(state, payload){
             state.allFoods = payload;
         },
-        setUser(state, payload){
-            state.user = payload;
-        },
+
         setAdmin(state, payload){
             state.admin = payload;
         }

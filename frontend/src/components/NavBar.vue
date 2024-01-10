@@ -8,8 +8,8 @@
             <router-link @click="scrollToTop()" to="/">home</router-link>
             <!--<router-link @click="scrollToTop()" to="/menu">menu</router-link>
             <router-link @click="scrollToTop()" to="/table">table</router-link>
-            <router-link @click="scrollToTop()" to="/promotions">Serate speciali</router-link>
-            <router-link @click="scrollToTop()" to="/login">login</router-link>-->
+            <router-link @click="scrollToTop()" to="/promotions">Serate speciali</router-link>-->
+            <router-link @click="scrollToTop()" to="/admin">Admin</router-link>
         </nav>
 
         <div class="icons">
@@ -32,7 +32,6 @@ for (var i = 0; i < parametri.length; i++) {
     parametriObj[coppia[0]] = coppia[1];
 }
 
-import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 export default {
     name: 'NavBar',
@@ -43,10 +42,6 @@ export default {
             info: '',
             numcoda: '',
         }
-    },
-
-    computed: {
-        ...mapState(["user"])
     },
 
     created() {
@@ -61,7 +56,6 @@ export default {
     },
 
     methods: {
-        ...mapMutations(["setUser"]),
 
         scrollToTop() {
             window.scrollTo(0, 0);
@@ -117,10 +111,6 @@ export default {
             /* let log = document.querySelector('.drop-down-select');
              log.classList.remove('active');*/
         },
-
-        handleLogout: function () {
-            this.setUser("");
-        }
     }
 }
 </script>

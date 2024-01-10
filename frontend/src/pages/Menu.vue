@@ -165,7 +165,6 @@ export default {
 
         return {
             foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile },
-            showQuickView: false,
             showDropDown: false,
             matchUser: undefined,
             setqty: false,
@@ -234,6 +233,10 @@ export default {
             }
         },
 
+        scrollToTop() {
+            window.scrollTo(0, 0);
+        },
+
         errorImage(e) {
             e.target.src = require('../assets/images/no.png');
         },
@@ -281,10 +284,6 @@ export default {
                     }
                 }
             }
-        },
-
-        handleChildEvent(dataFromChild) {
-            this.showQuickView = dataFromChild;
         },
 
         evaluateStatus: function (food, statusArray) {
@@ -379,7 +378,6 @@ export default {
         async addToCart(index) {
             this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
-            this.showQuickView = false
 
             let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
             let data = {
