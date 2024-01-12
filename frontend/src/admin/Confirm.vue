@@ -36,15 +36,13 @@
                 <div class="form-group">
                     <label for="uIdSagra">Sagra:
                     </label>
-                    <select name="IdSagra" id="IdSagra" :placeholder="ConfirmObj.id_sagra" class="form-select">
-                       <option v-for="sagra in sagre" :key="sagra" :value="sagra">{{ sagra }}</option>
+                    <select name="uIdSagra" id="uIdSagra" v-model="ConfirmObj.id_sagra" class="form-select">
+                        <option v-for="sagra in descsagre" :key="sagra" :value="sagra">{{ sagra }}</option>
                     </select>
-                    <input type="text" name="uIdSagra" :placeholder="ConfirmObj.id_sagra" id="uIdSagra" class="form-control"
-                        v-model="ConfirmObj.id_sagra" />
                 </div>
 
                 <div class="form-group">
-                    <label for="uauthlevel">Autorizzaizione:
+                    <label for="uauthlevel">Autorizzazione:
                     </label>
                     <input type="number" name="uauthlevel" :placeholder="ConfirmObj.authlevel" id="uauthlevel"
                         class="form-control" min="0" max="9" v-model="ConfirmObj.authlevel" />
@@ -52,9 +50,12 @@
 
                 <div class="form-group">
                     <input type="submit" value="Conferma" class="btn" />
+                    <input type="reset" value="Rifiuta" style="background-color: #f38609;" @click="handereject()"
+                        class="btn" />
                 </div>
             </form>
         </div>
+        <QuickViewConfirm v-if="showQuickVue" :-ute="QuickView_ute"></QuickViewConfirm>
     </div>
 </template>
 
@@ -69,16 +70,18 @@ for (var i = 0; i < parametri.length; i++) {
 }
 
 import axios from 'axios';
+import QuickViewConfirm from '@/components/QuickViewConfirm.vue';
 export default {
     name: "Confirm",
 
     data() {
         return {
             ConfirmObj: { name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
-            sagre: [],
+            descsagre: [],
+            idsagre: [],
             errors: [],
             showQuickVue: false,
-            Isuser: true,
+            QuickView_ute: true
         }
     },
 
@@ -94,62 +97,82 @@ export default {
         async getuser() {
             let Adminuser = await axios.get('/users/' + parametriObj.email);
             let Sagra = await axios.get('/sagra/' + parametriObj.id)
-                this.ConfirmObj.name = Adminuser.data.user_name
-                this.ConfirmObj.email = Adminuser.data.user_email
-                this.ConfirmObj.pass = Adminuser.data.user_password
-                this.ConfirmObj.id_sagra = Sagra.data[0].descrizione
-                this.ConfirmObj.authlevel = Adminuser.data.authlevel
+            this.ConfirmObj.name = Adminuser.data.user_name
+            this.ConfirmObj.email = Adminuser.data.user_email
+            this.ConfirmObj.pass = Adminuser.data.user_password
+            this.ConfirmObj.id_sagra = Sagra.data[0].descrizione
+            this.ConfirmObj.authlevel = Adminuser.data.authlevel
 
             let sagredata = await axios.get('/sagra/ute/' + parametriObj.id)
 
-            console.log(sagredata)
             sagredata.data.forEach(element => {
-                this.sagre.push(element.descrizione)          
+                this.descsagre.push(element.descrizione)
+                this.idsagre.push(element.id_sagra)
             });
-
-            console.log(this.sagre)
         },
 
         async checkForm() {
             this.errors = [];
 
+            // IdSagra
+            if (!this.ConfirmObj.id_sagra) {
+                this.errors.push("La sagra è obbligatoria");
+                this.scrollToTop();
+            }
+
             // Authlevel
             if (!/[0-9]{1}$/.test(this.ConfirmObj.authlevel)) {
                 this.errors.push("L'autorizzazione deve essere un numero");
+                this.scrollToTop();
             }
+        },
+
+        async handereject() {
+           let data = {
+                conferma: false,
+                sagra_link: "http://" + window.location.hostname.toString()
+            }
+            await axios.post("/mail/confirm/", data)
+            this.QuickView_ute = false
+            this.showQuickVue = true
         },
 
         async handleSubmit(e) {
             this.checkForm();
-
-            if (!this.checkEmptyErr()) {
+            if (this.errors.length > 0) {
                 e.preventDefault();
             } else {
                 e.preventDefault();
-                let data = await axios.get('/users/' + this.ConfirmObj.email);
-                if (data.data) {
-                    this.errorObj.emailErr.push("Questa email è associata a un account esistente");
-                    this.errors.push("Questa email è associata a un account esistente");
-                }
-                else {
-                    let dataid = (await axios.get("/users/new")).data
-                    let id = dataid.user_id
-                    id == null || undefined ? id = 0 : id == 0 ? id = 1 : id = id + 1
-                    let data = {
-                        user_id: id,
-                        user_email: this.ConfirmObj.email,
-                        user_password: this.ConfirmObj.pass,
-                        id_sagra: sessionStorage.getItem('SagraId'),
-                        user_name: this.ConfirmObj.name,
-                        authlevel: "0",
-                        user_confirm: "0"
+                for (let i = 0; i < this.descsagre.length; i++) {
+                    if (this.descsagre[i] == this.ConfirmObj.id_sagra) {
+                        this.ConfirmObj.id_sagra = this.idsagre[i]
+                        break;
                     }
-                    await axios.post("/users/", data);
-                    this.showQuickVue = true
+
                 }
+                let data = {
+                    user_email: this.ConfirmObj.email,
+                    id_sagra: this.ConfirmObj.id_sagra,
+                    authlevel: this.ConfirmObj.authlevel,
+                }
+                await axios.put("/users/update/", data);
+                
+                data = {
+                    conferma: true,
+                    admin_link: "http://" + window.location.hostname.toString() + "/admin",
+                    admin_email: this.ConfirmObj.email,
+                    admin_password: this.ConfirmObj.pass,
+                    sagra_link: "http://" + window.location.hostname.toString()
+                }
+                await axios.post("/mail/confirm/", data)
+                this.QuickView_ute = true
+                this.showQuickVue = true
             }
         }
     },
+
+    components: { QuickViewConfirm }
+
 };
 </script>
 
@@ -192,6 +215,7 @@ export default {
     padding: 2rem 1.2rem;
     font-size: 1.6rem;
     color: #130f40;
+    background: #f7f7f7;
     text-transform: none;
     width: 100%;
     border-color: black;

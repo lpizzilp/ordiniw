@@ -12,11 +12,16 @@ import {
 import {
     showAUser,
     createAccount,
-    SendMail,
     allUsers,
     getId,
-    SendRegistrazione
+    updateUserauthlevel
 } from "../controllers/user.js";
+
+import {
+    SendCoferma,
+    SendMail,
+    SendRegistrazione
+} from "../controllers/mail.js";
 
 import {
     addItems,
@@ -108,11 +113,20 @@ router.get("/api/users/:name", showAUser);
 // create account
 router.post("/api/users/", createAccount);
 
+// update authlevel
+router.put("/api/users/update/", updateUserauthlevel);
+
+
+////////////////////////// MAIL ////////////////////////////////
+
 // send mail ordine completato
 router.post("/api/mail/", SendMail)
 
 // send mail registrazione
 router.post("/api/mail/registrazione/", SendRegistrazione)
+
+// send mail conferma
+router.post("/api/mail/confirm/", SendCoferma)
 
 
 ////////////////////////// CART ////////////////////////////////

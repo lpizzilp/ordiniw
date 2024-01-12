@@ -162,7 +162,7 @@ export default {
 
 
             let data = {
-                sagra_link: "http://ordini.esagra.it",
+                sagra_link: "http://" + window.location.hostname.toString(),
                 reg_ora: ora,
                 admin_name: this.registerObj.name,
                 admin_email: this.registerObj.email,

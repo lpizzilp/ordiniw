@@ -1,12 +1,11 @@
 // import functions from User model
 
 import {
-    Emailregistrazione,
-    Emailsender,
     NuovoId,
     getAllUser,
     getUserByEmail,
-    insertUser
+    insertUser,
+    updateauthlevel
 } from "../models/UserModel.js";
 
 
@@ -56,10 +55,11 @@ export const createAccount=(req,res)=>{
     });
 };
 
-//send mail
-export const SendMail =(req,res)=>{
-    let Uemail = req.body;
-    Emailsender(Uemail,(err,results)=> {
+
+// update user
+export const updateUserauthlevel=(req,res)=>{
+    const data = req.body;
+    updateauthlevel(data, (err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -67,19 +67,3 @@ export const SendMail =(req,res)=>{
         }
     });
 };
-
-
-export const SendRegistrazione =(req,res)=>{
-    let Uemail = req.body;
-    Emailregistrazione(Uemail,(err,results)=> {
-        if (err) {
-            res.send(err);
-        }else {
-            res.json(results);
-        }
-    });
-};
-
-
-
-
