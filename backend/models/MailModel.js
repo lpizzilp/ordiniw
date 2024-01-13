@@ -64,6 +64,7 @@ export const Emailsender = (data, result) => {
 };
 
 
+// registrazione
 export const Emailregistrazione = (data, result) => {
     const transporter = emaildata
 
@@ -124,7 +125,7 @@ export const Emailregistrazione = (data, result) => {
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
             <hr style="border: 2px dashed #27ae60;">
-            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
+            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione avvenuta alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
         </div>`;
 
 
@@ -146,7 +147,7 @@ export const Emailregistrazione = (data, result) => {
 
 };
 
-
+//Conferma registrazione
 export const EmailConf = (data, result) => {
     const transporter = emaildata
 
@@ -154,7 +155,7 @@ export const EmailConf = (data, result) => {
     if (data.conferma == true) {
         emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
         <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Benvenuto</p>
-        <p style="text-align: left; font-size:16px;">Buon giorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che il tuo utente è appena stato confermato, quindi potrai cominciare ad uttilizzarlo andando alla pagina<a href=` + data.admin_link + `>ordini.esagra.it/admin</a>.</p>
+        <p style="text-align: left; font-size:16px;">Buon giorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che il tuo utente è appena stato confermato, quindi potrai cominciare ad uttilizzarlo andando alla pagina<a href=` + data.admin_link + `> ordini.esagra.it/admin</a>.</p>
         <hr style="border: 2px dashed #27ae60;">
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
@@ -172,17 +173,14 @@ export const EmailConf = (data, result) => {
     } else {
         emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Ci dispiace</p>
-            <p style="text-align: center; font-size:16px;">Buon giorno gentile utente,<br> il la tua registrazione come amministratore non è stata accettata. Di conseguenza non potra accedere all'area di amministrazione</p>
-            <hr style="border: 2px dashed #27ae60;">
-        </div>
-        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
+            <p style="text-align: left; font-size:16px;">Buon giorno gentile utente,<br>la tua registrazione come amministratore non è stata accettata, di conseguenza non potra accedere all'area di amministrazione</p>
             <hr style="border: 2px dashed #27ae60;">
             <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a><br><br>Se credi sia stato un errore prova a effettuare nuovamente la registrazione.</p>
         </div>`;
     }
 
-    mailOptions.to = data.user_email
-    mailOptions.subject = "Il tuo codice dell' Ordine web"
+    mailOptions.to = data.admin_email
+    mailOptions.subject = "Info amministratore ordini.esagra.it"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {

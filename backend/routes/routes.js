@@ -14,7 +14,8 @@ import {
     createAccount,
     allUsers,
     getId,
-    updateUserauthlevel
+    updateUserauthlevel,
+    Userdelete
 } from "../controllers/user.js";
 
 import {
@@ -115,6 +116,8 @@ router.post("/api/users/", createAccount);
 
 // update authlevel
 router.put("/api/users/update/", updateUserauthlevel);
+
+router.delete("/api/users/delete/:email", Userdelete);
 
 
 ////////////////////////// MAIL ////////////////////////////////

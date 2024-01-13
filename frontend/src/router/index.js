@@ -1,6 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Login from '../pages/Login.vue';
-import Register from '../pages/Register.vue';
+import Register from '../admin/Register.vue';
 import Home from '../pages/Home.vue';
 import Eliminacode from '../pages/Eliminacode.vue';
 import Menu from '../pages/Menu.vue';
@@ -9,8 +8,8 @@ import Cart from '../pages/Cart.vue';
 import Checkout from '../pages/Checkout.vue';
 import Thank from '../pages/Thank.vue';
 import MyOrder from '../pages/MyOrder.vue';
-import Admin from '../admin/Admin.vue';
-import Dashboard from '../admin/Dashboard.vue';
+import Admin from '../admin/Login.vue';
+import Dashboard from '../admin/pages/Dashboard.vue';
 import Confirm from '../admin/Confirm.vue';
 
 
@@ -42,11 +41,6 @@ const routes = [
     component: Cart,
   },
   {
-    path: "/login",
-    name: "Login",
-    component: Login,
-  },
-  {
     path: "/register",
     name: "Register",
     component: Register,
@@ -67,7 +61,7 @@ const routes = [
     component: MyOrder,
   },
   {
-    path: "/admin",
+    path: "/login",
     name: "Admin",
     component: Admin,
   },

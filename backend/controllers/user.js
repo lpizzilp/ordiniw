@@ -2,6 +2,7 @@
 
 import {
     NuovoId,
+    deleteuserbyemail,
     getAllUser,
     getUserByEmail,
     insertUser,
@@ -60,6 +61,17 @@ export const createAccount=(req,res)=>{
 export const updateUserauthlevel=(req,res)=>{
     const data = req.body;
     updateauthlevel(data, (err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// delete user
+export const Userdelete = (req,res)=>{
+    deleteuserbyemail(req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

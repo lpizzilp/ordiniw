@@ -55,7 +55,7 @@
 
 <script>
 import axios from 'axios';
-import QuickViewRegister from '@/components/QuickViewRegister.vue';
+import QuickViewRegister from '@/admin/components/QuickViewRegister.vue';
 export default {
     name: "Register",
 
