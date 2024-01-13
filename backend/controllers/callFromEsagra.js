@@ -32,7 +32,7 @@ export const importAnagrafica=(req,res)=>{
                 res.json(results);
             }
         });
-});
+    });
 
 };
 //-------------------------------------------------
@@ -62,6 +62,21 @@ export const importEsauriti=(req,res)=>{
                 res.json(results);
             }
         });
-});
+    });
+
+};
+
+export const deleteAllEsauriti=(req,res)=>{
+    const data = req.body;
+    //Cancella tutta la tabella esauriti
+    deleteEsauriti(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+            return;
+
+        }else {
+            res.json(results);
+        }
+    });
 
 };

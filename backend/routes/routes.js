@@ -48,11 +48,9 @@ import {
 } from "../controllers/billstatus.js";
 
 import {
-    importAnagrafica
-} from "../controllers/callFromEsagra.js";
-
-import {
-    importEsauriti
+    importAnagrafica,
+    importEsauriti,
+    deleteAllEsauriti
 } from "../controllers/callFromEsagra.js";
 
 
@@ -179,6 +177,7 @@ router.post("/api/importfood", importAnagrafica);
 
 ////////////////////////// Esauriti ////////////////////////////////
 router.post("/api/importesauriti", importEsauriti);
+router.delete("/api/deleteesauriti", deleteAllEsauriti);
 
 
 // export default router
