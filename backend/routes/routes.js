@@ -75,7 +75,8 @@ import {
     checkquantita,
     createDettaglio,
     createPrenotazione,
-    getAllPrenotGtId
+    getAllPrenotGtId,
+    getPrenDetailsById
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -163,6 +164,7 @@ router.get("/api/prenotazione/check", checkquantita);
 
 router.post("/api/prenotazione/dettaglio", createDettaglio);
 router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
+router.get("/api/prenotazione/:id", getPrenDetailsById);
 
 
 ////////////////////////// Bill Details ////////////////////////////////
@@ -185,7 +187,7 @@ router.delete("/api/billstatus/delete/:id", deleteBill)
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
-router.get("/api/sagra/ute/:ordine", allSagre)
+router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/:sigla", getSagraSig);
 router.post("/api/catalogosagre", createSagra);
 router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);

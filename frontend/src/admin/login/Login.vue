@@ -85,7 +85,10 @@ export default {
             } else if (Adminuser.data.authlevel != 0) {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
-                    this.matchUser = true
+                    sessionStorage.setItem('AdminSagraId', (await axios.get('/users/' + this.loginObj.email)).data.id_sagra);
+                    if (sessionStorage.getItem('AdminSagraId') != null || undefined || ""){
+                        this.matchUser = true
+                    }
                 } else {
                     this.matchUser = false
                 }
@@ -111,7 +114,7 @@ export default {
 
                     case true:
                         this.setAdmin("admin");
-                        this.$router.push("/admin/dashboard");
+                        this.$router.push("/admin/prenotazioni");
                         break;
 
                     case undefined:

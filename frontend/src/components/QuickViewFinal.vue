@@ -19,7 +19,7 @@
             <form @submit.prevent="submitForm">
                 <input class="email" type="email" id="email" name="email" v-model="Dataform.email"
                     placeholder="Inserisci la tua email" required>
-                <button class="btn" type="submit" style="width: 100%;">Invia</button>
+                <button class="btn" type="submit" style="width: 100%;" @click="submitForm()" :disabled="buttonDisabled" >Invia</button>
                 <button class="btn" type="reset" @click="DataParent('I')"
                     style="width: 100%; margin-top: 20px; background-color: #f38304;">Annulla</button>
             </form>
@@ -52,7 +52,8 @@ export default {
             Dataform: { email: "", id: "", data: "" },
             Item: [],
             itemQuantity: [],
-            timer: 7
+            timer: 7,
+            buttonDisabled: false
         }
     },
 
@@ -104,11 +105,15 @@ export default {
         },
 
         async submitForm() {
-            let billitem = await axios.get('/billdetails/' + this.Dataform.id)
+            this.buttonDisabled = true
+            if (sessionStorage.getItem('filtro') == 'PRE') {
+                var billitem = await axios.get('/prenotazione/' + this.Dataform.id)
+            } else {
+                billitem = await axios.get('/billdetails/' + this.Dataform.id)
+            }
             billitem.data.forEach(element => {
                 this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">' + element.food_name + '</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">' + parseInt(element.item_qty));
             });
-
 
             let data = {
                 user_email: this.Dataform.email,
@@ -119,6 +124,7 @@ export default {
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,
             }
+
             await axios.post('/mail/', data)
                 .then(response => {
                     if (response.data === '') {

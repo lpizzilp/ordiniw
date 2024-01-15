@@ -70,3 +70,14 @@ export const getPrenotGtId = (id,result) => {
         }
     });
 };
+
+export const getPrenDetails = (id,result) => {
+    db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name FROM bookdetails b2, food f WHERE b2.book_id = ? AND f.food_id = b2.food_id" ,id, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

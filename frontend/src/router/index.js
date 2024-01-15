@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Register from '../admin/Register.vue';
+import Register from '../admin/login/Register.vue';
 import Home from '../pages/Home.vue';
 import Eliminacode from '../pages/Eliminacode.vue';
 import Menu from '../pages/Menu.vue';
@@ -8,9 +8,10 @@ import Cart from '../pages/Cart.vue';
 import Checkout from '../pages/Checkout.vue';
 import Thank from '../pages/Thank.vue';
 import MyOrder from '../pages/MyOrder.vue';
-import Admin from '../admin/Login.vue';
-import Dashboard from '../admin/pages/Dashboard.vue';
-import Confirm from '../admin/Confirm.vue';
+import Admin from '../admin/login/Login.vue';
+import Ordini from '../admin/pages/Ordini.vue';
+import Prenotazioni from '../admin/pages/Prenotazioni.vue'
+import Confirm from '../admin/login/Confirm.vue';
 
 
 const routes = [
@@ -71,9 +72,14 @@ const routes = [
     component: Confirm,
   },
   {
-    path: "/admin/dashboard",
-    name: "Dashboard",
-    component: Dashboard,
+    path: "/admin/ordini",
+    name: "Ordini",
+    component: Ordini,
+  },
+  {
+    path: "/admin/prenotazioni",
+    name: "Prenotaizoni",
+    component: Prenotazioni,
   },
   {
     path: '/:pathMatch(.*)*',

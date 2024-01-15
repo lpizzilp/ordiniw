@@ -3,7 +3,8 @@ import {
     checkfood,
     insertDettaglio,
     insertPrenotazione,
-    getPrenotGtId
+    getPrenotGtId,
+    getPrenDetails
 } from "../models/PrenotazioniModel.js";
 
 
@@ -57,6 +58,16 @@ export const checkquantita=(req,res)=>{
 // ...Se l'id non viene passato  vengono fornite tutte  
 export const getAllPrenotGtId=(req,res)=>{
     getPrenotGtId(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const getPrenDetailsById=(req,res)=>{
+    getPrenDetails(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
