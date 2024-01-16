@@ -71,12 +71,26 @@ export const getPrenotGtId = (id,result) => {
     });
 };
 
+//recupera dettaglio
 export const getPrenDetails = (id,result) => {
     db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name FROM bookdetails b2, food f WHERE b2.book_id = ? AND f.food_id = b2.food_id" ,id, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
         }else{
+            result(null,results);
+        }
+    });
+};
+
+// recupera tutte le prenotazioni
+export const getAll = (result) => {
+    db.query("select b.*, b2.item_qty, f.food_name  from bookstatus b, bookdetails b2, food f where b2.book_id = b.book_id and  f.food_id = b2.food_id order by f.food_name asc, b.book_when asc", (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }
+        else{
             result(null,results);
         }
     });

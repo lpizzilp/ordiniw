@@ -4,7 +4,8 @@ import {
     insertDettaglio,
     insertPrenotazione,
     getPrenotGtId,
-    getPrenDetails
+    getPrenDetails,
+    getAll
 } from "../models/PrenotazioniModel.js";
 
 
@@ -68,6 +69,17 @@ export const getAllPrenotGtId=(req,res)=>{
 
 export const getPrenDetailsById=(req,res)=>{
     getPrenDetails(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// prendi tutte le prenotazoni
+export const getAllPrenot=(req,res)=>{
+    getAll((err,results)=> {
         if (err) {
             res.send(err);
         }else {

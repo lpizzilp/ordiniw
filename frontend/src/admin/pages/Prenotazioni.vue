@@ -1,47 +1,44 @@
 <template>
     <div class="admin-container">
-        <h1><i class="fa-solid fa-book-open">   Prenotazioni</i></h1>
+        <h1><i class="fa-solid fa-book-open"> Prenotazioni</i></h1>
 
         <div class="table-responsive">
             <!-- PROJECT TABLE -->
             <table class="table colored-header datatable project-list">
                 <thead>
                     <tr>
-                        <th>Nominativo</th>
-                        <th>telefono</th>
-                        <th>Orario</th>
                         <th>Serata</th>
                         <th>Pezzi</th>
+                        <th>nominativo</th>
+                        <th>telefono</th>
+                        <th>Orario</th>
                         <th>Stato</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(b) in filterBills.slice().reverse()" :key="b.bill_id">
-                        <td>{{ b.bill_phone }}</td>
-                        <td>{{ b.bill_address }}</td>
-                        <td>{{ b.bill_when }}</td>
-                        <td>{{ b.bill_paid }}</td>
-                        <td>${{ b.bill_total }}</td>
-                        <td>{{ avaiableStatus[b.bill_status] }}</td>
+                    <tr v-for="(b) in filterPenot.slice().reverse()" :key="b.book_id">
+                        <td>{{ b.food_name }}</td>
+                        <td>{{ b.item_qty }}</td>
+                        <td>{{ b.book_nominativo }}</td>
+                        <td>{{ b.book_phone }}</td>
+                        <td>{{ formattime(b.book_when) }}</td>
+                        <td v-if="b.book_status = 0"><i class="fa-solid fa-square-xmark"
+                                style="padding-right: 1vh;"></i>Cancellato</td>
+                        <td v-else-if="b.book_status = 1"><i class="fa-regular fa-square-minus"
+                                style="padding-right: 1vh;"></i>Attesa</td>
+                        <td v-else-if="b.book_status = 2"><i class="fa-regular fa-square-check"
+                                style="padding-right: 1vh;"></i>confermato</td>
                         <td>
-                            <button v-if="b.bill_status < 5" class="action-btn" @click="nextStatusBtn(b.bill_id)">
-                                {{ avaiableStatus[b.bill_status + 1] }}
-                            </button>
+                            <button class="btn" @click="changestate()" style="padding: 0.5vh 1.5vh; border-radius: 5px;"><i class="fas fa-bars"></i></button>
+                            <div v-if="showAction == true" class="drop-down-select">
+                                <button v-if="b.book_status != 0" class="action-btn" @click="nextStatusBtn(b.bill_id)">
+                                    Conferma
+                                </button>
 
-                            <button v-if="b.bill_status == 1" class="cancel-btn" @click="cancelBtn(b.bill_id)">
-                                Cancel
-                            </button>
-
-                            <button v-else-if="b.bill_status == 5 && b.bill_paid == 'false'" class="paid-btn"
-                                @click="paidBtn(b.bill_id)">
-                                Paid
-                            </button>
-
-                            <button v-else-if="b.bill_status == 5 && b.bill_paid == 'true'" class="action-btn"
-                                @click="nextStatusBtn(b.bill_id)">
-                                {{ avaiableStatus[b.bill_status + 1] }}
-                            </button>
+                                <button v-if="b.book_status != 0" class="cancel-btn" @click="cancelBtn(b.bill_id)">
+                                    Cancella
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -53,24 +50,26 @@
 
 <script>
 import axios from "axios";
+import moment from 'moment';
 import { mapState, mapMutations } from "vuex";
 export default {
-    name: 'Dashboard',
+    name: 'Prenotazioni',
 
     data() {
         return {
             avaiableStatus: ["cancel", "confirmed", "preparing", "checking", "delivering", "delivered", "completed"],
-            allBills: [],
+            allPenot: [],
             showOrderDetails: false,
             sendId: undefined,
             interval: "",
+            showAction: false,
         }
     },
 
     created() {
-        this.getAllBills();
+        this.getAllPenot();
         if (!this.admin) {
-            this.$router.push("/");
+            this.$router.push("/login");
         }
     },
 
@@ -85,17 +84,30 @@ export default {
     computed: {
         ...mapState(["allFoods", "admin"]),
 
-        filterBills: function () {
-            return this.allBills.filter((b) => b.bill_status < 6 && b.bill_status > 0);
+        filterPenot: function () {
+            return this.allPenot.filter((b) => b.book_status < 6 && b.book_status > 0);
         },
     },
 
     methods: {
         ...mapMutations(["setAdmin"]),
 
-        async getAllBills() {
-            this.allBills = (await axios.get('/billstatus')).data;
+        async getAllPenot() {
+            this.allPenot = (await axios.get('/getprenotazione')).data;
         },
+
+        changestate() {
+           switch (this.showAction) {
+            case true:
+                this.showAction = false
+                break;
+           
+            case false:
+                this.showAction = true
+                break;
+           }
+        },
+
 
         sendBillId: function (id) {
             this.sendId = id
@@ -106,28 +118,39 @@ export default {
             this.showOrderDetails = !this.showOrderDetails;
         },
 
+        formattime(data) {
+            const dataParsata = moment(data, 'YYYY/MM/DDTHH:mm');
+
+            // Formatta la data nel nuovo formato
+            const dataFormattata = dataParsata.format('DD/MM/YYYY');
+
+            return dataFormattata;
+        },
+
         handleLogout: function () {
             this.setAdmin("");
         },
 
         async nextStatusBtn(id) {
             await axios.put('/billstatus/' + id);
-            this.getAllBills();
+            this.getAllPenot();
         },
 
         async paidBtn(id) {
             await axios.put('/billstatus/paid/' + id);
-            this.getAllBills();
+            this.getAllPenot();
         },
 
         async cancelBtn(id) {
             await axios.put('/billstatus/cancel/' + id);
-            this.getAllBills();
+            this.getAllPenot();
         },
+
+
 
         autoUpdate: function () {
             this.interval = setInterval(function () {
-                this.getAllBills();
+                this.getAllPenot();
             }.bind(this), 1000);
         }
 
@@ -184,5 +207,14 @@ export default {
 
 .action-btn:hover {
     background-color: #27ae60;
+}
+
+.drop-down-select {
+    background-color: rgb(255, 255, 255);
+    padding: 1vh 1vh;
+    text-align: center;
+    border: 2px outset black;
+    border-radius: 5px;
+
 }
 </style>

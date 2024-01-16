@@ -77,7 +77,7 @@ export default {
     created() {
         this.getAllBills();
         if (!this.admin) {
-            this.$router.push("/");
+            this.$router.push("/login");
         }
     },
 
@@ -144,9 +144,10 @@ export default {
 
 <style scoped>
 .admin-container {
+    margin-left: 20%;
     background-color: #fff;
     height: 100vh;
-    padding: 2rem 9%;
+    padding: 2rem 5%;
     font-size: 16px;
 }
 

@@ -75,6 +75,7 @@ import {
     checkquantita,
     createDettaglio,
     createPrenotazione,
+    getAllPrenot,
     getAllPrenotGtId,
     getPrenDetailsById
 } from "../controllers/prenotazioni.js";
@@ -158,13 +159,16 @@ router.delete("/api/cartItem/:id", deleteItems);
 router.post("/api/booking", createBooking);
 
 ////////////////////////// Prenotazione ////////////////////////////////
-router.post("/api/prenotazione", createPrenotazione);
-router.get("/api/prenotazione/new", PredinuovoId);
-router.get("/api/prenotazione/check", checkquantita);
+router.get("/api/getprenotazione", getAllPrenot)
 
-router.post("/api/prenotazione/dettaglio", createDettaglio);
+router.get("/api/prenotazione/new", PredinuovoId);
 router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
 router.get("/api/prenotazione/:id", getPrenDetailsById);
+router.get("/api/prenotazione/check", checkquantita);
+
+router.post("/api/prenotazione", createPrenotazione);
+router.post("/api/prenotazione/dettaglio", createDettaglio);
+
 
 
 ////////////////////////// Bill Details ////////////////////////////////
