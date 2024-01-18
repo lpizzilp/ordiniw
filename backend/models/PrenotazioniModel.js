@@ -84,8 +84,32 @@ export const getPrenDetails = (id,result) => {
 };
 
 // recupera tutte le prenotazioni
-export const getAll = (result) => {
-    db.query("select b.*, b2.item_qty, f.food_name  from bookstatus b, bookdetails b2, food f where b2.book_id = b.book_id and  f.food_id = b2.food_id order by f.food_name asc, b.book_when asc", (err,results)=> {
+export const getAll = (id,result) => {
+    db.query("select b.*, b2.item_qty, f.food_name  from bookstatus b, bookdetails b2, food f where f.food_id = ? and b2.book_id = b.book_id and b2.food_id = f.food_id order by f.food_name desc, case WHEN book_status = 1 THEN 1 WHEN book_status = 2 THEN 2 ELSE 3 end desc, b.book_when asc",id, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }
+        else{
+            result(null,results);
+        }
+    });
+};
+
+export const Updatestatus = (data, result) => {
+    db.query("UPDATE bookstatus SET book_status = ? WHERE book_id = ?",[data.action, data.id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            console.log(data)
+            result(null,results);
+        }
+    });
+};
+
+export const getsum = (result) => {
+    db.query("SELECT f.food_id, f.food_name, SUM(bd.item_qty) AS somma_qty FROM food AS f JOIN bookdetails bd ON f.food_id = bd.food_id JOIN bookstatus bs ON bd.book_id = bs.book_id WHERE bs.book_status <> 0  GROUP BY f.food_name ORDER BY f.food_name asc", (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

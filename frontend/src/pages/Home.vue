@@ -85,7 +85,7 @@ export default {
     name: "Home",
     data() {
         return {
-            loginObj: {email: "exemple.exemple@gmail.com", pass: "Utente1"},
+            loginObj: { email: "exemple.exemple@gmail.com", pass: "Utente1" },
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
@@ -107,11 +107,12 @@ export default {
 
         async getsagra() {
             setTimeout(() => {
-                console.log(sessionStorage.getItem('SagraBottoni').split("/"))
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
-                this.Btn = sessionStorage.getItem('SagraBottoni').split("/")
-                this.Display[0] = this.Btn[5].split('')
-                this.Display[1] = this.Btn[7]
+                if (this.sagra_name != undefined || null) {
+                    this.Btn = sessionStorage.getItem('SagraBottoni').split("/")
+                    this.Display[0] = this.Btn[5].split('')
+                    this.Display[1] = this.Btn[7]
+                }
             }, 300);
         },
 
@@ -125,10 +126,10 @@ export default {
                 user_password: this.loginObj.pass,
             };
             this.matchUser = datareg;
-                    sessionStorage.setItem('Username', this.matchUser.user_id);
-                    sessionStorage.setItem('MatchUser', this.matchUser);
-                    sessionStorage.setItem('filtro', type.category);
-                    this.$router.push("/menu");
+            sessionStorage.setItem('Username', this.matchUser.user_id);
+            sessionStorage.setItem('MatchUser', this.matchUser);
+            sessionStorage.setItem('filtro', type.category);
+            this.$router.push("/menu");
         },
 
         randomizza() {

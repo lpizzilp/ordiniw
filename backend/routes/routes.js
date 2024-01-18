@@ -72,12 +72,14 @@ import {
 
 import {
     PredinuovoId,
+    PutAction,
+    Totsum,
     checkquantita,
     createDettaglio,
     createPrenotazione,
     getAllPrenot,
     getAllPrenotGtId,
-    getPrenDetailsById
+    getPrenDetailsById,
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -159,15 +161,18 @@ router.delete("/api/cartItem/:id", deleteItems);
 router.post("/api/booking", createBooking);
 
 ////////////////////////// Prenotazione ////////////////////////////////
-router.get("/api/getprenotazione", getAllPrenot)
+router.get("/api/prenotazione/sum", Totsum);
 
 router.get("/api/prenotazione/new", PredinuovoId);
 router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
 router.get("/api/prenotazione/:id", getPrenDetailsById);
+router.get("/api/getprenotazione/:id", getAllPrenot);
 router.get("/api/prenotazione/check", checkquantita);
 
 router.post("/api/prenotazione", createPrenotazione);
 router.post("/api/prenotazione/dettaglio", createDettaglio);
+
+router.put("/api/prenotazione/action", PutAction);
 
 
 
