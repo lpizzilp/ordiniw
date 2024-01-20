@@ -102,7 +102,6 @@ export const Updatestatus = (data, result) => {
             console.log(err);
             result(err,null);
         }else{
-            console.log(data)
             result(null,results);
         }
     });

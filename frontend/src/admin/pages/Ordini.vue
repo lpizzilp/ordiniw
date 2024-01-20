@@ -1,8 +1,8 @@
 <template>
     <div class="admin-container">
         <div class="d-flex justify-content-between">
-            <h1>Hello Admin!</h1>
-            <button class="btn" @click="handleLogout()">Logout</button>
+            <h1><i class="fa-solid fa-utensils"> Ordini</i></h1>
+            <button class="btn" @click="getAllBills()">Aggiorna</button>
         </div>
 
         <div class="table-responsive">
@@ -10,44 +10,37 @@
             <table class="table colored-header datatable project-list">
                 <thead>
                     <tr>
-                        <th>Bill Id</th>
-                        <th>User Id</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>When</th>
-                        <th>Paid</th>
+                        <th>Tavolo</th>
+                        <th>Coperti</th>
+                        <th>Nominativo</th>
+                        <th>Data Ordine</th>
+                        <th>Tipo</th>
                         <th>Total</th>
                         <th>Status</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(b) in filterBills.slice().reverse()" :key="b.bill_id">
-                        <td>{{ b.bill_id }}</td>
-                        <td>{{ b.user_id }}</td>
-                        <td>{{ b.bill_phone }}</td>
-                        <td>{{ b.bill_address }}</td>
-                        <td>{{ b.bill_when }}</td>
-                        <td>{{ b.bill_paid }}</td>
-                        <td>${{ b.bill_total }}</td>
-                        <td>{{ avaiableStatus[b.bill_status] }}</td>
+                    <tr v-for="(b) in filterBills.slice()" :key="b.bill_id">
+                        <td>{{ b.bill_tavolo }}</td>
+                        <td>{{ b.bill_coperti }}</td>
+                        <td>{{ b.Nominativo }}</td>
+                        <td>{{ formattype('T', b.bill_when) }}</td>
+                        <td>{{ formattype('C', b.TipoCassa) }}</td>
+                        <td>{{ b.bill_total }}€</td>
+                        <td v-if="b.bill_status == 0"><i class="fa-solid fa-square-xmark"></i> {{ avaiableStatus[b.bill_status] }}</td>
+                        <td v-else-if="b.bill_status == 1"><i class="fa-regular fa-square-minus"></i> {{ avaiableStatus[b.bill_status] }}</td>
+                        <td v-else-if="b.bill_status == 2 || 3"><i class="fa-regular fa-square-check"></i> {{ avaiableStatus[b.bill_status] }}</td>
                         <td>
-                            <button v-if="b.bill_status < 5" class="action-btn" @click="nextStatusBtn(b.bill_id)">
+                            <button v-if="b.bill_status == 0" class="annulla-btn" @click="nextStatusBtn(b.bill_id)">
+                                Annulla
+                            </button>
+
+                            <button v-if="b.bill_status < 3 && b.bill_status > 0" class="action-btn" @click="nextStatusBtn(b.bill_id)">
                                 {{ avaiableStatus[b.bill_status + 1] }}
                             </button>
 
                             <button v-if="b.bill_status == 1" class="cancel-btn" @click="cancelBtn(b.bill_id)">
-                                Cancel
-                            </button>
-
-                            <button v-else-if="b.bill_status == 5 && b.bill_paid == 'false'" class="paid-btn"
-                                @click="paidBtn(b.bill_id)">
-                                Paid
-                            </button>
-
-                            <button v-else-if="b.bill_status == 5 && b.bill_paid == 'true'" class="action-btn"
-                                @click="nextStatusBtn(b.bill_id)">
-                                {{ avaiableStatus[b.bill_status + 1] }}
+                                Cancella
                             </button>
                         </td>
                     </tr>
@@ -60,13 +53,14 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Dashboard',
 
     data() {
         return {
-            avaiableStatus: ["cancel", "confirmed", "preparing", "checking", "delivering", "delivered", "completed"],
+            avaiableStatus: ["cancellato", "attesa", "confermato", "completato"],
             allBills: [],
             showOrderDetails: false,
             sendId: undefined,
@@ -93,7 +87,7 @@ export default {
         ...mapState(["allFoods", "admin"]),
 
         filterBills: function () {
-            return this.allBills.filter((b) => b.bill_status < 6 && b.bill_status > 0);
+            return this.allBills.filter((b) => b.bill_status < 4 && b.bill_status >= 0);
         },
     },
 
@@ -117,13 +111,27 @@ export default {
             this.setAdmin("");
         },
 
-        async nextStatusBtn(id) {
-            await axios.put('/billstatus/' + id);
-            this.getAllBills();
+        formattype(typeformat, data) {
+            let resul = ""
+            switch (typeformat) {
+                case 'T':
+                    resul = moment(data, 'YYYY/MM/DDTHH:mm').format('DD/MM/YYYY');
+                    break;
+
+                case 'C':
+                    if (data == 'W') {
+                        resul = 'Tavolo'
+                    } else {
+                        resul = 'Asporto'
+                    }
+                    break;
+            }
+
+            return resul;
         },
 
-        async paidBtn(id) {
-            await axios.put('/billstatus/paid/' + id);
+        async nextStatusBtn(id) {
+            await axios.put('/billstatus/' + id);
             this.getAllBills();
         },
 
@@ -135,7 +143,7 @@ export default {
         autoUpdate: function () {
             this.interval = setInterval(function () {
                 this.getAllBills();
-            }.bind(this), 1000);
+            }.bind(this), 300000);
         }
 
     },
@@ -146,44 +154,72 @@ export default {
 .admin-container {
     margin-left: 20%;
     background-color: #fff;
-    height: 100vh;
     padding: 2rem 5%;
     font-size: 16px;
 }
 
-.project-list>tbody>tr>td {
-    padding: 12px 8px;
+.admin-container h1 {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.5em;
+    color: #27ae60;
 }
 
-.project-list>tbody>tr>td .avatar {
-    width: 22px;
-    border: 1px solid #CCC;
+.project-list>tbody>tr>td {
+    padding: 3px 5px;
 }
 
 .table-responsive {
     margin-top: 8vh;
 }
 
+
+.annulla-btn,
 .action-btn,
-.cancel-btn,
-.paid-btn {
-    width: 100px;
-    height: 25px;
+.cancel-btn {
     color: white;
-    text-transform: capitalize;
+    text-align: center;
+    padding: 0.5vh;
+    border-radius: 5px;
 }
 
 .action-btn {
-    background-color: #0da9ef;
-    margin-right: 10px;
-}
-
-.cancel-btn,
-.paid-btn {
-    background-color: red;
-}
-
-.action-btn:hover {
     background-color: #27ae60;
+    margin-bottom: 0.5vh;
+    margin-right: 0.3vh;
+}
+
+.cancel-btn {
+    background-color: red;
+    margin-top: 0.5vh;
+    margin-left: 0.3vh;
+}
+
+.annulla-btn {
+    background-color: #0da9ef;
+}
+.annulla-btn:hover {
+    background-color: #27ae60;
+}
+
+
+.action-btn:hover,
+.cancel-btn:hover {
+    background-color: #0da9ef;
+}
+
+@media (max-width: 983px) {
+    .admin-container {
+    margin: 0px;
+    margin-top: 70px;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+.admin-container h1 {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.2em;
+    color: #27ae60;
+}
+
 }
 </style>

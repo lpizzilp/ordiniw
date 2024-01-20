@@ -9,6 +9,7 @@ import Checkout from '../pages/Checkout.vue';
 import Thank from '../pages/Thank.vue';
 import MyOrder from '../pages/MyOrder.vue';
 import Admin from '../admin/login/Login.vue';
+import Dashboard from '../admin/pages/Dashboard.vue';
 import Ordini from '../admin/pages/Ordini.vue';
 import Prenotazioni from '../admin/pages/Prenotazioni.vue'
 import Confirm from '../admin/login/Confirm.vue';
@@ -70,6 +71,11 @@ const routes = [
     path: "/admin/confirm",
     name: "Confirm",
     component: Confirm,
+  },
+  {
+    path: "/admin/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
   },
   {
     path: "/admin/ordini",

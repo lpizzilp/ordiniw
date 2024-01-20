@@ -3,6 +3,8 @@
         <router-link @click="scrollToTop()" to="admin/dashboard" class="testa"><i class="fa-solid fa-user-tie"
                 style="padding-right: 2vh;"></i>Ciao Amministratore!
         </router-link>
+        <button class="btn"><i class="fas fa-bars" @click="showNav()"></i>
+        </button>
 
         <ul class="table-element">
             <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
@@ -15,12 +17,21 @@
 
 
         <div class="icons">
-            <!-- <div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>-->
             <router-link @click="setAdmin('')" to="/" class="link">
                 <i class="fa-solid fa-right-from-bracket">Logout</i>
             </router-link>
         </div>
 
+    </div>
+    <div class="navigation">
+        <ul class="table-phone">
+            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
+                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
+            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
+                        style="padding-right: 2vh;"></i>Ordini</router-link></li>
+            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
+                        class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
+        </ul>
     </div>
 </template>
 
@@ -45,9 +56,14 @@ export default {
             window.scrollTo(0, 0);
         },
 
-        showNav: function () {
-            let navbar = document.querySelector('.header .navbar');
-            navbar.classList.toggle('active');
+        showNav() {
+            let nav = document.getElementsByClassName('navigation')
+            if (nav[0].style.display == 'none') {
+                nav[0].style.display = 'block'
+            } else {
+                nav[0].style.display = 'none'
+            }
+
         },
 
     }
@@ -56,11 +72,11 @@ export default {
 
 <style scoped>
 .header {
-    position: absolute;
+    position: fixed;
     top: 0;
+    bottom: 0;
     left: 0;
     width: 20%;
-    height: 100%;
     background: #27ae60;
     display: flex;
     flex-direction: column;
@@ -124,45 +140,75 @@ export default {
     background: #f38609 !important;
 }
 
-#menu-btn {
+.btn {
     display: none;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 985px) {
     .header .icons .account:hover .drop-down-select {
         display: block;
     }
 }
 
-@media (max-width: 768px) {
-    /* .header .navbar {
-        position: absolute;
-        top: 99%;
+@media (max-width: 983px) {
+    .header {
+        position: fixed;
+        top: 0;
         left: 0;
-        right: 0;
-        background: #fff;
-        border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
-        border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2);
-        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        width: 100%;
+        height: 70px;
+        background: #27ae60;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 2em 2em;
     }
-*/
 
-    .header .navbar a {
-        font-size: 2rem;
-        margin: 2rem;
+    .table-element {
+        display: none;
+    }
+
+    .header .icons {
+        display: none;
+    }
+
+    .btn {
         display: block;
+        background-color: #ffffff;
+        color: black;
     }
 
-    #menu-btn {
-        display: inline-block;
+    .navigation {
+        display: none;
+        position: fixed;
+        z-index: 99;
+        width: 100%;
+        background-color: #ffffff;
     }
 
-}
+    .navigation .table-phone {
+        list-style-type: none;
+        color: black;
+        font-size: 2rem;
+    }
 
-@media (max-width: 576px) {
-    .header .navbar a {
-        font-size: 1.5rem;
-        margin: 0;
+    .navigation .table-phone li {
+        padding: 1rem 10rem;
+        color: black;
+        border: 2px inset black;
+        border-radius: 5px;
+    }
+
+    .navigation .table-phone a {
+        color: black;
+    }
+
+    .table-phone a:hover {
+        color: #f38609;
+    }
+
+    .table-phone a.router-link-exact-active {
+        color: #0015ff;
     }
 }
 </style>
