@@ -1,8 +1,9 @@
 <template>
     <div class="admin-container">
-        <div class="d-flex justify-content-between">
+        <div class="header">
             <h1><i class="fa-solid fa-book-open"> Prenotazioni</i></h1>
-            <button class="btn" @click="getAllPenot()">Aggiorna</button>
+            <button class="btn download" @click="getAllPenot()"><i class="fa-solid fa-download" style="padding-right: 1vh;"></i>Download in Excel</button>
+            <button class="btn" @click="getAllPenot()"><i class="fa-solid fa-retweet" style="padding-right: 1vh;"></i>Aggiorna</button>
         </div>
 
         <div class="table-responsive">
@@ -247,6 +248,13 @@ export default {
     font-size: 1.5em;
     color: #27ae60;
 }
+
+.header {
+    display: flex; 
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
 
 .project-list>tbody>tr>td {
     position: relative;
