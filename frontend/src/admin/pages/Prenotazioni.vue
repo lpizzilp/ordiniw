@@ -244,25 +244,29 @@ export default {
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
 
-            data[0] = ['Id Articolo', 'Serata', 'Pezzi']
+            data[0] = ['Id Articolo', 'Serata', 'Pezzi', '', '']
             plus = plus + 1
 
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                if (plus != 1) {
-                    data[0 + plus] = ['', '', '']
+                data[0 + plus] = [this.totqty[i].food_id, this.totqty[i].food_name, this.totqty[i].somma_qty, '', '']
+                plus = plus + 1
+            }
+            for (let i = 0; i < this.totqty.length; i++) {
+                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
+                console.log(this.allPenot)
+                if (plus != this.totqty.length) {
+                    data[0 + plus] = ['', '', '', '', '']
                     this.rowcolor.push(plus)
                     plus = plus + 1
                 }
-                data[0 + plus] = [this.totqty[i].food_id, this.totqty[i].food_name, this.totqty[i].somma_qty,]
-                plus = plus + 1
-                data[0 + plus] = ['Id prenot', 'Nominativo', 'Telefono']
-                plus = plus + 1
-                data[0 + plus] = ['', '', '']
-                plus = plus + 1
+                data[0 + plus] = ['Articolo', 'Quantità', 'Nominativo', 'Telefono', 'Data']
+                    plus = plus + 1
+                    data[0 + plus] = ['', '', '', '', '']
+                    plus = plus + 1
                 for (let l = 0; l < this.allPenot.length; l++) {
-                    data[0 + plus] = [this.allPenot[l].book_id, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone]
+                    data[0 + plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when)]
                     plus = plus + 1
                 }
             }
@@ -281,9 +285,11 @@ export default {
             const worksheet = workbook.addWorksheet('Dati');
 
             // Imposta la larghezza delle colonne
-            worksheet.getColumn('A').width = 12;
+            worksheet.getColumn('A').width = 25;
             worksheet.getColumn('B').width = 25;
             worksheet.getColumn('C').width = 20;
+            worksheet.getColumn('D').width = 20;
+            worksheet.getColumn('E').width = 20;
 
             const headerStyle = {
                 font: { size: 13 },
