@@ -2,7 +2,7 @@
     <div class="admin-container">
         <div class="header">
             <h1><i class="fa-solid fa-utensils"> Ordini</i></h1>
-            <button class="btn download" @click="getAllBills()"><i class="fa-solid fa-download" style="padding-right: 1vh;"></i>Download in Excel</button>
+            <button class="btn download" @click="Exportfunction()"><i class="fa-solid fa-download" style="padding-right: 1vh;"></i>Download in Excel</button>
             <button class="btn" @click="getAllBills()"><i class="fa-solid fa-retweet" style="padding-right: 1vh;"></i>Aggiorna</button>
         </div>
 
@@ -55,6 +55,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import ExcelJS from 'exceljs';
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Dashboard',
@@ -145,7 +146,102 @@ export default {
             this.interval = setInterval(function () {
                 this.getAllBills();
             }.bind(this), 300000);
-        }
+        },
+
+        async Exportdata() {
+            let plus = 0 // incremento righe
+            var data = [[]] //array dei dati
+
+            // recupera ordini
+            this.allBills = (await axios.get('/billstatus')).data;
+
+            data[0] = ['Id Ordine', 'Tavolo', 'Coperti', 'Nominativo', 'Data Ordine', 'Tipo', 'Totale']
+            plus = plus + 1
+
+            // carico dati
+            for (let i = 0; i < this.allBills; i++) {
+                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
+                data[0 + plus] = [this.allBills[i].bill_id, this.allBills[i].bill_tavolo, this.allBills[i].bill_coperti, this.allBills[i].bill_nominativo, this.allBills[i].bill_when, this.allBills[i].TipoCassa, this.allBills[i].bill_total]
+                plus = plus + 1
+            }
+
+            console.log(data)
+            return data
+        },
+
+
+        async Exportfunction() {
+            this.totqty = (await axios.get('/prenotazione/sum')).data;
+            // Creare un nuovo workbook e foglio Excel
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Dati');
+
+            // Imposta la larghezza delle colonne
+            worksheet.getColumn('A').width = 20;
+            worksheet.getColumn('B').width = 20;
+            worksheet.getColumn('C').width = 20;
+            worksheet.getColumn('D').width = 20;
+            worksheet.getColumn('E').width = 20;
+            worksheet.getColumn('F').width = 20;
+            worksheet.getColumn('G').width = 20;
+
+            const headerStyle = {
+                font: { size: 13 },
+                alignment: { vertical: 'middle', horizontal: 'center' },
+                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
+                fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
+            };
+
+            const emptyStyle = {
+                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
+                fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
+            };
+
+            // Definisci lo stile per le celle non header
+            const cellStyle = {
+                font: { size: 12 },
+                alignment: { vertical: 'middle', horizontal: 'center' },
+                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
+            };
+
+
+            // Aggiungere dati al foglio Excel
+            const data = await this.Exportdata()
+            worksheet.addRows(data);
+
+            // Aggiungi i dati al foglio Excel e applica gli stili
+            data.forEach((row, rowIndex) => {
+                row.forEach((value, colIndex) => {
+                    const cell = worksheet.getCell(rowIndex + 1, colIndex + 1);
+                    // Applica lo stile appropriato in base alla riga
+                    if (rowIndex === 0) {
+                        cell.style = headerStyle;
+                    } else {
+                        cell.style = cellStyle;
+                    }
+
+                    for (let i = 0; i < this.rowcolor.length; i++) {
+                        if (rowIndex === this.rowcolor[i]) {
+                            cell.style = emptyStyle;
+                        }
+                    }
+                });
+            });
+
+            // Salva il file Excel
+            workbook.xlsx.writeBuffer().then((buffer) => {
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const url = window.URL.createObjectURL(blob);
+
+                // Crea un elemento <a> per il download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Ordini_excel.xlsx';
+                a.click();
+
+                window.URL.revokeObjectURL(url);
+            });
+        },
 
     },
 }

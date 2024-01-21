@@ -342,7 +342,7 @@ export default {
                 // Crea un elemento <a> per il download
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'dati_excel.xlsx';
+                a.download = 'Prenotazioni_excel.xlsx';
                 a.click();
 
                 window.URL.revokeObjectURL(url);
