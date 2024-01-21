@@ -1,12 +1,3 @@
--- db_restaurant.availability definition
-
-CREATE TABLE `availability` (
-  `food_id` varchar(5) NOT NULL,
-  `QtaDisponibile` int(10) unsigned NOT NULL DEFAULT 1,
-  PRIMARY KEY (`food_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 -- db_restaurant.billstatus definition
 
 CREATE TABLE `billstatus` (
@@ -86,6 +77,7 @@ CREATE TABLE `catalogo_sagre` (
   `info` varchar(255) NOT NULL,
   `flgInfo` tinyint(1) NOT NULL DEFAULT 0,
   `numcoda` int(10) unsigned NOT NULL DEFAULT 99,
+  `nstartprt` int(10) unsigned NOT NULL DEFAULT 500,
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -119,6 +111,7 @@ CREATE TABLE `food` (
   `DataInizioValidita` varchar(10) DEFAULT NULL,
   `DataFineValidita` varchar(10) DEFAULT NULL,
   `FlgPrenotabile` tinyint(1) DEFAULT 0,
+  `DataFinePRT` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

@@ -44,7 +44,9 @@ import {
     updateBillStatus,
     updateBillPaid,
     cancelBillStatus,
-    deleteBill
+    deleteBill,
+    getAllBillsGtId
+
 } from "../controllers/billstatus.js";
 
 import {
@@ -162,6 +164,7 @@ router.put("/api/billstatus/:id", updateBillStatus);
 router.put("/api/billstatus/paid/:id", updateBillPaid);
 router.put("/api/billstatus/cancel/:id", cancelBillStatus);
 router.delete("/api/billstatus/delete/:id", deleteBill)
+router.get("/api/billstatus/allgt/:id", getAllBillsGtId);
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla

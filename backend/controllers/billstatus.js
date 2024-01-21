@@ -7,7 +7,8 @@ import {
     updateStatus,
     updatePaid,
     cancelStatus,
-    deleteBillById
+    deleteBillById,
+    getBillsGtId
 } from "../models/BillStatusModel.js";
 
 // get newest Bill Status
@@ -103,6 +104,19 @@ export const cancelBillStatus=(req,res)=>{
 export const deleteBill=(req,res)=>{
     const id = req.params.id;
     deleteBillById (id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+
+// get tutti gli ordini inserite maggiori un determinato id 
+// ...Se l'id non viene passato  vengono fornite tutte  
+export const getAllBillsGtId=(req,res)=>{
+    getBillsGtId(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

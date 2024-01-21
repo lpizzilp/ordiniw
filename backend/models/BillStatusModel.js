@@ -117,3 +117,19 @@ export const deleteBillById = (id,result) => {
         }
     });
 };
+
+// get all bills  per data > parametro 
+export const getBillsGtId = (id,result) => {
+    db.query("SELECT * FROM billstatus  " +   
+            " WHERE bill_id > ? "  
+            ,id, (err,results)=> {
+
+        if (err){
+            console.log(err);
+            result(err,null);
+        }
+        else{
+            result(null,results);
+        }
+    });
+};
