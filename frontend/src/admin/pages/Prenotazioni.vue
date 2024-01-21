@@ -2,8 +2,10 @@
     <div class="admin-container">
         <div class="header">
             <h1><i class="fa-solid fa-book-open"> Prenotazioni</i></h1>
-            <button class="btn download" @click="getAllPenot()"><i class="fa-solid fa-download" style="padding-right: 1vh;"></i>Download in Excel</button>
-            <button class="btn" @click="getAllPenot()"><i class="fa-solid fa-retweet" style="padding-right: 1vh;"></i>Aggiorna</button>
+            <button class="btn download" @click="Exportfunction()"><i class="fa-solid fa-download"
+                    style="padding-right: 1vh;"></i>Download in Excel</button>
+            <button class="btn" @click="getAllPenot()"><i class="fa-solid fa-retweet"
+                    style="padding-right: 1vh;"></i>Aggiorna</button>
         </div>
 
         <div class="table-responsive">
@@ -28,8 +30,10 @@
                         <td style="padding: 12px 4px;">{{ t.somma_qty }}</td>
                         <td style="padding: 12px 4px;"></td>
                         <td style="padding: 12px 4px;"></td>
-                        <td style="padding: 12px 4px;" v-if="showSerata[id] == false"><i @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-down"></i></td>
-                        <td style="padding: 12px 4px;" v-if="showSerata[id] == true"><i @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-up"></i></td>
+                        <td style="padding: 12px 4px;" v-if="showSerata[id] == false"><i
+                                @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-down"></i></td>
+                        <td style="padding: 12px 4px;" v-if="showSerata[id] == true"><i
+                                @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-up"></i></td>
                     </tr>
                     <tr v-if="showSerata[id] == true">
                         <th>Serata</th>
@@ -83,6 +87,7 @@
 <script>
 import axios from "axios";
 import moment from 'moment';
+import ExcelJS from 'exceljs';
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Prenotazioni',
@@ -96,6 +101,7 @@ export default {
             interval: "",
             showSerata: [],
             showAction: [],
+            rowcolor: [],
         }
     },
 
@@ -229,7 +235,113 @@ export default {
             this.interval = setInterval(function () {
                 this.getAllPenot();
             }.bind(this), 600000);
-        }
+        },
+
+        async Exportdata() {
+            let plus = 0 // incremento righe
+            var data = [[]] //array dei dati
+
+            // recupera prenotazioni
+            this.totqty = (await axios.get('/prenotazione/sum')).data;
+
+            data[0] = ['Id Articolo', 'Serata', 'Pezzi']
+            plus = plus + 1
+
+            // carico dati
+            for (let i = 0; i < this.totqty.length; i++) {
+                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
+                if (plus != 1) {
+                    data[0 + plus] = ['', '', '']
+                    this.rowcolor.push(plus)
+                    plus = plus + 1
+                }
+                data[0 + plus] = [this.totqty[i].food_id, this.totqty[i].food_name, this.totqty[i].somma_qty,]
+                plus = plus + 1
+                data[0 + plus] = ['Id prenot', 'Nominativo', 'Telefono']
+                plus = plus + 1
+                data[0 + plus] = ['', '', '']
+                plus = plus + 1
+                for (let l = 0; l < this.allPenot.length; l++) {
+                    data[0 + plus] = [this.allPenot[l].book_id, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone]
+                    plus = plus + 1
+                }
+            }
+
+            console.log(data)
+            console.log(this.rowcolor)
+
+            return data
+        },
+
+
+        async Exportfunction() {
+            this.totqty = (await axios.get('/prenotazione/sum')).data;
+            // Creare un nuovo workbook e foglio Excel
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Dati');
+
+            // Imposta la larghezza delle colonne
+            worksheet.getColumn('A').width = 12;
+            worksheet.getColumn('B').width = 25;
+            worksheet.getColumn('C').width = 20;
+
+            const headerStyle = {
+                font: { size: 13 },
+                alignment: { vertical: 'middle', horizontal: 'center' },
+                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
+                fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
+            };
+
+            const emptyStyle = {
+                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
+                fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
+            };
+
+            // Definisci lo stile per le celle non header
+            const cellStyle = {
+                font: { size: 12 },
+                alignment: { vertical: 'middle', horizontal: 'center' },
+                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
+            };
+
+
+            // Aggiungere dati al foglio Excel
+            const data = await this.Exportdata()
+            worksheet.addRows(data);
+
+            // Aggiungi i dati al foglio Excel e applica gli stili
+            data.forEach((row, rowIndex) => {
+                row.forEach((value, colIndex) => {
+                    const cell = worksheet.getCell(rowIndex + 1, colIndex + 1);
+                    // Applica lo stile appropriato in base alla riga
+                    if (rowIndex === 0) {
+                        cell.style = headerStyle;
+                    } else {
+                        cell.style = cellStyle;
+                    }
+
+                    for (let i = 0; i < this.rowcolor.length; i++) {
+                        if (rowIndex === this.rowcolor[i]) {
+                            cell.style = emptyStyle;
+                        }
+                    }
+                });
+            });
+
+            // Salva il file Excel
+            workbook.xlsx.writeBuffer().then((buffer) => {
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const url = window.URL.createObjectURL(blob);
+
+                // Crea un elemento <a> per il download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'dati_excel.xlsx';
+                a.click();
+
+                window.URL.revokeObjectURL(url);
+            });
+        },
 
     },
 }
@@ -250,7 +362,7 @@ export default {
 }
 
 .header {
-    display: flex; 
+    display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
@@ -264,9 +376,11 @@ export default {
 .table-responsive::-webkit-scrollbar {
     width: 1rem;
 }
+
 .table-responsive::-webkit-scrollbar-track {
     background: #fff;
 }
+
 .table-responsive::-webkit-scrollbar-thumb {
     background: #f38609;
     border-radius: 5rem;
@@ -326,17 +440,17 @@ export default {
 
 @media (max-width: 983px) {
     .admin-container {
-    margin: 0px;
-    margin-top: 70px;
-    background-color: #fff;
-    font-size: 16px;
-}
+        margin: 0px;
+        margin-top: 70px;
+        background-color: #fff;
+        font-size: 16px;
+    }
 
-.admin-container h1 {
-    font-family: 'Satisfy', cursive;
-    font-size: 1.2em;
-    color: #27ae60;
-}
+    .admin-container h1 {
+        font-family: 'Satisfy', cursive;
+        font-size: 1.2em;
+        color: #27ae60;
+    }
 
 }
 </style>
