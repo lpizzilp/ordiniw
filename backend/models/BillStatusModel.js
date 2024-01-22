@@ -133,3 +133,15 @@ export const getBillsGtId = (id,result) => {
         }
     });
 };
+
+//cancella tutti gli orini
+export const deleteAllBills = (data,result) => {
+    db.query("DELETE FROM billstatus ",data, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

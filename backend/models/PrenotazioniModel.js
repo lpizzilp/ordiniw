@@ -70,3 +70,15 @@ export const getPrenotGtId = (id,result) => {
         }
     });
 };
+
+//cancella tutti gli orini
+export const deleteAllBooks = (data,result) => {
+    db.query("DELETE FROM bookstatus ",data, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

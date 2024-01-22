@@ -3,7 +3,8 @@ import {
     checkfood,
     insertDettaglio,
     insertPrenotazione,
-    getPrenotGtId
+    getPrenotGtId,
+    deleteAllBooks    
 } from "../models/PrenotazioniModel.js";
 
 
@@ -65,3 +66,13 @@ export const getAllPrenotGtId=(req,res)=>{
     });
 };
 
+export const deleteAllBook=(req,res)=>{
+    const id = req.params.id;
+    deleteAllBooks (id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
