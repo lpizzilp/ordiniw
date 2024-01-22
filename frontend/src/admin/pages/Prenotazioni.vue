@@ -250,29 +250,26 @@ export default {
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                data[0 + plus] = [this.totqty[i].food_id, this.totqty[i].food_name, this.totqty[i].somma_qty, '', '']
+                data[plus] = [this.totqty[i].food_id, this.totqty[i].food_name, this.totqty[i].somma_qty, '', '']
                 plus = plus + 1
             }
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
                 console.log(this.allPenot)
                 if (plus != this.totqty.length) {
-                    data[0 + plus] = ['', '', '', '', '']
+                    data[plus] = ['', '', '', '', '']
                     this.rowcolor.push(plus)
                     plus = plus + 1
                 }
-                data[0 + plus] = ['Articolo', 'Quantità', 'Nominativo', 'Telefono', 'Data']
+                data[plus] = ['Articolo', 'Quantità', 'Nominativo', 'Telefono', 'Data']
                     plus = plus + 1
-                    data[0 + plus] = ['', '', '', '', '']
+                    data[plus] = ['', '', '', '', '']
                     plus = plus + 1
                 for (let l = 0; l < this.allPenot.length; l++) {
-                    data[0 + plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when)]
+                    data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when)]
                     plus = plus + 1
                 }
             }
-
-            console.log(data)
-            console.log(this.rowcolor)
 
             return data
         },
