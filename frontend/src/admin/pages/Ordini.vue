@@ -62,7 +62,7 @@ export default {
 
     data() {
         return {
-            avaiableStatus: ["cancellato", "attesa", "confermato", "completato"],
+            avaiableStatus: ["Cancellato", "Attesa", "Confermato", "Completato"],
             allBills: [],
             showOrderDetails: false,
             sendId: undefined,
@@ -149,23 +149,16 @@ export default {
         },
 
         async Exportdata() {
-            let plus = 0 // incremento righe
             var data = [[]] //array dei dati
-
-            // recupera ordini
             this.allBills = (await axios.get('/billstatus')).data;
-
-            data[0] = ['Id Ordine', 'Tavolo', 'Coperti', 'Nominativo', 'Data Ordine', 'Tipo', 'Totale']
-            plus = plus + 1
+            data[0] = ['Id Ordine', 'Tavolo', 'Coperti', 'Nominativo', 'Data Ordine', 'Tipo', 'Stato', 'Totale']
 
             // carico dati
-            for (let i = 0; i < this.allBills; i++) {
-                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                data[0 + plus] = [this.allBills[i].bill_id, this.allBills[i].bill_tavolo, this.allBills[i].bill_coperti, this.allBills[i].bill_nominativo, this.allBills[i].bill_when, this.allBills[i].TipoCassa, this.allBills[i].bill_total]
-                plus = plus + 1
+            for (let i = 0; i < this.allBills.length; i++) {
+                console.log(this.avaiableStatus[this.allBills[i].bill_status])
+                data[i + 1] = [this.allBills[i].bill_id, this.allBills[i].bill_tavolo, this.allBills[i].bill_coperti, this.allBills[i].Nominativo, this.formattype('T', this.allBills[i].bill_when), this.formattype('C', this.allBills[i].TipoCassa), this.avaiableStatus[this.allBills[i].bill_status], this.allBills[i].bill_total + '€']
             }
 
-            console.log(data)
             return data
         },
 
@@ -177,13 +170,14 @@ export default {
             const worksheet = workbook.addWorksheet('Dati');
 
             // Imposta la larghezza delle colonne
-            worksheet.getColumn('A').width = 20;
-            worksheet.getColumn('B').width = 20;
-            worksheet.getColumn('C').width = 20;
-            worksheet.getColumn('D').width = 20;
+            worksheet.getColumn('A').width = 12;
+            worksheet.getColumn('B').width = 12;
+            worksheet.getColumn('C').width = 12;
+            worksheet.getColumn('D').width = 25;
             worksheet.getColumn('E').width = 20;
-            worksheet.getColumn('F').width = 20;
-            worksheet.getColumn('G').width = 20;
+            worksheet.getColumn('F').width = 15;
+            worksheet.getColumn('G').width = 15;
+            worksheet.getColumn('H').width = 12;
 
             const headerStyle = {
                 font: { size: 13 },
@@ -191,13 +185,6 @@ export default {
                 border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
                 fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
             };
-
-            const emptyStyle = {
-                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
-                fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
-            };
-
-            // Definisci lo stile per le celle non header
             const cellStyle = {
                 font: { size: 12 },
                 alignment: { vertical: 'middle', horizontal: 'center' },
@@ -213,17 +200,10 @@ export default {
             data.forEach((row, rowIndex) => {
                 row.forEach((value, colIndex) => {
                     const cell = worksheet.getCell(rowIndex + 1, colIndex + 1);
-                    // Applica lo stile appropriato in base alla riga
                     if (rowIndex === 0) {
                         cell.style = headerStyle;
                     } else {
                         cell.style = cellStyle;
-                    }
-
-                    for (let i = 0; i < this.rowcolor.length; i++) {
-                        if (rowIndex === this.rowcolor[i]) {
-                            cell.style = emptyStyle;
-                        }
                     }
                 });
             });
