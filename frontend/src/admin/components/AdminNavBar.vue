@@ -7,8 +7,8 @@
         </button>
 
         <ul class="table-element">
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
-                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
+            <!-- <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
+                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>-->
             <li class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
                         style="padding-right: 2vh;"></i>Ordini</router-link></li>
             <li class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
@@ -25,12 +25,14 @@
     </div>
     <div class="navigation">
         <ul class="table-phone">
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
-                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
+            <!-- <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
+                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>-->
             <li class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
                         style="padding-right: 2vh;"></i>Ordini</router-link></li>
             <li class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
+            <li class="td-router"><router-link @click="setAdmin('')" to="/"><i
+                        class="fa-solid fa-right-from-bracket" style="padding-right: 2vh;"></i>Logout</router-link></li>
         </ul>
     </div>
 </template>
