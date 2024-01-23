@@ -67,7 +67,7 @@
                     <p v-if='Btn[4] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
                     <p v-if='Btn[6] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
                     <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;"><i class="fa-solid fa-retweet"
-                            style="margin-right: 5px;"></i>Aggiorna</button>
+                            :disabled="BtnUpData[0]" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
                 </div>
             </div>
         </div>
@@ -93,6 +93,8 @@ export default {
             sagra_name: "",
             Btn: [],
             Display: [[]],
+            BtnUpData: [false, 'Aggiorna'],
+            timer: 30,
         };
     },
 
@@ -153,7 +155,6 @@ export default {
             let div = document.getElementsByClassName('tabelloni')
             switch (type) {
                 case 'TAB':
-
                     div[0].style.display = 'block'
                     var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
                     if (sagra.data[0].flgEliminacode == 1) {
@@ -166,10 +167,10 @@ export default {
                         this.Btn[4] = 0
                         this.Display[1] = sagra.data[0].info
                     }
+                    this.AttesaUpdate();
                     break;
 
                 case 'PRE':
-
                     var data = {
                         vis: false,
                         category: type
@@ -179,12 +180,23 @@ export default {
                     break;
 
                 default:
-
                     div[0].style.display = 'none'
                     this.Category = type
                     this.showQuickVue = true
                     break;
             }
+        },
+
+        async AttesaUpdate() {
+            this.BtnUpData[0] = false
+            setInterval(() => {
+                if (this.timer === 0) {
+                    clearInterval()
+                } else {
+                    this.timer--
+                    this.BtnUpData[1] = 'Disponibile tra ' + this.timer + 's'
+                }
+            }, 1000);
         },
     },
     components: { QuickViewHome, sevenSegmentDisplay }
