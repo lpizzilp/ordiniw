@@ -82,8 +82,7 @@ import {
     createPrenotazione,
     getAllPrenotGtId,
     deleteAllBook,
-    getAllPrenot,
-    getAllPrenotGtId,
+    getAllPrenot,    
     getPrenDetailsById
 } from "../controllers/prenotazioni.js";
 
@@ -169,7 +168,6 @@ router.post("/api/booking", createBooking);
 router.get("/api/prenotazione/sum", Totsum);
 
 router.get("/api/prenotazione/new", PredinuovoId);
-router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
 router.get("/api/prenotazione/:id", getPrenDetailsById);
 router.get("/api/getprenotazione/:id", getAllPrenot);
 router.get("/api/prenotazione/check", checkquantita);
