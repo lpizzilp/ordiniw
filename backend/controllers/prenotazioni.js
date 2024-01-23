@@ -4,6 +4,7 @@ import {
     insertDettaglio,
     insertPrenotazione,
     getPrenotGtId,
+    deleteAllBooks,
     getPrenDetails,
     getAll,
     Updatestatus,
@@ -69,6 +70,20 @@ export const getAllPrenotGtId=(req,res)=>{
     });
 };
 
+
+export const deleteAllBook=(req,res)=>{
+    const id = req.params.id;
+    deleteAllBooks (id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+      
+
 export const getPrenDetailsById=(req,res)=>{
     getPrenDetails(req.params.id,(err,results)=> {
         if (err) {
@@ -110,4 +125,5 @@ export const Totsum=(req,res)=>{
         }
     });
 };
+
 

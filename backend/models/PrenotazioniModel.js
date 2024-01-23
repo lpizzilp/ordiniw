@@ -71,8 +71,20 @@ export const getPrenotGtId = (id,result) => {
     });
 };
 
+//cancella tutti gli orini
+export const deleteAllBooks = (data,result) => {
+    db.query("DELETE FROM bookstatus ",data, (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
 //recupera dettaglio
-export const getPrenDetails = (id,result) => {
+  export const getPrenDetails = (id,result) => {
     db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name FROM bookdetails b2, food f WHERE b2.book_id = ? AND f.food_id = b2.food_id" ,id, (err,results)=> {
         if (err){
             console.log(err);
@@ -82,6 +94,7 @@ export const getPrenDetails = (id,result) => {
         }
     });
 };
+
 
 // recupera tutte le prenotazioni
 export const getAll = (id,result) => {
@@ -118,3 +131,4 @@ export const getsum = (result) => {
         }
     });
 };
+

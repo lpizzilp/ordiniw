@@ -38,7 +38,9 @@ import {
 } from "../controllers/booktable.js";
 
 import {
-    createBillDetails, deleteBillById, getBillDetailsById
+    createBillDetails,
+     deleteBillById, 
+     getBillDetailsById
 } from "../controllers/billdetails.js";
 
 import {
@@ -51,7 +53,8 @@ import {
     updateBillPaid,
     cancelBillStatus,
     deleteBill,
-    getAllBillsGtId
+    getAllBillsGtId,
+    deleteAllBill
 
 } from "../controllers/billstatus.js";
 
@@ -77,9 +80,11 @@ import {
     checkquantita,
     createDettaglio,
     createPrenotazione,
+    getAllPrenotGtId,
+    deleteAllBook,
     getAllPrenot,
     getAllPrenotGtId,
-    getPrenDetailsById,
+    getPrenDetailsById
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -171,8 +176,10 @@ router.get("/api/prenotazione/check", checkquantita);
 
 router.post("/api/prenotazione", createPrenotazione);
 router.post("/api/prenotazione/dettaglio", createDettaglio);
-
+router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
+router.delete("/api/prenotazioni/delete", deleteAllBook);
 router.put("/api/prenotazione/action", PutAction);
+
 
 
 
@@ -194,6 +201,7 @@ router.put("/api/billstatus/paid/:id", updateBillPaid);
 router.put("/api/billstatus/cancel/:id", cancelBillStatus);
 router.delete("/api/billstatus/delete/:id", deleteBill)
 router.get("/api/billstatus/allgt/:id", getAllBillsGtId);
+router.delete("/api/billstatus/delete", deleteAllBill)
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
