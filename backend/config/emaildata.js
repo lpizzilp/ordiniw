@@ -12,7 +12,7 @@ export const emaildata = nodemailer.createTransport({
 export const mailOptions = {
     from: 'Ordini@esagra.it',
     to: '',
-    subject: "Il tuo codice dell' Ordine web",
+    subject: '',
     html: '',
 };
 

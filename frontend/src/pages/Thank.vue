@@ -47,7 +47,6 @@ export default {
         sessionStorage.removeItem('Username')
         sessionStorage.removeItem('TipoOrdine')
         sessionStorage.removeItem('Bill')
-        sessionStorage.removeItem('SagraId')
         sessionStorage.removeItem('filtro')
     },
 
@@ -94,7 +93,7 @@ export default {
 .dot {
     background: #fff;
     margin: 3vh auto;
-    padding: 5vh;
+    padding: 3.5vh;
     width: 22.5rem;
     height: 22.5rem;
     border-radius: 50%;

@@ -55,7 +55,7 @@
 
 <script>
 import axios from 'axios';
-import QuickViewRegister from '@/components/QuickViewRegister.vue';
+import QuickViewRegister from '@/admin/components/QuickViewRegister.vue';
 export default {
     name: "Register",
 
@@ -151,6 +151,29 @@ export default {
             return true;
         },
 
+        async SendMail() {
+            // ora
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var hour = ("0" + (now.getHours())).slice(-2);
+            var min = ("0" + (now.getMinutes())).slice(-2);
+            let ora = hour + ":" + min + ' del giorno ' + day + '/' + month + '/' + now.getFullYear();
+
+
+            let data = {
+                sagra_link: "http://" + window.location.hostname.toString(),
+                reg_ora: ora,
+                admin_name: this.registerObj.name,
+                admin_email: this.registerObj.email,
+                admin_password: this.registerObj.pass,
+                admin_sagra: sessionStorage.getItem('Siglanav'),
+                confirm_link: "http://" + window.location.hostname + "/admin/confirm/?email=" + this.registerObj.email + "&id=" + sessionStorage.getItem('SagraId')
+            }
+            await axios.post("/mail/registrazione/", data);
+        },
+
+
         async handleSubmit(e) {
             this.checkForm();
             if (!this.checkEmptyErr()) {
@@ -176,26 +199,7 @@ export default {
                         authlevel: "0",
                     }
                     await axios.post("/users/", data);
-
-                    // ora
-                    var now = new Date();
-                    var day = ("0" + now.getDate()).slice(-2);
-                    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-                    var hour = ("0" + (now.getHours())).slice(-2);
-                    var min = ("0" + (now.getMinutes())).slice(-2);
-                    let ora = hour + ":" + min + ' del giorno ' + day + '/' + month + '/' + now.getFullYear();
-
-                    data = {
-                        sagra_link: "http://ordini.esagra.it",
-                        reg_ora: ora,
-                        admin_name: this.registerObj.name,
-                        admin_email: this.registerObj.email,
-                        admin_password: this.registerObj.pass,
-                        admin_sagra: sessionStorage.getItem('Sagranav'),
-                        confirm_link: "http://" + window.location.hostname + "/admin/confirm/?email=" + this.registerObj.email + "&id=" + sessionStorage.getItem('SagraId')
-                    }
-                    console.log(data)
-                    await axios.post("/mail/registrazione/", data)
+                    this.SendMail();
                     this.showQuickVue = true
                 }
             }

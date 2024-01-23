@@ -2,12 +2,24 @@ import {
     getSagrabySig,
     deleteSagra,
     insertSagra,
-    updateSagraCodaeInfoByID
+    updateSagraCodaeInfoByID,
+    getAllSagre
 } from "../models/CatalogoModel.js";
 
 
 export const getSagraSig=(req,res)=>{
     getSagrabySig(req.params.sigla,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// recupera tutte le sagre
+export const allSagre=(req,res)=>{
+    getAllSagre(req.params.ordine,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

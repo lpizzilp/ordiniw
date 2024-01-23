@@ -4,7 +4,11 @@ import {
     insertDettaglio,
     insertPrenotazione,
     getPrenotGtId,
-    deleteAllBooks    
+    deleteAllBooks,
+    getPrenDetails,
+    getAll,
+    Updatestatus,
+    getsum
 } from "../models/PrenotazioniModel.js";
 
 
@@ -66,6 +70,7 @@ export const getAllPrenotGtId=(req,res)=>{
     });
 };
 
+
 export const deleteAllBook=(req,res)=>{
     const id = req.params.id;
     deleteAllBooks (id,(err,results)=> {
@@ -76,3 +81,49 @@ export const deleteAllBook=(req,res)=>{
         }
     });
 };
+
+      
+
+export const getPrenDetailsById=(req,res)=>{
+    getPrenDetails(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// prendi tutte le prenotazoni
+export const getAllPrenot=(req,res)=>{
+    getAll(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const PutAction=(req,res)=>{
+    const data = req.body;
+    Updatestatus(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const Totsum=(req,res)=>{
+    getsum((err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+
