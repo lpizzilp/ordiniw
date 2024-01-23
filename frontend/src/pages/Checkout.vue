@@ -204,7 +204,6 @@ export default {
         },
 
         async sendBillDetails(billId, foodId, qty) {
-            console.log(billId)
             if (sessionStorage.getItem('filtro') === 'PRE') {
                 let bookDetails = {
                     book_id: parseInt(billId),
@@ -212,7 +211,6 @@ export default {
                     item_qty: parseInt(qty)
                 };
                 await axios.post("/prenotazione/dettaglio", bookDetails);
-                console.log('fe')
             } else {
 
                 let billDetails = {
@@ -250,7 +248,6 @@ export default {
                         bookId = parseInt(bookId.book_id) + 1;
                     }
 
-                    console.log(bookId)
                     let dataprenotazione = {
                         book_id: parseInt(bookId),
                         user_id: parseInt(sessionStorage.getItem('Username')),

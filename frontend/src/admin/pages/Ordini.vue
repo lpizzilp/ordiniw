@@ -155,7 +155,6 @@ export default {
 
             // carico dati
             for (let i = 0; i < this.allBills.length; i++) {
-                console.log(this.avaiableStatus[this.allBills[i].bill_status])
                 data[i + 1] = [this.allBills[i].bill_id, this.allBills[i].bill_tavolo, this.allBills[i].bill_coperti, this.allBills[i].Nominativo, this.formattype('T', this.allBills[i].bill_when), this.formattype('C', this.allBills[i].TipoCassa), this.avaiableStatus[this.allBills[i].bill_status], this.allBills[i].bill_total + '€']
             }
 

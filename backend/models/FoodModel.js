@@ -7,7 +7,6 @@ export const getFoods = (result) => {
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
     var datacorrente = now.getFullYear() + month + day
-    console.log(datacorrente)
     let sql1 = "SELECT f.*, e.QtaDisponibile  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id "
     let sql11 = sql1 + " WHERE f.FlgValidita = 0 "
     let sql2 = " UNION "

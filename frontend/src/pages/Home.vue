@@ -66,8 +66,8 @@
                 <div class="content">
                     <p v-if='Btn[4] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
                     <p v-if='Btn[6] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
-                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;"><i class="fa-solid fa-retweet"
-                            :disabled="BtnUpData[0]" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
+                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i class="fa-solid fa-retweet"
+                     style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@ export default {
             sagra_name: "",
             Btn: [],
             Display: [[]],
-            BtnUpData: [false, 'Aggiorna'],
+            BtnUpData: [true, 'Attesa aggiornamento'],
             timer: 30,
         };
     },
@@ -188,15 +188,12 @@ export default {
         },
 
         async AttesaUpdate() {
-            this.BtnUpData[0] = false
-            setInterval(() => {
-                if (this.timer === 0) {
-                    clearInterval()
-                } else {
-                    this.timer--
-                    this.BtnUpData[1] = 'Disponibile tra ' + this.timer + 's'
-                }
-            }, 1000);
+            this.BtnUpData[0] = true
+            this.BtnUpData[1] = 'Nuvo aggiornamento tra 30s'
+            setTimeout(() => {
+                    this.BtnUpData[0] = false
+                    this.BtnUpData[1] = 'Aggiorna'
+            }, 10000);
         },
     },
     components: { QuickViewHome, sevenSegmentDisplay }

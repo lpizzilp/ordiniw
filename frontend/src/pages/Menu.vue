@@ -129,10 +129,12 @@
                 </div>
             </div>
         </div>
-        <div class="to-cart">
-            <router-link @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
+        <div class="to-cart" >
+            <router-link v-if="Cartdisabled == false" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;" >
                 <i class="fas fa-shopping-cart cart"></i> Vai al carrello
             </router-link>
+            <button v-else class="btn" style="width: 100%;" :disabled="true">
+                <i class="fas fa-shopping-cart cart"></i> Vai al carrello</button>
         </div>
     </div>
 </template>
@@ -153,7 +155,6 @@ export default {
         switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
-                console.log(sessionStorage.getItem('filtro'))
                 break;
 
 
@@ -171,6 +172,7 @@ export default {
             Prenotazione: flgartprenotabile,
 
             sendId: null,
+            Cartdisabled: false,
             showCounterCart: false,
             qty: [],
             CartItem: [],
@@ -376,6 +378,7 @@ export default {
         },
 
         async addToCart(index) {
+            this.Cartdisabled = true
             this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
 
@@ -420,6 +423,8 @@ export default {
                     this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
                 }
             }
+
+            this.Cartdisabled = false
 
         },
     },
