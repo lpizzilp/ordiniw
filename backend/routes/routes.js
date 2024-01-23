@@ -12,11 +12,17 @@ import {
 import {
     showAUser,
     createAccount,
-    SendMail,
     allUsers,
     getId,
-    SendRegistrazione
+    updateUserauthlevel,
+    Userdelete
 } from "../controllers/user.js";
+
+import {
+    SendCoferma,
+    SendMail,
+    SendRegistrazione
+} from "../controllers/mail.js";
 
 import {
     addItems,
@@ -59,16 +65,21 @@ import {
 import {
     getSagraSig,
     createSagra,
-    updateSagraCodaeInfo
+    updateSagraCodaeInfo,
+    allSagre
 
 } from "../controllers/catalogo.js";
 
 import {
     PredinuovoId,
+    PutAction,
+    Totsum,
     checkquantita,
     createDettaglio,
     createPrenotazione,
-    getAllPrenotGtId
+    getAllPrenot,
+    getAllPrenotGtId,
+    getPrenDetailsById,
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -107,11 +118,22 @@ router.get("/api/users/:name", showAUser);
 // create account
 router.post("/api/users/", createAccount);
 
+// update authlevel
+router.put("/api/users/update/", updateUserauthlevel);
+
+router.delete("/api/users/delete/:email", Userdelete);
+
+
+////////////////////////// MAIL ////////////////////////////////
+
 // send mail ordine completato
 router.post("/api/mail/", SendMail)
 
 // send mail registrazione
 router.post("/api/mail/registrazione/", SendRegistrazione)
+
+// send mail conferma
+router.post("/api/mail/confirm/", SendCoferma)
 
 
 ////////////////////////// CART ////////////////////////////////
@@ -139,12 +161,19 @@ router.delete("/api/cartItem/:id", deleteItems);
 router.post("/api/booking", createBooking);
 
 ////////////////////////// Prenotazione ////////////////////////////////
-router.post("/api/prenotazione", createPrenotazione);
+router.get("/api/prenotazione/sum", Totsum);
+
 router.get("/api/prenotazione/new", PredinuovoId);
+router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
+router.get("/api/prenotazione/:id", getPrenDetailsById);
+router.get("/api/getprenotazione/:id", getAllPrenot);
 router.get("/api/prenotazione/check", checkquantita);
 
+router.post("/api/prenotazione", createPrenotazione);
 router.post("/api/prenotazione/dettaglio", createDettaglio);
-router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
+
+router.put("/api/prenotazione/action", PutAction);
+
 
 
 ////////////////////////// Bill Details ////////////////////////////////
@@ -168,6 +197,7 @@ router.get("/api/billstatus/allgt/:id", getAllBillsGtId);
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
+router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/:sigla", getSagraSig);
 router.post("/api/catalogosagre", createSagra);
 router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);

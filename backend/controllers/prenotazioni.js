@@ -3,7 +3,11 @@ import {
     checkfood,
     insertDettaglio,
     insertPrenotazione,
-    getPrenotGtId
+    getPrenotGtId,
+    getPrenDetails,
+    getAll,
+    Updatestatus,
+    getsum
 } from "../models/PrenotazioniModel.js";
 
 
@@ -57,6 +61,48 @@ export const checkquantita=(req,res)=>{
 // ...Se l'id non viene passato  vengono fornite tutte  
 export const getAllPrenotGtId=(req,res)=>{
     getPrenotGtId(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const getPrenDetailsById=(req,res)=>{
+    getPrenDetails(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// prendi tutte le prenotazoni
+export const getAllPrenot=(req,res)=>{
+    getAll(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const PutAction=(req,res)=>{
+    const data = req.body;
+    Updatestatus(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const Totsum=(req,res)=>{
+    getsum((err,results)=> {
         if (err) {
             res.send(err);
         }else {

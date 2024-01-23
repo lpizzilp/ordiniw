@@ -200,9 +200,7 @@ export default {
                 if (!this.checkoutObj.Nominativo) {
                     this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
                 }
-
-            } 
-
+            }
         },
 
         async sendBillDetails(billId, foodId, qty) {
