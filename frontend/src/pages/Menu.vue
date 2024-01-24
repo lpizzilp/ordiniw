@@ -130,11 +130,11 @@
             </div>
         </div>
         <div class="to-cart" >
-            <router-link v-if="Cartdisabled == false" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;" >
+            <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;" >
                 <i class="fas fa-shopping-cart cart"></i> Vai al carrello
             </router-link>
             <button v-else class="btn" style="width: 100%;" :disabled="true">
-                <i class="fas fa-shopping-cart cart"></i> Vai al carrello</button>
+                <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
         </div>
     </div>
 </template>
@@ -147,6 +147,7 @@ import axios from "axios";
 export default {
     props: ["food"],
     name: "Menu",
+    DataCart: false,
 
     data() {
         let categorytype = ""
@@ -172,7 +173,7 @@ export default {
             Prenotazione: flgartprenotabile,
 
             sendId: null,
-            Cartdisabled: false,
+            showCart: true,
             showCounterCart: false,
             qty: [],
             CartItem: [],
@@ -363,6 +364,7 @@ export default {
                 this.qty[index] = 0;
             }
 
+            this.showCart = false
             this.timerInterval = setInterval(() => {
                 if (this.timer > 0) {
                     this.timer--;
@@ -378,7 +380,6 @@ export default {
         },
 
         async addToCart(index) {
-            this.Cartdisabled = true
             this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
 
@@ -424,7 +425,7 @@ export default {
                 }
             }
 
-            this.Cartdisabled = false
+            this.showCart = true
 
         },
     },
