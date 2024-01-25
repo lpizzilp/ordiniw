@@ -10,7 +10,7 @@
             </div>
         </div>
         <div v-else>
-            <NavBar :showCart="menuCart" />
+            <NavBar />
 
             <div class="auth-wrapper">
                 <div class="auth-inner">
@@ -26,7 +26,6 @@
 import NavBar from './components/NavBar.vue';
 import FooterComponent from './components/FooterComponent.vue';
 import AdminNavBar from './admin/components/AdminNavBar.vue';
-import Menu from './pages/Menu.vue';
 import { mapActions } from 'vuex';
 import { mapState } from 'vuex';
 export default {
@@ -35,12 +34,6 @@ export default {
         NavBar,
         FooterComponent,
         AdminNavBar,
-    },
-
-    data() {
-        return {
-            menuCart: Menu.DataCart
-        }
     },
 
     created() {

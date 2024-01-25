@@ -41,17 +41,16 @@ for (var i = 0; i < parametri.length; i++) {
 import axios from "axios";
 export default {
     name: 'NavBar',
+    inject: ["eventBus"],
+
     data() {
         return {
             nav_name: 'Home ordini',
             sagra_name: '',
             info: '',
             numcoda: '',
+            showCart: true
         }
-    },
-
-    props: {
-        showCart: Boolean
     },
 
     created() {
@@ -60,7 +59,12 @@ export default {
 
     mounted() {
         window.addEventListener('scroll', this.handleScroll);
+        this.eventBus.on("showCart", (param) => {
+            this.showCart = param
+        });
+
     },
+
     unmounted() {
         window.removeEventListener('scroll', this.handleScroll);
     },

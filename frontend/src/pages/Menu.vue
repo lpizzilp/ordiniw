@@ -147,7 +147,7 @@ import axios from "axios";
 export default {
     props: ["food"],
     name: "Menu",
-    DataCart: false,
+    inject: ["eventBus"],
 
     data() {
         let categorytype = ""
@@ -365,6 +365,7 @@ export default {
             }
 
             this.showCart = false
+            this.eventBus.emit("showCart", this.showCart);
             this.timerInterval = setInterval(() => {
                 if (this.timer > 0) {
                     this.timer--;
@@ -426,6 +427,7 @@ export default {
             }
 
             this.showCart = true
+            this.eventBus.emit("showCart", this.showCart);
 
         },
     },
