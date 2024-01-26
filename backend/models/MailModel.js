@@ -25,7 +25,7 @@ export const Emailsender = (data, result) => {
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Articoli Ordinati</p>
             <p style="text-align:center; font-size:16px;">Riportiamo gli articoli che hai ordinato:</p>
             <br>
-            <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item + `</td></tr></table><br>
+            <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item.join('') + `</td></tr></table><br>
             <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.ord_data + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
         </div>`;
     } else {
@@ -40,7 +40,7 @@ export const Emailsender = (data, result) => {
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Articoli Ordinati</p>
             <p style="text-align:center; font-size:16px;">Riportiamo gli articoli che hai ordinato:</p>
             <br>
-            <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item + `</td></tr></table><br>
+            <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item.join('') + `</td></tr></table><br>
             <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.ord_data + `<br><br>La ringraziamo per aver uttilizzato il nostro servizio online.</p>
         </div>`;
     }
