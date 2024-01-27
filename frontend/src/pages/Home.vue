@@ -59,15 +59,15 @@
                 <div v-if="Btn[6] == 1" class="info">
                     <span>Tabellone Info</span>
                     <div class="display" @click="handleSubmit('TAB')">
-                        <p>{{ Display[1] }} </p>
+                        <p v-html="Display[1]"></p>
                     </div>
                 </div>
 
                 <div class="content">
                     <p v-if='Btn[4] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
                     <p v-if='Btn[6] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
-                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i class="fa-solid fa-retweet"
-                     style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
+                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
+                            class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
                 </div>
             </div>
         </div>
@@ -160,12 +160,11 @@ export default {
                     if (sagra.data[0].flgEliminacode == 1) {
                         this.Btn[4] = 1
                         this.Btn[6] = 0
-                        let num = sagra.data[0].numcoda.toString()
-                        this.Display[0] = num.split('')
+                        this.Numeroritardato(sagra.data[0].numcoda.toString())
                     } else if (sagra.data[0].flgInfo == 1) {
                         this.Btn[6] = 1
                         this.Btn[4] = 0
-                        this.Display[1] = sagra.data[0].info
+                        this.Display[1] = sagra.data[0].info.replace(/\r\n/g, '<br>');
                     }
                     this.AttesaUpdate();
                     break;
@@ -187,13 +186,22 @@ export default {
             }
         },
 
+        async Numeroritardato(numero) {
+            let num = '000'
+            this.Display[0] = num.split('')
+            setTimeout(() => {
+                let num = numero
+                this.Display[0] = num.split('')
+            }, 1500);
+        },
+
         async AttesaUpdate() {
             this.BtnUpData[0] = true
-            this.BtnUpData[1] = 'Nuvo aggiornamento tra 30s'
+            this.BtnUpData[1] = 'Puoi riprovare tra 30s'
             setTimeout(() => {
-                    this.BtnUpData[0] = false
-                    this.BtnUpData[1] = 'Aggiorna'
-            }, 10000);
+                this.BtnUpData[0] = false
+                this.BtnUpData[1] = 'Aggiorna'
+            }, 30000);
         },
     },
     components: { QuickViewHome, sevenSegmentDisplay }

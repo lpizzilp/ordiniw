@@ -1,15 +1,19 @@
 <template>
     <div class="thank-container">
         <h1> Grazie!</h1>
-        <span>Utilizza il codice per pagare il tuo ordine</span>
+        <span v-if="prenotazione === false">Utilizza il codice per pagare il tuo ordine</span>
+        <span v-else>Il tuo codice prenotazione</span>
 
         <div class="dot">
             {{ NumId }}
         </div>
 
         <div class="thank-letter">
-            <p>Abbiamo inserito l'ordine provvisorio<br>
+            <p v-if="prenotazione === false">Abbiamo inserito l'ordine provvisorio<br>
                 Utilizza il codice per confermare l'ordine in cassa.
+            </p>
+            <p v-else>Abbiamo inserito la prenotazione<br>
+                Ricordati di mostrare il codice alla cassa.
             </p>
             <div class="end-button">
                 <button class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un Email</button>
@@ -30,10 +34,18 @@ export default {
     name: 'Thank',
 
     data() {
+        let artprenotabile
+        if (sessionStorage.getItem('filtro')) {
+            artprenotabile = true
+        } else {
+            artprenotabile = false
+        }
+
         return {
             NumId: 0,
             from: undefined,
-            showQuickView: false
+            showQuickView: false,
+            prenotazione: artprenotabile,
         }
     },
 

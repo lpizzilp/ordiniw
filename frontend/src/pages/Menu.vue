@@ -136,12 +136,14 @@
             <button v-else class="btn" style="width: 100%;" :disabled="true">
                 <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
         </div>
+        <quick-view-prenotazione v-if="showQuickView === true" ></quick-view-prenotazione>
     </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
+import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import axios from "axios";
 
 export default {
@@ -175,6 +177,7 @@ export default {
             sendId: null,
             showCart: true,
             showCounterCart: false,
+            showQuickView: false,
             qty: [],
             CartItem: [],
             perPage: 50,
@@ -419,6 +422,7 @@ export default {
                 if (Itemprenotabili.data.length > 1) {
                     await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
                     this.qty[index] = 0
+                    this.showQuickView = true
                     this.$refs.alert.showAlert("Errore", "Riprovare!", "Puoi prenotare solo una articolo per ordine!");
                 } else {
                     await axios.put("/cartItem/", data);
@@ -433,7 +437,8 @@ export default {
     },
 
     components: {
-        VueBasicAlert
+        VueBasicAlert,
+        QuickViewPrenotazione
     }
 };
 </script>
