@@ -29,10 +29,6 @@ export default {
         }
     },
 
-    created(){
-        console.log(this.Ute)
-        },
-
     props: {
         Ute: Boolean
     },

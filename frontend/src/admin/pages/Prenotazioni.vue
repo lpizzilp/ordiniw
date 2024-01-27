@@ -255,7 +255,6 @@ export default {
             }
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                console.log(this.allPenot)
                 if (plus != this.totqty.length) {
                     data[plus] = ['', '', '', '', '']
                     this.rowcolor.push(plus)

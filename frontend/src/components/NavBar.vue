@@ -12,11 +12,17 @@
             <router-link @click="scrollToTop()" to="/login">Login</router-link>
         </nav>
 
-        <div class="icons">
+        <div v-if="showCart == true" class="icons">
             <!--<div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>-->
             <router-link @click="scrollToTop()" to="cart">
                 <div class="fas fa-shopping-cart cart"></div>
             </router-link>
+        </div>
+        <div v-else class="icons">
+            <!--<div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>-->
+            <button @click="scrollToTop()" :disabled="true">
+                <div class="fas fa-shopping-cart cart" style="background-color: #130f40a6;"></div>
+            </button>
         </div>
 
     </div>
@@ -35,12 +41,15 @@ for (var i = 0; i < parametri.length; i++) {
 import axios from "axios";
 export default {
     name: 'NavBar',
+    inject: ["eventBus"],
+
     data() {
         return {
             nav_name: 'Home ordini',
             sagra_name: '',
             info: '',
             numcoda: '',
+            showCart: true
         }
     },
 
@@ -50,7 +59,12 @@ export default {
 
     mounted() {
         window.addEventListener('scroll', this.handleScroll);
+        this.eventBus.on("showCart", (param) => {
+            this.showCart = param
+        });
+
     },
+
     unmounted() {
         window.removeEventListener('scroll', this.handleScroll);
     },
@@ -80,7 +94,7 @@ export default {
                     sagra.data[0].flgInfo == 1 ? this.info = sagra.data[0].info : this.info = ''
                     sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
 
-                    const flgdata = ordini + '/' + sagra.data[0].flgTavoli + '/' + sagra.data[0].flgAsporto + '/' + sagra.data[0].flgPrenotazioni + '/' + sagra.data[0].flgEliminacode + '/' + this.numcoda  + '/' + sagra.data[0].flgInfo + '/' + this.info
+                    const flgdata = ordini + '/' + sagra.data[0].flgTavoli + '/' + sagra.data[0].flgAsporto + '/' + sagra.data[0].flgPrenotazioni + '/' + sagra.data[0].flgEliminacode + '/' + this.numcoda + '/' + sagra.data[0].flgInfo + '/' + this.info
                     sessionStorage.setItem('SagraBottoni', flgdata)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;
@@ -178,7 +192,7 @@ export default {
 }
 
 .header .icons a.router-link-exact-active .cart {
-    background: #f38609 ;
+    background: #f38609;
     color: white;
 }
 

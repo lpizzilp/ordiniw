@@ -129,10 +129,12 @@
                 </div>
             </div>
         </div>
-        <div class="to-cart">
-            <router-link @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
+        <div class="to-cart" >
+            <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;" >
                 <i class="fas fa-shopping-cart cart"></i> Vai al carrello
             </router-link>
+            <button v-else class="btn" style="width: 100%;" :disabled="true">
+                <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
         </div>
     </div>
 </template>
@@ -145,6 +147,7 @@ import axios from "axios";
 export default {
     props: ["food"],
     name: "Menu",
+    inject: ["eventBus"],
 
     data() {
         let categorytype = ""
@@ -153,7 +156,6 @@ export default {
         switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
-                console.log(sessionStorage.getItem('filtro'))
                 break;
 
 
@@ -171,6 +173,7 @@ export default {
             Prenotazione: flgartprenotabile,
 
             sendId: null,
+            showCart: true,
             showCounterCart: false,
             qty: [],
             CartItem: [],
@@ -361,6 +364,8 @@ export default {
                 this.qty[index] = 0;
             }
 
+            this.showCart = false
+            this.eventBus.emit("showCart", this.showCart);
             this.timerInterval = setInterval(() => {
                 if (this.timer > 0) {
                     this.timer--;
@@ -420,6 +425,9 @@ export default {
                     this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
                 }
             }
+
+            this.showCart = true
+            this.eventBus.emit("showCart", this.showCart);
 
         },
     },

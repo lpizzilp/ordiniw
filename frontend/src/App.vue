@@ -33,7 +33,7 @@ export default {
     components: {
         NavBar,
         FooterComponent,
-        AdminNavBar
+        AdminNavBar,
     },
 
     created() {
