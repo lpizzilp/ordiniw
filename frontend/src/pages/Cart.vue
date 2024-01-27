@@ -3,6 +3,7 @@
 
         <div class="heading">
             <span>Carrello</span>
+            <h3 v-if="sessionStorage.getItem('filtro')">Conferma la Prenotazione premendo "Checkout"</h3>
             <h3>Conferma l'ordine premendo "Checkout"</h3>
         </div>
 

@@ -2,8 +2,8 @@
     <div class="quick-view">
         <div class="quick-view-inner">
             <h2>Attenzione!</h2><br>
-            <h3> Puoi prenotare un singolo articolo alla volta!<br><br>
-                Se vuoi prenotare una altro articolo dovrai fare una prenotazine differente.
+            <h3> Puoi prenotare un singolo articolo!<br><br>
+                Se vuoi prenotare un altro articolo devi fare una prenotazione differente.
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent()" style="width: 100%;">Ho capito</button>
