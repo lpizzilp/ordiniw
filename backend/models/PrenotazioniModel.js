@@ -85,7 +85,7 @@ export const deleteAllBooks = (data,result) => {
 
 //recupera dettaglio
   export const getPrenDetails = (id,result) => {
-    db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name FROM bookdetails b2, food f WHERE b2.book_id = ? AND f.food_id = b2.food_id" ,id, (err,results)=> {
+    db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name, f.food_price FROM bookdetails b2, food f WHERE b2.book_id = ? AND f.food_id = b2.food_id" ,id, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

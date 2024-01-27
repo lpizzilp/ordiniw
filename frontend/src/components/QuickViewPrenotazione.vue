@@ -1,7 +1,7 @@
 <template>
     <div class="quick-view">
         <div class="quick-view-inner">
-            <h2>Attenzione</h2><br>
+            <h2>Attenzione!</h2><br>
             <h3> Puoi prenotare un singolo articolo alla volta!<br><br>
                 Se vuoi prenotare una altro articolo dovrai fare una prenotazine differente.
                 <slot></slot>
@@ -26,7 +26,7 @@ export default {
 
     methods: {
         DataParent() {
-            this.$emit('Close', false);
+            this.$emit('Closedata', false);
         },
     },
 
