@@ -61,6 +61,7 @@ import segmentEndpoint from "./segment-endpoint.vue";
 
 const SEGMENT_MAP = {
   "null": { a: false, b: false, c: false, d: false, e: false, f: false, g: false },
+  "-": { a: false, b: false, c:false , d: false, e: false, f: false, g: true },
   "0": { a: true, b: true, c: true, d: true, e: true, f: true, g: false },
   "1": { a: false, b: true, c: true, d: false, e: false, f: false, g: false },
   "2": { a: true, b: true, c: false, d: true, e: true, f: false, g: true },

@@ -5,15 +5,15 @@
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
-                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a ordinare</button><br>
+                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a Ordinare</button><br>
                 <span v-if="Btn[3] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Prenota
-                    serata</button><br>
+                    Evento / Specialità</button><br>
                 <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
                     style="margin-top: 10px;">Tabellone
-                    eliminacode
+                    Eliminacode
                 </button>
             </div>
             <div class="image">
@@ -187,7 +187,7 @@ export default {
         },
 
         async Numeroritardato(numero) {
-            let num = '000'
+            let num = '---'
             this.Display[0] = num.split('')
             setTimeout(() => {
                 let num = numero

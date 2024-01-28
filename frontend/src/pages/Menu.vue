@@ -5,7 +5,7 @@
         <div class="heading">
             <span>menu</span>
             <h3 v-if="Prenotazione == '0'">Vi presentiamo i nostri piatti</h3>
-            <h3 v-else>Prenotazione serate speciali</h3>
+            <h3 v-else>Prenotazione Eventi / Specialità</h3>
         </div>
 
         <div class="row">
