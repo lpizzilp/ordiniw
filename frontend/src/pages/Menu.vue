@@ -108,7 +108,8 @@
                     <div v-if="!filterFoods.length">
                         <div class="box">
                             <div class="content">
-                                <h1 v-if="Prenotazione == '1'" style="color: #057835fa;">Nessun articolo! <br>Prenotazioni chiuse</h1>
+                                <h1 v-if="Prenotazione == '1'" style="color: #057835fa;">Nessun articolo! <br>Prenotazioni
+                                    chiuse</h1>
                                 <h1 v-else style="color: #057835fa;">Nessun articolo! <br>Scegli un altro Reparto</h1>
                             </div>
                             <div class="image">
@@ -129,19 +130,22 @@
                 </div>
             </div>
         </div>
-        <div class="to-cart" >
-            <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;" >
+        <div class="to-cart">
+            <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
                 <i class="fas fa-shopping-cart cart"></i> Vai al carrello
             </router-link>
             <button v-else class="btn" style="width: 100%;" :disabled="true">
                 <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
         </div>
+        <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
+            @Closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
+import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import axios from "axios";
 
 export default {
@@ -175,6 +179,7 @@ export default {
             sendId: null,
             showCart: true,
             showCounterCart: false,
+            showQuickView: false,
             qty: [],
             CartItem: [],
             perPage: 50,
@@ -228,12 +233,20 @@ export default {
         // return require(`../assets/images/${this.food_src}`);
 
         Artimage(food) {
-            try {
-                return require(`../assets/images/${food}`);
+            if (food === '') {
+                return '';
+            } else {
+                try {
+                    return require(`../assets/images/${food}`);
 
-            } catch (ex) {
-                return '';//require(`../assets/images/no.png`);
+                } catch (ex) {
+                    return require(`../assets/images/no.png`);
+                }
             }
+        },
+
+        CloseQuickvue(data) {
+            this.showQuickView = data
         },
 
         scrollToTop() {
@@ -419,6 +432,7 @@ export default {
                 if (Itemprenotabili.data.length > 1) {
                     await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
                     this.qty[index] = 0
+                    this.showQuickView = true
                     this.$refs.alert.showAlert("Errore", "Riprovare!", "Puoi prenotare solo una articolo per ordine!");
                 } else {
                     await axios.put("/cartItem/", data);
@@ -433,7 +447,8 @@ export default {
     },
 
     components: {
-        VueBasicAlert
+        VueBasicAlert,
+        QuickViewPrenotazione
     }
 };
 </script>
@@ -754,4 +769,5 @@ hr {
         margin-top: 5vh;
     }
 
-}</style>
+}
+</style>

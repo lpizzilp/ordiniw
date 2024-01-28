@@ -3,6 +3,7 @@
 
         <div class="heading">
             <span>Carrello</span>
+            <h3 v-if="sessionStorage.getItem('filtro')">Conferma la Prenotazione premendo "Checkout"</h3>
             <h3>Conferma l'ordine premendo "Checkout"</h3>
         </div>
 
@@ -153,7 +154,7 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <h3>Totale {{ calculateSummaryPrice()[0] }}€</h3>
+                                <h3 style="color: #f38609;">Totale {{ calculateSummaryPrice()[0] }}€</h3>
                             </div>
 
                             <div class="box-content">
@@ -364,7 +365,7 @@ export default {
 .first-price,
 .item-quantity {
     text-align: center;
-    width: 6rem;
+    width: 5.85rem;
     height: 30px;
     font-size: 16px;
     margin-bottom: 0px;
