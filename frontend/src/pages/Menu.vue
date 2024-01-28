@@ -83,10 +83,16 @@
                                     <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
                                 </div>
 
-                                <div v-if="f.QtaDisponibile == 0" class="add-to-cart">
+                                <div v-if="f.FlgPrenotabile == 0 && f.QtaDisponibile == 0" class="add-to-cart">
                                     <h4
                                         style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
                                         Esaurito
+                                    </h4>
+                                </div>
+                                <div v-else-if="f.FlgPrenotabile != 0 && QtyDisponibile[index] == true" class="add-to-cart">
+                                    <h4
+                                        style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
+                                        Prenotazione Chiusa
                                     </h4>
                                 </div>
                                 <div v-else class="add-to-cart">
@@ -170,11 +176,12 @@ export default {
         }
 
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "" },
             showDropDown: false,
             matchUser: undefined,
             setqty: false,
             Prenotazione: flgartprenotabile,
+            QtyDisponibile: [],
 
             sendId: null,
             showCart: true,
@@ -192,7 +199,8 @@ export default {
         this.buildArray()
         this.getAllCartItem()
         if (this.Prenotazione == '1') {
-            this.chekPrenotazioni()
+            this.chekdata()
+            this.chekQty()
         }
     },
 
@@ -209,7 +217,8 @@ export default {
                 (this.evaluatePrice(f, this.foodObj.price)) &&
                 f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
                 (this.evaluateStatus(f, this.foodObj.status)) &&
-                f.FlgPrenotabile.toString().match(this.foodObj.prenotazioni.toString()));
+                f.FlgPrenotabile.toString().match(this.foodObj.prenotazioni.toString()) &&
+                f.DataFinePRT.toString() >= (this.foodObj.ora.toString()));
         },
 
         currentPageItems: function () {
@@ -279,8 +288,25 @@ export default {
             }
         },
 
-        chekPrenotazioni() {
-            //ee
+        chekdata() {
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            this.foodObj.ora = now.getFullYear() + month + day;
+        },
+
+        async chekQty() {
+            let totqty = (await axios.get('/prenotazione/sum')).data;
+            for (let i = 0; i < this.allFoods.length; i++) {
+                if (this.allFoods[i].FlgPrenotabile != 0) {
+                    for (let l = 0; l < totqty.length; l++) {
+                        if (this.allFoods[i].food_id == totqty[l].food_id) {
+                            totqty[l].somma_qty > this.allFoods[i].QtaDisponibile ? this.QtyDisponibile.push(true) : this.QtyDisponibile.push(false)
+                            break;
+                        }
+                    }
+                }
+            }
         },
 
         async getAllCartItem() {

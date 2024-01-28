@@ -158,7 +158,7 @@ export const EmailConf = (data, result) => {
     if (data.conferma == true) {
         emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
         <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Benvenuto</p>
-        <p style="text-align: left; font-size:16px;">Buongiorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che il tuo utente è appena stato confermato, quindi potrai cominciare ad utilizzarlo andando alla pagina<a href=` + data.admin_link + `> ordini.esagra.it/admin</a>.</p>
+        <p style="text-align: left; font-size:16px;">Buongiorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che il tuo utente è appena stato confermato, quindi potrai cominciare ad utilizzarlo andando alla pagina<a href=` + data.admin_link + `> ordini.esagra.it/login</a>.</p>
         <hr style="border: 2px dashed #27ae60;">
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">

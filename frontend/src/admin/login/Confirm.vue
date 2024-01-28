@@ -166,7 +166,7 @@ export default {
 
                     data = {
                         conferma: true,
-                        admin_link: "http://" + window.location.hostname.toString() + "/admin",
+                        admin_link: "http://" + window.location.hostname.toString() + "/login",
                         admin_email: this.ConfirmObj.email,
                         admin_password: this.ConfirmObj.pass,
                         sagra_link: "http://" + window.location.hostname.toString()
