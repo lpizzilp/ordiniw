@@ -301,8 +301,20 @@ export default {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
                         if (this.allFoods[i].food_id == totqty[l].food_id) {
-                            totqty[l].somma_qty > this.allFoods[i].QtaDisponibile ? this.QtyDisponibile.push(true) : this.QtyDisponibile.push(false)
-                            break;
+                            if (this.allFoods[i].DataFinePRT < this.foodObj.ora) {
+                                break;
+                            } else {
+                                if (this.allFoods[i].QtaDisponibile == null || undefined || "") {
+                                    this.QtyDisponibile.push(false)
+                                } else {
+                                    if (this.allFoods[i].QtaDisponibile < totqty[l].somma_qty) {
+                                        this.QtyDisponibile.push(true)
+                                    } else {
+                                        this.QtyDisponibile.push(false)
+                                    }
+                                }
+                                break;
+                            }
                         }
                     }
                 }
