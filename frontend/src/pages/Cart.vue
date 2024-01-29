@@ -3,8 +3,8 @@
 
         <div class="heading">
             <span>Carrello</span>
-            <h3 v-if="sessionStorage.getItem('filtro')">Conferma la Prenotazione premendo "Checkout"</h3>
-            <h3>Conferma l'ordine premendo "Checkout"</h3>
+            <h3 v-if="isPrenotazione">Conferma la Prenotazione premendo "Checkout"</h3>
+            <h3 v-else >Conferma l'ordine premendo "Checkout"</h3>
         </div>
 
         <div class="container">
@@ -204,6 +204,14 @@ export default {
             return this.allFoods.filter(
                 (f) => this.matchID(f, this.cartItem)
             );
+        },
+
+        isPrenotazione: function () {
+            if (sessionStorage.getItem('filtro') === "PRE") {
+                return true
+            } else {
+                return false
+            }
         },
     },
 
