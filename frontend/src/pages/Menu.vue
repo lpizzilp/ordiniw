@@ -218,7 +218,7 @@ export default {
                 f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
                 (this.evaluateStatus(f, this.foodObj.status)) &&
                 f.FlgPrenotabile.toString().match(this.foodObj.prenotazioni.toString()) &&
-                f.DataFinePRT.toString() >= (this.foodObj.ora.toString()));
+                f.DataFineValidita.toString() >= (this.foodObj.ora.toString()));
         },
 
         currentPageItems: function () {
@@ -302,6 +302,7 @@ export default {
                     for (let l = 0; l < totqty.length; l++) {
                         if (this.allFoods[i].food_id == totqty[l].food_id) {
                             if (this.allFoods[i].DataFinePRT < this.foodObj.ora) {
+                                this.QtyDisponibile.push(true)
                                 break;
                             } else {
                                 if (this.allFoods[i].QtaDisponibile == null || undefined || "") {
