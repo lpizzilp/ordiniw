@@ -12,7 +12,7 @@
                     Evento / Specialità</button><br>
                 <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
-                    style="margin-top: 10px;">Tabellone
+                    style="margin-top: 10px;" :disabled="BtnUpData[0]">Tabellone
                     Eliminacode
                 </button>
             </div>
@@ -77,7 +77,6 @@
 </template>
 
 <script>
-
 import axios from "axios";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
@@ -93,7 +92,7 @@ export default {
             sagra_name: "",
             Btn: [],
             Display: [[]],
-            BtnUpData: [true, 'Attesa aggiornamento'],
+            BtnUpData: [false, 'Attesa aggiornamento'],
             timer: 30,
         };
     },
