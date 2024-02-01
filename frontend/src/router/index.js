@@ -1,4 +1,5 @@
-import { createWebHistory, createRouter } from "vue-router";
+// Per ripristinare la history inserire "createWebHistory" al posto di "createMemoryHistory"
+import { createRouter, createMemoryHistory } from "vue-router";
 import Register from '../admin/login/Register.vue';
 import Home from '../pages/Home.vue';
 import Eliminacode from '../pages/Eliminacode.vue';
@@ -95,8 +96,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  //history: createWebHistory(),
+  history: createMemoryHistory(),
   routes,
 });
-
-export default router;
