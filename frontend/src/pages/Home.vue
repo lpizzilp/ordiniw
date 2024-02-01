@@ -82,6 +82,8 @@ import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
 export default {
     name: "Home",
+    inject: ["eventBus"],
+
     data() {
         return {
             loginObj: { email: "exemple.exemple@gmail.com", pass: "Utente1" },
@@ -99,6 +101,12 @@ export default {
 
     created() {
         this.getsagra();
+        //console.log('SONO IN CREATED');
+        this.eventBus.on("loadBottoniHome", () => {
+            //console.log(param);
+            this.getsagra();
+        });
+            
     },
 
     methods: {
@@ -107,14 +115,15 @@ export default {
         },
 
         async getsagra() {
-            setTimeout(() => {
+//            console.log('sono in GETSAGRA'); 
+//            setTimeout(() => {
                 this.sagra_name = sessionStorage.getItem('SiglaHome')
                 if (this.sagra_name != undefined || null) {
                     this.Btn = sessionStorage.getItem('SagraBottoni').split("/")
                     this.Display[0] = this.Btn[5].split('')
                     this.Display[1] = this.Btn[7]
                 }
-            }, 300);
+//            }, 300);
         },
 
         async handleChildEvent(type) {

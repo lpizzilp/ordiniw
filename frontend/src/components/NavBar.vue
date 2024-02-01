@@ -75,9 +75,14 @@ export default {
             window.scrollTo(0, 0);
         },
 
+        sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+        },
+
         async getsagra() {
             if (!sessionStorage.getItem('Siglanav')) {
                 var sagra = await axios.get('/sagra/' + parametriObj.id)
+                //await this.sleep(1000)  
                 if (sagra.data.length == 0) {
                     sessionStorage.setItem('SagraBottoni', 0)
                 } else {
@@ -101,6 +106,7 @@ export default {
                         history.replaceState({}, document.title, nuovoURL);
                     }
                 }
+                this.eventBus.emit("loadBottoniHome", 'OIgetsagra-1');
             } else {
                 this.nav_name = sessionStorage.getItem('Siglanav')
             }
@@ -128,6 +134,10 @@ export default {
     }
 }
 </script>
+<!------------------------------------------------------------------------->
+<!------------------------------------------------------------------------->
+<!------------------------------------------------------------------------->
+<!------------------------------------------------------------------------->
 
 <style scoped>
 .header {
