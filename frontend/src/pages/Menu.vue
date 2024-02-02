@@ -1,6 +1,6 @@
 <template>
-    <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
 
+    <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
     <div class="menu-section">
         <div class="heading">
             <span>menu</span>
@@ -15,13 +15,12 @@
                 </div>
 
                 <div v-if="Prenotazione == '0'">
-                    <div class="row filter-drop-down">
+                    <!-- <div class="row filter-drop-down">
                         <p @click="displayFilterDrop">Filtri<span v-if="showDropDown">V</span><span v-else>X</span></p>
-                    </div>
-
-                    <div class="row filter-heading">
+                    </div> -->
+                    <!--  <div class="row filter-heading">
                         <h1>Tipo</h1>
-                    </div>
+                    </div> -->
 
                     <div class="row filter-section">
                         <ul class="filter-option">
@@ -385,9 +384,11 @@ export default {
             }
         },
         filterFoodBtn: function (e) {
+            this.foodObj.name=""
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
             this.foodObj.category = e.target.value;
+            console.log(e)
             e.target.style.background = "#057835fa";
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
