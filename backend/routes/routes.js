@@ -83,7 +83,8 @@ import {
     getAllPrenotGtId,
     deleteAllBook,
     getAllPrenot,    
-    getPrenDetailsById
+    getPrenDetailsById,
+    SumPerOrdine
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -166,6 +167,7 @@ router.post("/api/booking", createBooking);
 
 ////////////////////////// Prenotazione ////////////////////////////////
 router.get("/api/prenotazione/sum", Totsum);
+router.get("/api/prenotazione/sumordine", SumPerOrdine);
 
 router.get("/api/prenotazione/new", PredinuovoId);
 router.get("/api/prenotazione/:id", getPrenDetailsById);

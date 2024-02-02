@@ -295,7 +295,7 @@ export default {
         },
 
         async chekQty() {
-            let totqty = (await axios.get('/prenotazione/sum')).data;
+            let totqty = (await axios.get('/prenotazione/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {

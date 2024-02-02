@@ -132,3 +132,16 @@ export const getsum = (result) => {
     });
 };
 
+export const getqtaperordine = (result) => {
+    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty FROM food f LEFT JOIN bookdetails bd ON f.food_id = bd.food_id WHERE f.FlgPrenotabile != 0 GROUP BY f.food_name ORDER BY f.food_name asc", (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }
+        else{
+            result(null,results);
+        }
+    });
+};
+
+

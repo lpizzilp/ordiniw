@@ -8,7 +8,8 @@ import {
     getPrenDetails,
     getAll,
     Updatestatus,
-    getsum
+    getsum,
+    getqtaperordine
 } from "../models/PrenotazioniModel.js";
 
 
@@ -118,6 +119,16 @@ export const PutAction=(req,res)=>{
 
 export const Totsum=(req,res)=>{
     getsum((err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const SumPerOrdine=(req,res)=>{
+    getqtaperordine((err,results)=> {
         if (err) {
             res.send(err);
         }else {
