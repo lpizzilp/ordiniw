@@ -24,23 +24,23 @@
 
                     <div class="row filter-section">
                         <ul class="filter-option">
-                            <li>
+                            <li id="filter0">
                                 <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
-                                    @click="filterFoodBtn($event)" />
+                                    @click="filterFoodBtn($event, 0)" />
                                 <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
                             </li>
 
 
-                            <li>
+                            <li id="filter1">
                                 <input type="button" name="cbStatus" id="ooStatus" value="P" hidden
-                                    @click="filterFoodBtn($event)" />
+                                    @click="filterFoodBtn($event, 1)" />
                                 <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
                             </li>
 
 
-                            <li>
+                            <li id="filter2">
                                 <input type="button" name="cbStatus" id="soStatus" value="C" hidden
-                                    @click="filterFoodBtn($event)" />
+                                    @click="filterFoodBtn($event, 2)" />
                                 <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
                             </li>
 
@@ -51,9 +51,9 @@
                             <label for="sdStatus" class="d-flex justify-content-between">Pesce</label>
                         </li> -->
 
-                            <li>
+                            <li id="filter3">
                                 <input type="button" name="cbStatus" id="ndStatus" value="B" hidden
-                                    @click="filterFoodBtn($event)" />
+                                    @click="filterFoodBtn($event, 3)" />
                                 <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
                             </li>
 
@@ -383,19 +383,33 @@ export default {
                 return food;
             }
         },
-        filterFoodBtn: function (e) {
+
+        filterFoodBtn: function (e, id) {
+            this.FilterBtncolor(id)
             this.foodObj.name=""
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
             this.foodObj.category = e.target.value;
             console.log(e)
-            e.target.style.background = "#057835fa";
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }
         },
 
-        displayFilterDrop: function () {
+        FilterBtncolor (id) {
+            for (let i = 0; i < 4; i++) {
+                document.getElementById('filter' + i).style.background = 'white'
+                document.getElementById('filter' + i).style.color = 'black'
+                document.getElementById('filter' + i).style.width = '100%'    
+            }
+            console.log(id)
+            document.getElementById('filter' + id).style.background = '#27ae60'
+            document.getElementById('filter' + id).style.borderRadius = '10px'
+            document.getElementById('filter' + id).style.color = 'white'
+            document.getElementById('filter' + id).style.width = '75%'
+        },
+
+      /*  displayFilterDrop: function () {
             let divControl1 = document.getElementsByClassName("filter-heading");
             let divControl2 = document.getElementsByClassName("filter-section");
             for (var i = 0; i < divControl1.length; i++) {
@@ -409,7 +423,7 @@ export default {
                 }
             }
             this.showDropDown = !this.showDropDown;
-        },
+        }, */
 
         onQtyChange: function (index) {
             clearInterval(this.timerInterval);
@@ -544,7 +558,9 @@ hr {
 
 .filter-option label:hover {
     color: white;
+    width: 75%;
     background-color: #f38609 !important;
+    border-radius: 10px;
     transition: all 0.5s ease;
 }
 
@@ -733,7 +749,7 @@ hr {
         width: 100%;
     }
 
-    .filter-drop-down {
+  /*  .filter-drop-down {
         display: block;
         background-color: #27ae5f;
         border-radius: 10px;
@@ -757,7 +773,7 @@ hr {
         padding-right: 10px;
         text-transform: lowercase;
         font-weight: 300;
-    }
+    } */
 
     .filter-heading,
     .filter-section {
