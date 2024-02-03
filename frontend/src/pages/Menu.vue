@@ -207,6 +207,9 @@ export default {
         this.buildArray()
         this.getAllCartItem()
     },
+    mounted() {
+        this.FilterBtncolor(0)
+    },
 
     computed: {
         ...mapState(["allFoods"]),
@@ -236,6 +239,7 @@ export default {
             return this.allFoods.filter((f) => f.food_id == this.food);
         },
     },
+
     methods: {
 
         // return require(`../assets/images/${this.food_src}`);
@@ -390,7 +394,7 @@ export default {
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
             this.foodObj.category = e.target.value;
-            console.log(e)
+            //console.log(e)
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }
@@ -402,8 +406,8 @@ export default {
                 document.getElementById('filter' + i).style.color = 'black'
                 document.getElementById('filter' + i).style.width = '100%'    
             }
-            console.log(id)
-            document.getElementById('filter' + id).style.background = '#27ae60'
+            //console.log(id)
+            document.getElementById('filter' + id).style.background = '#f38609'
             document.getElementById('filter' + id).style.borderRadius = '10px'
             document.getElementById('filter' + id).style.color = 'white'
             document.getElementById('filter' + id).style.width = '75%'
