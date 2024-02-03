@@ -13,13 +13,12 @@
         </nav>
 
         <div v-if="showCart == true" class="icons">
-            <!--<div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>-->
-            <router-link @click="scrollToTop()" to="cart">
+            <div v-if="showHamburger" id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>
+            <router-link v-else-if="!showHamburger" @click="scrollToTop()" to="cart">
                 <div class="fas fa-shopping-cart cart"></div>
             </router-link>
         </div>
         <div v-else class="icons">
-            <!--<div id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>-->
             <button @click="scrollToTop()" :disabled="true">
                 <div class="fas fa-shopping-cart cart" style="background-color: #130f40a6;"></div>
             </button>
@@ -38,6 +37,7 @@ for (var i = 0; i < parametri.length; i++) {
     parametriObj[coppia[0]] = coppia[1];
 }
 
+import router from "@/router";
 import axios from "axios";
 export default {
     name: 'NavBar',
@@ -49,7 +49,8 @@ export default {
             sagra_name: '',
             info: '',
             numcoda: '',
-            showCart: true
+            showCart: true,
+            showHamburger: false
         }
     },
 
@@ -62,11 +63,12 @@ export default {
         this.eventBus.on("showCart", (param) => {
             this.showCart = param
         });
-
+        window.addEventListener('routeChanged', this.handleHamburger);
     },
 
     unmounted() {
         window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('routeChanged', this.handleHamburger);
     },
 
     methods: {
@@ -76,7 +78,16 @@ export default {
         },
 
         sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
+
+        handleHamburger() {
+            let mq = window.matchMedia("(max-width: 768px)");
+            if (router.currentRoute.value.path == '/'  && mq.matches || router.currentRoute.value.path == '/login' && mq.matches) {
+                this.showHamburger = true
+            } else {
+                this.showHamburger = false
+            }
         },
 
         async getsagra() {
@@ -264,6 +275,9 @@ export default {
 @media (max-width: 768px) {
     .header .navbar {
         position: absolute;
+        display: flex;
+        flex-wrap: wrap;
+        border-radius: 5px;
         top: 99%;
         left: 0;
         right: 0;
@@ -274,25 +288,26 @@ export default {
     }
 
     .header .navbar.active {
+        margin: 0;
+        padding: 0;
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
     }
 
     .header .navbar a {
+        width: 100%;
+        border: 1px inset black;
+        border-radius: 5px;
+        padding: 2px 0px;
+        margin: 0;
         font-size: 2rem;
-        margin: 2rem;
+        text-align: center;
         display: block;
     }
 
     #menu-btn {
+        color: white;
         display: inline-block;
     }
 
-}
-
-@media (max-width: 576px) {
-    .header .navbar a {
-        font-size: 1.5rem;
-        margin: 0;
-    }
 }
 </style>
