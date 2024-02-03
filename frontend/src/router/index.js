@@ -101,8 +101,22 @@ const router = createRouter({
   routes,
 });
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
   window.dispatchEvent(new Event('routeChanged'));
+  window.addEventListener('popstate', function(event) {
+    event.preventDefault
+    if (from.fullPath == '/thank') {
+      this.history.state.current = '/'
+      router.push('/')
+    } else if (from.fullPath == '/checkout') {
+      this.history.state.current = '/thank'
+      router.push('/thank')
+    } else {
+      this.history.state.current = event.state.current
+      router.push(event.state.current)
+    }
+    this.scrollTo(0, 0)
+  });
 });
 
 export default router;
