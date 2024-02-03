@@ -117,17 +117,16 @@ CREATE TABLE `food` (
 
 
 -- db_restaurant.`user` definition
-
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
-  `user_email` varchar(255) DEFAULT NULL,
-  `user_password` varchar(255) DEFAULT NULL,
-  `id_sagra` varchar(3) NOT NULL,
-  `user_name` varchar(255) DEFAULT NULL,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_email` varchar(50) DEFAULT NULL,
+  `user_password` varchar(50) DEFAULT NULL,
+  `id_sagra` varchar(5) NOT NULL,
+  `user_name` varchar(50) DEFAULT NULL,
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_un` (`user_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition
