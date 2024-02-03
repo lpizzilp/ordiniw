@@ -187,11 +187,7 @@ export default {
                     this.errors.push("Questa email è associata a un account esistente");
                 }
                 else {
-                    let dataid = (await axios.get("/users/new")).data
-                    let id = dataid.user_id
-                    id == null || undefined ? id = 0 : id == 0 ? id = 1 : id = id + 1
                     let data = {
-                        user_id: id,
                         user_email: this.registerObj.email,
                         user_password: this.registerObj.pass,
                         id_sagra: sessionStorage.getItem('SagraId'),

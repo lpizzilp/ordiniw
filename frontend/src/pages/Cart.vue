@@ -246,7 +246,7 @@ export default {
         },
 
         calculateItemPrice: function (index) {
-            return ((parseFloat(this.filterFoods[index].food_price) - parseInt(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
+            return ((parseFloat(this.filterFoods[index].food_price) - parseFloat(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
         },
 
         calculateSummaryPrice: function () {

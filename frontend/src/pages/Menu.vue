@@ -1,5 +1,4 @@
 <template>
-
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
     <div class="menu-section">
         <div class="heading">
@@ -390,44 +389,46 @@ export default {
 
         filterFoodBtn: function (e, id) {
             this.FilterBtncolor(id)
-            this.foodObj.name=""
+            this.foodObj.name = ""
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
             this.foodObj.category = e.target.value;
-            //console.log(e)
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }
         },
 
-        FilterBtncolor (id) {
-            for (let i = 0; i < 4; i++) {
-                document.getElementById('filter' + i).style.background = 'white'
-                document.getElementById('filter' + i).style.color = 'black'
-                document.getElementById('filter' + i).style.width = '100%'    
+        FilterBtncolor(id) {
+            if (this.Prenotazione == 0) {
+
+                for (let i = 0; i < 4; i++) {
+                    document.getElementById('filter' + i).style.background = 'white'
+                    document.getElementById('filter' + i).style.color = 'black'
+                    document.getElementById('filter' + i).style.width = '100%'
+                }
+                //console.log(id)
+                document.getElementById('filter' + id).style.background = '#f38609'
+                document.getElementById('filter' + id).style.borderRadius = '10px'
+                document.getElementById('filter' + id).style.color = 'white'
+                document.getElementById('filter' + id).style.width = '75%'
             }
-            //console.log(id)
-            document.getElementById('filter' + id).style.background = '#f38609'
-            document.getElementById('filter' + id).style.borderRadius = '10px'
-            document.getElementById('filter' + id).style.color = 'white'
-            document.getElementById('filter' + id).style.width = '75%'
         },
 
-      /*  displayFilterDrop: function () {
-            let divControl1 = document.getElementsByClassName("filter-heading");
-            let divControl2 = document.getElementsByClassName("filter-section");
-            for (var i = 0; i < divControl1.length; i++) {
-                if (this.showDropDown) {
-                    divControl1[i].style.display = "block";
-                    divControl2[i].style.display = "block";
-                }
-                else {
-                    divControl1[i].style.display = "none";
-                    divControl2[i].style.display = "none";
-                }
-            }
-            this.showDropDown = !this.showDropDown;
-        }, */
+        /*  displayFilterDrop: function () {
+              let divControl1 = document.getElementsByClassName("filter-heading");
+              let divControl2 = document.getElementsByClassName("filter-section");
+              for (var i = 0; i < divControl1.length; i++) {
+                  if (this.showDropDown) {
+                      divControl1[i].style.display = "block";
+                      divControl2[i].style.display = "block";
+                  }
+                  else {
+                      divControl1[i].style.display = "none";
+                      divControl2[i].style.display = "none";
+                  }
+              }
+              this.showDropDown = !this.showDropDown;
+          }, */
 
         onQtyChange: function (index) {
             clearInterval(this.timerInterval);
@@ -753,7 +754,7 @@ hr {
         width: 100%;
     }
 
-  /*  .filter-drop-down {
+    /*  .filter-drop-down {
         display: block;
         background-color: #27ae5f;
         border-radius: 10px;

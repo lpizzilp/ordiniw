@@ -1,5 +1,5 @@
-// Per ripristinare la history inserire "createWebHistory" al posto di "createMemoryHistory"
-import { createRouter, createMemoryHistory } from "vue-router";
+// Per eliminare la history inserire "createMemoryHistory" al posto di "createWebHistory"
+import { createRouter,createWebHistory } from "vue-router";
 import Register from '../admin/login/Register.vue';
 import Home from '../pages/Home.vue';
 import Eliminacode from '../pages/Eliminacode.vue';
@@ -96,9 +96,27 @@ const routes = [
 ];
 
 const router = createRouter({
-  //history: createWebHistory(),
-  history: createMemoryHistory(),
+  history: createWebHistory(),
+  //history: createMemoryHistory(),
   routes,
+});
+
+router.afterEach((to, from) => {
+  window.dispatchEvent(new Event('routeChanged'));
+  window.addEventListener('popstate', function(event) {
+    event.preventDefault
+    if (from.fullPath == '/thank') {
+      this.history.state.current = '/'
+      router.push('/')
+    } else if (from.fullPath == '/checkout') {
+      this.history.state.current = '/thank'
+      router.push('/thank')
+    } else {
+      this.history.state.current = event.state.current
+      router.push(event.state.current)
+    }
+    this.scrollTo(0, 0)
+  });
 });
 
 export default router;

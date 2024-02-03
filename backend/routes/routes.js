@@ -13,7 +13,6 @@ import {
     showAUser,
     createAccount,
     allUsers,
-    getId,
     updateUserauthlevel,
     Userdelete
 } from "../controllers/user.js";
@@ -110,9 +109,6 @@ router.delete("/api/foods/:id", deleteFood);
 
 
 ////////////////////////// USER ////////////////////////////////
-
-// get new id
-router.get("/api/users/new", getId)
 
 // get all user
 router.get("/api/users", allUsers)
