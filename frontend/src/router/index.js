@@ -111,6 +111,9 @@ router.afterEach((to, from) => {
     } else if (from.fullPath == '/checkout') {
       this.history.state.current = '/thank'
       router.push('/thank')
+    } else if (from.fullPath == '/login') {
+      this.history.state.current = '/admin/prenotazioni'
+      router.push('/admin/prenotazioni')
     } else {
       this.history.state.current = event.state.current
       router.push(event.state.current)

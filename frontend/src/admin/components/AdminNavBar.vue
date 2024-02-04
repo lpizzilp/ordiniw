@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <router-link @click="scrollToTop()" to="admin/dashboard" class="testa"><i class="fa-solid fa-user-tie"
-                style="padding-right: 2vh;"></i>Ciao Amministratore!
+                style="padding-right: 2vh;"></i>Ciao {{ nav_name }}!
         </router-link>
         <button class="btn"><i class="fas fa-bars" @click="showNav()"></i>
         </button>
@@ -31,31 +31,39 @@
                         style="padding-right: 2vh;"></i>Ordini</router-link></li>
             <li class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
-            <li class="td-router"><router-link @click="setAdmin('')" to="/"><i
-                        class="fa-solid fa-right-from-bracket" style="padding-right: 2vh;"></i>Logout</router-link></li>
+            <li class="td-router"><router-link @click="setAdmin('')" to="/"><i class="fa-solid fa-right-from-bracket"
+                        style="padding-right: 2vh;"></i>Logout</router-link></li>
         </ul>
     </div>
 </template>
 
 <script>
+import axios from "axios";
 import { mapMutations } from "vuex";
 export default {
     name: 'NavBar',
+
     data() {
         return {
-            nav_name: 'Home ordini',
-            sagra_name: '',
-            info: '',
-            numcoda: '',
+            nav_name: 'Amministratore',
         }
     },
 
+    created() {
+        this.getName()
+    },
 
     methods: {
         ...mapMutations(["setAdmin"]),
 
         scrollToTop() {
             window.scrollTo(0, 0);
+        },
+
+        async getName() {
+            let user = ''
+            user = (await axios.get('/users/' + sessionStorage.getItem('Admin'))).data.user_name.split(' ')
+            this.nav_name = user[0]
         },
 
         showNav() {

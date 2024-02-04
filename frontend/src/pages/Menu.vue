@@ -68,8 +68,9 @@
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
                             <div v-if="Artimage(f.food_src) != ''" class="image">
-                                <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
+                                <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
                                     @click="qty[index]++, onQtyChange(index)" />
+                                    <img v-else :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"/>
                             </div>
                             <div class="content">
                                 <h3>{{ f.food_name }}</h3>
