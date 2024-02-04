@@ -9,7 +9,7 @@ CREATE TABLE `billstatus` (
   `bill_method` varchar(255) DEFAULT NULL,
   `bill_discount` int(11) DEFAULT NULL,
   `bill_delivery` int(11) DEFAULT NULL,
-  `bill_total` int(11) DEFAULT NULL,
+  `bill_total` float DEFAULT NULL,
   `bill_paid` varchar(255) DEFAULT NULL,
   `bill_status` int(11) DEFAULT NULL,
   `TipoCassa` varchar(1) DEFAULT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `bookstatus` (
   `book_method` varchar(255) DEFAULT NULL,
   `book_discount` int(11) DEFAULT NULL,
   `book_delivery` int(11) DEFAULT NULL,
-  `book_total` int(11) DEFAULT NULL,
+  `book_total` float DEFAULT NULL,
   `book_paid` varchar(255) DEFAULT NULL,
   `book_status` int(11) DEFAULT NULL,
   `book_tipocassa` varchar(1) DEFAULT NULL,
@@ -117,6 +117,7 @@ CREATE TABLE `food` (
 
 
 -- db_restaurant.`user` definition
+
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_email` varchar(50) DEFAULT NULL,
@@ -126,7 +127,9 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_un` (`user_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 
 -- db_restaurant.billdetails definition
