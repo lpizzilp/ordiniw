@@ -105,19 +105,27 @@ router.afterEach((to, from) => {
   window.dispatchEvent(new Event('routeChanged'));
   window.addEventListener('popstate', function(event) {
     event.preventDefault
-    if (from.fullPath == '/thank') {
-      this.history.state.current = '/'
-      router.push('/')
-    } else if (from.fullPath == '/checkout') {
-      this.history.state.current = '/thank'
-      router.push('/thank')
-    } else if (from.fullPath == '/login') {
-      this.history.state.current = '/admin/prenotazioni'
-      router.push('/admin/prenotazioni')
-    } else {
-      this.history.state.current = event.state.current
-      router.push(event.state.current)
-    }
+    switch ( from.fullPath ) {
+      case '/':
+        router.removeRoute('Home');
+        break;
+      case '/thank':
+        this.history.state.current = '/';
+        router.push('/');
+        break;
+      case '/checkout': 
+        this.history.state.current = '/thank'
+        router.push('/thank')
+        break
+      case '/login':
+        this.history.state.current = '/admin/prenotazioni'
+        router.push('/admin/prenotazioni')
+        break;
+      default:
+        this.history.state.current = event.state.current
+        router.push(event.state.current)
+    } 
+
     this.scrollTo(0, 0)
   });
 });
