@@ -12,9 +12,12 @@
                     Evento / Specialità</button><br>
                 <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
-                    style="margin-top: 10px;" :disabled="BtnUpData[0]">Tabellone
+                    style="margin-top: 10px; margin-bottom: 10px;" :disabled="BtnUpData[0]">Tabellone
                     Eliminacode
-                </button>
+                </button><br>
+                <span v-if="linksito != null" style="padding-left: 30px;">Nel frattempo</span><br>
+                <a v-if="linksito != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il nostro sito
+                </a>
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
@@ -93,6 +96,7 @@ export default {
             Category: undefined,
             sagra_name: "",
             Btn: [],
+            linksito: null,
             Display: [[]],
             BtnUpData: [false, 'Attesa aggiornamento'],
             timer: 30,
@@ -101,12 +105,10 @@ export default {
 
     created() {
         this.getsagra();
-        //console.log('SONO IN CREATED');
         this.eventBus.on("loadBottoniHome", () => {
-            //console.log(param);
             this.getsagra();
         });
-            
+
     },
 
     methods: {
@@ -115,15 +117,17 @@ export default {
         },
 
         async getsagra() {
-//            console.log('sono in GETSAGRA'); 
-//            setTimeout(() => {
-                this.sagra_name = sessionStorage.getItem('SiglaHome')
-                if (this.sagra_name != undefined || null) {
-                    this.Btn = sessionStorage.getItem('SagraBottoni').split("/")
-                    this.Display[0] = this.Btn[5].split('')
-                    this.Display[1] = this.Btn[7]
-                }
-//            }, 300);
+            //            console.log('sono in GETSAGRA'); 
+            //            setTimeout(() => {
+            this.sagra_name = sessionStorage.getItem('SiglaHome')
+            if (this.sagra_name != undefined || null) {
+                this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
+                console.log(this.Btn[8])
+                this.linksito = this.Btn[8] == 0 ? null : this.Btn[8]
+                this.Display[0] = this.Btn[5].split('')
+                this.Display[1] = this.Btn[7]
+            }
+            //            }, 300);
         },
 
         async handleChildEvent(type) {
@@ -163,6 +167,7 @@ export default {
             let div = document.getElementsByClassName('tabelloni')
             switch (type) {
                 case 'TAB':
+                    this.linksito = null
                     div[0].style.display = 'block'
                     var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
                     if (sagra.data[0].flgEliminacode == 1) {
@@ -254,6 +259,10 @@ export default {
     color: #000000a8;
     line-height: 1.5;
     padding: 1rem 0;
+}
+
+.home-main .content a {
+    color: white;
 }
 
 .home-main .image {

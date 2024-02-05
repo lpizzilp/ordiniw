@@ -49,6 +49,7 @@ export default {
             sagra_name: '',
             info: '',
             numcoda: '',
+            sito: '',
             showCart: true,
             showHamburger: false
         }
@@ -109,8 +110,10 @@ export default {
 
                     sagra.data[0].flgInfo == 1 ? this.info = sagra.data[0].info : this.info = ''
                     sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
+                    sagra.data[0].linkSito == null? this.sito = 0 : this.sito = sagra.data[0].linkSito
+                    console.log(sagra.data[0].linkSito)
 
-                    const flgdata = ordini + '/' + sagra.data[0].flgTavoli + '/' + sagra.data[0].flgAsporto + '/' + sagra.data[0].flgPrenotazioni + '/' + sagra.data[0].flgEliminacode + '/' + this.numcoda + '/' + sagra.data[0].flgInfo + '/' + this.info
+                    const flgdata = ordini + '-' + sagra.data[0].flgTavoli + '-' + sagra.data[0].flgAsporto + '-' + sagra.data[0].flgPrenotazioni + '-' + sagra.data[0].flgEliminacode + '-' + this.numcoda + '-' + sagra.data[0].flgInfo + '-' + this.info + '-' + this.sito
                     sessionStorage.setItem('SagraBottoni', flgdata)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;
