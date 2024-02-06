@@ -1,5 +1,5 @@
 <template>
-    <div v-if="Ute === true" class="quick-view">
+    <div class="quick-view">
         <div class="quick-view-inner">
             <h2>Segnalazione effettuata</h2><br>
             <h3>Ti ringraziamo per avverci segnalato un errore nel nostro programma.<br>Ci attiveremo il prima possibile in

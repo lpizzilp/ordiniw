@@ -35,14 +35,15 @@
 
 <script>
 import axios from 'axios';
+import { UAParser } from 'ua-parser-js';
 import QuickViewSegnalazione from '@/components/QuickViewSegnalazione.vue'
 export default {
     name: "Confirm",
 
     data() {
         return {
-            ErrorObj: { segnalazione: "", descrizione: "", telefono: "", versioneos: "", browser: "", versionebr: "" },
-            errori: ["Bottoni non funzionanti", "L'ordine si blocca", "La modalità ordini è bloccata", "Non posso accedere al carrello"],
+            ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os:"", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
+            errori: ["Bottoni non funzionanti", "L'ordine si blocca", "Non mi viene inviata nessuna mail", "Non posso accedere al carrello", "Dopo il primo ordine l'app si blocca", "Non mi è stato assegnato un numero ordine", 'Altro...'],
             errors: [],
             showQuickVue: false,
         }
@@ -58,8 +59,19 @@ export default {
         },
 
         async getdataphone() {
-            var deviceDetect = require('device-detect')()
-            console.log(deviceDetect);
+            const parser = new UAParser();
+            // Ottenere le informazioni sull'agente utente
+            let reusult = parser.getResult();
+            this.ErrorObj.telefono = reusult.device.vendor
+            this.ErrorObj.modello = reusult.device.model
+            this.ErrorObj.os = reusult.os.name
+            this.ErrorObj.versioneos = reusult.os.version
+            this.ErrorObj.browser = reusult.browser.name
+            this.ErrorObj.versionebr = reusult.browser.version
+            this.ErrorObj.Webkit = reusult.engine.name
+            this.ErrorObj.versioenwk = reusult.engine.version
+            console.log(this.ErrorObj)
+            console.log(reusult)
         },
 
         async checkForm() {
@@ -88,10 +100,13 @@ export default {
                     tipoErr: this.ErrorObj.segnalazione,
                     descrizione: this.ErrorObj.descrizione,
                     telefono: this.ErrorObj.telefono,
-                    os: this.ErrorObj.versioneos,
+                    modello: this.ErrorObj.modello,
+                    os: this.ErrorObj.os,
                     versioneos: this.ErrorObj.versioneos,
                     browser: this.ErrorObj.browser,
                     versionebr: this.ErrorObj.versionebr,
+                    Webkit: this.ErrorObj.Webkit,
+                    versionewk: this.ErrorObj.versioenwk
                 }
                 await axios.post("/users/error/", data);
                 this.showQuickVue = true
@@ -99,7 +114,7 @@ export default {
         }
     },
 
-    components: { QuickViewSegnalazione}
+    components: { QuickViewSegnalazione }
 
 };
 </script>
