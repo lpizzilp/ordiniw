@@ -1,7 +1,11 @@
 <template>
-  <div class="footer">
-
-       <div class="box-container">
+    <div class="footer">
+        <div class="box-container" style="margin-bottom: 10px;">
+            <div class="box">
+                <RouterLink v-if="$route.path != '/segnalazioni'" to="/segnalazioni" class="btn">Segnala un errore</RouterLink>
+            </div>
+        </div>
+        <div class="box-container">
 
             <div class="box">
                 <h4>Powered by Esagra</h4>
@@ -10,7 +14,7 @@
             <div class="box">
                 <a href="https://www.esagra.it" target="_blank" title="Link esagra">https://esagra.it</a>
             </div>
-        </div> 
+        </div>
 
     </div>
 </template>
@@ -44,6 +48,19 @@ export default {
     text-align: center;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 1.5rem;
+}
+
+.footer .box-container .box .btn {
+    width: 25%; 
+    margin-left: 37.5%; 
+    color: white;
+    background-color: #f38609e3;
+    padding: 5px 2.5px;
+}
+
+.footer .box-container .box .btn:hover {
+    color: white;
+    background-color: #f32009e3;
 }
 
 .footer .box-container .box h4 {
@@ -109,6 +126,11 @@ export default {
         grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 
     }
+
+    .footer .box-container .box .btn {
+    width: 52%; 
+    margin-left: 24%;
+}
 
 }
 </style>

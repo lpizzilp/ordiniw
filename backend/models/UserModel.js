@@ -62,3 +62,15 @@ export const deleteuserbyemail = (email, result) => {
         }
     });
 };
+
+//Segnalazioneerrore
+export const insertError = (data, result) => {
+    db.query("INSERT INTO errors SET ?", data, (err, results) => {
+        if (err) {
+            console.log(err);
+            result(err, null);
+        } else {
+            result(null, results[0]);
+        }
+    });
+};

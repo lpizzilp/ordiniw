@@ -14,6 +14,7 @@ import Dashboard from '../admin/pages/Dashboard.vue';
 import Ordini from '../admin/pages/Ordini.vue';
 import Prenotazioni from '../admin/pages/Prenotazioni.vue'
 import Confirm from '../admin/login/Confirm.vue';
+import Segnalazione from '../pages/Segnalazione.vue'
 
 
 const routes = [
@@ -62,6 +63,11 @@ const routes = [
     path: "/myorder",
     name: "MyOrder",
     component: MyOrder,
+  },
+  {
+    path: "/segnalazioni",
+    name: "Segnalazioni",
+    component: Segnalazione,
   },
   {
     path: "/login",
