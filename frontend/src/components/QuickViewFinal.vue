@@ -123,11 +123,12 @@ export default {
                 user_email: this.Dataform.email,
                 sagra_link: "http://" + window.location.hostname.toString() + "?id=" + sessionStorage.getItem('SagraId'),
                 prenotazione: sessionStorage.getItem('filtro'),
-                user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&bill_id=" + sessionStorage.getItem('Bill'),
+                user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd=" + sessionStorage.getItem('filtro'),
                 ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,
             }
+            console.log(data.user_data)
 
             await axios.post('/mail/', data)
                 .then(response => {

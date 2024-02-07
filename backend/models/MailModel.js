@@ -37,6 +37,13 @@ export const Emailsender = (data, result) => {
             <h2 style="text-align:center; font-size:60px; padding-top: 5px; padding-botton: 5px; color:#27ae60; whidth:100%; background-color: #fff;">N.`  + data.ord_id + `</h2>
             <hr style="border: 2px dashed #27ae60;">
         </div>
+        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
+                <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Hai dei ripensamenti?</p>
+                <p style="text-align: center; font-size:16px;">Se ti sei accorto che nel tuo ordine manca qualcosa,<br>puoi sempre modificarlo cliccando sul bottone qui sotto </p>
+                <p style="margin-top:5px;">ㅤ</p>
+                <a href="` + data.user_data + `" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #27ae60; border-radius: 10px;">Clicca e modifica l'ordine</a>
+                <p style="margin-top:5px;">ㅤ</p>
+        </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
             <hr style="border: 2px dashed #27ae60;">
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Articolo Prenotato</p>

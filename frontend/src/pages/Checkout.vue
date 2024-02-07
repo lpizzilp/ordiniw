@@ -19,7 +19,7 @@
                             <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
                                 class="form-control" v-model="checkoutObj.Coperti" />
                             <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
-                        </div>
+                        </div><br>
 
                         <div class="form-group">
                             <input type="text" name="Nominativo" id="Nominativo"
@@ -29,9 +29,15 @@
                             </p>
                         </div>
 
+                        <div class="form-group">
+                            <textarea class="form-control" id="text" name="text" rows="3" cols="50" maxlength="200"
+                                placeholder="Aggiungi un extra che vorresti avere, non obbligatorio"
+                                v-model="checkoutObj.Note"></textarea>
+                        </div>
+
                     </div>
                 </div>
-                <div v-else-if=" type === 'Y'">
+                <div v-else-if="type === 'Y'">
                     <div class="form-group details-group" id="Asporto">
                         <h4>Dettagli dell'acquirente</h4>
                         <div class="form-group">
@@ -40,9 +46,15 @@
                             <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
                             </p>
                         </div>
+
+                        <div class="form-group">
+                            <textarea class="form-control" id="text" name="text" rows="3" cols="50" maxlength="200"
+                                placeholder="Aggiungi un extra che vorresti avere, non obbligatorio"
+                                v-model="checkoutObj.Note"></textarea>
+                        </div>
                     </div>
                 </div>
-                <div v-else-if=" type === 'PRE'">
+                <div v-else-if="type === 'PRE'">
                     <div class="form-group details-group" id="Asporto">
                         <h4>Dettagli dell'acquirente</h4>
                         <div class="form-group">
@@ -51,9 +63,23 @@
                             <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
                             </p>
                         </div>
+
                         <div class="form-group">
-                            <input type="tel" name="Telefono" id="Telefono" placeholder="Inserisci un numero di telefono, non obbligatorio"
-                                class="form-control" v-model="checkoutObj.Telefono" />
+                            <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
+                                class="form-control" v-model="checkoutObj.Coperti" />
+                            <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
+                        </div><br>
+
+                        <div class="form-group">
+                            <input type="tel" name="Telefono" id="Telefono"
+                                placeholder="Inserisci un numero di telefono, non obbligatorio" class="form-control"
+                                v-model="checkoutObj.Telefono" />
+                        </div>
+
+                        <div class="form-group">
+                            <textarea class="form-control" id="text" name="text" rows="3" cols="50" maxlength="200"
+                                placeholder="Aggiungi un extra che vorresti avere, non obbligatorio"
+                                v-model="checkoutObj.Note"></textarea>
                         </div>
                     </div>
                 </div>
@@ -94,7 +120,7 @@ export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Telefono: "", Type: "", paymentMethod: "cash" },
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Telefono: "", Type: "", paymentMethod: "cash", Note: "" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], payErr: [] },
             cartItem: [],
             itemQuantity: [],
@@ -184,22 +210,37 @@ export default {
 
         checkForm: function () {
             this.resetCheckErr();
-            if (this.type === 'W') {
-                // Tavolo validate
-                if (!this.checkoutObj.Tavolo) {
-                    this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
-                }
+            switch (this.type) {
+                case 'W':
+                    // Tavolo validate
+                    if (!this.checkoutObj.Tavolo) {
+                        this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
+                    }
 
-                // Coperti validate
-                if (!this.checkoutObj.Coperti) {
-                    this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
-                }
+                    // Coperti validate
+                    if (!this.checkoutObj.Coperti) {
+                        this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
+                    }
 
-            } else if (this.type === 'Y' || this.type === 'PRE' ) {
-                // Nominativo validate
-                if (!this.checkoutObj.Nominativo) {
-                    this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
-                }
+                    break;
+                case 'Y':
+                    // Nominativo validate
+                    if (!this.checkoutObj.Nominativo) {
+                        this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
+                    }
+
+                    break;
+                case 'PRE':
+                    // Nominativo validate
+                    if (!this.checkoutObj.Nominativo) {
+                        this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
+                    }
+                    // Coperti validate
+                    if (!this.checkoutObj.Coperti) {
+                        this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
+                    }
+
+                    break;
             }
         },
 
@@ -227,7 +268,7 @@ export default {
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
             var hour = ("0" + (now.getHours())).slice(-2);
             var min = ("0" + (now.getMinutes())).slice(-2);
-            return  now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
+            return now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
 
         },
 
@@ -238,7 +279,7 @@ export default {
             }
             else {
                 e.preventDefault(); //importante
-                
+
                 if (this.type === 'PRE') {
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
@@ -263,6 +304,7 @@ export default {
                         book_tipocassa: sessionStorage.getItem('filtro'),
                         book_nominativo: this.checkoutObj.Nominativo,
                         book_phone: this.checkoutObj.Telefono,
+                        book_note: this.checkoutObj.Note
 
                     };
 
@@ -301,7 +343,8 @@ export default {
                         bill_paid: "false",
                         bill_status: 1,
                         TipoCassa: sessionStorage.getItem('TipoOrdine'),
-                        Nominativo: this.checkoutObj.Nominativo
+                        Nominativo: this.checkoutObj.Nominativo,
+                        bill_note: this.checkoutObj.Note
                     };
 
                     await axios.post("/billstatus", billStatus);

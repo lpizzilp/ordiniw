@@ -170,7 +170,6 @@ export default {
 
             default:
                 sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
-                sessionStorage.removeItem('filtro')
                 break;
         }
 
