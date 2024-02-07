@@ -49,28 +49,28 @@
                         <td v-if="showSerata[id] == true">{{ b.book_nominativo }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_phone }}</td>
                         <td v-if="showSerata[id] == true">{{ formattime(b.book_when) }}</td>
-                        <td v-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
+                        <td v-if="b.book_status == 3 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
                                 style="padding-right: 1vh;"></i>Cancellato</td>
-                        <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
+                        <td v-else-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
                                 style="padding-right: 1vh;"></i>Attesa</td>
-                        <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i class="fa-regular fa-square-check"
+                        <td v-else-if="b.book_status == 4 && showSerata[id] == true"><i class="fa-regular fa-square-check"
                                 style="padding-right: 1vh;"></i>confermato</td>
                         <td v-if="showSerata[id] == true">
                             <button class="btn" @click="changestate(index)"
                                 style="z-index: 0; padding: 0.1vh 1vh; border-radius: 5px;"><i
                                     class="fas fa-bars"></i></button>
                             <div v-if="showAction[index] == true" class="drop-down-select">
-                                <button v-if="b.book_status == 1" class="action-btn"
+                                <button v-if="b.book_status == 0" class="action-btn"
                                     @click="ActionBtn('Confirm', index, b.book_id, t.food_id)">
                                     Conferma
                                 </button>
 
-                                <button v-if="b.book_status != 1" class="annulla-btn"
+                                <button v-if="b.book_status != 0" class="annulla-btn"
                                     @click="ActionBtn('Annulla', index, b.book_id, t.food_id)">
                                     Annulla
                                 </button>
 
-                                <button v-if="b.book_status == 1" class="cancel-btn"
+                                <button v-if="b.book_status == 0" class="cancel-btn"
                                     @click="ActionBtn('Cancel', index, b.book_id, t.food_id)">
                                     Cancella
                                 </button>
@@ -101,7 +101,6 @@ export default {
             interval: "",
             showSerata: [],
             showAction: [],
-            rowcolor: [],
         }
     },
 
@@ -127,7 +126,7 @@ export default {
         ...mapState(["admin"]),
 
         filterPenot: function () {
-            return this.allPenot.filter((b) => b.book_status <= 2 && b.book_status >= 0);
+            return this.allPenot.filter((b) => b.book_status <= 4 && b.book_status >= 0);
         },
     },
 
@@ -206,21 +205,21 @@ export default {
                 case "Confirm":
                     var data = {
                         id: book_id,
-                        action: 2
+                        action: 4
                     }
                     break;
 
                 case "Annulla":
                     data = {
                         id: book_id,
-                        action: 1
+                        action: 0
                     }
                     break;
 
                 case "Cancel":
                     data = {
                         id: book_id,
-                        action: 0
+                        action: 3
                     }
                     break;
             }
@@ -238,32 +237,16 @@ export default {
         },
 
         async Exportdata() {
-            let plus = 0 // incremento righe
             var data = [[]] //array dei dati
-
+            let plus = 0
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
-
-            data[0] = ['Id Articolo', 'Serata', 'Pezzi', '', '']
+   
+            data[0] = ['Articolo', 'Quantità', 'Nominativo', 'Telefono', 'Data']
             plus = plus + 1
-
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                data[plus] = [this.totqty[i].food_id, this.totqty[i].food_name, this.totqty[i].somma_qty, '', '']
-                plus = plus + 1
-            }
-            for (let i = 0; i < this.totqty.length; i++) {
-                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                if (plus != this.totqty.length) {
-                    data[plus] = ['', '', '', '', '']
-                    this.rowcolor.push(plus)
-                    plus = plus + 1
-                }
-                data[plus] = ['Articolo', 'Quantità', 'Nominativo', 'Telefono', 'Data']
-                    plus = plus + 1
-                    data[plus] = ['', '', '', '', '']
-                    plus = plus + 1
                 for (let l = 0; l < this.allPenot.length; l++) {
                     data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when)]
                     plus = plus + 1
@@ -272,6 +255,7 @@ export default {
 
             return data
         },
+
 
 
         async Exportfunction() {
@@ -290,11 +274,6 @@ export default {
             const headerStyle = {
                 font: { size: 13 },
                 alignment: { vertical: 'middle', horizontal: 'center' },
-                border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
-                fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
-            };
-
-            const emptyStyle = {
                 border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
                 fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } }
             };
@@ -320,12 +299,6 @@ export default {
                         cell.style = headerStyle;
                     } else {
                         cell.style = cellStyle;
-                    }
-
-                    for (let i = 0; i < this.rowcolor.length; i++) {
-                        if (rowIndex === this.rowcolor[i]) {
-                            cell.style = emptyStyle;
-                        }
                     }
                 });
             });
