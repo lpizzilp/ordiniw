@@ -14,6 +14,7 @@ CREATE TABLE `billstatus` (
   `bill_status` int(11) DEFAULT NULL,
   `TipoCassa` varchar(1) DEFAULT NULL,
   `Nominativo` varchar(50) DEFAULT NULL,
+  `bill_note` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`bill_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -35,6 +36,7 @@ CREATE TABLE `bookstatus` (
   `book_tipocassa` varchar(1) DEFAULT NULL,
   `book_nominativo` varchar(50) DEFAULT NULL,
   `book_phone` varchar(50) DEFAULT NULL,
+  `book_note` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`book_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -78,8 +80,27 @@ CREATE TABLE `catalogo_sagre` (
   `flgInfo` tinyint(1) NOT NULL DEFAULT 0,
   `numcoda` int(10) unsigned NOT NULL DEFAULT 99,
   `nstartprt` int(10) unsigned NOT NULL DEFAULT 500,
+  `linkSito` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.errors definition
+
+CREATE TABLE `errors` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `tipoErr` varchar(50) NOT NULL,
+  `descrizione` varchar(500) NOT NULL,
+  `telefono` varchar(25) DEFAULT NULL,
+  `modello` varchar(25) DEFAULT NULL,
+  `os` varchar(25) DEFAULT NULL,
+  `versioneos` varchar(25) DEFAULT NULL,
+  `browser` varchar(25) DEFAULT NULL,
+  `versionebr` varchar(25) DEFAULT NULL,
+  `Webkit` varchar(25) DEFAULT NULL,
+  `versionewk` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.esauriti definition
@@ -127,9 +148,7 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_un` (`user_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition
