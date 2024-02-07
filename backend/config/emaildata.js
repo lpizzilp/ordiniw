@@ -11,7 +11,7 @@ export const emaildata = nodemailer.createTransport({
 
 export const mailOptions = {
     from: 'Ordini@esagra.it',
-    to: '',
+    to: 'giulio.pizzinato@gmail.com',
     subject: '',
     html: '',
 };

@@ -117,17 +117,13 @@ export default {
         },
 
         async getsagra() {
-            //            console.log('sono in GETSAGRA'); 
-            //            setTimeout(() => {
             this.sagra_name = sessionStorage.getItem('SiglaHome')
             if (this.sagra_name != undefined || null) {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
-                console.log(this.Btn[8])
                 this.linksito = this.Btn[8] == 0 ? null : this.Btn[8]
                 this.Display[0] = this.Btn[5].split('')
                 this.Display[1] = this.Btn[7]
             }
-            //            }, 300);
         },
 
         async handleChildEvent(type) {

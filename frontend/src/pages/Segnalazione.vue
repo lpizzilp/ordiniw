@@ -42,7 +42,7 @@ export default {
 
     data() {
         return {
-            ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os:"", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
+            ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
             errori: ["Bottoni non funzionanti", "L'ordine si blocca", "Non mi viene inviata nessuna mail", "Non posso accedere al carrello", "Dopo il primo ordine l'app si blocca", "Non mi è stato assegnato un numero ordine", 'Altro...'],
             errors: [],
             showQuickVue: false,
@@ -60,18 +60,15 @@ export default {
 
         async getdataphone() {
             const parser = new UAParser();
-            // Ottenere le informazioni sull'agente utente
-            let reusult = parser.getResult();
-            this.ErrorObj.telefono = reusult.device.vendor
-            this.ErrorObj.modello = reusult.device.model
-            this.ErrorObj.os = reusult.os.name
-            this.ErrorObj.versioneos = reusult.os.version
-            this.ErrorObj.browser = reusult.browser.name
-            this.ErrorObj.versionebr = reusult.browser.version
-            this.ErrorObj.Webkit = reusult.engine.name
-            this.ErrorObj.versioenwk = reusult.engine.version
-            console.log(this.ErrorObj)
-            console.log(reusult)
+            let UAresult = parser.getResult();
+            this.ErrorObj.telefono = UAresult.device.vendor
+            this.ErrorObj.modello = UAresult.device.model
+            this.ErrorObj.os = UAresult.os.name
+            this.ErrorObj.versioneos = UAresult.os.version
+            this.ErrorObj.browser = UAresult.browser.name
+            this.ErrorObj.versionebr = UAresult.browser.version
+            this.ErrorObj.Webkit = UAresult.engine.name
+            this.ErrorObj.versioenwk = UAresult.engine.version
         },
 
         async checkForm() {
@@ -83,11 +80,20 @@ export default {
                 this.scrollToTop();
             }
 
-            // Authlevel
+            // Desc errore
             if (!this.ErrorObj.descrizione) {
                 this.errors.push("La descrizione è obbligatoria");
                 this.scrollToTop();
             }
+        },
+
+      async  getData() {
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var hour = ("0" + (now.getHours())).slice(-2);
+            var min = ("0" + (now.getMinutes())).slice(-2);
+            return day + '/' + month + '/' + now.getFullYear() + ' alle ore ' + hour + ":" + min; 
         },
 
         async handleSubmit(e) {
@@ -97,7 +103,7 @@ export default {
             } else {
                 e.preventDefault();
                 let data = {
-                    tipoErr: this.ErrorObj.segnalazione,
+                    tipoerr: this.ErrorObj.segnalazione,
                     descrizione: this.ErrorObj.descrizione,
                     telefono: this.ErrorObj.telefono,
                     modello: this.ErrorObj.modello,
@@ -106,9 +112,10 @@ export default {
                     browser: this.ErrorObj.browser,
                     versionebr: this.ErrorObj.versionebr,
                     Webkit: this.ErrorObj.Webkit,
-                    versionewk: this.ErrorObj.versioenwk
+                    versionewk: this.ErrorObj.versioenwk,
+                    err_ora: await this.getData()
                 }
-                await axios.post("/users/error/", data);
+                await axios.post("/mail/sengalazione/", data);
                 this.showQuickVue = true
             }
         }

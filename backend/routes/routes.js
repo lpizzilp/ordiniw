@@ -21,7 +21,8 @@ import {
 import {
     SendCoferma,
     SendMail,
-    SendRegistrazione
+    SendRegistrazione,
+    Sendsegnalazione
 } from "../controllers/mail.js";
 
 import {
@@ -139,6 +140,9 @@ router.post("/api/mail/registrazione/", SendRegistrazione)
 
 // send mail conferma
 router.post("/api/mail/confirm/", SendCoferma)
+
+// send mail sengalazione
+router.post("/api/mail/sengalazione/", Sendsegnalazione)
 
 
 ////////////////////////// CART ////////////////////////////////

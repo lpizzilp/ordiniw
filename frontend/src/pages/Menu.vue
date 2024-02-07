@@ -407,7 +407,6 @@ export default {
                     document.getElementById('filter' + i).style.color = 'black'
                     document.getElementById('filter' + i).style.width = '100%'
                 }
-                //console.log(id)
                 document.getElementById('filter' + id).style.background = '#f38609'
                 document.getElementById('filter' + id).style.borderRadius = '10px'
                 document.getElementById('filter' + id).style.color = 'white'
