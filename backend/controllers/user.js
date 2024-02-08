@@ -4,6 +4,7 @@ import {
     deleteuserbyemail,
     getAllUser,
     getUserByEmail,
+    insertError,
     insertUser,
     updateauthlevel
 } from "../models/UserModel.js";
@@ -60,6 +61,18 @@ export const updateUserauthlevel=(req,res)=>{
 // delete user
 export const Userdelete = (req,res)=>{
     deleteuserbyemail(req.params.email,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+// insert error
+export const Errors=(req,res)=>{
+    const data = req.body;
+    insertError(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
