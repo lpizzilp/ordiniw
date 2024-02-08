@@ -9,7 +9,9 @@ import {
     getAll,
     Updatestatus,
     getsum,
-    getqtaperordine
+    getqtaperordine,
+    deleteBookstatusById,
+    deleteBookdetailsById
 } from "../models/PrenotazioniModel.js";
 
 
@@ -129,6 +131,26 @@ export const Totsum=(req,res)=>{
 
 export const SumPerOrdine=(req,res)=>{
     getqtaperordine((err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const cancelBookstatus=(req,res)=>{
+    deleteBookstatusById(req.params.id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const cancelBookdetails=(req,res)=>{
+    deleteBookdetailsById(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

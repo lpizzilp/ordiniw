@@ -85,7 +85,9 @@ import {
     deleteAllBook,
     getAllPrenot,    
     getPrenDetailsById,
-    SumPerOrdine
+    SumPerOrdine,
+    cancelBookstatus,
+    cancelBookdetails
 } from "../controllers/prenotazioni.js";
 
 // init express router
@@ -183,9 +185,8 @@ router.post("/api/prenotazione/dettaglio", createDettaglio);
 router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
 router.delete("/api/prenotazioni/delete", deleteAllBook);
 router.put("/api/prenotazione/action", PutAction);
-
-
-
+router.delete("/api/prenotazioni/status/delete/:id", cancelBookstatus);
+router.delete("/api/prenotazioni/details/delete/:id", cancelBookdetails);
 
 ////////////////////////// Bill Details ////////////////////////////////
 router.post("/api/billdetails", createBillDetails);

@@ -144,4 +144,24 @@ export const getqtaperordine = (result) => {
     });
 };
 
+export const deleteBookstatusById = (id,result) => {
+    db.query("DELETE FROM bookstatus WHERE book_id = ?",[id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
 
+export const deleteBookdetailsById = (id,result) => {
+    db.query("DELETE FROM bookdetails WHERE book_id = ?",[id], (err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
