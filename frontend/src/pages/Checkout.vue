@@ -17,7 +17,7 @@
 
                         <div class="form-group">
                             <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
-                                class="form-control" v-model="checkoutObj.Coperti" />
+                                class="form-control" v-model="checkoutObj.Coperti" min="1"  @change="calculatePersonaPrice()" />
                             <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                         </div><br>
 
@@ -66,7 +66,7 @@
 
                         <div class="form-group">
                             <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
-                                class="form-control" v-model="checkoutObj.Coperti" />
+                                class="form-control" v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
                             <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                         </div><br>
 
@@ -87,6 +87,7 @@
                 <div class="form-group details-group" id="General">
                     <div class="checkout-headings">
                         <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
+                        <p v-if="Ute">Totale per persona {{ calculatePersonaPrice() }}</p>
                     </div>
                     <h4>Pagamento</h4>
                     <div class="form-group">
@@ -156,6 +157,16 @@ export default {
                 }
             });
             return temp;
+        },
+
+        calculatePersonaPrice: function () {
+            let subtotal = 0;
+            for (let i = 0; i < this.itemQuantity.length; i++) {
+                subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]
+            }
+            let total = subtotal / this.checkoutObj.Coperti
+            total = total.toFixed(2)
+            return total == 'Infinity' ? 'calcolo...' : total + '€';
         },
 
         calculateSummaryPrice: function () {
@@ -475,6 +486,14 @@ export default {
 
 .checkout-container .checkout-form-container form .checkout-headings h3 span {
     color: #f38609;
+}
+
+.checkout-container .checkout-form-container form .checkout-headings p {
+    color: #f38609;
+    font-size: 2rem;
+    padding: 0;
+    padding-bottom: 20px;
+    padding-left: 6px;
 }
 
 
