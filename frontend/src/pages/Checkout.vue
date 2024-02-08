@@ -281,6 +281,12 @@ export default {
                 e.preventDefault(); //importante
 
                 if (this.type === 'PRE') {
+                    if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                        axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
+                        axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
+                    }
+
+                    e.preventDefault();
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
                         bookId = 500;
