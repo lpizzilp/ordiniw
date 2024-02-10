@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="1" cols="50" maxlength="200"
+                            <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
                                 placeholder="Inserisci Nota o Variante, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
                         </div>
@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="1" cols="50" maxlength="200"
+                            <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
                                 placeholder="Inserisci Nota o Variante, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
                         </div>
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="1" cols="50" maxlength="200"
+                            <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
                                 placeholder="Inserisci una nota o un desiderata, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
                         </div>
