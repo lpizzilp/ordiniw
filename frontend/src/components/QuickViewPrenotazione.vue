@@ -1,9 +1,9 @@
 <template>
     <div class="quick-view">
         <div class="quick-view-inner">
-            <h2>Attenzione!</h2><br>
+            <h2>Ci Dispiace!</h2><br>
             <h3> Puoi prenotare un singolo articolo!<br><br>
-                Se vuoi prenotare un altro articolo devi fare una prenotazione differente.
+                Se vuoi prenotare un altro articolo devi fare una nuova prenotazione.
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent()" style="width: 100%;">Ho capito</button>

@@ -189,7 +189,9 @@ export default {
             CartItem: [],
             perPage: 50,
             pageNum: 0,
-            timer: 0.25
+            throttleTimer: null,
+            throttleDelay: 800, // Millisecondi   
+            throttleTimers: {} // Oggetto per memorizzare i timer per ciascun articolo         
         };
     },
 
@@ -428,30 +430,83 @@ export default {
               }
               this.showDropDown = !this.showDropDown;
           }, */
-
         onQtyChange: function (index) {
-            clearInterval(this.timerInterval);
+            // Cancella il timer se esiste per l'articolo specifico
+            if (this.throttleTimers[index]) {
+                clearTimeout(this.throttleTimers[index]);
+            }
+            
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
             }
-
-            this.showCart = false
+            
+            this.showCart = false;
             this.eventBus.emit("showCart", this.showCart);
-            this.timerInterval = setInterval(() => {
-                if (this.timer > 0) {
-                    this.timer--;
-                } else {
-                    // Quando il timer raggiunge zero, ferma l'intervallo e inserisci nel carrello
-                    clearInterval(this.timerInterval);
-                    this.addToCart(index)
-                }
-            }, 250);
-
-
-            this.setqty = true
+            
+            // Imposta un timer specifico per l'articolo
+            this.throttleTimers[index] = setTimeout(() => {
+                this.addToCart(index);
+                delete this.throttleTimers[index]; // Rimuovi il timer dopo l'esecuzione
+            }, this.throttleDelay);
+            
+            this.setqty = true;
         },
 
+
         async addToCart(index) {
+            this.sendId = this.currentPageItems[index].food_id;
+            this.showCounterCart = !this.showCounterCart;
+
+            let user_id = parseInt(sessionStorage.getItem('Username'));
+            let data = {
+                user_id: user_id,
+                food_id: this.sendId,
+                item_qty: parseInt(this.qty[index])
+            };
+            this.setqty = false
+
+
+            if (data.item_qty <= 0) {
+                // Se la quantità è <= 0, rimuovi l'articolo dal carrello (se presente)
+                await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
+                this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!");
+            } else {
+                // Verifica se l'articolo esiste nel carrello
+                let existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
+
+                if (existingCartItem.data.length > 0) {
+                    // Se l'articolo esiste, aggiorna la quantità
+                    await axios.put("/cartItem/", data);
+                    this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
+                } else {
+                    // Altrimenti, aggiungi l'articolo al carrello
+                    await axios.post("/cartItem", data);
+                    this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo aggiunto al carrello!");
+                }
+            }
+
+            if (this.Prenotazione === "1") {
+                // Gestisci la prenotazione dell'articolo
+                let cartItems = await axios.get('/cartItem/' + user_id);
+
+                if (cartItems.data.length > 1) {
+                    // Se ci sono più di un articolo nel carrello, rimuovi l'articolo aggiunto
+                    await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
+                    this.qty[index] = 0;
+                    this.showQuickView = true;
+                    this.$refs.alert.showAlert("Attenzione", "Ci Dispiace!", "Puoi prenotare solo un articolo per ordine!");
+                } else {
+                    // Altrimenti, conferma la prenotazione
+                    await axios.put("/cartItem/", data);
+                    this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
+                }
+            }
+
+            this.showCart = true;
+            this.eventBus.emit("showCart", this.showCart);
+        },        
+
+        async addToCart_old(index) {
             this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
 
@@ -479,7 +534,7 @@ export default {
                     if (data.item_qty <= 0) {
                         this.$refs.alert.showAlert("Errore", "Riprovare!", "Impossibile inserire articolo con con quantità pari a " + data.item_qty + "!")
                     } else {
-                        await axios.post("/cartItem/", data);
+                        await axios.post("/cartItem", data);
                         this.$refs.alert.showAlert("successo", "Grazie!", "Articolo aggiunto al carrello!")
                         break;
                     }

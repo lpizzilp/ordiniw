@@ -54,7 +54,7 @@ export default {
                         food_id: bookitem.data[i].food_id,
                         item_qty: parseInt(bookitem.data[i].item_qty)
                     }
-                    await axios.post("/cartItem/", data);
+                    await axios.post("/cartItem", data);
                 }
             } else {
                 sessionStorage.setItem('filtro', "")
@@ -65,7 +65,7 @@ export default {
                         food_id: billitem.data[i].food_id,
                         item_qty: parseInt(billitem.data[i].item_qty)
                     }
-                    await axios.post("/cartItem/", data);
+                    await axios.post("/cartItem", data);
                 }
             }
 

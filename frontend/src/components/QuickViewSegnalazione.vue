@@ -3,7 +3,7 @@
         <div class="quick-view-inner">
             <h2>Segnalazione effettuata</h2><br>
             <h3>Ti ringraziamo per avverci segnalato un errore nel nostro programma.<br>Ci attiveremo il prima possibile in
-                modo che tu possa uttilizare correttamente l'app
+                modo che tu possa utilizare correttamente l'app
                 <slot></slot>
             </h3>
             <RouterLink to="/" class="btn">Continua</RouterLink>

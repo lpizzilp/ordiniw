@@ -23,15 +23,15 @@
 
                         <div class="form-group">
                             <input type="text" name="Nominativo" id="Nominativo"
-                                placeholder="Campo nominativo, non obbligatorio" class="form-control"
+                                placeholder="Campo nominativo, Non obbligatorio" class="form-control"
                                 v-model="checkoutObj.Nominativo" />
                             <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
                             </p>
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="3" cols="50" maxlength="200"
-                                placeholder="Aggiungi un extra che vorresti avere, non obbligatorio"
+                            <textarea class="form-control" id="text" name="text" rows="1" cols="50" maxlength="200"
+                                placeholder="Inserisci Nota o Variante, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
                         </div>
 
@@ -48,8 +48,8 @@
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="3" cols="50" maxlength="200"
-                                placeholder="Aggiungi un extra che vorresti avere, non obbligatorio"
+                            <textarea class="form-control" id="text" name="text" rows="1" cols="50" maxlength="200"
+                                placeholder="Inserisci Nota o Variante, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
                         </div>
                     </div>
@@ -72,13 +72,13 @@
 
                         <div class="form-group">
                             <input type="tel" name="Telefono" id="Telefono"
-                                placeholder="Inserisci un numero di telefono, non obbligatorio" class="form-control"
+                                placeholder="Inserisci un numero di telefono, Non obbligatorio" class="form-control"
                                 v-model="checkoutObj.Telefono" />
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="3" cols="50" maxlength="200"
-                                placeholder="Aggiungi un extra che vorresti avere, non obbligatorio"
+                            <textarea class="form-control" id="text" name="text" rows="1" cols="50" maxlength="200"
+                                placeholder="Inserisci una nota o un desiderata, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                 <div class="form-group details-group" id="General">
                     <div class="checkout-headings">
                         <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
-                        <p v-if="Ute">Totale per persona {{ calculatePersonaPrice() }}</p>
+                        <h3 v-if="Ute"><span>Totale per persona {{ calculatePersonaPrice() }}</span></h3>
                     </div>
                     <h4>Pagamento</h4>
                     <div class="form-group">

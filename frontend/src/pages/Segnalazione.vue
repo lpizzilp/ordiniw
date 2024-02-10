@@ -43,7 +43,7 @@ export default {
     data() {
         return {
             ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
-            errori: ["Bottoni non funzionanti", "L'ordine si blocca", "Non mi viene inviata nessuna mail", "Non posso accedere al carrello", "Dopo il primo ordine l'app si blocca", "Non mi è stato assegnato un numero ordine", 'Altro...'],
+            errori: ["Bottoni non funzionanti", "La procedura si blocca", "Non mi viene inviata nessuna mail", "Non posso accedere al carrello", "Dopo il primo ordine l'app si blocca", "Non mi è stato assegnato un numero ordine", 'Altro...'],
             errors: [],
             showQuickVue: false,
         }
