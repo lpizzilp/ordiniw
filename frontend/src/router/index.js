@@ -1,8 +1,6 @@
-// Per eliminare la history inserire "createMemoryHistory" al posto di "createWebHistory"
 import { createRouter,createWebHistory } from "vue-router";
 import Register from '../admin/login/Register.vue';
 import Home from '../pages/Home.vue';
-import Eliminacode from '../pages/Eliminacode.vue';
 import Menu from '../pages/Menu.vue';
 import Table from '../pages/Table.vue';
 import Cart from '../pages/Cart.vue';
@@ -22,12 +20,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home, 
-  },
-
-  {
-    path: "/eliminacode",
-    name: "Eliminacode",
-    component: Eliminacode,
   },
   {
     path: "/menu",
@@ -103,7 +95,6 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  //history: createMemoryHistory(),
   routes,
 });
 
