@@ -190,7 +190,7 @@ export default {
             perPage: 50,
             pageNum: 0,
             throttleTimer: null,
-            throttleDelay: 800, // Millisecondi   
+            throttleDelay: 600, // Millisecondi   
             throttleTimers: {} // Oggetto per memorizzare i timer per ciascun articolo         
         };
     },
