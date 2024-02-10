@@ -39,6 +39,7 @@
                         <th>Serata</th>
                         <th>Pezzi</th>
                         <th>nominativo</th>
+                        <th>coperti</th>
                         <th>telefono</th>
                         <th>Data Prenotazione</th>
                         <th>Stato</th>
@@ -47,6 +48,7 @@
                         <td v-if="showSerata[id] == true">{{ b.food_name }}</td>
                         <td v-if="showSerata[id] == true">{{ b.item_qty }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_nominativo }}</td>
+                        <td v-if="showSerata[id] == true">{{ b.book_coperti }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_phone }}</td>
                         <td v-if="showSerata[id] == true">{{ formattime(b.book_when) }}</td>
                         <td v-if="b.book_status == 3 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
@@ -242,13 +244,13 @@ export default {
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
    
-            data[0] = ['Articolo', 'Quantità', 'Nominativo', 'Telefono', 'Data']
+            data[0] = ['Articolo', 'Quantità', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Note']
             plus = plus + 1
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
                 for (let l = 0; l < this.allPenot.length; l++) {
-                    data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when)]
+                    data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.allPenot[l].book_note]
                     plus = plus + 1
                 }
             }
@@ -265,11 +267,13 @@ export default {
             const worksheet = workbook.addWorksheet('Dati');
 
             // Imposta la larghezza delle colonne
-            worksheet.getColumn('A').width = 25;
-            worksheet.getColumn('B').width = 25;
+            worksheet.getColumn('A').width = 28;
+            worksheet.getColumn('B').width = 10;
             worksheet.getColumn('C').width = 20;
-            worksheet.getColumn('D').width = 20;
+            worksheet.getColumn('D').width = 10;
             worksheet.getColumn('E').width = 20;
+            worksheet.getColumn('F').width = 15;
+            worksheet.getColumn('G').width = 20;
 
             const headerStyle = {
                 font: { size: 13 },
