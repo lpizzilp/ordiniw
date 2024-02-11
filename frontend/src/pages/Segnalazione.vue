@@ -21,7 +21,8 @@
                     <label for="uDettagli">Descrizione:
                     </label>
                     <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
-                        v-model="ErrorObj.descrizione" placeholder="Descrivi il tuo problema e se possibile indica il modello e la versione del tuo telefono."></textarea>
+                        placeholder="Descrivi il tuo problema... (se vuoi essere ricontatto lasciaci la tua mail)"
+                        v-model="ErrorObj.descrizione"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -87,13 +88,13 @@ export default {
             }
         },
 
-      async  getData() {
+        async getData() {
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
             var hour = ("0" + (now.getHours())).slice(-2);
             var min = ("0" + (now.getMinutes())).slice(-2);
-            return day + '/' + month + '/' + now.getFullYear() + ' alle ore ' + hour + ":" + min; 
+            return day + '/' + month + '/' + now.getFullYear() + ' alle ore ' + hour + ":" + min;
         },
 
         async handleSubmit(e) {

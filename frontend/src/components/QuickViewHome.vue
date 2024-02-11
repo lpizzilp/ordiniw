@@ -10,7 +10,7 @@
         </div>
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
-            <h3>In questa sagra non puoi ordinare online.</h3><br>
+            <h3>Il servizio ordini online non è attivo</h3><br>
             <h3 v-if="BtnAttivi[3] == 1 || BtnAttivi[4] == 1 || BtnAttivi[6] == 1">Puoi uttilizzare i servizi di:
                 <slot></slot>
             </h3>
