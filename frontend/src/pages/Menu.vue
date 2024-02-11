@@ -68,9 +68,9 @@
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
                             <div v-if="Artimage(f.food_src) != ''" class="image">
-                                <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
-                                    @click="qty[index]++, onQtyChange(index)" />
-                                    <img v-else :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"/>
+                                <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)"
+                                    :alt="require('../assets/images/no.png')" @click="qty[index]++, onQtyChange(index)" />
+                                <img v-else :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')" />
                             </div>
                             <div class="content">
                                 <h3>{{ f.food_name }}</h3>
@@ -191,13 +191,16 @@ export default {
             pageNum: 0,
             throttleTimer: null,
             throttleDelay: 600, // Millisecondi   
-            throttleTimers: {} // Oggetto per memorizzare i timer per ciascun articolo         
+            throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
+            wifiquality: null,
+            wifispeed: null,
         };
     },
 
     created() {
         this.buildArray()
         this.getAllCartItem()
+        this.getConnection()
         if (this.Prenotazione == '1') {
             this.chekdata()
             this.chekQty()
@@ -243,17 +246,31 @@ export default {
 
     methods: {
 
-        // return require(`../assets/images/${this.food_src}`);
+        getConnection() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                console.log('Tipo di connessione:', connection.effectiveType);
+                this.wifiquality = connection.effectiveType.indexOf('g')
+                console.log('Velocità di connessione:', connection.downlink + ' Mbps');
+                this.wifispeed = connection.downlink
+            } else {
+                console.log('API navigator.connection non supportata.');
+            }
+        },
 
         Artimage(food) {
             if (food === '') {
                 return '';
             } else {
-                try {
-                    return require(`../assets/images/${food}`);
+               if (this.wifiquality == -1 || this.wifispeed < '0.25') {
+                    return ''
+                } else {
+                    try {
+                        return require(`../assets/images/${food}`);
 
-                } catch (ex) {
-                    return require(`../assets/images/no.png`);
+                    } catch (ex) {
+                        return require(`../assets/images/no.png`);
+                    }
                 }
             }
         },
@@ -435,20 +452,20 @@ export default {
             if (this.throttleTimers[index]) {
                 clearTimeout(this.throttleTimers[index]);
             }
-            
+
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
             }
-            
+
             this.showCart = false;
             this.eventBus.emit("showCart", this.showCart);
-            
+
             // Imposta un timer specifico per l'articolo
             this.throttleTimers[index] = setTimeout(() => {
                 this.addToCart(index);
                 delete this.throttleTimers[index]; // Rimuovi il timer dopo l'esecuzione
             }, this.throttleDelay);
-            
+
             this.setqty = true;
         },
 
@@ -504,7 +521,7 @@ export default {
 
             this.showCart = true;
             this.eventBus.emit("showCart", this.showCart);
-        },        
+        },
 
         async addToCart_old(index) {
             this.sendId = this.currentPageItems[index].food_id;

@@ -16,7 +16,8 @@
                     Eliminacode
                 </button><br>
                 <span v-if="linksito != null" style="padding-left: 30px;">Nel frattempo</span><br>
-                <a v-if="linksito != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il nostro sito
+                <a v-if="linksito != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
+                    nostro sito
                 </a>
             </div>
             <div class="image">
@@ -108,7 +109,6 @@ export default {
         this.eventBus.on("loadBottoniHome", () => {
             this.getsagra();
         });
-
     },
 
     methods: {
