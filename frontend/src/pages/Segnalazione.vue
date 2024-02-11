@@ -21,7 +21,7 @@
                     <label for="uDettagli">Descrizione:
                     </label>
                     <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
-                        v-model="ErrorObj.descrizione"></textarea>
+                        v-model="ErrorObj.descrizione" placeholder="Descrivi il tuo problema e se possibile indica il modello e la versione del tuo telefono."></textarea>
                 </div>
 
                 <div class="form-group">
