@@ -111,8 +111,10 @@ router.afterEach((to, from) => {
         router.push('/');
         break;
       case '/checkout': 
-        this.history.state.current = '/thank'
-        router.push('/thank')
+        // this.history.state.current = '/thank'
+        // router.push('/thank')
+        this.history.state.current = '/'
+        router.push('/')
         break
       case '/login':
         this.history.state.current = '/admin/prenotazioni'
