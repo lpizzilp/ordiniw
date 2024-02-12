@@ -1,6 +1,6 @@
 <template>
     <div class="quick-view">
-        <div v-if="BtnAttivi[0] == 1" class="quick-view-inner">
+        <div v-if="BtnAttivi[0] == 1 && BtnAttivi[10] == 1" class="quick-view-inner">
             <h2>Scelgi il tipo ordine</h2><br>
             <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>
@@ -10,7 +10,7 @@
         </div>
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
-            <h3>In questa sagra non puoi ordinare online.</h3><br>
+            <h3>Il servizio ordini online non è attivo</h3><br>
             <h3 v-if="BtnAttivi[3] == 1 || BtnAttivi[4] == 1 || BtnAttivi[6] == 1">Puoi uttilizzare i servizi di:
                 <slot></slot>
             </h3>

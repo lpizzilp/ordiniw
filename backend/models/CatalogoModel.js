@@ -66,5 +66,21 @@ export const updateSagraCodaeInfoByID = (data,id,result) => {
 };
 
 
+//-------------------------------------------------------
+//UPDATE inizio e fine sagra
+//-------------------------------------------------------
+
+export const updateContrOrdini = (id,type,result) => {
+    db.query("UPDATE catalogo_sagre SET StrOrdini = 0 WHERE id_sagra = ?",[type, id],(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+
 
 
