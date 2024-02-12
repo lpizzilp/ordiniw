@@ -69,20 +69,9 @@ export const updateSagraCodaeInfoByID = (data,id,result) => {
 //-------------------------------------------------------
 //UPDATE inizio e fine sagra
 //-------------------------------------------------------
-export const updateStrordini = (id,result) => {
-    db.query("UPDATE catalogo_sagre SET StrOrdini = 1 WHERE id_sagra = ?",id,(err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results);
-        }
-    });
-};
 
-
-export const updateStopOrdini = (id,result) => {
-    db.query("UPDATE catalogo_sagre SET StrOrdini = 0 WHERE id_sagra = ?",id,(err,results)=> {
+export const updateContrOrdini = (id,type,result) => {
+    db.query("UPDATE catalogo_sagre SET StrOrdini = 0 WHERE id_sagra = ?",[type, id],(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
