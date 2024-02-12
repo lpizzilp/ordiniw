@@ -16,7 +16,7 @@
                     Eliminacode
                 </button><br>
                 <span v-if="linksito[0] != null" style="padding-left: 30px;">Nel frattempo</span><br>
-                <a v-if="linksito[0] != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
+                <a v-if="linksito[0] != null" :href="Btn[9]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
                     nostro sito
                 </a>
             </div>
@@ -121,9 +121,8 @@ export default {
             this.sagra_name = sessionStorage.getItem('SiglaHome')
             if (this.sagra_name != undefined || null) {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
-                this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
-                console.log(this.Btn[8])
-                console.log(this.linksito)
+                this.Btn[9] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[9]]
+                sessionStorage.setItem('startprt', this.Btn[8])
                 this.Display[0] = this.Btn[5].split('')
                 this.Display[1] = this.Btn[7]
             }

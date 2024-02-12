@@ -119,11 +119,12 @@ export default {
             });
             this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:17px; color: #f38609;">Totale</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:17px; text-align: center; color: #f38609;">' + parseFloat(price) + ' €')
 
+                let ripresalink = process.env.NODE_ENV === 'production' ? "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd=" + sessionStorage.getItem('filtro') : "http://" + window.location.hostname.toString() + ":8080/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd=" + sessionStorage.getItem('filtro')
             let data = {
                 user_email: this.Dataform.email,
                 sagra_link: "http://" + window.location.hostname.toString() + "?id=" + sessionStorage.getItem('SagraId'),
                 prenotazione: sessionStorage.getItem('filtro'),
-                user_data: "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd=" + sessionStorage.getItem('filtro'),
+                user_data: ripresalink,
                 ord_id: this.Dataform.id,
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,
