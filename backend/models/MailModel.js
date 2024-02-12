@@ -234,6 +234,7 @@ export const Emailsegnalazione = (data, result) => {
                     <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Versione browser: `+ data.versionebr + `<li>
                     <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">WebKit: `+ data.Webkit + `<li>
                     <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Verisone webkit: `+ data.versionewk + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Connessione: `+ data.connessione + `<li>
                 </ul>
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">

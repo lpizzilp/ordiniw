@@ -103,6 +103,12 @@ export default {
                 e.preventDefault();
             } else {
                 e.preventDefault();
+                var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                if (connection) {
+                    connection = connection.effectiveType + ', velocità di connessione: ' + connection.downlink + ' Mbps'
+                } else {
+                    connection = 'API navigator.connection non supportata'
+                }
                 let data = {
                     tipoerr: this.ErrorObj.segnalazione,
                     descrizione: this.ErrorObj.descrizione,
@@ -114,6 +120,7 @@ export default {
                     versionebr: this.ErrorObj.versionebr,
                     Webkit: this.ErrorObj.Webkit,
                     versionewk: this.ErrorObj.versioenwk,
+                    connessione: connection,
                     err_ora: await this.getData()
                 }
                 await axios.post("/mail/sengalazione/", data);
