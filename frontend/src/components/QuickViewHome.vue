@@ -1,6 +1,6 @@
 <template>
     <div class="quick-view">
-        <div v-if="BtnAttivi[0] == 1" class="quick-view-inner">
+        <div v-if="BtnAttivi[0] == 1 && BtnAttivi[10] == 1" class="quick-view-inner">
             <h2>Scelgi il tipo ordine</h2><br>
             <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>

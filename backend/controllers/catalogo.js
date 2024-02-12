@@ -3,7 +3,9 @@ import {
     deleteSagra,
     insertSagra,
     updateSagraCodaeInfoByID,
-    getAllSagre
+    getAllSagre,
+    updateStrordini,
+    updateStopOrdini
 } from "../models/CatalogoModel.js";
 
 
@@ -65,6 +67,29 @@ export const updateSagraCodaeInfo=(req,res)=>{
     const data = req.body;
     const id = req.params.id;
     updateSagraCodaeInfoByID(data[0],id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+
+export const updateStartOrdini=(req,res)=>{
+    const id = req.params.id;
+    updateStrordini(id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const updateStoptOrdini=(req,res)=>{
+    const id = req.params.id;
+    updateStopOrdini(id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

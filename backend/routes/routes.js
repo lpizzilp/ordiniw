@@ -70,7 +70,9 @@ import {
     getSagraSig,
     createSagra,
     updateSagraCodaeInfo,
-    allSagre
+    allSagre,
+    updateStartOrdini,
+    updateStoptOrdini
 
 } from "../controllers/catalogo.js";
 
@@ -214,6 +216,8 @@ router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/:sigla", getSagraSig);
 router.post("/api/catalogosagre", createSagra);
 router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);
+router.put("/api/sagraStart/:id", updateStartOrdini);
+router.put("/api/sagraStop/:id", updateStoptOrdini);
 
 
 
