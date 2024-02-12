@@ -12,11 +12,11 @@
                     Evento / Specialità</button><br>
                 <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
-                    style="margin-top: 10px; margin-bottom: 10px;" :disabled="BtnUpData[0]">Tabellone
+                    style="margin-top: 10px; margin-bottom: 10px;">Tabellone
                     Eliminacode
                 </button><br>
-                <span v-if="linksito != null" style="padding-left: 30px;">Nel frattempo</span><br>
-                <a v-if="linksito != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
+                <span v-if="linksito[0] != null" style="padding-left: 30px;">Nel frattempo</span><br>
+                <a v-if="linksito[0] != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
                     nostro sito
                 </a>
             </div>
@@ -97,10 +97,11 @@ export default {
             Category: undefined,
             sagra_name: "",
             Btn: [],
-            linksito: null,
+            linksito: [null, null],
             Display: [[]],
             BtnUpData: [false, 'Attesa aggiornamento'],
             timer: 30,
+            togleTab: false,
         };
     },
 
@@ -120,7 +121,9 @@ export default {
             this.sagra_name = sessionStorage.getItem('SiglaHome')
             if (this.sagra_name != undefined || null) {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
-                this.linksito = this.Btn[8] == 0 ? null : this.Btn[8]
+                this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
+                console.log(this.Btn[8])
+                console.log(this.linksito)
                 this.Display[0] = this.Btn[5].split('')
                 this.Display[1] = this.Btn[7]
             }
@@ -163,19 +166,26 @@ export default {
             let div = document.getElementsByClassName('tabelloni')
             switch (type) {
                 case 'TAB':
-                    this.linksito = null
-                    div[0].style.display = 'block'
-                    var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
-                    if (sagra.data[0].flgEliminacode == 1) {
-                        this.Btn[4] = 1
-                        this.Btn[6] = 0
-                        this.Numeroritardato(sagra.data[0].numcoda.toString())
-                    } else if (sagra.data[0].flgInfo == 1) {
-                        this.Btn[6] = 1
-                        this.Btn[4] = 0
-                        this.Display[1] = sagra.data[0].info.replace(/\r\n/g, '<br>');
+                    if (!this.togleTab) {
+                        this.togleTab = true
+                        this.linksito[0] = null
+                        div[0].style.display = 'block'
+                        var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+                        if (sagra.data[0].flgEliminacode == 1) {
+                            this.Btn[4] = 1
+                            this.Btn[6] = 0
+                            this.Numeroritardato(sagra.data[0].numcoda.toString())
+                        } else if (sagra.data[0].flgInfo == 1) {
+                            this.Btn[6] = 1
+                            this.Btn[4] = 0
+                            this.Display[1] = sagra.data[0].info.replace(/\r\n/g, '<br>');
+                        }
+                        this.AttesaUpdate();
+                    } else {
+                        this.togleTab = false
+                        div[0].style.display = 'none'
+                         this.linksito[1] == null ? this.linksito[0] = null : this.linksito[0] = 1
                     }
-                    this.AttesaUpdate();
                     break;
 
                 case 'PRE':
@@ -194,6 +204,7 @@ export default {
                     break;
             }
         },
+
 
         async Numeroritardato(numero) {
             let num = '---'
