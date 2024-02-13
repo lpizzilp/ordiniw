@@ -14,6 +14,7 @@
 <script>
 export default {
     name: "QuickView",
+    inject: ["eventBus"],
 
     data() {
         return {
@@ -26,6 +27,7 @@ export default {
 
     methods: {
         DataParent() {
+            this.eventBus.emit("showCart", false);
             this.$emit('Closedata', false);
         },
     },

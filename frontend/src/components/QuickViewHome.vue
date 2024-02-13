@@ -11,12 +11,7 @@
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
             <h3>Il servizio ordini online non è attivo</h3><br>
-            <h3 v-if="BtnAttivi[3] == 1 || BtnAttivi[4] == 1 || BtnAttivi[6] == 1">Puoi uttilizzare i servizi di:
-                <slot></slot>
-            </h3>
-            <button v-if="BtnAttivi[3] == 1" class="btn" @click="DataParent('PRE')"
-                style="width: 100%;">Prenotazione</button>
-            <button @click="DataParent('TAB')" v-if="BtnAttivi[4] == 1 || BtnAttivi[6] == 1" class="btn" style="width: 100%;">Eliminacode</button>
+            <button @click="DataParent('')" class="btn" style="width: 100%;">Torna alla Home</button>
         </div>
     </div>
 </template>

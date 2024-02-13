@@ -131,9 +131,7 @@ export default {
 
         async handleChildEvent(type) {
             this.showQuickVue = type.vis
-            if (type.mode == 'TAB' || type.mode == 'PRE') {
-                this.handleSubmit(type.mode)
-            } else {
+            if (type.mode != '') {
                 this.errors = [];
                 var idR = this.randomizza();
                 let datareg = {

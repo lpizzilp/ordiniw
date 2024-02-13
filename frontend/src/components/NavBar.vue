@@ -19,7 +19,8 @@
             </router-link>
         </div>
         <div v-else class="icons">
-            <button @click="scrollToTop()" :disabled="true">
+            <div v-if="showHamburger" id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>
+            <button v-else @click="scrollToTop()" :disabled="true">
                 <div class="fas fa-shopping-cart cart" style="background-color: #130f40a6;"></div>
             </button>
         </div>
