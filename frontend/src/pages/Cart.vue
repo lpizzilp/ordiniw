@@ -437,7 +437,7 @@ export default {
         display: flex;
         margin-top: 10px;
         margin-bottom: 10px;
-        padding: 10px 30px;
+        padding: 10px 25%;
         text-align: center;
     }
 }
@@ -462,7 +462,7 @@ export default {
         margin-top: 0px;
         margin-right: 5px;
         margin-bottom: 0px;
-        padding: 10px 30px;
+        padding: 10px 25%;
     }
 
     .image-box {

@@ -50,7 +50,7 @@ export default {
             info: '',
             numcoda: '',
             sito: '',
-            showCart: true,
+            showCart: false,
             showHamburger: false
         }
     },

@@ -16,14 +16,12 @@
             </h3>
             <button v-if="BtnAttivi[3] == 1" class="btn" @click="DataParent('PRE')"
                 style="width: 100%;">Prenotazione</button>
-            <RouterLink to="/eliminacode" v-if="BtnAttivi[4] == 1 || BtnAttivi[6] == 1" class="btn" style="width: 100%;">Eliminacode</RouterLink>
+            <button @click="DataParent('TAB')" v-if="BtnAttivi[4] == 1 || BtnAttivi[6] == 1" class="btn" style="width: 100%;">Eliminacode</button>
         </div>
     </div>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
-
 export default {
     name: "QuickView",
     data() {
@@ -41,12 +39,12 @@ export default {
             sessionStorage.setItem('TipoOrdine', Tipo);
             const dataforParent = {
                 vis: false,
-                category: this.Categoria
+                category: this.Categoria,
+                mode: Tipo
             };
             this.$emit('childEvent', dataforParent);
         },
     },
-    components: { RouterLink }
 };
 </script>
 

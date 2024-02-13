@@ -131,18 +131,22 @@ export default {
 
         async handleChildEvent(type) {
             this.showQuickVue = type.vis
-            this.errors = [];
-            var idR = this.randomizza();
-            let datareg = {
-                user_id: idR,
-                user_email: this.loginObj.email,
-                user_password: this.loginObj.pass,
-            };
-            this.matchUser = datareg;
-            sessionStorage.setItem('Username', this.matchUser.user_id);
-            sessionStorage.setItem('MatchUser', this.matchUser);
-            sessionStorage.setItem('filtro', type.category);
-            this.$router.push("/menu");
+            if (type.mode == 'TAB' || type.mode == 'PRE') {
+                this.handleSubmit(type.mode)
+            } else {
+                this.errors = [];
+                var idR = this.randomizza();
+                let datareg = {
+                    user_id: idR,
+                    user_email: this.loginObj.email,
+                    user_password: this.loginObj.pass,
+                };
+                this.matchUser = datareg;
+                sessionStorage.setItem('Username', this.matchUser.user_id);
+                sessionStorage.setItem('MatchUser', this.matchUser);
+                sessionStorage.setItem('filtro', type.category);
+                this.$router.push("/menu");
+            }
         },
 
         randomizza() {
@@ -184,7 +188,7 @@ export default {
                     } else {
                         this.togleTab = false
                         div[0].style.display = 'none'
-                         this.linksito[1] == null ? this.linksito[0] = null : this.linksito[0] = 1
+                        this.linksito[1] == null ? this.linksito[0] = null : this.linksito[0] = 1
                     }
                     break;
 
