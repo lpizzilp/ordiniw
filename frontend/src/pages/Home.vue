@@ -6,17 +6,17 @@
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
                 <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a Ordinare</button><br>
-                <span v-if="Btn[3] == 1" style="padding-left: 30px;">oppure</span><br>
-                <button v-if="Btn[3] == 1" @click="handleSubmit('PRE')" class="btn"
+                <span v-if="Btn[2] == 1" style="padding-left: 30px;">oppure</span><br>
+                <button v-if="Btn[2] == 1" @click="handleSubmit('PRE')" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Prenota
                     Evento / Specialità</button><br>
-                <span v-if="Btn[4] == 1 || Btn[6] == 1" style="padding-left: 30px;">oppure</span><br>
-                <button @click="handleSubmit('TAB')" v-if="Btn[4] == 1 || Btn[6] == 1" class="btn"
+                <span v-if="Btn[3] == 1 || Btn[5] == 1" style="padding-left: 30px;">oppure</span><br>
+                <button @click="handleSubmit('TAB')" v-if="Btn[3] == 1 || Btn[5] == 1" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Tabellone
                     Eliminacode
                 </button><br>
                 <span v-if="linksito[0] != null" style="padding-left: 30px;">Nel frattempo</span><br>
-                <a v-if="linksito[0] != null" :href="Btn[9]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
+                <a v-if="linksito[0] != null" :href="Btn[8]" target="_blank" class="btn" style="margin-top: 10px;">Visita il
                     nostro sito
                 </a>
             </div>
@@ -47,7 +47,7 @@
         <div class="home-about">
 
             <div class="tabelloni">
-                <div v-if="Btn[4] == 1" class="eliminacode">
+                <div v-if="Btn[3] == 1" class="eliminacode">
                     <span>Eliminacode</span>
                     <div class="display" @click="handleSubmit('TAB')">
                         <sevenSegmentDisplay :value="Display[0][0]" :rounded="true" :segment-width="50" :segment-height="7"
@@ -60,7 +60,7 @@
                             off-color="transparent" />
                     </div>
                 </div>
-                <div v-if="Btn[6] == 1" class="info">
+                <div v-if="Btn[5] == 1" class="info">
                     <span>Tabellone Info</span>
                     <div class="display" @click="handleSubmit('TAB')">
                         <p v-html="Display[1]"></p>
@@ -68,9 +68,9 @@
                 </div>
 
                 <div class="content">
-                    <p v-if='Btn[4] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
-                    <p v-if='Btn[6] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
-                    <button class="btn" @click="handleSubmit('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
+                    <p v-if='Btn[3] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
+                    <p v-if='Btn[5] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
+                    <button class="btn" @click="UpdateTab('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
                             class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
                 </div>
             </div>
@@ -121,11 +121,11 @@ export default {
             this.sagra_name = sessionStorage.getItem('SiglaHome')
             if (this.sagra_name != undefined || null) {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
-                this.Btn[9] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[9]]
-                sessionStorage.setItem('startprt', this.Btn[8])
-                console.log(this.Btn[10])
-                this.Display[0] = this.Btn[5].split('')
-                this.Display[1] = this.Btn[7]
+                this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
+                sessionStorage.setItem('startprt', this.Btn[7])
+                console.log(this.Btn[7])
+                this.Display[0] = this.Btn[4].split('')
+                this.Display[1] = this.Btn[6]
             }
         },
 
@@ -163,23 +163,29 @@ export default {
             var numeroUnico = generaNumeroUnico();
             return numeroUnico;
         },
+
+        UpdateTab(type) {
+            this.togleTab = false
+            this.handleSubmit(type)
+        },
+
         // Punto dove inserisce user
         async handleSubmit(type) {
             let div = document.getElementsByClassName('tabelloni')
+            var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
             switch (type) {
                 case 'TAB':
                     if (!this.togleTab) {
                         this.togleTab = true
                         this.linksito[0] = null
                         div[0].style.display = 'block'
-                        var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
                         if (sagra.data[0].flgEliminacode == 1) {
-                            this.Btn[4] = 1
-                            this.Btn[6] = 0
+                            this.Btn[3] = 1
+                            this.Btn[5] = 0
                             this.Numeroritardato(sagra.data[0].numcoda.toString())
                         } else if (sagra.data[0].flgInfo == 1) {
-                            this.Btn[6] = 1
-                            this.Btn[4] = 0
+                            this.Btn[5] = 1
+                            this.Btn[3] = 0
                             this.Display[1] = sagra.data[0].info.replace(/\r\n/g, '<br>');
                         }
                         this.AttesaUpdate();
@@ -201,6 +207,13 @@ export default {
 
                 default:
                     div[0].style.display = 'none'
+                    var ordini = [sagra.data[0].flgTavoli,sagra.data[0].flgAsporto]
+                    if (ordini[0] == 1) {
+                        this.Btn[0] = sagra.data[0].StrOrdini.substring(0,1) == "" ? 1 : sagra.data[0].StrOrdini.substring(0,1)
+                    }
+                    if (ordini[1] == 1) {
+                        this.Btn[1] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
+                    }
                     this.Category = type
                     this.showQuickVue = true
                     break;

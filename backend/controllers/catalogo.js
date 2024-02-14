@@ -76,9 +76,8 @@ export const updateSagraCodaeInfo=(req,res)=>{
 
 
 export const updateControlOrdini=(req,res)=>{
-    const id = req.params.id
-    const type = req.params.type
-    updateContrOrdini(id,type,(err,results)=> {
+    const data = req.body
+    updateContrOrdini(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

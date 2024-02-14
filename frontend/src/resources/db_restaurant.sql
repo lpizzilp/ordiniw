@@ -81,7 +81,7 @@ CREATE TABLE `catalogo_sagre` (
   `numcoda` int(10) unsigned NOT NULL DEFAULT 99,
   `nstartprt` int(10) unsigned NOT NULL DEFAULT 500,
   `linkSito` varchar(100) DEFAULT NULL,
-  `StrOrdini` tinyint(1) NOT NULL DEFAULT 0,
+  `StrOrdini` varchar(2) NOT NULL DEFAULT '11',
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

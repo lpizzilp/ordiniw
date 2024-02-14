@@ -182,7 +182,7 @@ export default {
             QtyDisponibile: [],
 
             sendId: null,
-            showCart: true,
+            showCart: false,
             showCounterCart: false,
             showQuickView: false,
             qty: [],
