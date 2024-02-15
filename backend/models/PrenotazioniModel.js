@@ -98,7 +98,7 @@ export const deleteAllBooks = (data,result) => {
 
 // recupera tutte le prenotazioni
 export const getAll = (id,result) => {
-    db.query("select b.*, b2.item_qty, f.food_name  from bookstatus b, bookdetails b2, food f where f.food_id = ? and b2.book_id = b.book_id and b2.food_id = f.food_id order by f.food_name desc, case WHEN book_status = 1 THEN 1 WHEN book_status = 2 THEN 2 ELSE 3 end desc, b.book_when asc",id, (err,results)=> {
+    db.query("Select b.*, b2.item_qty, f.food_name  from bookstatus b, bookdetails b2, food f where f.food_id = ? and b2.book_id = b.book_id and b2.food_id = f.food_id order by f.food_name desc, case WHEN book_status = 0 THEN 1 WHEN book_status = 1 THEN 2 WHEN book_status = 2 THEN 3 ELSE 4 end desc, b.book_when asc",id, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

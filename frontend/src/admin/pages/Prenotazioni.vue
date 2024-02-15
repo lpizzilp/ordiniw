@@ -51,13 +51,15 @@
                         <td v-if="showSerata[id] == true">{{ b.book_coperti }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_phone }}</td>
                         <td v-if="showSerata[id] == true">{{ formattime(b.book_when) }}</td>
-                        <td v-if="b.book_status == 3 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
-                                style="padding-right: 1vh;"></i>Cancellato</td>
-                        <td v-else-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
+                        <td v-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
                                 style="padding-right: 1vh;"></i>Attesa</td>
-                        <td v-else-if="b.book_status == 4 && showSerata[id] == true"><i class="fa-regular fa-square-check"
-                                style="padding-right: 1vh;"></i>confermato</td>
-                        <td v-if="showSerata[id] == true">
+                        <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i class="fa-regular fa-square-check"
+                                style="padding-right: 1vh;"></i>Parzialmente evaso</td>
+                        <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i class="fa-solid fa-bell-concierge"
+                                style="padding-right: 1vh;"></i>Evaso</td>
+                        <td v-else-if="b.book_status == 3 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
+                                style="padding-right: 1vh;"></i>Cancellato</td>
+                        <td v-if="showSerata[id] == true && b.book_status != 2">
                             <button class="btn" @click="changestate(index)"
                                 style="z-index: 0; padding: 0.1vh 1vh; border-radius: 5px;"><i
                                     class="fas fa-bars"></i></button>
@@ -207,7 +209,7 @@ export default {
                 case "Confirm":
                     var data = {
                         id: book_id,
-                        action: 4
+                        action: 1
                     }
                     break;
 
@@ -243,14 +245,29 @@ export default {
             let plus = 0
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
-   
-            data[0] = ['Articolo', 'Quantità', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Note']
+
+            data[0] = ['Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Note']
             plus = plus + 1
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
                 for (let l = 0; l < this.allPenot.length; l++) {
-                    data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.allPenot[l].book_note]
+                    switch (this.allPenot[l].book_status) {
+                        case 0:
+                            var book_status = 'inserito'
+                            break;
+                    
+                        case 1:
+                            book_status = 'Parzialmente Evasa'
+                            break;
+                        case 2:
+                            book_status = 'Evasa'
+                            break;
+                        case 3:
+                            book_status = 'Cancellata'
+                            break;
+                    }
+                    data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.allPenot[l].book_note]
                     plus = plus + 1
                 }
             }
@@ -270,10 +287,11 @@ export default {
             worksheet.getColumn('A').width = 28;
             worksheet.getColumn('B').width = 10;
             worksheet.getColumn('C').width = 20;
-            worksheet.getColumn('D').width = 10;
-            worksheet.getColumn('E').width = 20;
-            worksheet.getColumn('F').width = 15;
-            worksheet.getColumn('G').width = 20;
+            worksheet.getColumn('D').width = 20;
+            worksheet.getColumn('E').width = 10;
+            worksheet.getColumn('F').width = 20;
+            worksheet.getColumn('G').width = 15;
+            worksheet.getColumn('H').width = 20;
 
             const headerStyle = {
                 font: { size: 13 },
