@@ -72,6 +72,7 @@ import {
     updateSagraCodaeInfo,
     allSagre,
     updateControlOrdini,
+    GetControlOrdini,
 } from "../controllers/catalogo.js";
 
 import {
@@ -184,7 +185,7 @@ router.post("/api/prenotazione", createPrenotazione);
 router.post("/api/prenotazione/dettaglio", createDettaglio);
 router.get("/api/prenotazione/allgt/:id", getAllPrenotGtId);
 router.delete("/api/prenotazioni/delete", deleteAllBook);
-router.put("/api/prenotazione/action", PutAction);
+router.put("/api/prenotazione/status", PutAction);
 router.delete("/api/prenotazioni/status/delete/:id", cancelBookstatus);
 router.delete("/api/prenotazioni/details/delete/:id", cancelBookdetails);
 
@@ -212,6 +213,7 @@ router.delete("/api/billstatus/delete", deleteAllBill)
 //recupera sagra in base alla sigla
 router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/:sigla", getSagraSig);
+router.get("/api/sagra/controlli/:id", GetControlOrdini);
 router.post("/api/catalogosagre", createSagra);
 router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);
 router.put("/api/sagraComand", updateControlOrdini);

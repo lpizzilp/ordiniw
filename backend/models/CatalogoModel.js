@@ -81,6 +81,17 @@ export const updateContrOrdini = (data,result) => {
     });
 };
 
+export const getContrOrdini = (id,result) => {
+    db.query("Select StrOrdini from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
 
 
 

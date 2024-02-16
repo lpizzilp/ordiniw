@@ -4,13 +4,22 @@ var unionParam = {
   type: process.argv[2] + process.argv[3],
   id: process.argv[4]
 }
-console.log(unionParam)
-// Imposta il metodo di richiesta e l'URL
-axios.put('http://localhost:8081/api/sagraComand', unionParam)
+
+axios.get('http://localhost:8081/api/sagra/controlli/' + unionParam.id)
   .then(response => {
-    console.log(response.data);
-    console.log('eseguito')
+
+    if (response.data[0].StrOrdini.substring(0, 1) == 1) {
+      
+      unionParam.type = response.data[0].StrOrdini.substring(0, 1) + unionParam.type
+      axios.put('http://localhost:8081/api/sagraComand', unionParam)
+        .catch(error => {
+          console.error('Errore nella richiesta:', error.message);
+        });
+
+    }
+
   })
   .catch(error => {
     console.error('Errore nella richiesta:', error.message);
   });
+

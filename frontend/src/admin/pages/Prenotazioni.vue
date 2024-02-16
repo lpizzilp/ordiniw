@@ -229,7 +229,7 @@ export default {
             }
 
             this.showAction[index] = false
-            await axios.put("/prenotazione/action", data)
+            await axios.put("/prenotazione/status", data)
             this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
         },
 
