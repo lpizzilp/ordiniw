@@ -2,7 +2,6 @@
     <div class="admin-container">
         <div class="d-flex justify-content-between">
             <h1><i class="fa-solid fa-chart-line"> Dashboard</i></h1>
-            <button class="btn" @click="getAllPenot()">Salva</button>
         </div>
 
         <div v-if="tabFunzioni[0] == true" class="table-open">
@@ -13,7 +12,7 @@
             <table class="project-list">
                 <tr>
                     <td>
-                        <h3>Appertura ordini auto</h3>
+                        <h3>Apertura/chiusura automatica</h3>
                     </td>
                     <td style="text-align: center;">
                         <h3>{{ status[0] }}</h3>
@@ -59,7 +58,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <h3>Ordini al Tavolo</h3>
+                        <h3>Ordini Asporto</h3>
                     </td>
                     <td style="text-align: center;">
                         <h3>{{ status[2] }}</h3>
