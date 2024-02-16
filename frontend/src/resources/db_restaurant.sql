@@ -81,7 +81,7 @@ CREATE TABLE `catalogo_sagre` (
   `numcoda` int(10) unsigned NOT NULL DEFAULT 99,
   `nstartprt` int(10) unsigned NOT NULL DEFAULT 500,
   `linkSito` varchar(100) DEFAULT NULL,
-  `StrOrdini` varchar(2) NOT NULL DEFAULT '11',
+  `StrOrdini` varchar(10) NOT NULL DEFAULT '11',
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -101,7 +101,7 @@ CREATE TABLE `errors` (
   `Webkit` varchar(25) DEFAULT NULL,
   `versionewk` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.esauriti definition
@@ -149,7 +149,7 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_un` (`user_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition
