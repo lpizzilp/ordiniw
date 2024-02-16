@@ -52,7 +52,7 @@
                         <td v-if="showSerata[id] == true">{{ b.book_phone }}</td>
                         <td v-if="showSerata[id] == true">{{ formattime(b.book_when) }}</td>
                         <td v-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
-                                style="padding-right: 1vh;"></i>Attesa</td>
+                                style="padding-right: 1vh;"></i>Inserito</td>
                         <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i class="fa-regular fa-square-check"
                                 style="padding-right: 1vh;"></i>Parzialmente evaso</td>
                         <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i class="fa-solid fa-bell-concierge"
@@ -130,7 +130,7 @@ export default {
         ...mapState(["admin"]),
 
         filterPenot: function () {
-            return this.allPenot.filter((b) => b.book_status <= 4 && b.book_status >= 0);
+            return this.allPenot;
         },
     },
 
@@ -139,6 +139,7 @@ export default {
 
         async getAllPenot() {
             this.totqty = (await axios.get('/prenotazione/sum')).data;
+            console.log(this.totqty)
             this.changeopengrid();
         },
 
@@ -153,6 +154,7 @@ export default {
 
                 case false:
                     this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
+                    console.log(this.allPenot)
                     for (let i = 0; i < this.showSerata.length; i++) {
                         if (id == i) {
                             this.showSerata[i] = true
