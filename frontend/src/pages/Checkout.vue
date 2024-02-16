@@ -292,7 +292,7 @@ export default {
                 e.preventDefault(); //importante
 
                 if (this.type === 'PRE') {
-                    if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                    if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
                         axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
                         axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                     }
@@ -300,9 +300,11 @@ export default {
                     e.preventDefault();
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
-                        if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                        console.log(sessionStorage.getItem('Bill'))
+                        if (sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') !=  "" || sessionStorage.getItem('Bill') != undefined) {
                             bookId = sessionStorage.getItem('Bill')
                         } else {
+                            console.log(sessionStorage.getItem('startprt') + 'ciao')
                             bookId = sessionStorage.getItem('startprt');
                         }
                     }
@@ -337,7 +339,7 @@ export default {
                     });
 
                 } else {
-                    if (sessionStorage.getItem('Bill') != "" || null || undefined) {
+                    if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
                         axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
                         axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
                     }
