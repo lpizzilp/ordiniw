@@ -1,244 +1,89 @@
 <template>
     <div class="admin-container">
         <div class="d-flex justify-content-between">
-            <h1><i class="fa-solid fa-book-open"> Prenotazioni</i></h1>
-            <button class="btn" @click="getAllPenot()">Aggiorna</button>
+            <h1><i class="fa-solid fa-chart-line"> Dashboard</i></h1>
+            <button class="btn" @click="getAllPenot()">Salva</button>
         </div>
 
-        <div class="table-responsive">
-            <!-- PROJECT TABLE -->
-            <table class="table colored-header datatable project-list">
-                <thead>
-                    <tr>
-                        <th>Serata</th>
-                        <th></th>
-                        <th></th>
-                        <th>Pezzi</th>
-                        <th></th>
-                        <th></th>
-                        <th>Vedi di più</th>
-                    </tr>
-                </thead>
-                <tbody v-for="(t, id) in totqty.slice()" :key="t.food_name">
-                    <tr>
-                        <td style="padding: 12px 4px;">{{ t.food_name }}</td>
-                        <td style="padding: 12px 4px;"></td>
-                        <td style="padding: 12px 4px;"></td>
-                        <td style="padding: 12px 4px;">{{ t.somma_qty }}</td>
-                        <td style="padding: 12px 4px;"></td>
-                        <td style="padding: 12px 4px;"></td>
-                        <td style="padding: 12px 4px;" v-if="showSerata[id] == false"><i @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-down"></i></td>
-                        <td style="padding: 12px 4px;" v-if="showSerata[id] == true"><i @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-up"></i></td>
-                    </tr>
-                    <tr v-if="showSerata[id] == true">
-                        <th>Serata</th>
-                        <th>Pezzi</th>
-                        <th>nominativo</th>
-                        <th>telefono</th>
-                        <th>Data Prenotazione</th>
-                        <th>Stato</th>
-                    </tr>
-                    <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id">
-                        <td v-if="showSerata[id] == true">{{ b.food_name }}</td>
-                        <td v-if="showSerata[id] == true">{{ b.item_qty }}</td>
-                        <td v-if="showSerata[id] == true">{{ b.book_nominativo }}</td>
-                        <td v-if="showSerata[id] == true">{{ b.book_phone }}</td>
-                        <td v-if="showSerata[id] == true">{{ formattime(b.book_when) }}</td>
-                        <td v-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
-                                style="padding-right: 1vh;"></i>Cancellato</td>
-                        <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
-                                style="padding-right: 1vh;"></i>Attesa</td>
-                        <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i class="fa-regular fa-square-check"
-                                style="padding-right: 1vh;"></i>confermato</td>
-                        <td v-if="showSerata[id] == true">
-                            <button class="btn" @click="changestate(index)"
-                                style="z-index: 0; padding: 0.1vh 1vh; border-radius: 5px;"><i
-                                    class="fas fa-bars"></i></button>
-                            <div v-if="showAction[index] == true" class="drop-down-select">
-                                <button v-if="b.book_status == 1" class="action-btn"
-                                    @click="ActionBtn('Confirm', index, b.book_id, t.food_id)">
-                                    Conferma
-                                </button>
-
-                                <button v-if="b.book_status != 1" class="annulla-btn"
-                                    @click="ActionBtn('Annulla', index, b.book_id, t.food_id)">
-                                    Annulla
-                                </button>
-
-                                <button v-if="b.book_status == 1" class="cancel-btn"
-                                    @click="ActionBtn('Cancel', index, b.book_id, t.food_id)">
-                                    Cancella
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+        <div v-if="tabFunzioni[0] == true" class="table-open">
+            <h2 @click="OpenGrid(0)"><i  class="fa-solid fa-utensils" style="padding-right: 2vh; color: #f38609;"></i>Ordini</h2>
+            <i @click="OpenGrid(0)" class="fa-solid fa-chevron-up"></i>
+            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+            <table class="project-list">
+                <tr>
+                    <td><h3>Ordini al Tavolo</h3></td>
+                    <td style="text-align: center;"><h3>Attivo</h3></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider round"></span></label></td>
+                </tr>
+                <tr>
+                    <td><hr style="width: 100%; margin: 10px 0px; border-width: 2px;"></td>
+                    <td><hr style="width: 100%; margin: 10px 0px; border-width: 2px;"></td>
+                    <td><hr style="width: 100%; margin: 10px 0px; border-width: 2px;"></td>
+                </tr>
+                <tr>
+                    <td><h3>Ordini al Tavolo</h3></td>
+                    <td style="text-align: center;"><h3>Attivo</h3></td>
+                    <td><label class="switch"><input type="checkbox" checked><span class="slider round"></span></label></td>
+                </tr>
             </table>
+        </div>
+        <div v-else class="table-close" @click="OpenGrid(0)">
+            <h2><i class="fa-solid fa-utensils" style="padding-right: 2vh; color: #f38609;"></i>Ordini</h2>
+            <i class="fa-solid fa-chevron-down"></i>
         </div>
     </div>
 </template>
 
 
 <script>
-import axios from "axios";
-import moment from 'moment';
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Prenotazioni',
 
     data() {
         return {
-            totqty: [],
-            allPenot: [],
-            showOrderDetails: false,
-            sendId: undefined,
-            interval: "",
-            showSerata: [],
-            showAction: [],
+            tabFunzioni: [false, false],
         }
     },
 
     created() {
-        if (this.allPenot.length == 0) {
-            if (!this.admin) {
-                this.$router.push("/login");
-            } else {
-                this.getAllPenot();
-            }
+        if (!this.admin) {
+            this.$router.push("/login");
         }
-    },
-
-    mounted: function () {
-        this.autoUpdate();
-    },
-
-    beforeUnmount() {
-        clearInterval(this.interval)
     },
 
     computed: {
         ...mapState(["admin"]),
-
-        filterPenot: function () {
-            return this.allPenot.filter((b) => b.book_status <= 2 && b.book_status >= 0);
-        },
     },
 
     methods: {
         ...mapMutations(["setAdmin"]),
 
-        async getAllPenot() {
-            this.totqty = (await axios.get('/prenotazione/sum')).data;
-            this.changeopengrid();
-        },
-
-        async changeopengrid(id, food_id) {
-            for (let l = 0; l < this.totqty.length; l++) {
-                this.showSerata.push(false)
-            }
-            switch (this.showSerata[id]) {
-                case true:
-                    this.showSerata[id] = false
-                    break;
-
-                case false:
-                    this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
-                    for (let i = 0; i < this.showSerata.length; i++) {
-                        if (id == i) {
-                            this.showSerata[i] = true
-                        } else {
-                            this.showSerata[i] = false
-                        }
-                    }
-                    break;
-            }
-
-        },
-
-        changestate(id) {
-            for (let i = 0; i < this.allPenot.length; i++) {
-                this.showAction.push(false)
-            }
-            switch (this.showAction[id]) {
-                case true:
-
-                    this.showAction[id] = false
-                    break;
-
-                case false:
-                    this.showAction[id] = true
-                    break;
-            }
-        },
-
-
-        sendBillId: function (id) {
-            this.sendId = id
-            this.showOrderDetails = !this.showOrderDetails;
-        },
-
-        closeView: function () {
-            this.showOrderDetails = !this.showOrderDetails;
-        },
-
-        formattime(data) {
-            const dataParsata = moment(data, 'YYYY/MM/DDTHH:mm');
-
-            // Formatta la data nel nuovo formato
-            const dataFormattata = dataParsata.format('DD/MM/YYYY');
-
-            return dataFormattata;
-        },
-
         handleLogout: function () {
             this.setAdmin("");
         },
 
-        async ActionBtn(type, index, book_id, food_id) {
-            switch (type) {
-                case "Confirm":
-                    var data = {
-                        id: book_id,
-                        action: 2
-                    }
-                    break;
-
-                case "Annulla":
-                    data = {
-                        id: book_id,
-                        action: 1
-                    }
-                    break;
-
-                case "Cancel":
-                    data = {
-                        id: book_id,
-                        action: 0
-                    }
-                    break;
+        OpenGrid(index) {
+            if (this.tabFunzioni[index] == true) {
+                this.tabFunzioni[index] = false
+            } else {
+                this.tabFunzioni[index] = true
             }
-
-            this.showAction[index] = false
-            await axios.put("/prenotazione/action", data)
-            this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
         },
-
-
-        autoUpdate: function () {
-            this.interval = setInterval(function () {
-                this.getAllPenot();
-            }.bind(this), 600000);
-        }
-
-    },
+    }
 }
 </script>
 
 <style scoped>
 .admin-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin-left: 20%;
-    background-color: #fff;
-    padding: 2rem 5%;
+    background-color: whitesmoke;
+    padding: 5rem 5%;
     font-size: 16px;
 }
 
@@ -248,87 +93,109 @@ export default {
     color: #27ae60;
 }
 
-.project-list>tbody>tr>td {
-    position: relative;
-    padding: 3px 2px;
+.project-list {
+    width: 100%;
+    text-align: left;
 }
 
-.table-responsive::-webkit-scrollbar {
-    width: 1rem;
-}
-.table-responsive::-webkit-scrollbar-track {
-    background: #fff;
-}
-.table-responsive::-webkit-scrollbar-thumb {
-    background: #f38609;
-    border-radius: 5rem;
-}
-
-.table-responsive {
-    margin-top: 4vh;
-}
-
-
-.action-btn,
-.annulla-btn,
-.cancel-btn {
-    color: white;
+.table-close {
+    width: 100%;
+    margin: 3vh 0vh;
+    padding: 12.5px 25px;
     text-align: center;
-    padding: 1vh;
-    border-radius: 5px;
-}
-
-.action-btn {
-    background-color: #27ae60;
-    margin-bottom: 0.5vh;
-}
-
-.annulla-btn {
-    background-color: #0da9ef;
-}
-
-.cancel-btn {
-    background-color: red;
-    margin-top: 0.5vh;
-}
-
-.annulla-btn:hover {
-    background-color: #27ae60;
-}
-
-
-.action-btn:hover,
-.cancel-btn:hover {
-    background-color: #0da9ef;
-}
-
-.drop-down-select {
-    position: absolute;
-    right: 0px;
-    z-index: 1;
     display: flex;
-    flex-direction: column;
-    background-color: rgb(255, 255, 255);
-    padding: 1vh 1vh;
-    text-align: center;
-    border: 2px outset black;
+    justify-content: space-between;
+    background-color: white;
+    border: 1px outset black;
     border-radius: 5px;
+}
 
+.table-open {
+    width: 100%;
+    margin: 3vh 0vh;
+    padding: 12.5px 25px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: white;
+    border: 1px outset black;
+    border-radius: 5px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 28px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 2.8px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 @media (max-width: 983px) {
     .admin-container {
-    margin: 0px;
-    margin-top: 70px;
-    background-color: #fff;
-    font-size: 16px;
-}
+        margin: 0px;
+        margin-top: 70px;
+        background-color: #fff;
+        font-size: 16px;
+    }
 
-.admin-container h1 {
-    font-family: 'Satisfy', cursive;
-    font-size: 1.2em;
-    color: #27ae60;
-}
+    .admin-container h1 {
+        font-family: 'Satisfy', cursive;
+        font-size: 1.2em;
+        color: #27ae60;
+    }
 
 }
 </style>

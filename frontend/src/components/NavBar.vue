@@ -107,10 +107,10 @@ export default {
 
                     var ordini = [sagra.data[0].flgTavoli,sagra.data[0].flgAsporto]
                     if (ordini[0] == 1) {
-                        ordini[0] = sagra.data[0].StrOrdini.substring(0,1) == "" ? 1 : sagra.data[0].StrOrdini.substring(0,1)
+                        ordini[0] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(0,1)
                     }
                     if (ordini[1] == 1) {
-                        ordini[1] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
+                        ordini[1] = sagra.data[0].StrOrdini.substring(2,3) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
                     }
                     sagra.data[0].flgInfo == 1 ? this.info = sagra.data[0].info : this.info = ''
                     sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
