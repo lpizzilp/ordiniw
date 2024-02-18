@@ -130,7 +130,7 @@ export default {
             }
         },
 
-        ChangeStatus(index, azione) {
+        async ChangeStatus(index, azione) {
             if (azione === true) {
                 this.status[index] = 'Abilitato'
             } else if (azione === false) {
@@ -144,8 +144,22 @@ export default {
                 type: replacestatus,
                 id: sessionStorage.getItem('AdminSagraId')
             }
+            await axios.put('/SagraComand', uniondata)
+            this.Makelog(index, azione)
+        },
 
-            axios.put('/SagraComand', uniondata)
+        async Makelog(index, azione) {
+            if (azione === true) {
+                azione = 'Abilitazione'
+            } else if (azione === false) {
+                azione = 'Disabilitazione'
+            }
+
+           let data = {
+                mode: 'warn',
+                arg: azione + ' toggle switch numero ' + (index + 1) + ' da parte di'+ sessionStorage.getItem('Admin')
+            }
+            await axios.post('/log', data)
         },
     }
 }

@@ -7,17 +7,17 @@
         </button>
 
         <ul class="table-element">
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
+            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Dashboard')" to="/admin/dashboard"><i
                         class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
+            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Prenotazioni')" to="/admin/prenotazioni"><i
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
+            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Ordini')" to="/admin/ordini"><i class="fa-solid fa-utensils"
                         style="padding-right: 2vh;"></i>Ordini</router-link></li>
         </ul>
 
 
         <div class="icons">
-            <router-link @click="setAdmin('')" to="/" class="link">
+            <router-link @click="setAdmin(''), Writelog('uscita')" to="/" class="link">
                 <i class="fa-solid fa-right-from-bracket">Logout</i>
             </router-link>
         </div>
@@ -25,13 +25,14 @@
     </div>
     <div class="navigation">
         <ul class="table-phone">
-            <li @click="SpaceNav('Dashboard')" class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
-                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
-            <li @click="SpaceNav('')" class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
+            <li @click="SpaceNav('Dashboard'), Writelog('Dashboard')" class="td-router"><router-link @click="scrollToTop()"
+                    to="/admin/dashboard"><i class="fa-solid fa-chart-line"
+                        style="padding-right: 2vh;"></i>Dashboard</router-link></li>
+            <li @click="SpaceNav(''), Writelog('Prenotazioni')" class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
-            <li @click="SpaceNav('')" class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
-                        style="padding-right: 2vh;"></i>Ordini</router-link></li>
-            <li class="td-router"><router-link @click="setAdmin('')" to="/"><i class="fa-solid fa-right-from-bracket"
+            <li @click="SpaceNav(''), Writelog('Ordini')" class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i
+                        class="fa-solid fa-utensils" style="padding-right: 2vh;"></i>Ordini</router-link></li>
+            <li class="td-router"><router-link @click="setAdmin(''), Writelog('uscita')" to="/"><i class="fa-solid fa-right-from-bracket"
                         style="padding-right: 2vh;"></i>Logout</router-link></li>
         </ul>
     </div>
@@ -58,6 +59,14 @@ export default {
 
         scrollToTop() {
             window.scrollTo(0, 0);
+        },
+
+      async  Writelog(pagina) {
+            let data = {
+                mode: 'info',
+                arg: pagina == 'uscita' ? 'Uscita di ' + sessionStorage.getItem('Admin') + '\n' : 'Accesso a ' + pagina + ' di ' +  sessionStorage.getItem('Admin')
+            }
+            await axios.post('/log', data)
         },
 
         async getName() {
