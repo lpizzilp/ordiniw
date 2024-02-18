@@ -87,11 +87,7 @@ export default {
     data() {
         return {
             tabFunzioni: [true],
-<<<<<<< HEAD
-            status: ['Abilitato', 'Abilitato', 'Abilitato',],
-=======
             status: [],
->>>>>>> Admin
         }
     },
 
