@@ -4,7 +4,8 @@ import {
     insertSagra,
     updateSagraCodaeInfoByID,
     getAllSagre,
-    updateContrOrdini
+    updateContrOrdini,
+    getContrOrdini
 } from "../models/CatalogoModel.js";
 
 
@@ -78,6 +79,17 @@ export const updateSagraCodaeInfo=(req,res)=>{
 export const updateControlOrdini=(req,res)=>{
     const data = req.body
     updateContrOrdini(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const GetControlOrdini=(req,res)=>{
+    const id = req.params.id;
+    getContrOrdini(id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
