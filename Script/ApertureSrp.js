@@ -1,10 +1,15 @@
-// lanciare con node AppertureSrp.js <parametro Tavolo> <parametro Asporto> <idSagra>
+// lanciare con node AppertureSrp.js <idSagra> <parametro Tavolo> <parametro Asporto> 
 const axios = require('axios');
 var unionParam = {
-  type: process.argv[2] + process.argv[3],
-  id: process.argv[4]
+  type: process.argv[3] + process.argv[4],
+  id: process.argv[2]
 }
 
+if ((unionParam.id === undefined) || (unionParam.id ===  "?")) {
+  console.log ("Lanciare con node ApertureSrp.js <idSagra> <parametro Tavolo>  <parametro Asporto> (es: 001 1 1 ")
+  process.exit(1);
+
+}
 axios.get('http://localhost:8081/api/sagra/controlli/' + unionParam.id)
   .then(response => {
 
