@@ -262,7 +262,7 @@ export default {
             if (food === '') {
                 return '';
             } else {
-               if (this.wifiquality == -1 || this.wifispeed < '0.25') {
+               if (this.wifiquality == -1 || this.wifispeed < '0.25' && this.wifispeed != null) {
                     return ''
                 } else {
                     try {

@@ -36,6 +36,7 @@
                                 @click="changeopengrid(id, t.food_id)" class="fa-solid fa-chevron-up"></i></td>
                     </tr>
                     <tr v-if="showSerata[id] == true">
+                        <th>Id</th>
                         <th>Serata</th>
                         <th>Pezzi</th>
                         <th>nominativo</th>
@@ -45,6 +46,7 @@
                         <th>Stato</th>
                     </tr>
                     <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id">
+                        <td v-if="showSerata[id] == true"  style="width: 1%;">{{ b.book_id }}</td>
                         <td v-if="showSerata[id] == true">{{ b.food_name }}</td>
                         <td v-if="showSerata[id] == true">{{ b.item_qty }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_nominativo }}</td>
@@ -248,11 +250,12 @@ export default {
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
 
-            data[0] = ['Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Note']
+            data[0] = ['Id Prenotazione','Codice', 'Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Validità', 'Note', 'Prezzo Tot']
             plus = plus + 1
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
+                console.log(this.allPenot)
                 for (let l = 0; l < this.allPenot.length; l++) {
                     switch (this.allPenot[l].book_status) {
                         case 0:
@@ -269,7 +272,7 @@ export default {
                             book_status = 'Cancellata'
                             break;
                     }
-                    data[plus] = [this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.allPenot[l].book_note]
+                    data[plus] = [ this.allPenot[l].book_id, this.allPenot[l].food_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.formattime(this.allPenot[l].DataFinePRT), this.allPenot[l].book_note, this.allPenot[l].book_total]
                     plus = plus + 1
                 }
             }
@@ -286,14 +289,18 @@ export default {
             const worksheet = workbook.addWorksheet('Dati');
 
             // Imposta la larghezza delle colonne
-            worksheet.getColumn('A').width = 28;
+            worksheet.getColumn('A').width = 17;
             worksheet.getColumn('B').width = 10;
-            worksheet.getColumn('C').width = 20;
-            worksheet.getColumn('D').width = 20;
-            worksheet.getColumn('E').width = 10;
+            worksheet.getColumn('C').width = 25;
+            worksheet.getColumn('D').width = 10;
+            worksheet.getColumn('E').width = 20;
             worksheet.getColumn('F').width = 20;
-            worksheet.getColumn('G').width = 15;
+            worksheet.getColumn('G').width = 10;
             worksheet.getColumn('H').width = 20;
+            worksheet.getColumn('I').width = 17;
+            worksheet.getColumn('J').width = 17;
+            worksheet.getColumn('K').width = 20;
+            worksheet.getColumn('L').width = 15;
 
             const headerStyle = {
                 font: { size: 13 },

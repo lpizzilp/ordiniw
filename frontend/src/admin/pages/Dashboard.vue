@@ -85,7 +85,7 @@ export default {
 
     data() {
         return {
-            tabFunzioni: [false, false],
+            tabFunzioni: [true],
             status: ['Abilitato', 'Abilitato', 'Abilitato',],
         }
     },
