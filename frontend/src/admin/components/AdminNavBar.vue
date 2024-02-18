@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <router-link @click="scrollToTop()" to="admin/dashboard" class="testa"><i class="fa-solid fa-user-tie"
+        <router-link @click="scrollToTop()" to="/admin/prenotazioni" class="testa"><i class="fa-solid fa-user-tie"
                 style="padding-right: 2vh;"></i>Ciao {{ nav_name }}!
         </router-link>
         <button class="btn"><i class="fas fa-bars" @click="showNav()"></i>
@@ -25,12 +25,12 @@
     </div>
     <div class="navigation">
         <ul class="table-phone">
-            <!-- <li class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
-                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>-->
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
-                        style="padding-right: 2vh;"></i>Ordini</router-link></li>
-            <li class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
+            <li @click="SpaceNav('')" class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
+            <li @click="SpaceNav('')" class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i class="fa-solid fa-utensils"
+                        style="padding-right: 2vh;"></i>Ordini</router-link></li>
+            <li @click="SpaceNav('Dashboard')" class="td-router"><router-link @click="scrollToTop()" to="/admin/dashboard"><i
+                        class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
             <li class="td-router"><router-link @click="setAdmin('')" to="/"><i class="fa-solid fa-right-from-bracket"
                         style="padding-right: 2vh;"></i>Logout</router-link></li>
         </ul>
@@ -72,6 +72,17 @@ export default {
                 nav[0].style.display = 'block'
             } else {
                 nav[0].style.display = 'none'
+            }
+
+        },
+
+        SpaceNav(type) {
+            let nav = document.getElementsByClassName('navigation')
+            console.log(nav[0].style.margintop)
+            if (type == 'Dashboard') {
+                nav[0].style.marginTop = '70px'
+            } else {
+                nav[0].style.marginTop = '0px'
             }
 
         },
@@ -190,7 +201,7 @@ export default {
 
     .navigation {
         display: none;
-        position: fixed;
+        position: absolute;
         z-index: 99;
         width: 100%;
         background-color: #ffffff;

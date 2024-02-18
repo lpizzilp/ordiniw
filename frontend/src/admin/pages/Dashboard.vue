@@ -79,6 +79,7 @@
 
 
 <script>
+import axios from "axios";
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Prenotazioni',
@@ -86,13 +87,19 @@ export default {
     data() {
         return {
             tabFunzioni: [true],
+<<<<<<< HEAD
             status: ['Abilitato', 'Abilitato', 'Abilitato',],
+=======
+            status: [],
+>>>>>>> Admin
         }
     },
 
     created() {
         if (!this.admin) {
             this.$router.push("/login");
+        } else {
+            this.GetSwitch()
         }
     },
 
@@ -102,6 +109,18 @@ export default {
 
     methods: {
         ...mapMutations(["setAdmin"]),
+
+        async GetSwitch() {
+            console.log(sessionStorage.getItem('AdminSagraId'))
+            let switchdata = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
+            console.log(switchdata.data.length)
+            if (switchdata.data.length > 0) {
+                this.status[0] = switchdata.data[0].StrOrdini.substring(0, 1) == 1 ? 'Abilitato' : 'Disabilitato'
+                this.status[1] = switchdata.data[0].StrOrdini.substring(1, 2) == 1 ? 'Abilitato' : 'Disabilitato'
+                this.status[2] = switchdata.data[0].StrOrdini.substring(2, 3) == 1 ? 'Abilitato' : 'Disabilitato'
+            }
+            console.log(this.status)
+        },
 
         handleLogout: function () {
             this.setAdmin("");
@@ -121,6 +140,16 @@ export default {
             } else if (azione === false) {
                 this.status[index] = 'Disabilitato'
             }
+
+            let unionstatus = this.status.join('')
+            let replacestatus = unionstatus.replace(/Abilitato/g, '1')
+            replacestatus = replacestatus.replace(/Disabilitato/g, '0')
+            let uniondata = {
+                type: replacestatus,
+                id: sessionStorage.getItem('AdminSagraId')
+            }
+
+            axios.put('/SagraComand', uniondata)
         },
     }
 }
@@ -239,7 +268,7 @@ input:checked+.slider:before {
     .admin-container {
         margin: 0px;
         margin-top: 70px;
-        background-color: #fff;
+        background-color: whitesmoke;
         font-size: 16px;
     }
 
@@ -249,4 +278,66 @@ input:checked+.slider:before {
         color: #27ae60;
     }
 
-}</style>
+    .project-list td {
+        padding-left: 3px;
+        text-align: left;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 0px;
+        bottom: 1.8px;
+        background-color: white;
+    }
+
+    input:checked+.slider {
+        background-color: #2196F3;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+}
+</style>
