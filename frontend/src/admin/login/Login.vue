@@ -86,7 +86,7 @@ export default {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
                     sessionStorage.setItem('AdminSagraId', (await axios.get('/users/' + this.loginObj.email)).data.id_sagra);
-                    if (sessionStorage.getItem('AdminSagraId') != null || undefined || ""){
+                    if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != ""){
                         this.matchUser = true
                     }
                 } else {
