@@ -123,7 +123,6 @@ export default {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
                 this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
                 sessionStorage.setItem('startprt', this.Btn[7])
-                console.log(this.Btn[7])
                 this.Display[0] = this.Btn[4].split('')
                 this.Display[1] = this.Btn[6]
             }

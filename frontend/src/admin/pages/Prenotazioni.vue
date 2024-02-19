@@ -141,7 +141,6 @@ export default {
 
         async getAllPenot() {
             this.totqty = (await axios.get('/prenotazione/sum')).data;
-            console.log(this.totqty)
             this.changeopengrid();
         },
 
@@ -156,7 +155,6 @@ export default {
 
                 case false:
                     this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
-                    console.log(this.allPenot)
                     for (let i = 0; i < this.showSerata.length; i++) {
                         if (id == i) {
                             this.showSerata[i] = true
@@ -255,7 +253,6 @@ export default {
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
                 this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
-                console.log(this.allPenot)
                 for (let l = 0; l < this.allPenot.length; l++) {
                     switch (this.allPenot[l].book_status) {
                         case 0:

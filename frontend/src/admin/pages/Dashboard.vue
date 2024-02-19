@@ -17,9 +17,9 @@
                     <td style="text-align: center;">
                         <h3>{{ status[0] }}</h3>
                     </td>
-                    <td v-if="status[0] === 'Abilitato'"><label class="switch" @click="ChangeStatus(0, false)"><input
+                    <td v-if="status[0] === 'Abilitato'"><label class="switch" @change="ChangeStatus(0, false)"><input
                                 type="checkbox" checked><span class="slider round"></span></label></td>
-                    <td v-else><label class="switch" @click="ChangeStatus(0, true)"><input type="checkbox"><span
+                    <td v-else><label class="switch" @change="ChangeStatus(0, true)"><input type="checkbox"><span
                                 class="slider round"></span></label></td>
                 </tr>
                 <tr>
@@ -40,9 +40,9 @@
                     <td style="text-align: center;">
                         <h3>{{ status[1] }}</h3>
                     </td>
-                    <td v-if="status[1] === 'Abilitato'"><label class="switch" @click="ChangeStatus(1, false)"><input
+                    <td v-if="status[1] === 'Abilitato'"><label class="switch" @change="ChangeStatus(1, false)"><input
                                 type="checkbox" checked><span class="slider round"></span></label></td>
-                    <td v-else><label class="switch" @click="ChangeStatus(1, true)"><input type="checkbox"><span
+                    <td v-else><label class="switch" @change="ChangeStatus(1, true)"><input type="checkbox"><span
                                 class="slider round"></span></label></td>
                 </tr>
                 <tr>
@@ -63,9 +63,9 @@
                     <td style="text-align: center;">
                         <h3>{{ status[2] }}</h3>
                     </td>
-                    <td v-if="status[2] === 'Abilitato'"><label class="switch" @click="ChangeStatus(2, false)"><input
+                    <td v-if="status[2] === 'Abilitato'"><label class="switch" @change="ChangeStatus(2, false)"><input
                                 type="checkbox" checked><span class="slider round"></span></label></td>
-                    <td v-else><label class="switch" @click="ChangeStatus(2, true)"><input type="checkbox"><span
+                    <td v-else><label class="switch" @change="ChangeStatus(2, true)"><input type="checkbox"><span
                                 class="slider round"></span></label></td>
                 </tr>
             </table>
@@ -107,15 +107,12 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async GetSwitch() {
-            console.log(sessionStorage.getItem('AdminSagraId'))
             let switchdata = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
-            console.log(switchdata.data.length)
             if (switchdata.data.length > 0) {
                 this.status[0] = switchdata.data[0].StrOrdini.substring(0, 1) == 1 ? 'Abilitato' : 'Disabilitato'
                 this.status[1] = switchdata.data[0].StrOrdini.substring(1, 2) == 1 ? 'Abilitato' : 'Disabilitato'
                 this.status[2] = switchdata.data[0].StrOrdini.substring(2, 3) == 1 ? 'Abilitato' : 'Disabilitato'
             }
-            console.log(this.status)
         },
 
         handleLogout: function () {

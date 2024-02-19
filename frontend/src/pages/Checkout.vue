@@ -300,9 +300,7 @@ export default {
                     e.preventDefault();
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
-                        console.log(sessionStorage.getItem('Bill') + ' bill')
                         if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') ==  "" || sessionStorage.getItem('Bill') == undefined) {
-                            console.log(sessionStorage.getItem('startprt') + 'ciao')
                             bookId = sessionStorage.getItem('startprt');
                         } else {
                             bookId = sessionStorage.getItem('Bill')

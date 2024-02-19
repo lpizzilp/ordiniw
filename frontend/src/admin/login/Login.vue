@@ -78,7 +78,6 @@ export default {
 
         async validateuser() {
             let Adminuser = await axios.get('/users/' + this.loginObj.email);
-            console.log(Adminuser)
 
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
