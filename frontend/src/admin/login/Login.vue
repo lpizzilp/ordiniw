@@ -78,6 +78,7 @@ export default {
 
         async validateuser() {
             let Adminuser = await axios.get('/users/' + this.loginObj.email);
+            console.log(Adminuser)
 
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
@@ -86,8 +87,13 @@ export default {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
                     sessionStorage.setItem('AdminSagraId', (await axios.get('/users/' + this.loginObj.email)).data.id_sagra);
-                    if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != ""){
+                    if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != "") {
                         this.matchUser = true
+                        let data = {
+                            mode: 'info',
+                            arg: 'Accesso pannello di controllo di ' + Adminuser.data.user_name
+                        }
+                        axios.post('/log', data)
                     }
                 } else {
                     this.matchUser = false

@@ -90,6 +90,7 @@ import {
     cancelBookstatus,
     cancelBookdetails
 } from "../controllers/prenotazioni.js";
+import { Infolog } from "../log/loggerModel.js";
 
 // init express router
 const router = express.Router();
@@ -226,6 +227,8 @@ router.post("/api/importfood", importAnagrafica);
 router.post("/api/importesauriti", importEsauriti);
 router.delete("/api/deleteesauriti", deleteAllEsauriti);
 
+////////////////////////// Log ////////////////////////////////
+router.post("/api/log", Infolog)
 
 // export default router
 export default router;
