@@ -1,4 +1,4 @@
-import logger from "./logger.js";
+import logger from "../config/logger.js";
 
 
 export const Infolog = (req, res) => {
