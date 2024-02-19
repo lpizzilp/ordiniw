@@ -5,13 +5,14 @@
             <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>
             </h3>
-            <button v-if="BtnAttivi[0] == 1" class="btn" @click="DataParent('W')" style="width: 100%;">Tavolo</button>
-            <button v-if="BtnAttivi[1] == 1" class="btn" @click="DataParent('Y')" style="width: 100%;">Asporto</button>
+            <button v-if="BtnAttivi[0] == 1" class="btn" @click="DataParent('W')">Tavolo</button>
+            <button v-if="BtnAttivi[1] == 1" class="btn" @click="DataParent('Y')" style="margin-top: 3vh;">Asporto</button>
+            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
         </div>
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
             <h3>Il servizio ordini online non è attivo</h3><br>
-            <button @click="DataParent('')" class="btn" style="width: 100%;">Torna alla Home</button>
+            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
         </div>
     </div>
 </template>
@@ -82,8 +83,7 @@ export default {
 .quick-view .quick-view-inner .btn {
     font-size: 18px;
     margin-top: 5vh;
-    margin-bottom: 10px;
-    width: 45%;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
