@@ -900,6 +900,20 @@ hr {
         margin: 0%;
         margin-top: 5vh;
     }
+@media (max-width: 361px) {
+    .menu-section .box-container {
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1rem;
+    }
+    .menu-section .box-container .box .content h3 {
+        height: 4rem;
+        font-size: small !important;
+    }
+    .menu-section .box-container .box .content .price {
+        font-size: 1.8rem;
+     }
+
+}
 
 }
 </style>
