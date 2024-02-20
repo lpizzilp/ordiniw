@@ -92,6 +92,7 @@ export default {
                             mode: 'info',
                             arg: 'Accesso pannello di controllo di ' + Adminuser.data.user_name
                         }
+                        sessionStorage.setItem("User", Adminuser.data.user_name)
                         axios.post('/log', data)
                     }
                 } else {

@@ -102,6 +102,7 @@ export default {
             BtnUpData: [false, 'Attesa aggiornamento'],
             timer: 30,
             togleTab: false,
+            errore: false
         };
     },
 
@@ -171,7 +172,18 @@ export default {
         // Punto dove inserisce user
         async handleSubmit(type) {
             let div = document.getElementsByClassName('tabelloni')
-            var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+            try {
+                var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+                let response = sagra.request.response
+                if (response.includes("{\"code\"")) {
+                    console.log(sagra.request.response)
+                    console.log('err')
+                    this.errore = true
+                }
+            } catch (error) {
+                console.log('err')
+                this.errore = true
+            }
             switch (type) {
                 case 'TAB':
                     if (!this.togleTab) {
@@ -206,12 +218,12 @@ export default {
 
                 default:
                     div[0].style.display = 'none'
-                    var ordini = [sagra.data[0].flgTavoli,sagra.data[0].flgAsporto]
+                    var ordini = [sagra.data[0].flgTavoli, sagra.data[0].flgAsporto]
                     if (ordini[0] == 1) {
-                        this.Btn[0] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
+                        this.Btn[0] = sagra.data[0].StrOrdini.substring(1, 2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1, 2)
                     }
                     if (ordini[1] == 1) {
-                        this.Btn[1] = sagra.data[0].StrOrdini.substring(2,3) == "" ? 1 : sagra.data[0].StrOrdini.substring(2,3)
+                        this.Btn[1] = sagra.data[0].StrOrdini.substring(2, 3) == "" ? 1 : sagra.data[0].StrOrdini.substring(2, 3)
                     }
                     this.Category = type
                     this.showQuickVue = true

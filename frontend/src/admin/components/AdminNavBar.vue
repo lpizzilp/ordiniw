@@ -66,7 +66,7 @@ export default {
       async  Writelog(pagina) {
             let data = {
                 mode: 'info',
-                arg: pagina == 'uscita' ? 'Uscita di ' + sessionStorage.getItem('Admin') + '\n' : 'Accesso a ' + pagina + ' di ' +  sessionStorage.getItem('Admin')
+                arg: pagina == 'uscita' ? 'Uscita di ' + sessionStorage.getItem('User') + '\n' : 'Accesso a ' + pagina + ' di ' +  sessionStorage.getItem('User')
             }
             await axios.post('/log', data)
         },
