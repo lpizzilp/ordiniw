@@ -129,7 +129,6 @@ export default {
                 ord_data: this.Dataform.data,
                 ord_item: this.Item,
             }
-            console.log(data.user_data)
 
             await axios.post('/mail/', data)
                 .then(response => {

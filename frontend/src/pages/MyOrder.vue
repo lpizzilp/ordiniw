@@ -45,7 +45,6 @@ export default {
             sessionStorage.setItem('TipoOrdine', parametriObj.type)
             sessionStorage.setItem('Bill', parametriObj.id)
             if (parametriObj.filtroOrd == 'PRE') {
-                console.log ('passo')
                 sessionStorage.setItem('filtro', parametriObj.filtroOrd)
                 let bookitem = await axios.get('/prenotazione/' + parametriObj.id)
                 for (let i = 0; i < bookitem.data.length; i++) {

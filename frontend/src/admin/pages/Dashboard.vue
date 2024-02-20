@@ -17,10 +17,7 @@
                     <td style="text-align: center;">
                         <h3>{{ status[0] }}</h3>
                     </td>
-                    <td v-if="status[0] === 'Abilitato'"><label class="switch" @click="ChangeStatus(0, false)"><input
-                                type="checkbox" checked><span class="slider round"></span></label></td>
-                    <td v-else><label class="switch" @click="ChangeStatus(0, true)"><input type="checkbox"><span
-                                class="slider round"></span></label></td>
+                    <td><VueToggles :value="toggle[0]" @click="ChangeStatus(0)" :height="28" :width="56" checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" /></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 0px;">
@@ -40,10 +37,7 @@
                     <td style="text-align: center;">
                         <h3>{{ status[1] }}</h3>
                     </td>
-                    <td v-if="status[1] === 'Abilitato'"><label class="switch" @click="ChangeStatus(1, false)"><input
-                                type="checkbox" checked><span class="slider round"></span></label></td>
-                    <td v-else><label class="switch" @click="ChangeStatus(1, true)"><input type="checkbox"><span
-                                class="slider round"></span></label></td>
+                    <td><VueToggles :value="toggle[1]" @click="ChangeStatus(1)" :height="28" :width="56" checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" /></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 0px;">
@@ -63,10 +57,7 @@
                     <td style="text-align: center;">
                         <h3>{{ status[2] }}</h3>
                     </td>
-                    <td v-if="status[2] === 'Abilitato'"><label class="switch" @click="ChangeStatus(2, false)"><input
-                                type="checkbox" checked><span class="slider round"></span></label></td>
-                    <td v-else><label class="switch" @click="ChangeStatus(2, true)"><input type="checkbox"><span
-                                class="slider round"></span></label></td>
+                    <td><VueToggles :value="toggle[2]" @click="ChangeStatus(2)" :height="28" :width="56" checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" /></td>
                 </tr>
             </table>
         </div>
@@ -80,6 +71,7 @@
 
 <script>
 import axios from "axios";
+import { VueToggles } from "vue-toggles";
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Prenotazioni',
@@ -88,6 +80,7 @@ export default {
         return {
             tabFunzioni: [true],
             status: [],
+            toggle: [],
         }
     },
 
@@ -107,15 +100,15 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async GetSwitch() {
-            console.log(sessionStorage.getItem('AdminSagraId'))
             let switchdata = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
-            console.log(switchdata.data.length)
             if (switchdata.data.length > 0) {
                 this.status[0] = switchdata.data[0].StrOrdini.substring(0, 1) == 1 ? 'Abilitato' : 'Disabilitato'
                 this.status[1] = switchdata.data[0].StrOrdini.substring(1, 2) == 1 ? 'Abilitato' : 'Disabilitato'
                 this.status[2] = switchdata.data[0].StrOrdini.substring(2, 3) == 1 ? 'Abilitato' : 'Disabilitato'
+                this.toggle[0] = switchdata.data[0].StrOrdini.substring(0, 1) == 1 ? true : false
+                this.toggle[1] = switchdata.data[0].StrOrdini.substring(1, 2) == 1 ? true : false
+                this.toggle[2] = switchdata.data[0].StrOrdini.substring(2, 3) == 1 ? true : false
             }
-            console.log(this.status)
         },
 
         handleLogout: function () {
@@ -130,11 +123,13 @@ export default {
             }
         },
 
-        async ChangeStatus(index, azione) {
-            if (azione === true) {
-                this.status[index] = 'Abilitato'
-            } else if (azione === false) {
+        async ChangeStatus(index) {
+            if (this.toggle[index] === true) {
                 this.status[index] = 'Disabilitato'
+                this.toggle[index] = false
+            } else if (this.toggle[index] === false) {
+                this.status[index] = 'Abilitato'
+                this.toggle[index] = true
             }
 
             let unionstatus = this.status.join('')
@@ -145,23 +140,25 @@ export default {
                 id: sessionStorage.getItem('AdminSagraId')
             }
             await axios.put('/SagraComand', uniondata)
-            this.Makelog(index, azione)
+            this.Makelog(index)
         },
 
-        async Makelog(index, azione) {
-            if (azione === true) {
-                azione = 'Abilitazione'
-            } else if (azione === false) {
-                azione = 'Disabilitazione'
+        async Makelog(index) {
+            let arg = ""
+            if (this.toggle[index] === true) {
+                arg = 'Disabilitazione'
+            } else if (this.toggle[index] === false) {
+                arg = 'Abbilitazione'
             }
 
            let data = {
                 mode: 'warn',
-                arg: azione + ' toggle switch numero ' + (index + 1) + ' da parte di'+ sessionStorage.getItem('Admin')
+                arg: arg + ' toggle switch numero ' + (index + 1) + ' da parte di '+ sessionStorage.getItem('Admin')
             }
             await axios.post('/log', data)
         },
-    }
+    },
+    components: { VueToggles }
 }
 </script>
 
@@ -218,62 +215,6 @@ export default {
     border-radius: 5px;
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 54px;
-    height: 28px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 3px;
-    bottom: 2.8px;
-    background-color: white;
-}
-
-input:checked+.slider {
-    background-color: #2196F3;
-}
-
-input:focus+.slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked+.slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
 @media (max-width: 983px) {
     .admin-container {
         margin: 0px;
@@ -291,62 +232,6 @@ input:checked+.slider:before {
     .project-list td {
         padding-left: 3px;
         text-align: left;
-    }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 44px;
-        height: 20px;
-    }
-
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 0px;
-        bottom: 1.8px;
-        background-color: white;
-    }
-
-    input:checked+.slider {
-        background-color: #2196F3;
-    }
-
-    input:focus+.slider {
-        box-shadow: 0 0 1px #2196F3;
-    }
-
-    input:checked+.slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 34px;
-    }
-
-    .slider.round:before {
-        border-radius: 50%;
     }
 
 }

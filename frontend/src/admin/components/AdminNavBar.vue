@@ -89,7 +89,6 @@ export default {
 
         SpaceNav(type) {
             let nav = document.getElementsByClassName('navigation')
-            console.log(nav[0].style.margintop)
             if (type == 'Dashboard') {
                 nav[0].style.marginTop = '70px'
             } else {

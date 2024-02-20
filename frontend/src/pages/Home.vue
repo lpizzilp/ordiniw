@@ -123,7 +123,6 @@ export default {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("-")
                 this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
                 sessionStorage.setItem('startprt', this.Btn[7])
-                console.log(this.Btn[7])
                 this.Display[0] = this.Btn[4].split('')
                 this.Display[1] = this.Btn[6]
             }
@@ -209,10 +208,10 @@ export default {
                     div[0].style.display = 'none'
                     var ordini = [sagra.data[0].flgTavoli,sagra.data[0].flgAsporto]
                     if (ordini[0] == 1) {
-                        this.Btn[0] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(0,1)
+                        this.Btn[0] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
                     }
                     if (ordini[1] == 1) {
-                        this.Btn[1] = sagra.data[0].StrOrdini.substring(2,3) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
+                        this.Btn[1] = sagra.data[0].StrOrdini.substring(2,3) == "" ? 1 : sagra.data[0].StrOrdini.substring(2,3)
                     }
                     this.Category = type
                     this.showQuickVue = true
