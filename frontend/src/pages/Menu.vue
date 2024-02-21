@@ -735,10 +735,12 @@ hr {
     flex: 33%;
     padding-left: 2%;
     padding-right: 2%;
+    touch-action: manipulation;
 }
 
 .menu-section .box-container .box .content .add-to-cart .btn:hover {
     background-color: #27ae60;
+    touch-action: manipulation;
 }
 
 .menu-section .box-container .box .content .add-to-cart h4 {
