@@ -29,12 +29,14 @@
             </form>
         </div>
         <quick-view-login v-if="showQuickVue"></quick-view-login>
+        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
     </div>
 </template>
 
 
 <script>
 import axios from "axios";
+import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import QuickViewLogin from "@/admin/components/QuickViewLogin.vue"
 import { mapMutations } from "vuex";
 export default {
@@ -46,6 +48,7 @@ export default {
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
+            Quickerrore: false
         }
     },
 
@@ -78,6 +81,11 @@ export default {
 
         async validateuser() {
             let Adminuser = await axios.get('/users/' + this.loginObj.email);
+            let response = Adminuser.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+                this.Makelog(response);
+            }
 
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
@@ -102,6 +110,14 @@ export default {
             } else {
                 this.matchUser = undefined
             }
+        },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
         },
 
         async handleSubmit(e) {
@@ -137,7 +153,7 @@ export default {
 
     },
 
-    components: { QuickViewLogin }
+    components: { QuickViewLogin, QuickViewErrore }
 
 }
 </script>

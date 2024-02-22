@@ -77,11 +77,13 @@
         </div>
         <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="Btn">
         </QuickViewHome>
+        <QuickViewErrore v-if="errore"></QuickViewErrore>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
 export default {
@@ -172,18 +174,12 @@ export default {
         // Punto dove inserisce user
         async handleSubmit(type) {
             let div = document.getElementsByClassName('tabelloni')
-            try {
                 var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
                 let response = sagra.request.response
                 if (response.includes("{\"code\"")) {
-                    console.log(sagra.request.response)
-                    console.log('err')
                     this.errore = true
+                    this.Makelog(response);
                 }
-            } catch (error) {
-                console.log('err')
-                this.errore = true
-            }
             switch (type) {
                 case 'TAB':
                     if (!this.togleTab) {
@@ -249,8 +245,16 @@ export default {
                 this.BtnUpData[1] = 'Aggiorna'
             }, 30000);
         },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
-    components: { QuickViewHome, sevenSegmentDisplay }
+    components: { QuickViewHome, sevenSegmentDisplay, QuickViewErrore }
 };
 </script>
 

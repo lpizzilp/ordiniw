@@ -85,7 +85,7 @@ export default {
 
         handleHamburger() {
             let mq = window.matchMedia("(max-width: 768px)");
-            if (router.currentRoute.value.path == '/'  && mq.matches || router.currentRoute.value.path == '/login' && mq.matches) {
+            if (router.currentRoute.value.path == '/' && mq.matches || router.currentRoute.value.path == '/login' && mq.matches) {
                 this.showHamburger = true
             } else {
                 this.showHamburger = false
@@ -95,6 +95,10 @@ export default {
         async getsagra() {
             if (!sessionStorage.getItem('Siglanav')) {
                 var sagra = await axios.get('/sagra/' + parametriObj.id)
+                let response = sagra.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                }
                 //await this.sleep(1000)  
                 if (sagra.data.length == 0) {
                     sessionStorage.setItem('SagraBottoni', 0)
@@ -105,20 +109,20 @@ export default {
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
 
-                    var ordini = [sagra.data[0].flgTavoli,sagra.data[0].flgAsporto,sagra.data[0].flgPrenotazioni]
+                    var ordini = [sagra.data[0].flgTavoli, sagra.data[0].flgAsporto, sagra.data[0].flgPrenotazioni]
                     if (ordini[0] == 1) {
-                        ordini[0] = sagra.data[0].StrOrdini.substring(1,2) == "" ? 1 : sagra.data[0].StrOrdini.substring(0,1)
+                        ordini[0] = sagra.data[0].StrOrdini.substring(1, 2) == "" ? 1 : sagra.data[0].StrOrdini.substring(0, 1)
                     }
                     if (ordini[1] == 1) {
-                        ordini[1] = sagra.data[0].StrOrdini.substring(2,3) == "" ? 1 : sagra.data[0].StrOrdini.substring(1,2)
+                        ordini[1] = sagra.data[0].StrOrdini.substring(2, 3) == "" ? 1 : sagra.data[0].StrOrdini.substring(1, 2)
                     }
                     if (ordini[2] == 1) {
-                        ordini[2] = sagra.data[0].StrOrdini.substring(3,4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3,4)
+                        ordini[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
                     }
                     sagra.data[0].flgInfo == 1 ? this.info = sagra.data[0].info : this.info = ''
                     sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
-                    sagra.data[0].linkSito == null? this.sito = 0 : this.sito = sagra.data[0].linkSito
-                    
+                    sagra.data[0].linkSito == null ? this.sito = 0 : this.sito = sagra.data[0].linkSito
+
                     const flgdata = ordini[0] + '-' + ordini[1] + '-' + ordini[2] + '-' + sagra.data[0].flgEliminacode + '-' + this.numcoda + '-' + sagra.data[0].flgInfo + '-' + this.info + '-' + sagra.data[0].nstartprt + '-' + this.sito
                     sessionStorage.setItem('SagraBottoni', flgdata)
                     if (history.replaceState) {
@@ -150,6 +154,14 @@ export default {
             navbar.classList.remove('active');
             /* let log = document.querySelector('.drop-down-select');
              log.classList.remove('active');*/
+        },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
         },
     }
 }

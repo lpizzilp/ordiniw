@@ -110,12 +110,14 @@
         </div>
 
         <QuickViewCheckout v-if="showQuickView" @childEvent="Quickshow"></QuickViewCheckout>
+        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
     </div>
 </template>
 
 <script>
 import axios from "axios";
 import QuickViewCheckout from "@/components/QuickViewCheckout.vue";
+import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import { mapState } from "vuex";
 export default {
     name: "Checkout",
@@ -127,7 +129,8 @@ export default {
             itemQuantity: [],
             showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
-            type: sessionStorage.getItem('filtro') == 'PRE' ? sessionStorage.getItem('filtro') : sessionStorage.getItem('TipoOrdine')
+            type: sessionStorage.getItem('filtro') == 'PRE' ? sessionStorage.getItem('filtro') : sessionStorage.getItem('TipoOrdine'),
+            Quickerrore: false
         };
     },
     created() {
@@ -182,10 +185,16 @@ export default {
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
                 let existItem = await axios.get("/cartItem/" + sessionStorage.getItem('Username'));
+                let response = existItem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                } else {
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
                 });
+            }
             }
         },
 
@@ -321,7 +330,7 @@ export default {
                         book_delivery: parseFloat(this.calculateSummaryPrice()[2]),
                         book_total: parseFloat(this.calculateSummaryPrice()[3]),
                         book_paid: "false",
-                        book_status: 1,
+                        book_status: 0,
                         book_tipocassa: sessionStorage.getItem('filtro'),
                         book_nominativo: this.checkoutObj.Nominativo,
                         book_phone: this.checkoutObj.Telefono,
@@ -383,10 +392,19 @@ export default {
             }
 
         },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
 
     components: {
-        QuickViewCheckout
+        QuickViewCheckout,
+        QuickViewErrore
     }
 };
 </script>

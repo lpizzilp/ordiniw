@@ -8,7 +8,7 @@
         <div class="box-container">
 
             <div class="box">
-                <h4>Powered by Esagra</h4>
+                <h4>Powered by Esagra <span style="font-size: 1rem;">Ver 1.0.0</span></h4>
             </div>
 
             <div class="box">

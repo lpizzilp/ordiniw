@@ -103,11 +103,13 @@
             <i class="fa-solid fa-chevron-down"></i>
         </div>
     </div>
+    <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
 </template>
 
 
 <script>
 import axios from "axios";
+import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import { VueToggles } from "vue-toggles";
 import { mapState, mapMutations } from "vuex";
 export default {
@@ -118,6 +120,7 @@ export default {
             tabFunzioni: [true, true],
             status: [],
             toggle: [],
+            Quickerrore: false,
         }
     },
 
@@ -138,11 +141,16 @@ export default {
 
         async GetSwitch() {
             let switchdata = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
-            if (switchdata.data.length > 0) {
-                let switchsplit = switchdata.data[0].StrOrdini.split('')
-                for (let i = 0; i < switchsplit.length; i++) {
-                    this.status[i] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
-                    this.toggle[i] = switchsplit[i] == 0 ? false : true
+            let response = switchdata.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+            } else {
+                if (switchdata.data.length > 0) {
+                    let switchsplit = switchdata.data[0].StrOrdini.split('')
+                    for (let i = 0; i < switchsplit.length; i++) {
+                        this.status[i] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
+                        this.toggle[i] = switchsplit[i] == 0 ? false : true
+                    }
                 }
             }
         },
@@ -194,7 +202,7 @@ export default {
             await axios.post('/log', data)
         },
     },
-    components: { VueToggles }
+    components: { VueToggles, QuickViewErrore }
 }
 </script>
 
