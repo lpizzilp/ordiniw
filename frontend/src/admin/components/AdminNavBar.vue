@@ -11,10 +11,9 @@
             <li class="td-router"><router-link @click="scrollToTop(), Writelog('Dashboard')" to="/admin/dashboard"><i
                         class="fa-solid fa-chart-line" style="padding-right: 2vh;"></i>Dashboard</router-link></li>
             <li class="td-router"><router-link @click="scrollToTop(), Writelog('Prenotazioni')" to="/admin/prenotazioni"><i
-
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
-            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Ordini')" to="/admin/ordini"><i class="fa-solid fa-utensils"
-                        style="padding-right: 2vh;"></i>Ordini</router-link></li>
+            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Ordini')" to="/admin/ordini"><i
+                        class="fa-solid fa-utensils" style="padding-right: 2vh;"></i>Ordini</router-link></li>
         </ul>
 
 
@@ -27,20 +26,23 @@
     </div>
     <div class="navigation">
         <ul class="table-phone">
-            <li @click="SpaceNav('Dashboard'), Writelog('Dashboard')" class="td-router"><router-link @click="scrollToTop()"
+            <li @click="RouteNav('/admin/dashboard'), Writelog('Dashboard')" class="td-router"><router-link
                     to="/admin/dashboard"><i class="fa-solid fa-chart-line"
                         style="padding-right: 2vh;"></i>Dashboard</router-link></li>
-            <li @click="SpaceNav(''), Writelog('Prenotazioni')" class="td-router"><router-link @click="scrollToTop()" to="/admin/prenotazioni"><i
-                        class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
-            <li @click="SpaceNav(''), Writelog('Ordini')" class="td-router"><router-link @click="scrollToTop()" to="/admin/ordini"><i
-                        class="fa-solid fa-utensils" style="padding-right: 2vh;"></i>Ordini</router-link></li>
-            <li class="td-router"><router-link @click="setAdmin(''), Writelog('uscita')" to="/"><i class="fa-solid fa-right-from-bracket"
+            <li @click="RouteNav('/admin/prenotazioni'), Writelog('Prenotazioni')" class="td-router"><router-link
+                    to="/admin/prenotazioni"><i class="fa-solid fa-book-open"
+                        style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
+            <li @click="RouteNav('/admin/ordini'), Writelog('Ordini')" class="td-router"><router-link to="/admin/ordini"><i
+                        class="fa-solid fa-utensils" style="padding-right: 2vh;"></i>Ordini</router-link>
+            </li>
+            <li @click="RouteNav('/'), setAdmin('')" class="td-router"><router-link to="/"><i class="fa-solid fa-right-from-bracket"
                         style="padding-right: 2vh;"></i>Logout</router-link></li>
         </ul>
     </div>
 </template>
 
 <script>
+import router from "@/router";
 import axios from "axios";
 import { mapMutations } from "vuex";
 export default {
@@ -49,6 +51,7 @@ export default {
     data() {
         return {
             nav_name: 'Amministratore',
+            route: '',
         }
     },
 
@@ -63,10 +66,10 @@ export default {
             window.scrollTo(0, 0);
         },
 
-      async  Writelog(pagina) {
+        async Writelog(pagina) {
             let data = {
                 mode: 'info',
-                arg: pagina == 'uscita' ? 'Uscita di ' + sessionStorage.getItem('Admin') + '\n' : 'Accesso a ' + pagina + ' di ' +  sessionStorage.getItem('Admin')
+                arg: pagina == 'uscita' ? 'Uscita di ' + sessionStorage.getItem('User') + '\n' : 'Accesso a ' + pagina + ' di ' + sessionStorage.getItem('User')
             }
             await axios.post('/log', data)
         },
@@ -78,23 +81,26 @@ export default {
         },
 
         showNav() {
+            console.log('passo')
             let nav = document.getElementsByClassName('navigation')
-            if (nav[0].style.display == 'none') {
+            if (nav[0].style.display == 'none' || nav[0].style.display == "") {
                 nav[0].style.display = 'block'
+                this.route = router.currentRoute.value.path
+                console.log(router.currentRoute.value.path)
+                if (this.route == '/admin/dashboard') {
+                    nav[0].style.marginTop = '70px'
+                } else {
+                    nav[0].style.marginTop = '0px'
+                }
             } else {
                 nav[0].style.display = 'none'
             }
-
         },
 
-        SpaceNav(type) {
-            let nav = document.getElementsByClassName('navigation')
-            if (type == 'Dashboard') {
-                nav[0].style.marginTop = '70px'
-            } else {
-                nav[0].style.marginTop = '0px'
-            }
-
+        RouteNav(type) {
+            console.log('passolink')
+            router.push(type)
+            this.showNav();
         },
 
     }

@@ -50,11 +50,13 @@
             </form>
         </div>
         <quick-view-register v-if="showQuickVue" :display="Isuser"></quick-view-register>
+        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import QuickViewRegister from '@/admin/components/QuickViewRegister.vue';
 export default {
     name: "Register",
@@ -66,6 +68,7 @@ export default {
             errors: [],
             showQuickVue: false,
             Isuser: true,
+            Quickerrore: false,
         }
     },
 
@@ -182,27 +185,41 @@ export default {
             } else {
                 e.preventDefault();
                 let data = await axios.get('/users/' + this.registerObj.email);
-                if (data.data) {
-                    this.errorObj.emailErr.push("Questa email è associata a un account esistente");
-                    this.errors.push("Questa email è associata a un account esistente");
-                }
-                else {
-                    let data = {
-                        user_email: this.registerObj.email,
-                        user_password: this.registerObj.pass,
-                        id_sagra: sessionStorage.getItem('SagraId'),
-                        user_name: this.registerObj.name,
-                        authlevel: "0",
+                let response = data.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                } else {
+                    if (data.data) {
+                        this.errorObj.emailErr.push("Questa email è associata a un account esistente");
+                        this.errors.push("Questa email è associata a un account esistente");
                     }
-                    await axios.post("/users/", data);
-                    this.SendMail();
-                    this.showQuickVue = true
+                    else {
+                        let data = {
+                            user_email: this.registerObj.email,
+                            user_password: this.registerObj.pass,
+                            id_sagra: sessionStorage.getItem('SagraId'),
+                            user_name: this.registerObj.name,
+                            authlevel: "0",
+                        }
+                        await axios.post("/users/", data);
+                        this.SendMail();
+                        this.showQuickVue = true
+                    }
                 }
             }
-        }
+        },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
 
-    components: { QuickViewRegister }
+    components: { QuickViewRegister, QuickViewErrore }
 
 };
 </script>

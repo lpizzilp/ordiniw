@@ -21,7 +21,6 @@ export const getUserByEmail = (data, result) => {
             console.log(err);
             result(err, null);
         } else {
-            console.log(result)
             result(null, results[0]);
         }
     });

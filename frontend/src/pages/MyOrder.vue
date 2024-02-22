@@ -4,6 +4,7 @@
             <div class="loader"></div>
         </div>
     </div>
+    <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
 </template>
 
 
@@ -24,12 +25,14 @@ for (var i = 0; i < parametri.length; i++) {
 }
 
 import axios from 'axios';
+import QuickViewErrore from '@/components/QuickViewErrore.vue';
 export default {
     name: 'MyOrder',
 
     data() {
         return {
             showContent: true,
+            Quickerrore: false
         }
     },
 
@@ -47,6 +50,11 @@ export default {
             if (parametriObj.filtroOrd == 'PRE') {
                 sessionStorage.setItem('filtro', parametriObj.filtroOrd)
                 let bookitem = await axios.get('/prenotazione/' + parametriObj.id)
+                let response = bookitem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response)
+                }
                 for (let i = 0; i < bookitem.data.length; i++) {
                     let data = {
                         user_id: parseInt(sessionStorage.getItem('Username')),
@@ -58,6 +66,10 @@ export default {
             } else {
                 sessionStorage.setItem('filtro', "")
                 let billitem = await axios.get('/billdetails/' + parametriObj.id)
+                let response = billitem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                }
                 for (let i = 0; i < billitem.data.length; i++) {
                     let data = {
                         user_id: parseInt(sessionStorage.getItem('Username')),
@@ -70,7 +82,17 @@ export default {
 
             this.$router.push("/menu")
         },
-    }
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
+    },
+
+    components: { QuickViewErrore }
 }
 </script>
 

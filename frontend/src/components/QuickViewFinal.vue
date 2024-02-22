@@ -39,11 +39,12 @@
             <button class="btn" @click="DataParent('I')" style="margin-right: 5%;">Indietro</button>
         </div>
     </div>
+    <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
 </template>
 
 <script>
 import axios from 'axios';
-
+import QuickViewErrore from './QuickViewErrore.vue';
 export default {
     name: "QuickView",
     data() {
@@ -53,7 +54,8 @@ export default {
             Item: [],
             itemQuantity: [],
             timer: 7,
-            buttonDisabled: false
+            buttonDisabled: false,
+            Quickerrore: false
         }
     },
 
@@ -108,8 +110,18 @@ export default {
             this.buttonDisabled = true
             if (sessionStorage.getItem('filtro') == 'PRE') {
                 var billitem = await axios.get('/prenotazione/' + this.Dataform.id)
+                let response = billitem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                }
             } else {
                 billitem = await axios.get('/billdetails/' + this.Dataform.id)
+                let response = billitem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                }
             }
 
             let price = 0 
@@ -162,7 +174,17 @@ export default {
                 }
             }, 1000);
         },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
+
+    components: { QuickViewErrore }
 };
 </script>
 

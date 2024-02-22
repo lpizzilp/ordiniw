@@ -17,7 +17,10 @@
                     <td style="text-align: center;">
                         <h3>{{ status[0] }}</h3>
                     </td>
-                    <td><VueToggles :value="toggle[0]" @click="ChangeStatus(0)" :height="28" :width="56" checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" /></td>
+                    <td>
+                        <VueToggles :value="toggle[0]" @click="ChangeStatus(0)" :height="28" :width="56" checkedText="On"
+                            uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                    </td>
                 </tr>
                 <tr>
                     <td style="padding-left: 0px;">
@@ -37,7 +40,10 @@
                     <td style="text-align: center;">
                         <h3>{{ status[1] }}</h3>
                     </td>
-                    <td><VueToggles :value="toggle[1]" @click="ChangeStatus(1)" :height="28" :width="56" checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" /></td>
+                    <td>
+                        <VueToggles :value="toggle[1]" @click="ChangeStatus(1)" :height="28" :width="56" checkedText="On"
+                            uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                    </td>
                 </tr>
                 <tr>
                     <td style="padding-left: 0px;">
@@ -57,7 +63,10 @@
                     <td style="text-align: center;">
                         <h3>{{ status[2] }}</h3>
                     </td>
-                    <td><VueToggles :value="toggle[2]" @click="ChangeStatus(2)" :height="28" :width="56" checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" /></td>
+                    <td>
+                        <VueToggles :value="toggle[2]" @click="ChangeStatus(2)" :height="28" :width="56" checkedText="On"
+                            uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                    </td>
                 </tr>
             </table>
         </div>
@@ -65,12 +74,42 @@
             <h2><i class="fa-solid fa-utensils" style="padding-right: 2vh; color: #f38609;"></i>Ordini</h2>
             <i class="fa-solid fa-chevron-down"></i>
         </div>
+
+
+
+        <div v-if="tabFunzioni[1] == true" class="table-open">
+            <h2 @click="OpenGrid(1)"><i class="fa-solid fa-book-open"
+                    style="padding-right: 2vh; color: #f38609;"></i>Prenotazioni
+            </h2>
+            <i @click="OpenGrid(1)" class="fa-solid fa-chevron-up"></i>
+            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+            <table class="project-list">
+                <tr>
+                    <td>
+                        <h3>Apertura/chiusura automatica</h3>
+                    </td>
+                    <td style="text-align: center;">
+                        <h3>{{ status[3] }}</h3>
+                    </td>
+                    <td>
+                        <VueToggles :value="toggle[3]" @click="ChangeStatus(3)" :height="28" :width="56" checkedText="On"
+                            uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div v-else class="table-close" @click="OpenGrid(1)">
+            <h2><i class="fa-solid fa-book-open" style="padding-right: 2vh; color: #f38609;"></i>Prenotazioni</h2>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
     </div>
+    <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
 </template>
 
 
 <script>
 import axios from "axios";
+import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import { VueToggles } from "vue-toggles";
 import { mapState, mapMutations } from "vuex";
 export default {
@@ -78,9 +117,10 @@ export default {
 
     data() {
         return {
-            tabFunzioni: [true],
+            tabFunzioni: [true, true],
             status: [],
             toggle: [],
+            Quickerrore: false,
         }
     },
 
@@ -101,13 +141,17 @@ export default {
 
         async GetSwitch() {
             let switchdata = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
-            if (switchdata.data.length > 0) {
-                this.status[0] = switchdata.data[0].StrOrdini.substring(0, 1) == 1 ? 'Abilitato' : 'Disabilitato'
-                this.status[1] = switchdata.data[0].StrOrdini.substring(1, 2) == 1 ? 'Abilitato' : 'Disabilitato'
-                this.status[2] = switchdata.data[0].StrOrdini.substring(2, 3) == 1 ? 'Abilitato' : 'Disabilitato'
-                this.toggle[0] = switchdata.data[0].StrOrdini.substring(0, 1) == 1 ? true : false
-                this.toggle[1] = switchdata.data[0].StrOrdini.substring(1, 2) == 1 ? true : false
-                this.toggle[2] = switchdata.data[0].StrOrdini.substring(2, 3) == 1 ? true : false
+            let response = switchdata.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+            } else {
+                if (switchdata.data.length > 0) {
+                    let switchsplit = switchdata.data[0].StrOrdini.split('')
+                    for (let i = 0; i < switchsplit.length; i++) {
+                        this.status[i] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
+                        this.toggle[i] = switchsplit[i] == 0 ? false : true
+                    }
+                }
             }
         },
 
@@ -151,14 +195,14 @@ export default {
                 arg = 'Abbilitazione'
             }
 
-           let data = {
+            let data = {
                 mode: 'warn',
-                arg: arg + ' toggle switch numero ' + (index + 1) + ' da parte di '+ sessionStorage.getItem('Admin')
+                arg: arg + ' toggle switch numero ' + (index + 1) + ' da parte di ' + sessionStorage.getItem('User')
             }
             await axios.post('/log', data)
         },
     },
-    components: { VueToggles }
+    components: { VueToggles, QuickViewErrore }
 }
 </script>
 

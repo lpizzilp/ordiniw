@@ -145,11 +145,13 @@
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
             @Closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
+    <quick-view-errore v-if="Quickerrore"></quick-view-errore>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
+import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import axios from "axios";
 
@@ -194,6 +196,7 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
+            Quickerrore: false
         };
     },
 
@@ -262,7 +265,7 @@ export default {
             if (food === '') {
                 return '';
             } else {
-               if (this.wifiquality == -1 || this.wifispeed < '0.25' && this.wifispeed != null) {
+                if (this.wifiquality == -1 || this.wifispeed < '0.25' && this.wifispeed != null) {
                     return ''
                 } else {
                     try {
@@ -347,6 +350,11 @@ export default {
             if (this.setqty !== true) {
                 if (sessionStorage.getItem('MatchUser')) {
                     let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                    let response = existItem.request.response
+                    if (response.includes("{\"code\"")) {
+                        this.Quickerrore = true
+                        this.Makelog(response);
+                    }
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
                         let FoodID = existItem.data[ix].food_id
@@ -490,6 +498,11 @@ export default {
             } else {
                 // Verifica se l'articolo esiste nel carrello
                 let existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
+                let response = existingCartItem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                }
 
                 if (existingCartItem.data.length > 0) {
                     // Se l'articolo esiste, aggiorna la quantità
@@ -505,6 +518,11 @@ export default {
             if (this.Prenotazione === "1") {
                 // Gestisci la prenotazione dell'articolo
                 let cartItems = await axios.get('/cartItem/' + user_id);
+                let response = cartItems.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                }
 
                 if (cartItems.data.length > 1) {
                     // Se ci sono più di un articolo nel carrello, rimuovi l'articolo aggiunto
@@ -528,6 +546,11 @@ export default {
             this.showCounterCart = !this.showCounterCart;
 
             let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
+            let response = existItem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                }
             let data = {
                 user_id: parseInt(sessionStorage.getItem('Username')),
                 food_id: this.sendId,
@@ -559,6 +582,11 @@ export default {
 
             if (this.Prenotazione === "1") {
                 let Itemprenotabili = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                let response = Itemprenotabili.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                }
                 if (Itemprenotabili.data.length > 1) {
                     await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
                     this.qty[index] = 0
@@ -574,11 +602,20 @@ export default {
             this.eventBus.emit("showCart", this.showCart);
 
         },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
 
     components: {
         VueBasicAlert,
-        QuickViewPrenotazione
+        QuickViewPrenotazione,
+        QuickViewErrore
     }
 };
 </script>

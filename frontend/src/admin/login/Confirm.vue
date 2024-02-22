@@ -56,6 +56,7 @@
             </form>
         </div>
         <QuickViewConfirm v-if="showQuickVue" :-ute="QuickView_ute"></QuickViewConfirm>
+        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
     </div>
 </template>
 
@@ -70,6 +71,7 @@ for (var i = 0; i < parametri.length; i++) {
 }
 
 import axios from 'axios';
+import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import QuickViewConfirm from '@/admin/components/QuickViewConfirm.vue';
 export default {
     name: "Confirm",
@@ -81,7 +83,8 @@ export default {
             idsagre: [],
             errors: [],
             showQuickVue: false,
-            QuickView_ute: true
+            QuickView_ute: true,
+            Quickerrore: false
         }
     },
 
@@ -96,7 +99,17 @@ export default {
 
         async getuser() {
             let Adminuser = await axios.get('/users/' + parametriObj.email);
+            let response = Adminuser.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+                this.Makelog(response);
+            }
             let Sagra = await axios.get('/sagra/' + parametriObj.id)
+            response = Sagra.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+                this.Makelog(response);
+            }
             this.ConfirmObj.name = Adminuser.data.user_name
             this.ConfirmObj.email = Adminuser.data.user_email
             this.ConfirmObj.pass = Adminuser.data.user_password
@@ -104,6 +117,11 @@ export default {
             this.ConfirmObj.authlevel = Adminuser.data.authlevel
 
             let sagredata = await axios.get('/sagra/ute/' + parametriObj.id)
+            response = sagredata.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+                this.Makelog(response);
+            }
 
             sagredata.data.forEach(element => {
                 this.descsagre.push(element.descrizione)
@@ -176,10 +194,18 @@ export default {
                     this.showQuickVue = true
                 }
             }
-        }
+        },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
 
-    components: { QuickViewConfirm }
+    components: { QuickViewConfirm, QuickViewErrore }
 
 };
 </script>

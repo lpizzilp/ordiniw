@@ -4,7 +4,7 @@
         <div class="heading">
             <span>Carrello</span>
             <h3 v-if="isPrenotazione">Conferma la Prenotazione premendo "Checkout"</h3>
-            <h3 v-else >Conferma l'ordine premendo "Checkout"</h3>
+            <h3 v-else>Conferma l'ordine premendo "Checkout"</h3>
         </div>
 
         <div class="container">
@@ -173,11 +173,13 @@
             </div>
         </div>
         <quick-view-cart v-if="showQuickView" @childEvent="handleChildEvent" :parentData="dataFromParent"></quick-view-cart>
+        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
 export default {
@@ -190,6 +192,7 @@ export default {
             showQuickView: false,
             dataFromParent: null,
             Isuser: false,
+            Quickerrore: false
         };
     },
 
@@ -295,16 +298,31 @@ export default {
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
                 let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                existItem.data.forEach(element => {
-                    this.cartItem.push(element.food_id);
-                    this.itemQuantity.push(element.item_qty);
-                });
+                let response = existItem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                } else {
+                    existItem.data.forEach(element => {
+                        this.cartItem.push(element.food_id);
+                        this.itemQuantity.push(element.item_qty);
+                    });
+                }
             }
-        }
+        },
+
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
 
     components: {
-        QuickViewCart
+        QuickViewCart,
+        QuickViewErrore
     },
 }
 </script>

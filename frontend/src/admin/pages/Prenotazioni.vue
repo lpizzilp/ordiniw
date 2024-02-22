@@ -46,7 +46,7 @@
                         <th>Stato</th>
                     </tr>
                     <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id">
-                        <td v-if="showSerata[id] == true"  style="width: 1%;">{{ b.book_id }}</td>
+                        <td v-if="showSerata[id] == true" style="width: 1%;">{{ b.book_id }}</td>
                         <td v-if="showSerata[id] == true">{{ b.food_name }}</td>
                         <td v-if="showSerata[id] == true">{{ b.item_qty }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_nominativo }}</td>
@@ -59,9 +59,9 @@
                                 style="padding-right: 1vh;"></i>Parzialmente evaso</td>
                         <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i class="fa-solid fa-bell-concierge"
                                 style="padding-right: 1vh;"></i>Evaso</td>
-                        <td v-else-if="b.book_status == 3 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
-                                style="padding-right: 1vh;"></i>Cancellato</td>
-                        <td v-if="showSerata[id] == true && b.book_status != 2">
+                        <td v-else-if="b.book_status == 3 && showSerata[id] == true"><i
+                                class="fa-solid fa-square-xmark" style="padding-right: 1vh;"></i>Cancellato</td>
+                        <td v-if="showSerata[id] == true && b.book_status == 0">
                             <button class="btn" @click="changestate(index)"
                                 style="z-index: 0; padding: 0.1vh 1vh; border-radius: 5px;"><i
                                     class="fas fa-bars"></i></button>
@@ -71,7 +71,7 @@
                                     Conferma
                                 </button>
 
-                                <button v-if="b.book_status != 0" class="annulla-btn"
+                                <button v-if="b.book_status == 3" class="annulla-btn"
                                     @click="ActionBtn('Annulla', index, b.book_id, t.food_id)">
                                     Annulla
                                 </button>
@@ -248,7 +248,7 @@ export default {
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
 
-            data[0] = ['Id Prenotazione','Codice', 'Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Validità', 'Note', 'Prezzo Tot']
+            data[0] = ['Id Prenotazione', 'Codice', 'Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Validità', 'Note', 'Prezzo Tot']
             plus = plus + 1
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
@@ -258,7 +258,7 @@ export default {
                         case 0:
                             var book_status = 'inserito'
                             break;
-                    
+
                         case 1:
                             book_status = 'Parzialmente Evasa'
                             break;
@@ -269,7 +269,7 @@ export default {
                             book_status = 'Cancellata'
                             break;
                     }
-                    data[plus] = [ this.allPenot[l].book_id, this.allPenot[l].food_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.formattime(this.allPenot[l].DataFinePRT), this.allPenot[l].book_note, this.allPenot[l].book_total]
+                    data[plus] = [this.allPenot[l].book_id, this.allPenot[l].food_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.formattime(this.allPenot[l].DataFinePRT), this.allPenot[l].book_note, this.allPenot[l].book_total]
                     plus = plus + 1
                 }
             }
