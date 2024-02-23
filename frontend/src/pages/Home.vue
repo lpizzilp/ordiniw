@@ -174,12 +174,12 @@ export default {
         // Punto dove inserisce user
         async handleSubmit(type) {
             let div = document.getElementsByClassName('tabelloni')
-                var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
-                let response = sagra.request.response
-                if (response.includes("{\"code\"")) {
-                    this.errore = true
-                    this.Makelog(response);
-                }
+            var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+            let response = sagra.request.response
+            if (response.includes("{\"code\"")) {
+                this.errore = true
+                this.Makelog(response);
+            }
             switch (type) {
                 case 'TAB':
                     if (!this.togleTab) {
@@ -204,12 +204,20 @@ export default {
                     break;
 
                 case 'PRE':
-                    var data = {
-                        vis: false,
-                        category: type
+                    if (sagra.data[0].flgPrenotazioni == 1) {
+                        this.Btn[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
                     }
-                    sessionStorage.setItem('TipoOrdine', 'W');
-                    this.handleChildEvent(data)
+                    if (this.Btn[2] == 1) {
+                        var data = {
+                            vis: false,
+                            category: type
+                        }
+                        sessionStorage.setItem('TipoOrdine', 'W');
+                        this.handleChildEvent(data)
+                    } else{
+                        this.Btn[0] = this.Btn[1] = 0
+                        this.showQuickVue = true  
+                    }
                     break;
 
                 default:

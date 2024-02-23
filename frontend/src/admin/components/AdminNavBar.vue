@@ -14,6 +14,8 @@
                         class="fa-solid fa-book-open" style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
             <li class="td-router"><router-link @click="scrollToTop(), Writelog('Ordini')" to="/admin/ordini"><i
                         class="fa-solid fa-utensils" style="padding-right: 2vh;"></i>Ordini</router-link></li>
+            <li class="td-router" onmouseover="this.style.backgroundColor='#27ae60'"><hr style="width: 100%; border: 2px outset whitesmoke; border-radius: 2%;"></li>
+            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Utenti')" to="/admin/utenti"><i class="fa-solid fa-users-between-lines" style="padding-right: 2vh;"></i>Lista Utenti</router-link></li>
         </ul>
 
 

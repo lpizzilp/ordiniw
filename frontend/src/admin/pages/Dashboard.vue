@@ -86,10 +86,10 @@
             <table class="project-list">
                 <tr>
                     <td>
-                        <h3>Apertura/chiusura automatica</h3>
+                        <h3>Apertura/chiusura</h3>
                     </td>
                     <td style="text-align: center;">
-                        <h3>{{ status[3] }}</h3>
+                        <h3>{{ status[3] == 'Abilitato' ? 'Aperto' : 'Chiuso' }}</h3>
                     </td>
                     <td>
                         <VueToggles :value="toggle[3]" @click="ChangeStatus(3)" :height="28" :width="56" checkedText="On"
@@ -148,8 +148,8 @@ export default {
                 if (switchdata.data.length > 0) {
                     let switchsplit = switchdata.data[0].StrOrdini.split('')
                     for (let i = 0; i < switchsplit.length; i++) {
-                        this.status[i] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
-                        this.toggle[i] = switchsplit[i] == 0 ? false : true
+                            this.status[i] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
+                            this.toggle[i] = switchsplit[i] == 0 ? false : true
                     }
                 }
             }
