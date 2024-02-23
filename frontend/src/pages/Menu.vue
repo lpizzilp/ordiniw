@@ -946,11 +946,14 @@ hr {
     }
     .menu-section .box-container .box .content h3 {
         height: 4rem;
-        font-size: small !important;
+        font-size: 15px !important;
     }
     .menu-section .box-container .box .content .price {
         font-size: 1.8rem;
      }
+     .menu-section .box-container .box .content .desc p {
+        font-size: small;
+    }
 
 }
 
