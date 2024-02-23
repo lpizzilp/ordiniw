@@ -8,7 +8,7 @@
         <div class="box-container">
 
             <div class="box">
-                <h4>Powered by Esagra <span style="font-size: 1rem;">Ver 1.0.0</span></h4>
+                <h4>Powered by Esagra <span style="font-size: 1rem;">{{ Versione }}</span></h4>
             </div>
 
             <div class="box">
@@ -25,13 +25,22 @@ export default {
     name: 'FooterComponent',
 
     computed: {
-        ...mapState(['user'])
+        ...mapState(['user']),
+
+        Versione: function () {
+        console.log( localStorage.getItem('appVersion') + "DSDASDA")
+            return localStorage.getItem('appVersion');
+        },
+
+
     },
+
 
     methods: {
         scrollToTop() {
             window.scrollTo(0, 0);
         }
+        
     }
 }
 </script>
