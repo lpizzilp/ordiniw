@@ -3,8 +3,7 @@
         <div class="d-flex justify-content-between">
             <h1><i class="fa-solid fa-users-gear"> Utenti</i></h1>
             <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i class="fa-solid fa-pencil"
-                    style="padding-right: 1vh;"></i>Modifica riga N.{{Nriga
-                    }}</button>
+                    style="padding-right: 1vh;"></i>Modifica riga{{ Nriga == null ? null : ' N.' + Nriga }}</button>
             <div v-else style="display: flex; flex-direction: column; gap: 1rem;">
                 <button class="btn" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
                         class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Annulla
@@ -68,6 +67,8 @@
                     </label>
                     <input type="password" name="uPass" :placeholder="ModifyObj.pass" id="uPass" class="form-control"
                         v-model="ModifyObj.pass" />
+                    <i v-if="showPassword == false" class="fa-solid fa-eye" @click="GestClick('Password')"></i>
+                    <i v-else class="fa-solid fa-eye-slash" @click="GestClick('Password')"></i>
                 </div>
 
                 <div class="form-group">
@@ -96,8 +97,9 @@ export default {
 
     data() {
         return {
-            ModifyObj: { name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
+            ModifyObj: { id: "", name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
             Showmodifica: false,
+            showPassword: false,
             status: [],
             Ute: [],
             Nriga: null,
@@ -152,10 +154,22 @@ export default {
         async Rigadata() {
             var Tabella = document.getElementById("Tabella");
             var riga = Tabella.rows[this.Nriga];
+            this.ModifyObj.id = riga.cells[0].innerHTML
             this.ModifyObj.name = riga.cells[1].innerHTML
             this.ModifyObj.email = riga.cells[2].innerHTML
             this.ModifyObj.pass = riga.cells[3].innerHTML
             this.ModifyObj.authlevel = riga.cells[4].innerHTML == 'Si' ? 1 : 0
+        },
+
+        async Confuser() {
+            let data = {
+                user_email: this.ModifyObj.email,
+                user_password: this.ModifyObj.pass,
+                id_sagra: this.ModifyObj.id_sagra,
+                user_name: this.ModifyObj.name,
+                authlevel: this.ModifyObj.authlevel,
+            }
+            await axios.post("/users/", data);
         },
 
         async GestClick(type) {
@@ -165,15 +179,24 @@ export default {
                     break;
 
                 case 'Elimina':
-
+                    await axios.delete("/users/delete/" + this.ModifyObj.email)
                     break;
 
                 case 'Conferma':
-
+                    await axios.delete("/users/delete/" + this.ModifyObj.email)
+                    await this.Confuser()
                     break;
+
                 case 'Modifica':
-                    await this.Rigadata()
-                    this.Showmodifica = true
+                    if (this.Nriga != null || this.Nriga != undefined) {
+                        await this.Rigadata()
+                        this.Nriga = null
+                        this.Showmodifica = true
+                    }
+                    break;
+                case 'Password':
+                    this.showPassword = !this.showPassword;
+                    document.getElementById('uPass').type = this.showPassword ? 'text' : 'password';
                     break;
             }
         },
@@ -269,6 +292,16 @@ export default {
     text-align: center;
 }
 
+.form-group .fa-eye-slash,
+.form-group .fa-eye {
+    position: absolute;
+    top: 342px;
+    left: calc(100px + 20%);
+    text-align: center;
+    padding-left: 5px;
+    font-size: 20px;
+}
+
 .register-form-container form h3 {
     font-size: 2rem;
     text-transform: uppercase;
@@ -301,6 +334,10 @@ export default {
 
 .register-form-container form .form-group {
     margin: 0;
+}
+
+.register-form-container form .form-group input::placeholder {
+    color: black;
 }
 
 .register-form-container form .form-group .error-mess {
