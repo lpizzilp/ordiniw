@@ -63,7 +63,7 @@
                 </div>
                 <div class="input-box">
                     <label for="oWhen">when</label>
-                    <input type="datetime-local" name="oWhen" id="oWhen" v-model="orderObj.when"
+                    <input type="datetime-local"  name="oWhen" id="oWhen" v-model="orderObj.when"
                         @click="availableTime()">
                     <p v-if="errorObj.whenErr.length > 0">{{ errorObj.whenErr[0] }}</p>
                 </div>

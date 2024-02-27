@@ -772,12 +772,10 @@ hr {
     flex: 33%;
     padding-left: 2%;
     padding-right: 2%;
-    touch-action: manipulation;
 }
 
 .menu-section .box-container .box .content .add-to-cart .btn:hover {
     background-color: #27ae60;
-    touch-action: manipulation;
 }
 
 .menu-section .box-container .box .content .add-to-cart h4 {
@@ -939,23 +937,6 @@ hr {
         margin: 0%;
         margin-top: 5vh;
     }
-@media (max-width: 361px) {
-    .menu-section .box-container {
-        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-        gap: 1rem;
-    }
-    .menu-section .box-container .box .content h3 {
-        height: 4rem;
-        font-size: 15px !important;
-    }
-    .menu-section .box-container .box .content .price {
-        font-size: 1.8rem;
-     }
-     .menu-section .box-container .box .content .desc p {
-        font-size: small;
-    }
-
-}
 
 }
 </style>

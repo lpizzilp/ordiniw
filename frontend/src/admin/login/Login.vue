@@ -18,6 +18,8 @@
                 <div class="form-group">
                     <input type="password" id="uPass" name="uPass" class="form-control"
                         placeholder="Inserisci la tua password" v-model="loginObj.pass" />
+                    <i v-if="showPassword == false" class="fa-regular fa-eye" @click="ShowPass()"></i>
+                    <i v-else class="fa-regular fa-eye-slash" @click="ShowPass()"></i>
                 </div>
 
                 <div class="form-group">
@@ -47,6 +49,7 @@ export default {
             loginObj: { email: "", pass: "" },
             matchUser: undefined,
             errors: [],
+            showPassword: false,
             showQuickVue: false,
             Quickerrore: false
         }
@@ -76,6 +79,11 @@ export default {
             }
 
 
+        },
+
+        ShowPass() {
+            this.showPassword = !this.showPassword;
+            document.getElementById('uPass').type = this.showPassword ? 'text' : 'password';
         },
 
 
@@ -220,6 +228,16 @@ export default {
     color: #27ae60;
 }
 
+.form-group .fa-eye-slash,
+.form-group .fa-eye {
+    position: absolute;
+    top: 123px;
+    left: 330px;
+    text-align: center;
+    padding-left: 5px;
+    font-size: 20px;
+}
+
 .login-container .login-form-container form p a:hover {
     color: #130f40;
     text-decoration: underline;
@@ -243,5 +261,33 @@ export default {
     padding: 5px 10px;
     list-style-type: square;
     color: black;
+}
+
+@media (max-width: 768px) {
+
+    .form-group .fa-eye-slash,
+    .form-group .fa-eye {
+        position: absolute;
+        top: 110px;
+        left: 300px;
+        text-align: center;
+        padding-left: 5px;
+        font-size: 20px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+.form-group .fa-eye-slash,
+.form-group .fa-eye {
+    position: absolute;
+    top: 98px;
+    left: 265px;
+    text-align: center;
+    padding-left: 5px;
+    font-size: 20px;
+}
+
 }
 </style>
