@@ -134,7 +134,7 @@ export const Emailregistrazione = (data, result) => {
             <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione avvenuta alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
         </div>`;
 
-    mailOptions.subject = "Rischiesta accesso come amministratore"
+    mailOptions.subject = "Richiesta accesso come amministratore"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {

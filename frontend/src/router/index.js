@@ -48,6 +48,11 @@ const routes = [
     component: Checkout,
   },
   {
+    path: "/tavolo",
+    name: "Tavolo",
+    component: Table, 
+  },
+  {
     path: "/thank",
     name: "Thank",
     component: Thank,

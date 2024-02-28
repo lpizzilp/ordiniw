@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between">
             <h1><i class="fa-solid fa-users-gear"> Utenti</i></h1>
             <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i class="fa-solid fa-pencil"
-                    style="padding-right: 1vh;"></i>Modifica riga{{ Nriga == null ? null : ' N.' + Nriga }}</button>
+                    style="padding-right: 1vh;"></i>Modifica Utente{{ Nriga == null ? null : ' N.' + Nriga }}</button>
             <div v-else style="display: flex; flex-direction: column; gap: 1rem;">
                 <button class="btn" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
                         class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Annulla
@@ -67,8 +67,6 @@
                     </label>
                     <input type="password" name="uPass" :placeholder="ModifyObj.pass" id="uPass" class="form-control"
                         v-model="ModifyObj.pass" />
-                    <i v-if="showPassword == false" class="fa-solid fa-eye" @click="GestClick('Password')"></i>
-                    <i v-else class="fa-solid fa-eye-slash" @click="GestClick('Password')"></i>
                 </div>
 
                 <div class="form-group">
@@ -99,7 +97,6 @@ export default {
         return {
             ModifyObj: { id: "", name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
             Showmodifica: false,
-            showPassword: false,
             status: [],
             Ute: [],
             Nriga: null,
@@ -194,10 +191,6 @@ export default {
                         this.Showmodifica = true
                     }
                     break;
-                case 'Password':
-                    this.showPassword = !this.showPassword;
-                    document.getElementById('uPass').type = this.showPassword ? 'text' : 'password';
-                    break;
             }
         },
 
@@ -290,16 +283,6 @@ export default {
     margin-left: 25%;
     width: 50%;
     text-align: center;
-}
-
-.form-group .fa-eye-slash,
-.form-group .fa-eye {
-    position: absolute;
-    top: 342px;
-    left: calc(100px + 20%);
-    text-align: center;
-    padding-left: 5px;
-    font-size: 20px;
 }
 
 .register-form-container form h3 {

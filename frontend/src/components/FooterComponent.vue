@@ -26,15 +26,10 @@ export default {
 
     computed: {
         ...mapState(['user']),
-
         Versione: function () {
-        console.log( localStorage.getItem('appVersion') + "DSDASDA")
             return localStorage.getItem('appVersion');
         },
-
-
     },
-
 
     methods: {
         scrollToTop() {
