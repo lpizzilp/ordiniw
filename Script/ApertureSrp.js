@@ -15,7 +15,7 @@ axios.get('http://localhost:8081/api/sagra/controlli/' + unionParam.id)
 
     if (response.data[0].StrOrdini.substring(0, 1) == 1) {
       
-      unionParam.type = response.data[0].StrOrdini.substring(0, 1) + unionParam.type
+      unionParam.type = response.data[0].StrOrdini.substring(0, 1) + unionParam.type + response.data[0].StrOrdini.substring(3, 4)
       axios.put('http://localhost:8081/api/sagraComand', unionParam)
         .catch(error => {
           console.error('Errore nella richiesta:', error.message);
