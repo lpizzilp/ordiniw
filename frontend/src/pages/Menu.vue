@@ -56,8 +56,14 @@
                                 <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
                             </li>
 
-                        </ul>
+                        
                         <hr />
+                        <li id="Compress" style="display: flex; width: 75%; ">
+                            <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
+                            <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58" checkedText="On"
+                            uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" style="margin-left: -58px;"/>
+                        </li>
+                    </ul>
                     </div>
                 </div>
             </div>
@@ -67,17 +73,17 @@
                     <div v-for="(f, index) in currentPageItems" :key="index">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div v-if="Artimage(f.food_src) != ''" class="image">
+                            <div v-if="Artimage(f.food_src) != '' && Compress == false" class="image">
                                 <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)"
                                     :alt="require('../assets/images/no.png')" @click="qty[index]++, onQtyChange(index)" />
                                 <img v-else :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')" />
                             </div>
                             <div class="content">
                                 <h3>{{ f.food_name }}</h3>
-                                <div class="desc">
+                                <div class="desc" v-if="Compress == false">
                                     <p>{{ f.food_desc }}</p>
                                 </div>
-                                <div class="price">
+                                <div class="price" v-if="Compress == false">
                                     {{ parseFloat(f.food_price) - parseFloat(f.food_discount) }} €
                                     <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
                                 </div>
@@ -150,6 +156,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { VueToggles } from "vue-toggles";
 import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
@@ -181,6 +188,7 @@ export default {
             matchUser: undefined,
             setqty: false,
             Prenotazione: flgartprenotabile,
+            Compress: false,
             QtyDisponibile: [],
 
             sendId: null,
@@ -303,6 +311,14 @@ export default {
             var qtylenght = Object.keys(this.currentPageItems).length;
             for (var l = 0; l < qtylenght; l++) {
                 this.qty.push(0);
+            }
+        },
+
+        changeCompress(){
+            if (this.Compress == false) {
+                this.Compress = true
+            } else {
+                this.Compress = false
             }
         },
 
@@ -615,7 +631,8 @@ export default {
     components: {
         VueBasicAlert,
         QuickViewPrenotazione,
-        QuickViewErrore
+        QuickViewErrore,
+        VueToggles
     }
 };
 </script>
