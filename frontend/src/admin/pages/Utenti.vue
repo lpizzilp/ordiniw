@@ -74,7 +74,7 @@
                     <label for="uauthlevel">Autorizzazione:
                     </label>
                     <input type="number" name="uauthlevel" :placeholder="ModifyObj.authlevel" id="uauthlevel"
-                        class="form-control" min="0" max="9" v-model="ModifyObj.authlevel" />
+                        class="form-control" min="0" max="1" v-model="ModifyObj.authlevel" />
                 </div>
 
                 <div class="form-group">
@@ -260,15 +260,15 @@ export default {
     background-color: aliceblue;
 }
 
-.project-list::-webkit-scrollbar {
+.table-open::-webkit-scrollbar {
     width: 1rem;
 }
 
-.project-list::-webkit-scrollbar-track {
+.table-open::-webkit-scrollbar-track {
     background: #fff;
 }
 
-.project-list::-webkit-scrollbar-thumb {
+.table-open::-webkit-scrollbar-thumb {
     background: #f38609;
     border-radius: 5rem;
 }
@@ -364,6 +364,7 @@ export default {
     .admin-container {
         margin: 0px;
         margin-top: 70px;
+        padding-bottom: 0px;
         background-color: whitesmoke;
         font-size: 16px;
     }
@@ -375,21 +376,18 @@ export default {
     }
 
     .table-open {
-        display: inline-block;
+        width: 100%;
         text-align: center;
         background-color: white;
         border: 1px outset black;
         border-radius: 5px;
+        overflow-x: auto;
     }
 
     .register-form-container {
-        margin-top: 50px;
+        margin-top: 30px;
     }
 
-    .project-list {
-        width: 100%;
-        text-align: center;
-    }
 
     .admin-container .pc {
         display: none;
