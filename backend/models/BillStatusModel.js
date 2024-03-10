@@ -55,7 +55,7 @@ export const getBillsByBill = (id,result) => {
 
 // get all Bills Status
 export const getAll = (result) => {
-    db.query("SELECT * FROM billstatus order by case WHEN bill_status = 1 THEN 1 WHEN bill_status = 2 THEN 2 WHEN bill_status = 3 THEN 3 ELSE 4 end, bill_when desc", (err,results)=> {
+    db.query("SELECT * FROM billstatus order by case WHEN bill_status = 1 THEN 1 WHEN bill_status = 2 THEN 2 WHEN bill_status = 3 THEN 3 ELSE 4 end, bill_id desc, bill_when desc", (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

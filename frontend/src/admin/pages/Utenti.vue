@@ -2,10 +2,11 @@
     <div class="admin-container">
         <div class="d-flex justify-content-between">
             <h1><i class="fa-solid fa-users-gear"> Utenti</i></h1>
-            <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i class="fa-solid fa-pencil"
-                    style="padding-right: 1vh;"></i>Modifica Utente{{ Nriga == null ? null : ' N.' + Nriga }}</button>
+            <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i
+                    class="fa-solid fa-pencil" style="padding-right: 1vh;"></i>Modifica Utente{{ Nriga == null ? null :
+                ' N.' + Nriga }}</button>
             <div v-else style="display: flex; flex-direction: column; gap: 1rem;">
-                <button class="btn" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
+                <button class="btn pc" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
                         class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Annulla
                     Modifiche</button>
                 <button class="btn" style="background-color: red;" @click="GestClick('Elimina')"><i
@@ -50,8 +51,8 @@
 
                 <div class="form-group">
                     <label for="uName">Nome completo:
-                    </label><input type="text" name="uName" :placeholder="ModifyObj.name" id="uName" class="form-control"
-                        v-model="ModifyObj.name" />
+                    </label><input type="text" name="uName" :placeholder="ModifyObj.name" id="uName"
+                        class="form-control" v-model="ModifyObj.name" />
                 </div>
 
                 <div class="form-group">
@@ -78,6 +79,9 @@
 
                 <div class="form-group">
                     <input type="submit" value="Conferma" class="btn" />
+                    <button class="btn mobile" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
+                            class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Annulla
+                        Modifiche</button>
                 </div>
             </form>
         </div>
@@ -315,6 +319,10 @@ export default {
     text-align: center;
 }
 
+.register-form-container form .mobile {
+    display: none;
+}
+
 .register-form-container form .form-group {
     margin: 0;
 }
@@ -374,10 +382,21 @@ export default {
         border-radius: 5px;
     }
 
+    .register-form-container {
+        margin-top: 50px;
+    }
+
     .project-list {
         width: 100%;
         text-align: center;
     }
 
+    .admin-container .pc {
+        display: none;
+    }
+
+    .register-form-container form .mobile {
+        display: block;
+    }
 }
 </style>
