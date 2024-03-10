@@ -183,6 +183,7 @@ export default {
                 type: replacestatus,
                 id: sessionStorage.getItem('AdminSagraId')
             }
+            console.log(uniondata.type)
             await axios.put('/SagraComand', uniondata)
             this.Makelog(index)
         },

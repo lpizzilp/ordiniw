@@ -11,6 +11,7 @@
             <table class="table colored-header datatable project-list">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Tavolo</th>
                         <th>Coperti</th>
                         <th>Nominativo</th>
@@ -22,6 +23,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(b) in filterBills.slice()" :key="b.bill_id">
+                        <td>{{ b.bill_id }}</td>
                         <td>{{ b.bill_tavolo }}</td>
                         <td>{{ b.bill_coperti }}</td>
                         <td>{{ b.Nominativo }}</td>

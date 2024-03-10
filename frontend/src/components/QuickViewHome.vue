@@ -9,14 +9,14 @@
             <button v-if="BtnAttivi[1] == 1" class="btn" @click="DataParent('Y')" style="margin-top: 3vh;">Asporto</button>
             <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
         </div>
+        <div v-else-if="BtnAttivi[2] == 1 && (BtnAttivi[0] == 0 || BtnAttivi[1] == 0)" class="quick-view-inner">
+            <h2>Ordini non abilitati</h2><br>
+            <h3>Il servizio ordini online non è attivo</h3><br>
+            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
+        </div>
         <div v-else-if="BtnAttivi[2] == 0" class="quick-view-inner">
             <h2>Prenotazioni chiuse</h2><br>
             <h3>Le prenotazioni sono state chiuse. Riprova più tardi</h3><br>
-            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
-        </div>
-        <div v-else class="quick-view-inner">
-            <h2>Ordini non abilitati</h2><br>
-            <h3>Il servizio ordini online non è attivo</h3><br>
             <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
         </div>
     </div>
