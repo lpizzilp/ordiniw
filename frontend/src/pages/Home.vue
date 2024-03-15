@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="Btn">
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="TypeMess">
         </QuickViewHome>
         <QuickViewErrore v-if="errore"></QuickViewErrore>
     </div>
@@ -99,6 +99,7 @@ export default {
             Category: undefined,
             sagra_name: "",
             Btn: [],
+            TypeMess: [],
             linksito: [null, null],
             Display: [[]],
             BtnUpData: [false, 'Attesa aggiornamento'],
@@ -173,6 +174,7 @@ export default {
 
         // Punto dove inserisce user
         async handleSubmit(type) {
+            this.TypeMess = []
             let div = document.getElementsByClassName('tabelloni')
             var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
             let response = sagra.request.response
@@ -215,6 +217,9 @@ export default {
                         sessionStorage.setItem('TipoOrdine', 'W');
                         this.handleChildEvent(data)
                     } else{
+                        this.TypeMess[2] = 'click'
+                        this.TypeMess[1] = false
+                        this.TypeMess[0] = false
                         this.Btn[0] = this.Btn[1] = 0
                         this.showQuickVue = true  
                     }
@@ -223,12 +228,17 @@ export default {
                 default:
                     div[0].style.display = 'none'
                     var ordini = [sagra.data[0].flgTavoli, sagra.data[0].flgAsporto]
+                    console.log(ordini)
                     if (ordini[0] == 1) {
                         this.Btn[0] = sagra.data[0].StrOrdini.substring(1, 2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1, 2)
+                        this.TypeMess[0] = this.Btn[0] == 1 ? true : false
+                        this.TypeMess[0] = this.Btn[0] == 1 ? true : false
                     }
                     if (ordini[1] == 1) {
                         this.Btn[1] = sagra.data[0].StrOrdini.substring(2, 3) == "" ? 1 : sagra.data[0].StrOrdini.substring(2, 3)
+                        this.TypeMess[1] = this.Btn[1] == 1 ? true : false
                     }
+                    this.TypeMess[2] = false
                     this.Category = type
                     this.showQuickVue = true
                     break;

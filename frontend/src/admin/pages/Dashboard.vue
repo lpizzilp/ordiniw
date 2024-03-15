@@ -174,6 +174,9 @@ export default {
             } else if (this.toggle[index] === false) {
                 this.status[index] = 'Abilitato'
                 this.toggle[index] = true
+            } else {
+                this.status[index] = 'Abilitato'
+                this.toggle[index] = true
             }
 
             let unionstatus = this.status.join('')
@@ -183,7 +186,7 @@ export default {
                 type: replacestatus,
                 id: sessionStorage.getItem('AdminSagraId')
             }
-            console.log(uniondata.type)
+            
             await axios.put('/SagraComand', uniondata)
             this.Makelog(index)
         },

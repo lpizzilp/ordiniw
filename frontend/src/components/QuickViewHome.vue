@@ -1,22 +1,22 @@
 <template>
     <div class="quick-view">
-        <div v-if="BtnAttivi[0] == 1 || BtnAttivi[1] == 1" class="quick-view-inner">
+        <div v-if="BtnAttivi[0] == true || BtnAttivi[1] == true" class="quick-view-inner">
             <h2>Scelgi il tipo ordine</h2><br>
             <h3>Se desideri essere servito al tavolo, scegli "Tavolo"
                 <slot></slot>
             </h3>
-            <button v-if="BtnAttivi[0] == 1" class="btn" @click="DataParent('W')">Tavolo</button>
-            <button v-if="BtnAttivi[1] == 1" class="btn" @click="DataParent('Y')" style="margin-top: 3vh;">Asporto</button>
+            <button v-if="BtnAttivi[0] == true" class="btn" @click="DataParent('W')">Tavolo</button>
+            <button v-if="BtnAttivi[1] == true" class="btn" @click="DataParent('Y')" style="margin-top: 3vh;">Asporto</button>
             <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
         </div>
-        <div v-else-if="BtnAttivi[2] == 1 && (BtnAttivi[0] == 0 || BtnAttivi[1] == 0)" class="quick-view-inner">
-            <h2>Ordini non abilitati</h2><br>
-            <h3>Il servizio ordini online non è attivo</h3><br>
-            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
-        </div>
-        <div v-else-if="BtnAttivi[2] == 0" class="quick-view-inner">
+        <div v-else-if="BtnAttivi[2] == 'click'" class="quick-view-inner">
             <h2>Prenotazioni chiuse</h2><br>
             <h3>Le prenotazioni sono state chiuse. Riprova più tardi</h3><br>
+            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
+        </div>
+        <div v-else class="quick-view-inner">
+            <h2>Ordini non abilitati</h2><br>
+            <h3>Il servizio ordini online non è attivo</h3><br>
             <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
         </div>
     </div>
@@ -32,6 +32,11 @@ export default {
         Categoria: String,
         BtnAttivi: Array,
     },
+
+        created(){
+        console.log(this.BtnAttivi)
+    },
+
     scrollToTop() {
         window.scrollTo(0, 0);
     },
