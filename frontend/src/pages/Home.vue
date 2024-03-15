@@ -71,18 +71,22 @@
                     <p v-if='Btn[3] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
                     <p v-if='Btn[5] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
                     <button class="btn" @click="UpdateTab('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
-                            class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button>
+                            class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button><br>
+                    <button v-if='Btn[3] == 1' class="btn" @click="ShowAvviso()" style="padding: 1rem; margin-top: 3vh; margin-bottom: 3vh;"><i
+                    class="fa-solid fa-bell" style="padding-right: 2vh;"></i>Avvisami al mio turno</button>
                 </div>
             </div>
         </div>
         <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="TypeMess">
         </QuickViewHome>
         <QuickViewErrore v-if="errore"></QuickViewErrore>
+        <QuickViewEliminacode v-if="showQuickVueEliminacode" @childEvent="handleEliminacode" ></QuickViewEliminacode>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import QuickViewEliminacode from "@/components/QuickViewEliminacode.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
@@ -96,6 +100,7 @@ export default {
             matchUser: undefined,
             errors: [],
             showQuickVue: false,
+            showQuickVueEliminacode: false,
             Category: undefined,
             sagra_name: "",
             Btn: [],
@@ -150,6 +155,10 @@ export default {
             }
         },
 
+        handleEliminacode(data) {
+            this.showQuickVueEliminacode = data.vis
+        },
+
         randomizza() {
             var numeriGenerati = new Set();
             // Funzione per generare un numero casuale unico
@@ -170,6 +179,10 @@ export default {
         UpdateTab(type) {
             this.togleTab = false
             this.handleSubmit(type)
+        },
+
+        ShowAvviso() {
+            this.showQuickVueEliminacode = true
         },
 
         // Punto dove inserisce user
@@ -272,7 +285,7 @@ export default {
             await axios.post('/log', data)
         },
     },
-    components: { QuickViewHome, sevenSegmentDisplay, QuickViewErrore }
+    components: { QuickViewHome, sevenSegmentDisplay, QuickViewErrore, QuickViewEliminacode }
 };
 </script>
 
