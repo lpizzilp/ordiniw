@@ -2,7 +2,7 @@
     <div class="footer">
         <div class="box-container" style="margin-bottom: 10px;">
             <div class="box">
-                <RouterLink v-if="$route.path != '/segnalazioni'" to="/segnalazioni" class="btn">Segnala un errore</RouterLink>
+                <RouterLink v-if="$route.path != '/segnalazioni'" to="/segnalazioni" class="btn">suggerimenti/errori</RouterLink>
             </div>
         </div>
         <div class="box-container">
@@ -82,7 +82,7 @@ export default {
 
 .footer .box-container .box a {
     display: block;
-    font-style: italic;
+    font-style: normal;
     font-size: 2rem;
     color: #f38609;
     padding: 1rem 0;

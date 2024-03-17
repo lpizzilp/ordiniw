@@ -2,7 +2,7 @@
     <div class="register-container">
         <div class="register-form-container">
             <form id="registerForm" @submit="handleSubmit" novalidate autocomplete="off">
-                <h3>Segnala il tuo errore</h3>
+                <h3>Segnalazioni</h3>
 
                 <div v-if="errors.length != 0" class="error-box">
                     <ul>
@@ -10,7 +10,7 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="uError">Seleziona il tuo errore:
+                    <label for="uError">Seleziona voce:
                     </label>
                     <select name="uError" id="uError" v-model="ErrorObj.segnalazione" class="form-select">
                         <option v-for="Tipoerr in errori" :key="Tipoerr" :value="Tipoerr">{{ Tipoerr }}</option>
@@ -21,7 +21,7 @@
                     <label for="uDettagli">Descrizione:
                     </label>
                     <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
-                        placeholder="Descrivi il tuo problema... (se vuoi essere ricontatto lasciaci la tua mail)"
+                        placeholder="Descrivi il tuo problema o dacci un suggerimento... (se vuoi essere ricontatto lasciaci la tua mail)"
                         v-model="ErrorObj.descrizione"></textarea>
                 </div>
 
