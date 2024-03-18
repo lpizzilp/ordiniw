@@ -47,8 +47,7 @@
 
         <div v-else-if="Show == 4" class="quick-view-inner">
             <h2 style="color: #f38609">Errore</h2><br>
-            <h3>Ci scusiamo ma il sistema di notifica non può essere attivata per un incopatibilità di
-                sistema<br>Riprova più tardi
+            <h3>Ci scusiamo ma il sistema di notifica non può essere attivata per un incopatibilità di sistema
                 <slot></slot>
             </h3>
             <button class="btn" @click="Chiudi()">Ho capito</button>
