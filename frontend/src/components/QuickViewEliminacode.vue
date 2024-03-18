@@ -47,7 +47,8 @@
 
         <div v-else-if="Show == 4" class="quick-view-inner">
             <h2 style="color: #f38609">Errore</h2><br>
-            <h3>Ci scusiamo ma il sistema di notifica non può essere attivata per un incopatibilità di sistema
+            <h3>Ci scusiamo ma il sistema di notifica non può essere attivata per un incopatibilità di
+                sistema<br>Riprova più tardi
                 <slot></slot>
             </h3>
             <button class="btn" @click="Chiudi()">Ho capito</button>
@@ -62,7 +63,8 @@ export default {
         return {
             Ncliente: [],
             err: false,
-            Show: null
+            Show: null,
+            NotificationToken: null
         };
     },
 
@@ -143,15 +145,39 @@ export default {
                 this.Show = 4
             } else if (Notification.permission === "granted") {
                 console.log('permesso al primo colpo')
-                this.Show = 2
+                this.getNotificationToken()
             } else if (Notification.permission !== "denied") {
                 // Richiedi il permesso all'utente
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
                         console.log('permesso con richiesta')
-                        this.Show = 2
+                        this.getNotificationToken()
                     }
                 });
+            }
+        },
+
+        async getNotificationToken() {
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: "LA_TUA_PUBLIC_KEY"
+                    });
+                    // Ottieni il token di registrazione dal subscription
+                    const token = subscription.endpoint.split("/").slice(-1)[0];
+                    console.log(token)
+                    // Ora puoi inviare questo token al tuo backend per l'invio delle notifiche push
+                    this.NotificationToken = token
+                    this.Show = 2
+                } else {
+                    console.error("Service worker non registrato");
+                    this.Show = 4
+                }
+            } catch (error) {
+                console.error("Errore nel recuperare il token di registrazione:", error);
+                this.Show = 4
             }
         },
     },
