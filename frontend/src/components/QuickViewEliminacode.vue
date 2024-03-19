@@ -140,45 +140,37 @@ export default {
 
         async requestNotificationPermission() {
             if (!("Notification" in window)) {
-                alert("Questo browser non supporta le notifiche push");
+                alert("Questo browser non supporta le notifiche desktop");
                 this.Show = 4
             } else if (Notification.permission === "granted") {
-                console.log('permesso al primo colpo')
-                this.getNotificationToken()
+                // Permesso già concesso
+                this.sendNotification();
+                this.Show = 2
             } else if (Notification.permission !== "denied") {
-                // Richiedi il permesso all'utente
+                // Richiedi il permesso
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        console.log('permesso con richiesta')
-                        this.getNotificationToken()
+                        this.sendNotification();
+                        this.Show = 2
                     }
                 });
             }
         },
 
-        async getNotificationToken() {
-            try {
-                const registration = await navigator.serviceWorker.getRegistration();
-                if (registration) {
-                    const subscription = await registration.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: "LA_TUA_PUBLIC_KEY"
-                    });
-                    // Ottieni il token di registrazione dal subscription
-                    const token = subscription.endpoint.split("/").slice(-1)[0];
-                    console.log(token)
-                    // Ora puoi inviare questo token al tuo backend per l'invio delle notifiche push
-                    this.NotificationToken = token
-                    this.Show = 2
-                } else {
-                    console.error("Service worker non registrato");
-                    this.Show = 4
+        sendNotification() {
+            console.log('passo')
+            new Notification("Preparati in cassa", {
+                body: "Il tuo numero sta per essere raggiunto da quello dell'eliminacode, preparati in cassa",
+                vibrate: [200, 100, 200],
+                requireInteraction: true,
+                data: {
+                    messageId: 12345,
+                    currentmum: 250
+                    // Altri dati pertinenti
                 }
-            } catch (error) {
-                console.error("Errore nel recuperare il token di registrazione:", error);
-                this.Show = 4
-            }
-        },
+                // Altri opzioni per la notifica
+            });
+        }
     },
 };
 </script>
