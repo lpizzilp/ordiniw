@@ -26,7 +26,6 @@
             <h3>Perchè ti venga inviato il messaggio devi consentire al browser di inviarti notifiche
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent(1)">Consenti</button>
             <button class="btn" @click="Chiudi()" style="background-color: #f38609;">Non consentire e chiudi</button>
         </div>
         <div v-else-if="Show == 2" class="quick-view-inner">
@@ -111,22 +110,16 @@ export default {
             };
             switch (tipo) {
                 case 0:
-                    this.Show = 1
+                    await this.Checkerr()
+                    if (!this.err[0]) {
+                        this.Show = 1
+                    }
                     console.log('passo')
+                    this.DataParent(1)
                     break;
 
                 case 1:
-                    Notification.requestPermission().then(function (permission) {
-                        if (permission === "granted") {
-                            // Il permesso è stato concesso
-                            console.log("Permesso per le notifiche è stato concesso");
-                        } else {
-                            // Il permesso non è stato concesso
-                            console.log("Permesso per le notifiche non è stato concesso");
-                        }
-                    });
                     await this.requestNotificationPermission()
-                    this.Show = 2
                     break;
 
                 case 2:
@@ -159,17 +152,19 @@ export default {
 
         sendNotification() {
             console.log('passo')
-            new Notification("Preparati in cassa", {
-                body: "Il tuo numero sta per essere raggiunto da quello dell'eliminacode, preparati in cassa",
-                vibrate: [200, 100, 200],
-                requireInteraction: true,
-                data: {
-                    messageId: 12345,
-                    currentmum: 250
-                    // Altri dati pertinenti
-                }
-                // Altri opzioni per la notifica
-            });
+            setTimeout(() => {
+                new Notification("Preparati in cassa", {
+                    body: "Il tuo numero sta per essere raggiunto da quello dell'eliminacode, preparati in cassa",
+                    vibrate: [200, 100, 200],
+                    requireInteraction: true,
+                    data: {
+                        messageId: 12345,
+                        currentmum: 250
+                        // Altri dati pertinenti
+                    }
+                    // Altri opzioni per la notifica
+                });
+            }, 4000);
         }
     },
 };
