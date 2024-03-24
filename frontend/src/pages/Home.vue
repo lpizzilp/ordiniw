@@ -74,8 +74,11 @@
                     <p v-if='Btn[5] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
                     <button class="btn" @click="UpdateTab('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
                             class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button><br>
-                    <button v-if='Btn[3] == 1' class="btn" @click="ShowAvviso()"
+                    <button v-if='Btn[3] == 1 && IsIphone == false && Active == true' class="btn" @click="ShowAvviso()"
                         style="padding: 1rem; margin-top: 3vh; margin-bottom: 3vh;"><i class="fa-solid fa-bell"
+                            style="padding-right: 2vh;"></i>Avvisami al mio turno</button>
+                    <button v-if='Btn[3] == 1 && IsIphone == false && Active == false' class="btn" @click="ShowAvviso()"
+                        style="padding: 1rem; margin-top: 3vh; margin-bottom: 3vh;" disabled><i class="fa-solid fa-bell"
                             style="padding-right: 2vh;"></i>Avvisami al mio turno</button>
                 </div>
             </div>
@@ -83,13 +86,15 @@
         <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="TypeMess">
         </QuickViewHome>
         <QuickViewErrore v-if="errore"></QuickViewErrore>
-        <QuickViewEliminacode v-if="showQuickVueEliminacode" :-whatshow="Showeliminacode" @CloseError="handleCloseError"
-            @childEvent="handleEliminacode"></QuickViewEliminacode>
+        <QuickViewEliminacode v-if="showQuickVueEliminacode" :-whatshow="Showeliminacode"
+            :-initial-num="+Display[0].join('')" @CloseError="handleCloseError" @childEvent="handleEliminacode">
+        </QuickViewEliminacode>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import { UAParser } from 'ua-parser-js';
 import QuickViewEliminacode from "@/components/QuickViewEliminacode.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewHome from "@/components/QuickViewHome.vue";
@@ -115,7 +120,9 @@ export default {
             timer: 30,
             togleTab: false,
             errore: false,
-            Showeliminacode: true
+            Showeliminacode: true,
+            IsIphone: false,
+            Active: true
         };
     },
 
@@ -171,6 +178,7 @@ export default {
             } else {
                 this.showQuickVueEliminacode = false
                 console.log('inizio')
+                this.Active = false
                 await this.Faimedia(data.numero)
             }
         },
@@ -192,6 +200,7 @@ export default {
                     try {
                         console.log('primo timeout')
                         const sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
+                        this.Numeroritardato(sagra.data[0].numcoda.toString())
                         Ncorrente = +sagra.data[0].numcoda
                         console.log(Ninizio + ' Numero iniziale')
                         console.log(Ncorrente + ' Numero corrente')
@@ -232,6 +241,7 @@ export default {
                     try {
                         console.log('secondo timeout')
                         const sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
+                        this.Numeroritardato(sagra.data[0].numcoda.toString())
                         Ncorrente = +sagra.data[0].numcoda
                         console.log(Ninizio + ' Numero iniziale')
                         console.log(Ncorrente + ' Numero corrente')
@@ -244,7 +254,7 @@ export default {
                         console.log(Timpiegato + ' T per arrivare al messaggio')
                         if (+Timpiegato <= Tavviso) {
                             console.log('tempo avviso')
-                            this.requestNotificationPermission()
+                            this.serviceWorker(Ncorrente)
                         } else {
                             this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
                             console.log('ricomincio')
@@ -252,7 +262,7 @@ export default {
                         resolve();
                     } catch (error) {
                         console.error("Errore durante la richiesta Axios:", error);
-                        resolve(); // Assicura che la Promise venga sempre risolta, anche in caso di errore
+                        resolve();
                     }
                 }, (Timpiegato / 2));
             });
@@ -260,161 +270,168 @@ export default {
             console.log("uscita");
         },
 
-        requestNotificationPermission() {
-            if (!("Notification" in window)) {
-                alert("Questo browser non supporta le notifiche push");
-            } else if (Notification.permission === "granted") {
-                // Se l'utente ha già dato il permesso
-                // Invia il token di registrazione al backend per le notifiche
-                this.sendTokenToBackend();
-            } else if (Notification.permission !== "denied") {
-                // Richiedi il permesso all'utente
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        // Permesso ottenuto
-                        // Invia il token di registrazione al backend per le notifiche
-                        this.sendTokenToBackend();
-                    }
-                });
+        serviceWorker(Ncorrente) {
+            console.log('entro')
+            // Registrare il Service Worker utilizzando il percorso relativo
+            if ('serviceWorker' in navigator) {
+                console.log('passo')
+                navigator.serviceWorker.register('service.js')
+                    .then(function (registration) {
+                        console.log('Service Worker registrato con successo:', registration);
+                        setTimeout(function () {
+                            console.log('invio');
+                            registration.active.postMessage({
+                                action: 'showNotification',
+                                parametro: Ncorrente
+                            });
+                        }, 4000);
+                    })
+                    .catch(function (error) {
+                        console.error('Errore durante la registrazione del Service Worker:', error);
+                    });
+            } else {
+                console.log('I Service Worker non sono supportati in questo browser.');
+                this.Show = 4;
             }
         },
-        sendTokenToBackend() {
-            console.log('send')
-            // Invia il token di registrazione al backend
-            // Puoi utilizzare Axios o fetch per fare una richiesta al tuo backend
-            // con il token di registrazione come parte del payload della richiesta
+
+
+        randomizza() {
+            var numeriGenerati = new Set();
+            // Funzione per generare un numero casuale unico
+            function generaNumeroUnico() {
+                var numeroCasuale = Math.floor(Math.random() * 999999999) + 1;
+                if (numeriGenerati.has(numeroCasuale)) {
+                    return generaNumeroUnico();
+                }
+                else {
+                    numeriGenerati.add(numeroCasuale);
+                    return numeroCasuale;
+                }
+            }
+            var numeroUnico = generaNumeroUnico();
+            return numeroUnico;
         },
 
+        UpdateTab(type) {
+            this.togleTab = false
+            this.handleSubmit(type)
+        },
 
-    randomizza() {
-        var numeriGenerati = new Set();
-        // Funzione per generare un numero casuale unico
-        function generaNumeroUnico() {
-            var numeroCasuale = Math.floor(Math.random() * 999999999) + 1;
-            if (numeriGenerati.has(numeroCasuale)) {
-                return generaNumeroUnico();
+        ShowAvviso() {
+            this.showQuickVueEliminacode = true
+            this.Showeliminacode = 10
+        },
+
+        // Punto dove inserisce user
+        async handleSubmit(type) {
+            this.TypeMess = []
+            let div = document.getElementsByClassName('tabelloni')
+            var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+            let response = sagra.request.response
+            if (response.includes("{\"code\"")) {
+                this.errore = true
+                this.Makelog(response);
             }
-            else {
-                numeriGenerati.add(numeroCasuale);
-                return numeroCasuale;
-            }
-        }
-        var numeroUnico = generaNumeroUnico();
-        return numeroUnico;
-    },
-
-    UpdateTab(type) {
-        this.togleTab = false
-        this.handleSubmit(type)
-    },
-
-    ShowAvviso() {
-        this.showQuickVueEliminacode = true
-        this.Showeliminacode = 0
-    },
-
-    // Punto dove inserisce user
-    async handleSubmit(type) {
-        this.TypeMess = []
-        let div = document.getElementsByClassName('tabelloni')
-        var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
-        let response = sagra.request.response
-        if (response.includes("{\"code\"")) {
-            this.errore = true
-            this.Makelog(response);
-        }
-        switch (type) {
-            case 'TAB':
-                if (!this.togleTab) {
-                    this.togleTab = true
-                    this.linksito[0] = null
-                    div[0].style.display = 'block'
-                    if (sagra.data[0].flgEliminacode == 1) {
-                        this.Btn[3] = 1
-                        this.Btn[5] = 0
-                        this.Numeroritardato(sagra.data[0].numcoda.toString())
-                    } else if (sagra.data[0].flgInfo == 1) {
-                        this.Btn[5] = 1
-                        this.Btn[3] = 0
-                        this.Display[1] = sagra.data[0].info.replace(/\r\n/g, '<br>');
+            switch (type) {
+                case 'TAB':
+                    if (!this.togleTab) {
+                        this.togleTab = true
+                        this.linksito[0] = null
+                        div[0].style.display = 'block'
+                        if (sagra.data[0].flgEliminacode == 1) {
+                            this.Btn[3] = 1
+                            this.Btn[5] = 0
+                            const parser = new UAParser();
+                            let UAresult = parser.getResult();
+                            if (UAresult.os == 'iOS' || UAresult.device.vendor == 'Apple') {
+                                this.IsIphone = true
+                            } else {
+                                this.IsIphone = false
+                            }
+                            this.Numeroritardato(sagra.data[0].numcoda.toString())
+                        } else if (sagra.data[0].flgInfo == 1) {
+                            this.Btn[5] = 1
+                            this.Btn[3] = 0
+                            this.Display[1] = sagra.data[0].info.replace(/\r\n/g, '<br>');
+                        }
+                        this.AttesaUpdate();
+                    } else {
+                        this.togleTab = false
+                        div[0].style.display = 'none'
+                        this.linksito[1] == null ? this.linksito[0] = null : this.linksito[0] = 1
                     }
-                    this.AttesaUpdate();
-                } else {
-                    this.togleTab = false
+                    break;
+
+                case 'PRE':
+                    if (sagra.data[0].flgPrenotazioni == 1) {
+                        this.Btn[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
+                    }
+                    if (this.Btn[2] == 1) {
+                        var data = {
+                            vis: false,
+                            category: type
+                        }
+                        sessionStorage.setItem('TipoOrdine', 'W');
+                        this.handleChildEvent(data)
+                    } else {
+                        this.TypeMess[2] = 'click'
+                        this.TypeMess[1] = false
+                        this.TypeMess[0] = false
+                        this.Btn[0] = this.Btn[1] = 0
+                        this.showQuickVue = true
+                    }
+                    break;
+
+                default:
                     div[0].style.display = 'none'
-                    this.linksito[1] == null ? this.linksito[0] = null : this.linksito[0] = 1
-                }
-                break;
-
-            case 'PRE':
-                if (sagra.data[0].flgPrenotazioni == 1) {
-                    this.Btn[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
-                }
-                if (this.Btn[2] == 1) {
-                    var data = {
-                        vis: false,
-                        category: type
+                    var ordini = [sagra.data[0].flgTavoli, sagra.data[0].flgAsporto]
+                    console.log(ordini)
+                    if (ordini[0] == 1) {
+                        this.Btn[0] = sagra.data[0].StrOrdini.substring(1, 2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1, 2)
+                        this.TypeMess[0] = this.Btn[0] == 1 ? true : false
+                        this.TypeMess[0] = this.Btn[0] == 1 ? true : false
                     }
-                    sessionStorage.setItem('TipoOrdine', 'W');
-                    this.handleChildEvent(data)
-                } else {
-                    this.TypeMess[2] = 'click'
-                    this.TypeMess[1] = false
-                    this.TypeMess[0] = false
-                    this.Btn[0] = this.Btn[1] = 0
+                    if (ordini[1] == 1) {
+                        this.Btn[1] = sagra.data[0].StrOrdini.substring(2, 3) == "" ? 1 : sagra.data[0].StrOrdini.substring(2, 3)
+                        this.TypeMess[1] = this.Btn[1] == 1 ? true : false
+                    }
+                    this.TypeMess[2] = false
+                    this.Category = type
                     this.showQuickVue = true
-                }
-                break;
-
-            default:
-                div[0].style.display = 'none'
-                var ordini = [sagra.data[0].flgTavoli, sagra.data[0].flgAsporto]
-                console.log(ordini)
-                if (ordini[0] == 1) {
-                    this.Btn[0] = sagra.data[0].StrOrdini.substring(1, 2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1, 2)
-                    this.TypeMess[0] = this.Btn[0] == 1 ? true : false
-                    this.TypeMess[0] = this.Btn[0] == 1 ? true : false
-                }
-                if (ordini[1] == 1) {
-                    this.Btn[1] = sagra.data[0].StrOrdini.substring(2, 3) == "" ? 1 : sagra.data[0].StrOrdini.substring(2, 3)
-                    this.TypeMess[1] = this.Btn[1] == 1 ? true : false
-                }
-                this.TypeMess[2] = false
-                this.Category = type
-                this.showQuickVue = true
-                break;
-        }
-    },
+                    break;
+            }
+        },
 
 
-    async Numeroritardato(numero) {
-        let num = '---'
-        this.Display[0] = num.split('')
-        setTimeout(() => {
-            let num = numero
+        async Numeroritardato(numero) {
+            let num = '---'
             this.Display[0] = num.split('')
-        }, 1500);
-    },
+            setTimeout(() => {
+                let num = numero
+                this.Display[0] = num.split('')
+            }, 1500);
+        },
 
-    async AttesaUpdate() {
-        this.BtnUpData[0] = true
-        this.BtnUpData[1] = 'Puoi riprovare tra 30s'
-        setTimeout(() => {
-            this.BtnUpData[0] = false
-            this.BtnUpData[1] = 'Aggiorna'
-        }, 30000);
-    },
+        async AttesaUpdate() {
+            this.BtnUpData[0] = true
+            this.BtnUpData[1] = 'Puoi riprovare tra 30s'
+            setTimeout(() => {
+                this.BtnUpData[0] = false
+                this.BtnUpData[1] = 'Aggiorna'
+            }, 30000);
+        },
 
-    async Makelog(err) {
-        let data = {
-            mode: 'err',
-            arg: err
-        }
-        await axios.post('/log', data)
+        async Makelog(err) {
+            let data = {
+                mode: 'err',
+                arg: err
+            }
+            await axios.post('/log', data)
+        },
     },
-},
-components: { QuickViewHome, sevenSegmentDisplay, QuickViewErrore, QuickViewEliminacode }
-    };
+    components: { QuickViewHome, sevenSegmentDisplay, QuickViewErrore, QuickViewEliminacode }
+};
 </script>
 
 <style scoped>
