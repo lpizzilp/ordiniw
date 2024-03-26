@@ -85,7 +85,6 @@ export default {
     methods: {
 
         async Checkerr() {
-            console.log(this.InitialNum)
             this.err = []
             if (+this.Ncliente <= 0 || +this.Ncliente >= 1000) {
                 this.err[0] = true
@@ -119,7 +118,6 @@ export default {
                     await this.Checkerr()
                     if (!this.err[0]) {
                         this.Show = 1
-                        console.log('passo')
                         this.DataParent(1)
                     }
                     break;
@@ -149,10 +147,8 @@ export default {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
                         this.serviceWorker()
-                        console.log('permesso concesso')
                     } else if (permission === "denied") {
                         this.Show = 1
-                        console.log('permesso rifiutato')
                     }
                 });
             }
@@ -165,7 +161,6 @@ export default {
             if ('serviceWorker' in navigator) {
                 this.Show = 2
             } else {
-                console.log('I Service Worker non sono supportati in questo browser.');
                 this.Show = 4;
             }
 

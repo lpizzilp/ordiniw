@@ -130,7 +130,6 @@ export default {
 
         async GetUte() {
             this.Ute = (await axios.get('/users')).data
-            console.log(this.Ute)
         },
 
         handleLogout: function () {
@@ -149,7 +148,6 @@ export default {
                     Tabella.rows[i].cells[3].style.backgroundColor = t.authlevel == 0 ? '#2ae477c4' : '#e95018cb'
                 }
             }
-            console.log()
         },
 
         async Rigadata() {

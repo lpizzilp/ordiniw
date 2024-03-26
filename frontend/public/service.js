@@ -7,15 +7,14 @@ self.addEventListener('activate', function () {
 });
 
 self.addEventListener('message', function (event) {
-    console.log('Messaggio ricevuto dal Service Worker:', event.data);
     // Esegui qui la logica per mostrare la notifica
     self.registration.showNotification("Preparati in cassa", {
         body: "Il tuo numero sta per essere raggiunto da quello dell'eliminacode, preparati in cassa.\n Numero corrente " + event.data.parametro,
-        icon: "/Icona.png",
+        Image: "/Icona.png",
         badge: "/Icona.png",
-        image: "/Icona.png",
         vibrate: [500, 200, 500],
         requireInteraction: true,
+        showOnLockScreen: true,
         data: {
             messageId: 12345,
             currentmum: event.data.parametro,

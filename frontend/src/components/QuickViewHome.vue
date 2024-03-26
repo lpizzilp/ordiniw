@@ -33,10 +33,6 @@ export default {
         BtnAttivi: Array,
     },
 
-        created(){
-        console.log(this.BtnAttivi)
-    },
-
     scrollToTop() {
         window.scrollTo(0, 0);
     },

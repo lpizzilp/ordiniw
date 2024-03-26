@@ -185,6 +185,7 @@ export default {
 
 
         async Faimedia(Ncliente) {
+            console.log('fai media')
             var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
             let Ninizio = +sagra.data[0].numcoda
             let Nintotminuti = null
@@ -218,6 +219,7 @@ export default {
                             this.Tminimo = false
                         } else {
                             this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
+                            console.log('ripeti')
                         }
                         resolve();
                     } catch (error) {
@@ -226,8 +228,6 @@ export default {
                     }
                 }, Tinizio);
             });
-
-            console.log("uscita");
         },
 
         async RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso) {
@@ -289,9 +289,6 @@ export default {
                     .catch(function (error) {
                         console.error('Errore durante la registrazione del Service Worker:', error);
                     });
-            } else {
-                console.log('I Service Worker non sono supportati in questo browser.');
-                this.Show = 4;
             }
         },
 
@@ -386,7 +383,6 @@ export default {
                 default:
                     div[0].style.display = 'none'
                     var ordini = [sagra.data[0].flgTavoli, sagra.data[0].flgAsporto]
-                    console.log(ordini)
                     if (ordini[0] == 1) {
                         this.Btn[0] = sagra.data[0].StrOrdini.substring(1, 2) == "" ? 1 : sagra.data[0].StrOrdini.substring(1, 2)
                         this.TypeMess[0] = this.Btn[0] == 1 ? true : false
