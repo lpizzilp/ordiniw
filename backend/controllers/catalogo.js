@@ -5,7 +5,8 @@ import {
     updateSagraCodaeInfoByID,
     getAllSagre,
     updateContrOrdini,
-    getContrOrdini
+    getContrOrdini,
+    Wakeup
 } from "../models/CatalogoModel.js";
 
 
@@ -90,6 +91,17 @@ export const updateControlOrdini=(req,res)=>{
 export const GetControlOrdini=(req,res)=>{
     const id = req.params.id;
     getContrOrdini(id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+
+export const Restattivo=(req,res)=>{
+    Wakeup((err,results)=> {
         if (err) {
             res.send(err);
         }else {

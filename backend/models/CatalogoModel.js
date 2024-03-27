@@ -93,5 +93,18 @@ export const getContrOrdini = (id,result) => {
 };
 
 
+// Resta attivo
+export const Wakeup = (result) => {
+    db.query("Select 1 from catalogo_sagre",(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+
 
 
