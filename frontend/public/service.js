@@ -12,7 +12,6 @@ self.addEventListener('message', function (event) {
         body: "Il tuo numero sta per essere raggiunto da quello dell'eliminacode, preparati in cassa.\n Numero corrente " + event.data.parametro,
         Image: "/Icona.png",
         badge: "/Icona.png",
-        vibrate: [500, 200, 500],
         requireInteraction: true,
         showOnLockScreen: true,
         data: {

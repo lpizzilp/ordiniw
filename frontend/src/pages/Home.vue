@@ -278,20 +278,24 @@ export default {
                 navigator.serviceWorker.register('service.js')
                     .then(function (registration) {
                         console.log('Service Worker registrato con successo:', registration);
-                        setTimeout(function () {
-                            console.log('invio');
-                            registration.active.postMessage({
-                                action: 'showNotification',
-                                parametro: Ncorrente
-                            });
-                        }, 4000);
+                        console.log('invio');
+                        registration.active.postMessage({
+                            action: 'showNotification',
+                            parametro: Ncorrente
+                        });
+                        if (navigator.vibrate) {
+                            // Vibriamo per 500 millisecondi
+                            const pattern = [500, 200, 500, 200, 500]
+                            navigator.vibrate(pattern);
+                        } else {
+                            console.log("Spiacenti, il tuo browser non supporta l'API di vibrazione.");
+                        }
                     })
                     .catch(function (error) {
                         console.error('Errore durante la registrazione del Service Worker:', error);
                     });
             }
         },
-
 
         randomizza() {
             var numeriGenerati = new Set();
