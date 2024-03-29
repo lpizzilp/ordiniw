@@ -159,12 +159,19 @@ export default {
         serviceWorker() {
             // Registrare il Service Worker utilizzando il percorso relativo
             if ('serviceWorker' in navigator) {
+                this.playSound()
                 this.Show = 2
             } else {
                 this.Show = 4;
             }
 
         },
+
+        playSound() {
+            const soundPath = 'suono.mp3';
+            const audio = new Audio(soundPath);
+            audio.play();
+        }
 
     }
 };
