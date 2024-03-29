@@ -260,9 +260,7 @@ export default {
         getConnection() {
             const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
             if (connection) {
-                console.log('Tipo di connessione:', connection.effectiveType);
                 this.wifiquality = connection.effectiveType.indexOf('g')
-                console.log('Velocità di connessione:', connection.downlink + ' Mbps');
                 this.wifispeed = connection.downlink
             } else {
                 console.log('API navigator.connection non supportata.');

@@ -93,12 +93,10 @@ export default {
         },
 
         showNav() {
-            console.log('passo')
             let nav = document.getElementsByClassName('navigation')
             if (nav[0].style.display == 'none' || nav[0].style.display == "") {
                 nav[0].style.display = 'block'
                 this.route = router.currentRoute.value.path
-                console.log(router.currentRoute.value.path)
                 if (this.route == '/admin/dashboard' || this.route == '/admin/utenti') {
                     nav[0].style.marginTop = '70px'
                 } else {
@@ -110,7 +108,6 @@ export default {
         },
 
         RouteNav(type) {
-            console.log('passolink')
             router.push(type)
             this.showNav();
         },

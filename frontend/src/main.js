@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 import "@/axios"
 
-const currentVersion = '1.1.5'; // Versione corrente impostata durante il deploy
+const currentVersion = '1.1.6'; // Versione corrente impostata durante il deploy
 const eventBus = mitt();
 
 //controllo di versione 
@@ -15,10 +15,12 @@ if (savedVersion !== currentVersion) {
     location.reload(true);
 }
 
+
+
 //create vue 
 createApp(App)
     .use(router)
     .use(store)
-    .provide('eventBus',eventBus)
+    .provide('eventBus', eventBus)
     .mount('#app')
 // npm install vue-router
