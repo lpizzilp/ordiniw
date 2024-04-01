@@ -94,7 +94,7 @@
 
 <script>
 import axios from "axios";
-import AvvisoCoda from "@/assets/suono.mp3"
+import AvvisoCoda from "@/assets/sound/suono.mp3"
 import { UAParser } from 'ua-parser-js';
 import QuickViewEliminacode from "@/components/QuickViewEliminacode.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
@@ -286,6 +286,7 @@ export default {
                         });
                         const Isaudio = !!window.Audio
                         if (Isaudio) {
+                            console.log('entro')
                             const audio = new Audio(AvvisoCoda);
                             audio.play();
                         }
