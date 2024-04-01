@@ -73,7 +73,7 @@ import {
     allSagre,
     updateControlOrdini,
     GetControlOrdini,
-    Restattivo,
+    KeepAlive,
 } from "../controllers/catalogo.js";
 
 import {
@@ -214,7 +214,7 @@ router.delete("/api/billstatus/delete", deleteAllBill)
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
 router.get("/api/sagra/ute/:ordine", allSagre);
-router.get("/api/sagra/attiva", Restattivo)
+router.get("/api/sagra/keepalive", KeepAlive)
 router.get("/api/sagra/:sigla", getSagraSig);
 router.get("/api/sagra/controlli/:id", GetControlOrdini);
 router.post("/api/catalogosagre", createSagra);

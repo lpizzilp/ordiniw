@@ -100,6 +100,7 @@ export const Wakeup = (result) => {
             console.log(err);
             result(err,null);
         }else{
+            //result = ' ';
             result(null,results);
         }
     });
