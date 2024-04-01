@@ -163,9 +163,7 @@ export default {
             } else {
                 this.Show = 4;
             }
-
         },
-
     }
 };
 </script>

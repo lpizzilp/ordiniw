@@ -94,6 +94,7 @@
 
 <script>
 import axios from "axios";
+import AvvisoCoda from "@/assets/suono.mp3"
 import { UAParser } from 'ua-parser-js';
 import QuickViewEliminacode from "@/components/QuickViewEliminacode.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
@@ -283,12 +284,14 @@ export default {
                             action: 'showNotification',
                             parametro: Ncorrente
                         });
+                        const Isaudio = !!window.Audio
+                        if (Isaudio) {
+                            const audio = new Audio(AvvisoCoda);
+                            audio.play();
+                        }
                         if (navigator.vibrate) {
-                            // Vibriamo per 500 millisecondi
                             const pattern = [500, 200, 500, 200, 500]
                             navigator.vibrate(pattern);
-                        } else {
-                            console.log("Spiacenti, il tuo browser non supporta l'API di vibrazione.");
                         }
                     })
                     .catch(function (error) {
