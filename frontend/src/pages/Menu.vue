@@ -56,14 +56,15 @@
                                 <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
                             </li>
 
-                        
-                        <hr />
-                        <li id="Compress" style="display: flex; width: 75%; ">
-                            <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
-                            <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58" checkedText="On"
-                            uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" style="margin-left: -58px;"/>
-                        </li>
-                    </ul>
+
+                            <hr />
+                            <li id="Compress" style="display: flex; width: 75%; ">
+                                <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
+                                <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
+                                    checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey"
+                                    style="margin-left: -58px;" />
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -75,17 +76,19 @@
                             <!--<a href="" class="fas fa-heart"></a>-->
                             <div v-if="Artimage(f.food_src) != '' && Compress == false" class="image">
                                 <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)"
-                                    :alt="require('../assets/images/no.png')" @click="qty[index]++, onQtyChange(index)" />
+                                    :alt="require('../assets/images/no.png')"
+                                    @click="qty[index]++, onQtyChange(index)" />
                                 <img v-else :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')" />
                             </div>
                             <div class="content">
-                                <h3>{{ f.food_name }}</h3>
+                                <h3>{{ f.FlgVariante != 0 ? '++ ' + f.food_name + ' ++' : f.food_name }}</h3>
                                 <div class="desc" v-if="Compress == false">
                                     <p>{{ f.food_desc }}</p>
                                 </div>
                                 <div class="price" v-if="Compress == false">
                                     {{ parseFloat(f.food_price) - parseFloat(f.food_discount) }} €
-                                    <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }} €</span>
+                                    <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }}
+                                        €</span>
                                 </div>
 
                                 <div v-if="f.FlgPrenotabile == 0 && f.QtaDisponibile == 0" class="add-to-cart">
@@ -94,7 +97,8 @@
                                         Esaurito
                                     </h4>
                                 </div>
-                                <div v-else-if="f.FlgPrenotabile != 0 && QtyDisponibile[index] == true" class="add-to-cart">
+                                <div v-else-if="f.FlgPrenotabile != 0 && QtyDisponibile[index] == true"
+                                    class="add-to-cart">
                                     <h4
                                         style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
                                         Prenotazione Chiusa
@@ -119,8 +123,10 @@
                     <div v-if="!filterFoods.length">
                         <div class="box">
                             <div class="content">
-                                <h1 v-if="Prenotazione == '1'" style="color: #057835fa;">Nessun articolo! <br>Prenotazioni
-                                    chiuse</h1>
+                                <h1 v-if="Prenotazione == '1'" style="color: #057835fa;">Nessun articolo!
+                                    <br>Prenotazioni
+                                    chiuse
+                                </h1>
                                 <h1 v-else style="color: #057835fa;">Nessun articolo! <br>Scegli un altro Reparto</h1>
                             </div>
                             <div class="image">
@@ -149,7 +155,7 @@
                 <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
-            @Closedata="CloseQuickvue"></quick-view-prenotazione>
+            @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
     <quick-view-errore v-if="Quickerrore"></quick-view-errore>
 </template>
@@ -170,10 +176,12 @@ export default {
     data() {
         let categorytype = ""
         let flgartprenotabile = "0"
+        let flgvariante = "0"
         let Ordertype = sessionStorage.getItem('TipoOrdine')
         switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
+                flgvariante = "1"
                 break;
 
 
@@ -183,7 +191,7 @@ export default {
         }
 
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "" },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
             showDropDown: false,
             matchUser: undefined,
             setqty: false,
@@ -211,7 +219,7 @@ export default {
     created() {
         this.buildArray()
         this.getAllCartItem()
-        this.getConnection()
+        this.getWIFIConnection()
         if (this.Prenotazione == '1') {
             this.chekdata()
             this.chekQty()
@@ -234,8 +242,10 @@ export default {
                 (this.evaluatePrice(f, this.foodObj.price)) &&
                 f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
                 (this.evaluateStatus(f, this.foodObj.status)) &&
-                f.FlgPrenotabile.toString().match(this.foodObj.prenotazioni.toString()) &&
-                f.DataFineValidita.toString() >= (this.foodObj.ora.toString()));
+                Math.abs(f.FlgDisabled).toString().match('0') &&
+                Math.abs(f.FlgPrenotabile).toString().match(this.foodObj.prenotazioni.toString()) &&
+                f.DataFineValidita.toString() >= (this.foodObj.ora.toString()) &&
+                (Math.abs(f.FlgVariante).toString() == '0' || (this.foodObj.varianti.toString())));
         },
 
         currentPageItems: function () {
@@ -257,7 +267,7 @@ export default {
 
     methods: {
 
-        getConnection() {
+        getWIFIConnection() {
             const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
             if (connection) {
                 this.wifiquality = connection.effectiveType.indexOf('g')
@@ -312,7 +322,7 @@ export default {
             }
         },
 
-        changeCompress(){
+        changeCompress() {
             if (this.Compress == false) {
                 this.Compress = true
             } else {
@@ -346,7 +356,7 @@ export default {
                                 if (this.allFoods[i].QtaDisponibile == null || undefined || "") {
                                     this.QtyDisponibile.push(false)
                                 } else {
-                                    if (this.allFoods[i].QtaDisponibile < totqty[l].somma_qty) {
+                                    if (this.allFoods[i].QtaDisponibile <= totqty[l].somma_qty) {
                                         this.QtyDisponibile.push(true)
                                     } else {
                                         this.QtyDisponibile.push(false)
@@ -477,22 +487,81 @@ export default {
 
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
-            }
 
+            }
             this.showCart = false;
             this.eventBus.emit("showCart", this.showCart);
 
             // Imposta un timer specifico per l'articolo
             this.throttleTimers[index] = setTimeout(() => {
-                this.addToCart(index);
+                if (this.currentPageItems[index].FlgVariante != 0) {
+                    this.AltreVarianti(index)
+                } else {
+                    this.addToCart(index, false);
+                }
                 delete this.throttleTimers[index]; // Rimuovi il timer dopo l'esecuzione
             }, this.throttleDelay);
 
             this.setqty = true;
+
+        },
+
+        async AltreVarianti(index) {
+            console.log('AltreVariantei')
+            let lastItem = []
+            if (sessionStorage.getItem('MatchUser')) {
+                this.Isuser = true
+                let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                let response = existItem.request.response
+                if (response.includes("{\"code\"")) {
+                    this.Quickerrore = true
+                    this.Makelog(response);
+                } else {
+                    if (existItem.data.length > 0) {
+                        console.log('Lenght+ di 0')
+                        for (var i = existItem.data.length - 1; i >= 0; i--) {
+                            for (let l = 0; l < this.currentPageItems.length; l++) {
+                                console.log(this.currentPageItems[l].food_id + ' current food_id')
+                                console.log(existItem.data[i].food_id + ' exixt food-id')
+                                if (this.currentPageItems[l].food_id == existItem.data[i].food_id) {
+                                    console.log('id uguali')
+                                    if (this.currentPageItems[l].FlgVariante == 0) {
+                                        console.log('art non variabile')
+                                        lastItem[0] = existItem.data[i].food_id
+                                        lastItem[1] = existItem.data[i].item_qty
+                                        if (lastItem[1] >= this.qty[index]) {
+                                            console.log('qta corretta ')
+                                            this.addToCart(index, true)
+                                            break;
+                                        } else {
+                                            console.log('correggo qtaa')
+                                            this.qty[index] = lastItem[1]
+                                            this.addToCart(index, true)
+                                        }
+                                    } else {
+                                        console.log('art variabile')
+                                        console.log(this.currentPageItems[index].food_id + ' selezionato food_id')
+                                        console.log(existItem.data[i].food_id)
+                                        if (this.currentPageItems[index].food_id != existItem.data[i].food_id) {
+                                            console.log('corregog qta')
+                                            this.qty[index] = this.qty[index] + existItem.data[i].item_qty
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    } else {
+                        console.log('0 esco')
+                        this.qty[index] = 0
+                        return;
+                    }
+                }
+            }
         },
 
 
-        async addToCart(index) {
+        async addToCart(index, IsVariante) {
             this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
 
@@ -537,8 +606,11 @@ export default {
                     this.Quickerrore = true
                     this.Makelog(response);
                 }
-
-                if (cartItems.data.length > 1) {
+                let endItem = cartItems.data.length -1
+                const Itemindex = this.currentPageItems.find(item => item.food_id === cartItems.data[endItem].food_id);
+                console.log(Itemindex)
+                IsVariante = Itemindex.FlgVariante != 0 ? true : false
+                if (cartItems.data.length > 1 && !IsVariante) {
                     // Se ci sono più di un articolo nel carrello, rimuovi l'articolo aggiunto
                     await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
                     this.qty[index] = 0;
@@ -555,67 +627,68 @@ export default {
             this.eventBus.emit("showCart", this.showCart);
         },
 
-        async addToCart_old(index) {
-            this.sendId = this.currentPageItems[index].food_id;
-            this.showCounterCart = !this.showCounterCart;
+        /*  async addToCart_old(index) {
+              this.sendId = this.currentPageItems[index].food_id;
+              this.showCounterCart = !this.showCounterCart;
+     
+              let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
+              let response = existItem.request.response
+              if (response.includes("{\"code\"")) {
+                  this.Quickerrore = true
+                  this.Makelog(response);
+              }
+              let data = {
+                  user_id: parseInt(sessionStorage.getItem('Username')),
+                  food_id: this.sendId,
+                  item_qty: parseInt(this.qty[index])
+              }
+     
+              this.setqty = false
+     
+              switch (existItem.data.length) {
+                  case 1:
+                      if (data.item_qty <= 0) {
+                          await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
+                          this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!")
+                      } else {
+                          await axios.put("/cartItem/", data);
+                          this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
+                      }
+                      break;
+     
+                  case 0:
+                      if (data.item_qty <= 0) {
+                          this.$refs.alert.showAlert("Errore", "Riprovare!", "Impossibile inserire articolo con con quantità pari a " + data.item_qty + "!")
+                      } else {
+                          await axios.post("/cartItem", data);
+                          this.$refs.alert.showAlert("successo", "Grazie!", "Articolo aggiunto al carrello!")
+                          break;
+                      }
+              }
+     
+              if (this.Prenotazione === "1") {
+                  let Itemprenotabili = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                  let response = Itemprenotabili.request.response
+                  if (response.includes("{\"code\"")) {
+                      this.Quickerrore = true
+                      this.Makelog(response);
+                  }
+                  if (Itemprenotabili.data.length > 1) {
+                      await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
+                      this.qty[index] = 0
+                      this.showQuickView = true
+                      this.$refs.alert.showAlert("Errore", "Riprovare!", "Puoi prenotare solo una articolo per ordine!");
+                  } else {
+                      await axios.put("/cartItem/", data);
+                      this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
+                  }
+              }
+     
+              this.showCart = true
+              this.eventBus.emit("showCart", this.showCart);
+     
+          },*/
 
-            let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
-            let response = existItem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                }
-            let data = {
-                user_id: parseInt(sessionStorage.getItem('Username')),
-                food_id: this.sendId,
-                item_qty: parseInt(this.qty[index])
-            }
-
-            this.setqty = false
-
-            switch (existItem.data.length) {
-                case 1:
-                    if (data.item_qty <= 0) {
-                        await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
-                        this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!")
-                    } else {
-                        await axios.put("/cartItem/", data);
-                        this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
-                    }
-                    break;
-
-                case 0:
-                    if (data.item_qty <= 0) {
-                        this.$refs.alert.showAlert("Errore", "Riprovare!", "Impossibile inserire articolo con con quantità pari a " + data.item_qty + "!")
-                    } else {
-                        await axios.post("/cartItem", data);
-                        this.$refs.alert.showAlert("successo", "Grazie!", "Articolo aggiunto al carrello!")
-                        break;
-                    }
-            }
-
-            if (this.Prenotazione === "1") {
-                let Itemprenotabili = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                let response = Itemprenotabili.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                }
-                if (Itemprenotabili.data.length > 1) {
-                    await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
-                    this.qty[index] = 0
-                    this.showQuickView = true
-                    this.$refs.alert.showAlert("Errore", "Riprovare!", "Puoi prenotare solo una articolo per ordine!");
-                } else {
-                    await axios.put("/cartItem/", data);
-                    this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
-                }
-            }
-
-            this.showCart = true
-            this.eventBus.emit("showCart", this.showCart);
-
-        },
 
         async Makelog(err) {
             let data = {
@@ -954,23 +1027,27 @@ hr {
         margin: 0%;
         margin-top: 5vh;
     }
-@media (max-width: 361px) {
-    .menu-section .box-container {
-        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-        gap: 1rem;
-    }
-    .menu-section .box-container .box .content h3 {
-        height: 4rem;
-        font-size: 15px !important;
-    }
-    .menu-section .box-container .box .content .price {
-        font-size: 1.8rem;
-     }
-     .menu-section .box-container .box .content .desc p {
-        font-size: small;
-    }
 
-}
+    @media (max-width: 361px) {
+        .menu-section .box-container {
+            grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+            gap: 1rem;
+        }
+
+        .menu-section .box-container .box .content h3 {
+            height: 4rem;
+            font-size: 15px !important;
+        }
+
+        .menu-section .box-container .box .content .price {
+            font-size: 1.8rem;
+        }
+
+        .menu-section .box-container .box .content .desc p {
+            font-size: small;
+        }
+
+    }
 
 }
 </style>
