@@ -212,6 +212,7 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
+            Varianticounter: 0,
             Quickerrore: false
         };
     },
@@ -509,6 +510,7 @@ export default {
         async AltreVarianti(index) {
             console.log('AltreVariantei')
             let lastItem = []
+            let QtaVarianti = []
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
                 let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
@@ -535,17 +537,13 @@ export default {
                                             break;
                                         } else {
                                             console.log('correggo qtaa')
+                                            console.log(lastItem[1] + ' e ' + QtaVarianti)
                                             this.qty[index] = lastItem[1]
                                             this.addToCart(index, true)
                                         }
                                     } else {
-                                        console.log('art variabile')
-                                        console.log(this.currentPageItems[index].food_id + ' selezionato food_id')
-                                        console.log(existItem.data[i].food_id)
-                                        if (this.currentPageItems[index].food_id != existItem.data[i].food_id) {
-                                            console.log('corregog qta')
-                                            this.qty[index] = this.qty[index] + existItem.data[i].item_qty
-                                        }
+                                        QtaVarianti[this.Varianticounter] = existItem.data[i].food_id
+                                        this.Varianticounter = this.Varianticounter + 1
                                     }
                                 }
                             }
