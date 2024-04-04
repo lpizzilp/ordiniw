@@ -582,12 +582,13 @@ export default {
                 // Verifica se l'articolo esiste nel carrello
                 let existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
                 let response = existingCartItem.request.response
+                var Esiste = existingCartItem.data.length > 0 ? true : false
                 if (response.includes("{\"code\"")) {
                     this.Quickerrore = true
                     this.Makelog(response);
                 }
 
-                if (existingCartItem.data.length > 0) {
+                if (Esiste) {
                     // Se l'articolo esiste, aggiorna la quantità
                     await axios.put("/cartItem/", data);
                     this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
@@ -606,18 +607,19 @@ export default {
                     this.Quickerrore = true
                     this.Makelog(response);
                 }
-                let endItem = cartItems.data.length -1
-                const Itemindex = this.currentPageItems.find(item => item.food_id === cartItems.data[endItem].food_id);
-                console.log(Itemindex)
-                IsVariante = Itemindex.FlgVariante != 0 ? true : false
+
+                IsVariante = this.currentPageItems[index].FlgVariante != 0 ? true : false
+                if (!IsVariante) {
+                    IsVariante = Esiste === true ? true : false
+                }
                 if (cartItems.data.length > 1 && !IsVariante) {
-                    // Se ci sono più di un articolo nel carrello, rimuovi l'articolo aggiunto
+                    // Se ci sono più di un articolo non variante nel carrello, rimuovi l'articolo aggiunto
                     await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
                     this.qty[index] = 0;
                     this.showQuickView = true;
                     this.$refs.alert.showAlert("Attenzione", "Ci Dispiace!", "Puoi prenotare solo un articolo per ordine!");
                 } else {
-                    // Altrimenti, conferma la prenotazione
+                    console.log('entra')
                     await axios.put("/cartItem/", data);
                     this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
                 }
