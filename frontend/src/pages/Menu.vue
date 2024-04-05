@@ -212,7 +212,6 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
-            Varianticounter: 0,
             Quickerrore: false
         };
     },
@@ -508,9 +507,9 @@ export default {
         },
 
         async AltreVarianti(index) {
-            console.log('AltreVariantei')
+            this.sendId = this.currentPageItems[index].food_id;
             let lastItem = []
-            let QtaVarianti = []
+            let QtaVarianti =0
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
                 let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
@@ -520,37 +519,29 @@ export default {
                     this.Makelog(response);
                 } else {
                     if (existItem.data.length > 0) {
-                        console.log('Lenght+ di 0')
                         for (var i = existItem.data.length - 1; i >= 0; i--) {
                             for (let l = 0; l < this.currentPageItems.length; l++) {
-                                console.log(this.currentPageItems[l].food_id + ' current food_id')
-                                console.log(existItem.data[i].food_id + ' exixt food-id')
                                 if (this.currentPageItems[l].food_id == existItem.data[i].food_id) {
-                                    console.log('id uguali')
                                     if (this.currentPageItems[l].FlgVariante == 0) {
-                                        console.log('art non variabile')
                                         lastItem[0] = existItem.data[i].food_id
                                         lastItem[1] = existItem.data[i].item_qty
-                                        if (lastItem[1] >= this.qty[index]) {
-                                            console.log('qta corretta ')
+                                        if (lastItem[1] >= (this.qty[index] + QtaVarianti)) {
                                             this.addToCart(index, true)
                                             break;
                                         } else {
-                                            console.log('correggo qtaa')
-                                            console.log(lastItem[1] + ' e ' + QtaVarianti)
-                                            this.qty[index] = lastItem[1]
+                                            this.qty[index] = lastItem[1] - QtaVarianti
                                             this.addToCart(index, true)
                                         }
                                     } else {
-                                        QtaVarianti[this.Varianticounter] = existItem.data[i].food_id
-                                        this.Varianticounter = this.Varianticounter + 1
+                                        if (existItem.data[i].food_id != this.sendId) {
+                                            QtaVarianti = existItem.data[i].item_qty + QtaVarianti
+                                        }
                                     }
                                 }
                             }
 
                         }
                     } else {
-                        console.log('0 esco')
                         this.qty[index] = 0
                         return;
                     }
@@ -617,7 +608,6 @@ export default {
                     this.showQuickView = true;
                     this.$refs.alert.showAlert("Attenzione", "Ci Dispiace!", "Puoi prenotare solo un articolo per ordine!");
                 } else {
-                    console.log('entra')
                     await axios.put("/cartItem/", data);
                     this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
                 }

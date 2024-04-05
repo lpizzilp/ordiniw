@@ -134,6 +134,7 @@ CREATE TABLE `food` (
   `DataFineValidita` varchar(10) DEFAULT NULL,
   `FlgPrenotabile` tinyint(1) DEFAULT 0,
   `DataFinePRT` varchar(10) DEFAULT NULL,
+  `FlgVariante` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

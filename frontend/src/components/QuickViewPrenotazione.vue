@@ -27,7 +27,6 @@ export default {
 
     methods: {
         DataParent() {
-            this.eventBus.emit("showCart", false);
             this.$emit('closedata', false);
         },
     },

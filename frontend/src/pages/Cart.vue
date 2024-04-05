@@ -273,6 +273,22 @@ export default {
                 food_id: this.cartItem[i],
                 item_qty: this.itemQuantity[i]
             };
+
+            let IsVariante = this.filterFoods.find(item => item.food_id == this.cartItem[i])
+            IsVariante = IsVariante.FlgVariante == 0 ? false : true
+            console.log(IsVariante)
+            if (IsVariante) {
+                let Nonvariante = this.filterFoods.findIndex(item => item.FlgVariante == 0)
+                let Maxqta = this.itemQuantity[Nonvariante]
+                let Qtavarianti = 0
+                for (let i = (Nonvariante + 1); i < this.cartItem.length; i++) {
+                    Qtavarianti = Qtavarianti + this.itemQuantity[i]
+                }
+                if (Qtavarianti > Maxqta) {
+                    this.itemQuantity[i] = data.item_qty - (Qtavarianti - Maxqta)
+                    data.item_qty = this.itemQuantity[i]
+                }
+            }
             await axios.put("/cartItem/", data)
         },
 
