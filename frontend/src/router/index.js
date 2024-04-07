@@ -14,6 +14,7 @@ import Prenotazioni from '../admin/pages/Prenotazioni.vue'
 import Confirm from '../admin/login/Confirm.vue';
 import Segnalazione from '../pages/Segnalazione.vue'
 import Utenti from '../admin/pages/Utenti.vue'
+import Contaprezzi from "@/pages/Contaprezzi.vue";
 
 
 const routes = [
@@ -36,6 +37,11 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: Cart,
+  },
+  {
+    path: "/contaprezzi",
+    name: "Contaprezzi",
+    component: Contaprezzi,
   },
   {
     path: "/register",
