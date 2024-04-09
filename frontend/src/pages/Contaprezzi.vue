@@ -12,11 +12,8 @@
                     <div class="in-cart col-md-9">
                         <div class="box">
                             <div class="box-title item-total row">
-                                <h3>
-                                    <p style="font-size: 15px;">{{ filterFoods.length.toString() }}
-                                        <span v-if="filterFoods.length != 1">Articoli nel tuo carrello</span>
-                                        <span v-else>Articolo nel tuo carrello</span>
-                                    </p>
+                                <h3 style="border: 1px solid black; padding: 7px; margin: 0; text-align: center; justify-content: center; width: ;">
+                                    <p>Gruppi tra cui dividere il prezzo: <input type="text" :placeholder="Coperti" v-model="Coperti" @input="this.Calcnumbtn()"></p>
                                 </h3>
                             </div>
 
@@ -40,21 +37,27 @@
                                             <h2 class="item-name" style="color: #146c39">{{ f.food_name }}</h2>
                                             <div class="item-desc" style="color: black;">
                                                 <b>&nbsp;</b>
-                                                <p style="color: black;">{{ f.food_desc.substring(0, 25) }}</p>
+                                                <b>&nbsp;</b>
                                             </div>
                                         </div>
 
                                         <div class="item-price col-sm-1">
                                             <label id="iQuantity" class="form-control item-quantity">{{
                                                 itemQuantity[index]
-                                                }}</label>
+                                            }}</label>
+                                        </div>
 
+                                        <div class="item-qty">
+                                            <button v-for="(f, index) in group" :key="index" class="btn" value="plus"
+                                                :style="{ 'border-radius': '10px 10px 0px 0px' }"
+                                                @click="itemQuantity[index]++, onQtyChange(index)"><i
+                                                    class="fa-solid fa-plus"></i></button>
                                         </div>
 
                                         <div class="cal-total col-sm-2">
                                             <h4 class="item-total">{{
                                                 calculateItemPrice(index)
-                                                }}€
+                                            }}€
                                             </h4>
                                         </div>
                                     </div>
@@ -106,6 +109,9 @@ export default {
         return {
             cartItem: [],
             itemQuantity: [],
+            Coperti: parametriObj.coperti,
+            group: [],
+            screenWidth: window.innerWidth,
             showQuickView: false,
             dataFromParent: null,
             Isuser: false,
@@ -115,6 +121,7 @@ export default {
 
     created() {
         this.getAllBillItem();
+        this.Calcnumbtn();
     },
 
     computed: {
@@ -137,12 +144,10 @@ export default {
 
     methods: {
 
-        Artimage(food) {
-            try {
-                return require(`../assets/images/${food}`);
-
-            } catch (ex) {
-                return '';//require(`../assets/images/no.png`);
+        Calcnumbtn() {
+            this.group = []
+            for (let i = 0; i < this.Coperti; i++) {
+                this.group.push(i)
             }
         },
 
@@ -329,6 +334,18 @@ export default {
     margin-top: 27px;
 }
 
+.item-qty {
+    display: flex;
+    flex-wrap: nowrap;
+    position: absolute;
+    margin-top: 30px;
+    margin-left: 400px
+}
+
+.item-qty {
+    display: inline;
+}
+
 .remove-btn i {
     padding-right: 5px;
 }
@@ -449,6 +466,12 @@ export default {
     .item-price {
         position: absolute;
         margin-top: 30px;
+    }
+
+    .item-qty {
+        position: absolute;
+        margin-top: 30px;
+        margin-left: 120px
     }
 
     .cal-total {
