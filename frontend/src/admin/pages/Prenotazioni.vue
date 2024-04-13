@@ -23,8 +23,8 @@
                     </tr>
                 </thead>
                 <tbody v-for="(t, id) in totqty.slice()" :key="t.food_name">
-                    <tr>
-                        <td style="padding: 12px 4px;">{{ t.food_name }}</td>
+                    <tr  :style="{ backgroundColor: t.FlgVariante == 0 ? none : '#d3ffb3' }">
+                        <td style="padding: 12px 4px;">{{ t.FlgVariante == 0 ? t.food_name : '++ Variante ' + t.food_name + ' ++'}}</td>
                         <td style="padding: 12px 4px;"></td>
                         <td style="padding: 12px 4px;"></td>
                         <td style="padding: 12px 4px;">{{ t.somma_qty }}</td>
@@ -45,7 +45,7 @@
                         <th>Data Prenotazione</th>
                         <th>Stato</th>
                     </tr>
-                    <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id">
+                    <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id" :style="{ backgroundColor: b.book_status == 3 ? '#f34b2a' : 'none', color: b.book_status == 3 ? 'white' : 'black'}">
                         <td v-if="showSerata[id] == true" style="width: 1%;">{{ b.book_id }}</td>
                         <td v-if="showSerata[id] == true">{{ b.food_name }}</td>
                         <td v-if="showSerata[id] == true">{{ b.item_qty }}</td>

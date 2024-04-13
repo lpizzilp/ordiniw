@@ -178,7 +178,6 @@ export default {
                 this.showQuickVueEliminacode = false
             } else {
                 this.showQuickVueEliminacode = false
-                console.log('inizio')
                 this.Active = false
                 await this.Faimedia(data.numero)
             }
@@ -186,7 +185,6 @@ export default {
 
 
         async Faimedia(Ncliente) {
-            console.log('fai media')
             var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
             let Ninizio = +sagra.data[0].numcoda
             let Nintotminuti = null
@@ -196,31 +194,21 @@ export default {
             const Tinizio = 120000 // 2 secondi in millisecondi
             const Tavviso = 300000 // 5 minuti in millisecondi
             const Tnoneseguibile = Tavviso
-            console.log('dati messi')
             await new Promise(resolve => {
                 setTimeout(async () => {
                     try {
-                        console.log('primo timeout')
                         const sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
                         this.Numeroritardato(sagra.data[0].numcoda.toString())
                         Ncorrente = +sagra.data[0].numcoda
-                        console.log(Ninizio + ' Numero iniziale')
-                        console.log(Ncorrente + ' Numero corrente')
-                        console.log(Ncliente + ' Ncliente')
-                        console.log()
                         Nintotminuti = Ncorrente - Ninizio
-                        console.log(Nintotminuti + ' Numero passati in 2 minuti')
                         Nmancanti = Ncliente - Ncorrente
-                        console.log(Nmancanti + ' Numeri che manchano al cliente')
                         Timpiegato = (Tinizio * Nmancanti) / Nintotminuti
-                        console.log(Timpiegato + ' T per arrivare al messaggio')
                         if (+Timpiegato <= Tnoneseguibile) {
                             this.showQuickVueEliminacode = true
                             this.Showeliminacode = 3
                             this.Tminimo = false
                         } else {
                             this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
-                            console.log('ripeti')
                         }
                         resolve();
                     } catch (error) {
@@ -232,33 +220,22 @@ export default {
         },
 
         async RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso) {
-            console.log('ricomincio e inizo')
             let Nintotminuti = null
             let Ncorrente = null
             let Nmancanti = null
-            console.log('dati messi')
             await new Promise(resolve => {
                 setTimeout(async () => {
                     try {
-                        console.log('secondo timeout')
                         const sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
                         this.Numeroritardato(sagra.data[0].numcoda.toString())
                         Ncorrente = +sagra.data[0].numcoda
-                        console.log(Ninizio + ' Numero iniziale')
-                        console.log(Ncorrente + ' Numero corrente')
-                        console.log(Ncliente + ' Ncliente')
                         Nintotminuti = Ncorrente - Ninizio
-                        console.log(Nintotminuti + ' Numero passati in ' + Timpiegato + ' minuti')
                         Nmancanti = Ncliente - Ncorrente
-                        console.log(Nmancanti + ' Numeri che manchano al cliente')
                         Timpiegato = (Tinizio * Nmancanti) / Nintotminuti
-                        console.log(Timpiegato + ' T per arrivare al messaggio')
                         if (+Timpiegato <= Tavviso) {
-                            console.log('tempo avviso')
                             this.serviceWorker(Ncorrente)
                         } else {
                             this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
-                            console.log('ricomincio')
                         }
                         resolve();
                     } catch (error) {
@@ -268,25 +245,19 @@ export default {
                 }, (Timpiegato / 2));
             });
 
-            console.log("uscita");
         },
 
         serviceWorker(Ncorrente) {
-            console.log('entro')
             // Registrare il Service Worker utilizzando il percorso relativo
             if ('serviceWorker' in navigator) {
-                console.log('passo')
                 navigator.serviceWorker.register('service.js')
                     .then(function (registration) {
-                        console.log('Service Worker registrato con successo:', registration);
-                        console.log('invio');
                         registration.active.postMessage({
                             action: 'showNotification',
                             parametro: Ncorrente
                         });
                         const Isaudio = !!window.Audio
                         if (Isaudio) {
-                            console.log('entro')
                             const audio = new Audio(AvvisoCoda);
                             audio.play();
                         }

@@ -78,40 +78,6 @@ export const Emailregistrazione = (data, result) => {
 
     var emailText = ""
     emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
-            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Info registrazione</p>
-            <p style="text-align: left; font-size:16px;">Buongiorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che l'utente da te creato non è ancora attivo e per essere utilizzato dovrà essere confermato da noi.<br><br>Ti preghiamo di attendere un ulteriore email dove ti informeremo che il tuo utente è stato attivato.</p>
-            <hr style="border: 2px dashed #27ae60;">
-            </div>
-            <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
-                <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Dati inseriti</p>
-                <p style="text-align: center; font-size:16px;">Ti presentiamo la lista dei dati che hai inserito:</p>
-                <ul style="padding: 10px; list-style-type: none;">
-                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Nome: `+ data.admin_name + `<li>
-                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Email: `+ data.admin_email + `<li>
-                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Password: `+ data.admin_password + `<li>
-                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Sagra: `+ data.admin_sagra + `<li>
-                </ul>
-        </div>
-        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
-            <hr style="border: 2px dashed #27ae60;">
-            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione avvenuta alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
-        </div>`;
-
-    mailOptions.to = data.admin_email
-    mailOptions.subject = "Info utente per ordini.esagra.it"
-    mailOptions.html = emailText
-
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log('Errore durante l\'invio dell\'email:', error);
-            result(error, null);
-        } else {
-            console.log('Email inviata:', info.response);
-            result(null, result[0]);
-        }
-    });
-
-    emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Richiesta registrazione</p>
             <p style="text-align: center; font-size:16px;">Un nuovo utente ha richiesto l'accesso come amministratore.<br>Controlla le informazioni e conferma l'utente</p>
             <hr style="border: 2px dashed #27ae60;">
@@ -134,7 +100,43 @@ export const Emailregistrazione = (data, result) => {
             <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione avvenuta alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
         </div>`;
 
+    mailOptions.to = mailOptions.to
     mailOptions.subject = "Richiesta accesso come amministratore"
+    mailOptions.html = emailText
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log('Errore durante l\'invio dell\'email:', error);
+            result(error, null);
+        } else {
+            console.log('Email inviata:', info.response);
+            result(null, result[0]);
+        }
+    });
+
+
+    emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
+            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60;">Info registrazione</p>
+            <p style="text-align: left; font-size:16px;">Buongiorno nuovo amministratore,<br>Ti abbiamo inviato questa email per informarti che l'utente da te creato non è ancora attivo e per essere utilizzato dovrà essere confermato da noi.<br><br>Ti preghiamo di attendere un ulteriore email dove ti informeremo che il tuo utente è stato attivato.</p>
+            <hr style="border: 2px dashed #27ae60;">
+            </div>
+            <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #27ae60; border-right:  2px dashed #27ae60;">
+                <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Dati inseriti</p>
+                <p style="text-align: center; font-size:16px;">Ti presentiamo la lista dei dati che hai inserito:</p>
+                <ul style="padding: 10px; list-style-type: none;">
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Nome: `+ data.admin_name + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Email: `+ data.admin_email + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Password: `+ data.admin_password + `<li>
+                    <li style="padding: 5px 10px; list-style-type: square; color: black; font-size:16px;">Sagra: `+ data.admin_sagra + `<li>
+                </ul>
+        </div>
+        <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
+            <hr style="border: 2px dashed #27ae60;">
+            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione avvenuta alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
+        </div>`;
+
+    mailOptions.to = data.admin_email
+    mailOptions.subject = "Info utente per ordini.esagra.it"
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -197,7 +199,7 @@ export const EmailConf = (data, result) => {
 
 };
 
-// registrazione
+// segnalazione
 export const Emailsegnalazione = (data, result) => {
     const transporter = emaildata
 

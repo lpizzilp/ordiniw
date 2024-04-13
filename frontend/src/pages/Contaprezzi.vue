@@ -2,9 +2,8 @@
     <div class="shopping-cart-section">
 
         <div class="heading">
-            <span>Carrello</span>
-            <h3 v-if="isPrenotazione">Conferma la Prenotazione premendo "Checkout"</h3>
-            <h3 v-else>Conferma l'ordine premendo "Checkout"</h3>
+            <span>Conta Prezzi</span>
+            <h3>Diviti la spesa tra i vari membri</h3>
         </div>
 
         <div class="container">
@@ -13,19 +12,16 @@
                     <div class="in-cart col-md-9">
                         <div class="box">
                             <div class="box-title item-total row">
-                                <h3>
-                                    <p style="font-size: 15px;">{{ filterFoods.length.toString() }}
-                                        <span v-if="filterFoods.length != 1">Articoli nel tuo carrello</span>
-                                        <span v-else>Articolo nel tuo carrello</span>
-                                    </p>
+                                <h3 style="border: 1px solid black; padding: 7px; margin: 0; text-align: center; justify-content: center; width: ;">
+                                    <p>Gruppi tra cui dividere il prezzo: <input type="text" :placeholder="Coperti" v-model="Coperti" @input="this.Calcnumbtn()"></p>
                                 </h3>
                             </div>
 
                             <div v-if="!filterFoods.length">
                                 <div class="box-content row no-food">
                                     <div class="content">
-                                        <h2 style="color: #057835fa;">Non ci sono ancora articoli nel carrello.
-                                            <br>Ritorna al Menu!
+                                        <h2 style="color: #057835fa;">Errore!
+                                            <br>Aggiorna la pagina
                                         </h2>
                                     </div>
                                     <div class="image">
@@ -35,90 +31,27 @@
                             </div>
                             <div v-else>
                                 <div v-for="(f, index) in filterFoods" :key="index">
-                                    <div v-if="Artimage(f.food_src) != ''" class="box-content row">
-                                        <div class="image-box col-sm-3" style="padding-left: 0;">
-                                            <img :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')"
-                                                class="cart-product-img" />
-                                        </div>
 
-                                        <div class="desc col-sm-4">
-                                            <h2 class="item-name">{{ f.food_name }}</h2>
-                                            <div class="item-desc">
-                                                <b>&nbsp;</b>
-                                                <p>{{ f.food_desc.substring(0, 25) }}</p>
-                                            </div>
-                                            <button class="btn remove-btn" @click="cancelBtn(index)"
-                                                @touchstart="cancelBtn(index)"><i class="fa fa-trash"></i>Rimuovi</button>
-                                        </div>
-
-                                        <div class="item-price col-sm-1">
-                                            <span class="sale-price">{{ parseFloat(f.food_price) -
-                                                parseFloat(f.food_discount)
-                                            }}€</span>
-                                            <p class="text-muted first-price" v-if="parseFloat(f.food_discount) != 0.00">
-                                                {{
-                                                    parseFloat(f.food_price)
-                                                }}€
-
-                                            </p>
-                                        </div>
-
-                                        <div class="item-qty col-sm-2 d-inline">
-                                            <button class="btn" value="plus"
-                                                style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
-                                                @click="itemQuantity[index]++, onQtyChange(index)"><i
-                                                    class="fa-solid fa-plus"></i></button>
-                                            <label id="iQuantity" class="form-control item-quantity">{{ itemQuantity[index]
-                                            }}</label>
-                                            <button class="btn" value="minus"
-                                                style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
-                                                @click="itemQuantity[index]--, onQtyChange(index)"><i
-                                                    class="fa-solid fa-minus"></i></button>
-                                        </div>
-
-                                        <div class="cal-total col-sm-2">
-                                            <h4 class="item-total">{{
-                                                calculateItemPrice(index)
-                                            }}€
-                                            </h4>
-                                        </div>
-                                    </div>
-
-                                    <div v-else class="box-content row">
+                                    <div class="box-content row">
                                         <div class="desc col-sm-4">
                                             <h2 class="item-name" style="color: #146c39">{{ f.food_name }}</h2>
                                             <div class="item-desc" style="color: black;">
                                                 <b>&nbsp;</b>
-                                                <p style="color: black;">{{ f.food_desc.substring(0, 25) }}</p>
+                                                <b>&nbsp;</b>
                                             </div>
-                                            <button class="btn remove-btn" @click="cancelBtn(index)"><i
-                                                    class="fa fa-trash"></i>Rimuovi</button>
                                         </div>
 
                                         <div class="item-price col-sm-1">
-                                            <span class="sale-price" style="color: black;">{{ parseFloat(f.food_price) -
-                                                parseFloat(f.food_discount)
-                                            }}€</span>
-                                            <p class="text-muted first-price" v-if="parseFloat(f.food_discount) != 0.00"
-                                                style="color: black;">
-                                                {{
-                                                    parseFloat(f.food_price)
-                                                }}€
-
-                                            </p>
+                                            <label id="iQuantity" class="form-control item-quantity">{{
+                                                itemQuantity[index]
+                                            }}</label>
                                         </div>
 
                                         <div class="item-qty">
-                                            <button class="btn" value="plus"
-                                                style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
+                                            <button v-for="(f, index) in group" :key="index" class="btn" value="plus"
+                                                :style="{ 'border-radius': '10px 10px 0px 0px' }"
                                                 @click="itemQuantity[index]++, onQtyChange(index)"><i
                                                     class="fa-solid fa-plus"></i></button>
-                                            <label id="iQuantity" class="form-control item-quantity">{{ itemQuantity[index]
-                                            }}</label>
-                                            <button class="btn" value="minus"
-                                                style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
-                                                @click="itemQuantity[index]--, onQtyChange(index)"><i
-                                                    class="fa-solid fa-minus"></i></button>
                                         </div>
 
                                         <div class="cal-total col-sm-2">
@@ -134,20 +67,6 @@
 
 
                         </div>
-
-                        <div class="box-content row">
-                            <div v-if="Isuser">
-                                <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Aggiungi
-                                    articoli</router-link>
-                            </div>
-                            <div v-else>
-                                <router-link to="/" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Inizia a
-                                    comprare</router-link>
-                            </div>
-                            <button class="btn check-out-btn" style="margin-left: 10px;"
-                                :disabled="filterFoods.length ? false : true" @click="checkOutBtn()"><i
-                                    class="fa fa fa-shopping-cart"></i>Checkout</button>
-                        </div>
                     </div>
 
 
@@ -159,12 +78,8 @@
 
                             <div class="box-content">
                                 <div class="btn-group">
-                                    <button class="btn check-out-btn" :disabled="filterFoods.length ? false : true"
-                                        @click="checkOutBtn()"><i class="fa fa-shopping-cart"></i>
-                                        Checkout</button>
-                                    <button class="btn cancel-btn" @click="cancelBtn(false)"
-                                        :disabled="filterFoods.length ? false : true">
-                                        Annulla ordine</button>
+                                    <button class="btn cancel-btn" @click="ToHome()">
+                                        Chiudi</button>
                                 </div>
                             </div>
                         </div>
@@ -172,15 +87,20 @@
                 </div>
             </div>
         </div>
-        <quick-view-cart v-if="showQuickView" @childEvent="handleChildEvent" :parentData="dataFromParent"></quick-view-cart>
-        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
     </div>
 </template>
 
 <script>
+var queryString = window.location.search;
+queryString = queryString.substring(1);
+var parametri = queryString.split("&");
+var parametriObj = {};
+for (var i = 0; i < parametri.length; i++) {
+    var coppia = parametri[i].split("=");
+    parametriObj[coppia[0]] = coppia[1];
+}
+import router from "@/router";
 import axios from "axios";
-import QuickViewErrore from "@/components/QuickViewErrore.vue";
-import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
 export default {
     name: "Cart",
@@ -189,6 +109,9 @@ export default {
         return {
             cartItem: [],
             itemQuantity: [],
+            Coperti: parametriObj.coperti,
+            group: [],
+            screenWidth: window.innerWidth,
             showQuickView: false,
             dataFromParent: null,
             Isuser: false,
@@ -197,7 +120,8 @@ export default {
     },
 
     created() {
-        this.getAllCartItem();
+        this.getAllBillItem();
+        this.Calcnumbtn();
     },
 
     computed: {
@@ -220,12 +144,10 @@ export default {
 
     methods: {
 
-        Artimage(food) {
-            try {
-                return require(`../assets/images/${food}`);
-
-            } catch (ex) {
-                return '';//require(`../assets/images/no.png`);
+        Calcnumbtn() {
+            this.group = []
+            for (let i = 0; i < this.Coperti; i++) {
+                this.group.push(i)
             }
         },
 
@@ -292,16 +214,8 @@ export default {
             await axios.put("/cartItem/", data)
         },
 
-        async cancelBtn(index) {
-            if (index === false) {
-                await axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
-                this.cartItem = [];
-                this.itemQuantity = [];
-            } else {
-                await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.cartItem[index]);
-                this.cartItem.splice(index, 1);
-                this.itemQuantity.splice(index, 1);
-            }
+        ToHome() {
+            router.push("/")
         },
 
         checkOutBtn: function () {
@@ -310,10 +224,11 @@ export default {
             this.$router.push("/checkout");
         },
 
-        async getAllCartItem() {
+        async getAllBillItem() {
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
-                let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                let existItem = await axios.get('/billdetails/' + parametriObj.orderid);
+                console.log(existItem)
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
                     this.Quickerrore = true
@@ -334,11 +249,6 @@ export default {
             }
             await axios.post('/log', data)
         },
-    },
-
-    components: {
-        QuickViewCart,
-        QuickViewErrore
     },
 }
 </script>
@@ -422,6 +332,18 @@ export default {
     font-size: 12px;
     padding: 5px;
     margin-top: 27px;
+}
+
+.item-qty {
+    display: flex;
+    flex-wrap: nowrap;
+    position: absolute;
+    margin-top: 30px;
+    margin-left: 400px
+}
+
+.item-qty {
+    display: inline;
 }
 
 .remove-btn i {
@@ -543,23 +465,26 @@ export default {
 
     .item-price {
         position: absolute;
-        margin-top: 50px;
-    }
-
-    .item-price .first-price {
-        display: inline;
-        padding-left: 5px;
-        color: red !important;
+        margin-top: 30px;
     }
 
     .item-qty {
         position: absolute;
-        margin-top: 15px;
-        margin-left: 200px;
+        margin-top: 30px;
+        margin-left: 120px
     }
 
     .cal-total {
-        display: none;
+        position: absolute;
+        margin-top: 30px;
+        margin-left: 60px;
+
+        display: block;
+        color: black !important;
+    }
+
+    .cal-total h4 {
+        font-size: 16px;
     }
 
     .in-cart .box-content .check-out-btn {

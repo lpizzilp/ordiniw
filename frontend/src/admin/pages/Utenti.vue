@@ -31,7 +31,7 @@
                         @dblclick="GestClick('Modifica')">
                         <td style="border-right: 2px inset #27ae60; background-color: whitesmoke;">{{ t.user_id }}</td>
                         <td style="border-right: 2px inset #27ae60;">{{ t.user_name }}</td>
-                        <td style="border-right: 2px inset #27ae60;">{{ t.user_email }}</td>
+                        <td style="border-right: 2px inset #27ae60; text-transform: none">{{ t.user_email }}</td>
                         <td style="display: none;">{{ t.user_password }}</td>
                         <td v-if="t.authlevel == 1" style="background-color: #2ae477c4;">Si</td>
                         <td v-else-if="t.authlevel == 0" style="background-color: #e95018cb;">No</td>
