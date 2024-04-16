@@ -12,8 +12,11 @@
                     <div class="in-cart col-md-9">
                         <div class="box">
                             <div class="box-title item-total row">
-                                <h3 style="border: 1px solid black; padding: 7px; margin: 0; text-align: center; justify-content: center; width: ;">
-                                    <p>Gruppi tra cui dividere il prezzo: <input type="text" :placeholder="Coperti" v-model="Coperti" @input="this.Calcnumbtn()"></p>
+                                <h3 class="group-box">
+                                    Gruppi tra cui dividere il prezzo: <input type="number" :max="maxBtn" min="1"
+                                        maxlength="1" style="text-align: center; color: #27ae60;"
+                                        :placeholder="Coperti == null ? 'inserire' : Coperti" v-model="Coperti"
+                                        @input="this.Calcnumbtn()">
                                 </h3>
                             </div>
 
@@ -29,7 +32,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-else>
+                            <div v-else id="mioDiv">
+                                <hr style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
                                 <div v-for="(f, index) in filterFoods" :key="index">
 
                                     <div class="box-content row">
@@ -44,20 +48,22 @@
                                         <div class="item-price col-sm-1">
                                             <label id="iQuantity" class="form-control item-quantity">{{
                                                 itemQuantity[index]
-                                            }}</label>
+                                                }}</label>
                                         </div>
 
                                         <div class="item-qty">
-                                            <button v-for="(f, index) in group" :key="index" class="btn" value="plus"
-                                                :style="{ 'border-radius': '10px 10px 0px 0px' }"
-                                                @click="itemQuantity[index]++, onQtyChange(index)"><i
-                                                    class="fa-solid fa-plus"></i></button>
+                                            <button v-for="(value, indexBtn) in group[index]" :key="indexBtn"
+                                                class="btn" value="plus"
+                                                :style="{ 'border-radius': '10px 10px 0px 0px', 'background-color': Valorifissi[0][indexBtn] }"
+                                                @click="group[index][indexBtn]++, onIcrement(index, indexBtn)">
+                                                <i v-if="group[index][indexBtn] == 0" class="fa-solid fa-plus"></i>
+                                                <i v-else :class="'fa-solid fa-' + group[index][indexBtn]"></i></button>
                                         </div>
 
                                         <div class="cal-total col-sm-2">
                                             <h4 class="item-total">{{
                                                 calculateItemPrice(index)
-                                            }}€
+                                                }}€
                                             </h4>
                                         </div>
                                     </div>
@@ -73,11 +79,19 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <h3 style="color: #f38609;">Totale {{ calculateSummaryPrice()[0] }}€</h3>
+                                <ul class="Pricelist" v-for="(value, index) in group[0]" :key="index">
+                                    <li>
+                                        <h3>{{ Valorifissi[1][index] }}: {{ Price[index] }}€</h3>
+                                    </li>
+                                </ul>
+                                <hr v-if="group.length != 0"
+                                    style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
+                                <h3 style="color: #f38609; text-align: center; padding: 10.5px 0; margin: 0;">
+                                    Totale {{ calculateSummaryPrice()[0] }}€</h3>
                             </div>
 
-                            <div class="box-content">
-                                <div class="btn-group">
+                            <div class="box-content" style="text-align: center;">
+                                <div style="width: 100%;" class="btn-group">
                                     <button class="btn cancel-btn" @click="ToHome()">
                                         Chiudi</button>
                                 </div>
@@ -110,19 +124,25 @@ export default {
             cartItem: [],
             itemQuantity: [],
             Coperti: parametriObj.coperti,
-            group: [],
+            maxBtn: null,
+            group: [[0], [0]],
+            Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             screenWidth: window.innerWidth,
-            showQuickView: false,
-            dataFromParent: null,
-            Isuser: false,
-            Quickerrore: false
+            Quickerrore: false,
+            Valorifissi: [['#E5C000', 'red', 'green', 'blue', 'purple', 'black', 'orange', 'azure', 'brown'], ['Giallo', 'Rosso', 'Verde', 'Blu', 'Viola', 'Nero', 'Arancione', 'Celeste', 'Marrone']]
         };
     },
 
     created() {
         this.getAllBillItem();
-        this.Calcnumbtn();
     },
+
+    mounted() {
+        setTimeout(() => {
+            this.Calcnumbtn();
+        }, 100);
+    },
+
 
     computed: {
         ...mapState(["allFoods", "user"]),
@@ -132,23 +152,48 @@ export default {
                 (f) => this.matchID(f, this.cartItem)
             );
         },
-
-        isPrenotazione: function () {
-            if (sessionStorage.getItem('filtro') === "PRE") {
-                return true
-            } else {
-                return false
-            }
-        },
     },
 
     methods: {
 
-        Calcnumbtn() {
+        async Calcnumbtn() {
             this.group = []
-            for (let i = 0; i < this.Coperti; i++) {
-                this.group.push(i)
+            if (this.maxBtn == null) {
+                await this.Lenghtpage()
+                this.Coperti = this.Coperti > this.maxBtn ? null : this.Coperti
+            } {
+                this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : this.Coperti
             }
+            if (this.Coperti == "") {
+                this.Coperti = null
+                this.group = []
+                this.Price = []
+            } else {
+                 this.Price = Array(parseInt(this.Coperti)).fill(0)
+                for (let foodindex = 0; foodindex < this.cartItem.length; foodindex++) {
+                    this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
+                    console.log(this.group)
+                }
+            }
+        },
+
+        async Lenghtpage() {
+            var div = document.getElementById("mioDiv");
+            let divlenght = div.offsetWidth - 400
+            switch (true) {
+                case this.screenWidth > 768:
+                    this.maxBtn = Math.floor(divlenght / 58, 35)
+                    break;
+
+                case this.screenWidth < 768 && this.screenWidth > 567:
+                    this.maxBtn = Math.floor(divlenght / 52, 14)
+                    break;
+
+                case this.screenWidth < 567:
+                    this.maxBtn = Math.floor(divlenght / 48)
+                    break;
+            }
+
         },
 
 
@@ -160,14 +205,6 @@ export default {
                 }
             });
             return temp
-        },
-
-        handleChildEvent(dataFromChild) {
-            this.showQuickView = dataFromChild.event;
-            let i = dataFromChild.id
-            if (dataFromChild.type === 'si') {
-                this.cancelBtn(i)
-            }
         },
 
         calculateItemPrice: function (index) {
@@ -183,52 +220,30 @@ export default {
             return [subtotal, total];
         },
 
-        async onQtyChange(i) {
-            if (this.itemQuantity[i] == 0) {
-                this.dataFromParent = i
-                this.itemQuantity[i] = 1
-                this.showQuickView = true
+        onIcrement(indexItem, indexBtn) {
+            let sommaqta = 0
+            for (let i = 0; i < this.group[indexItem].length; i++) {
+                sommaqta = this.group[indexItem][i] + sommaqta
+                console.log(sommaqta)
+            }
+            if (this.itemQuantity[indexItem] < sommaqta) {
+                console.log(this.Price[indexBtn] + '-' + parseFloat(this.filterFoods[indexItem].food_price) + '*' + this.group[indexItem][indexBtn])
+                this.Price[indexBtn] = this.Price[indexBtn] - (parseFloat(this.filterFoods[indexItem].food_price) * (this.group[indexItem][indexBtn] - 1))
+                this.group[indexItem][indexBtn] = 0
+            } else {
+                this.Price[indexBtn] = parseFloat(this.filterFoods[indexItem].food_price) + this.Price[indexBtn]
+                console.log(this.group[indexBtn])
             }
 
-            let data = {
-                user_id: parseInt(sessionStorage.getItem('Username')),
-                food_id: this.cartItem[i],
-                item_qty: this.itemQuantity[i]
-            };
-
-            let IsVariante = this.filterFoods.find(item => item.food_id == this.cartItem[i])
-            IsVariante = IsVariante.FlgVariante == 0 ? false : true
-            console.log(IsVariante)
-            if (IsVariante) {
-                let Nonvariante = this.filterFoods.findIndex(item => item.FlgVariante == 0)
-                let Maxqta = this.itemQuantity[Nonvariante]
-                let Qtavarianti = 0
-                for (let i = (Nonvariante + 1); i < this.cartItem.length; i++) {
-                    Qtavarianti = Qtavarianti + this.itemQuantity[i]
-                }
-                if (Qtavarianti > Maxqta) {
-                    this.itemQuantity[i] = data.item_qty - (Qtavarianti - Maxqta)
-                    data.item_qty = this.itemQuantity[i]
-                }
-            }
-            await axios.put("/cartItem/", data)
         },
 
         ToHome() {
             router.push("/")
         },
 
-        checkOutBtn: function () {
-            this.cartItem = [];
-            this.itemQuantity = [];
-            this.$router.push("/checkout");
-        },
-
         async getAllBillItem() {
             if (sessionStorage.getItem('MatchUser')) {
-                this.Isuser = true
                 let existItem = await axios.get('/billdetails/' + parametriObj.orderid);
-                console.log(existItem)
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
                     this.Quickerrore = true
@@ -287,13 +302,35 @@ export default {
 
 .box-title {
     background-color: inherit;
-    border-color: #e7eaec;
-    border-style: solid solid none;
-    border-width: 3px 0 0;
+    border: 3px solid #e7eaec;
+    border-radius: 10px;
+    border-right: 0px;
+    border-left: 0px;
     color: inherit;
-    margin-bottom: 0;
-    padding: 14px 15px 7px;
-    min-height: 78px;
+    margin-bottom: 5px;
+    padding: 10px 15px;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.Pricelist {
+    display: inline;
+    list-style-type: square;
+}
+
+
+.Pricelist li {
+    padding-left: 10px;
+    margin-left: 30px
+}
+
+.group-box {
+    border: 1px outset black;
+    border-radius: 10px;
+    margin: 0;
+    padding: 10px;
+    align-items: center;
+    box-shadow: rgb(200, 208, 231) 3.2px 3.2px 8px 0px inset, rgb(255, 255, 255) -3.2px -3.2px 8px 0px inset;
 }
 
 .box-content {
@@ -367,6 +404,8 @@ export default {
 }
 
 
+
+
 @media (max-width: 768px) {
     .box-content .item-name {
         font-size: 14px;
@@ -379,23 +418,19 @@ export default {
 
     .box-content .btn-group {
         display: block;
+        text-align: center;
+        width: 100%;
     }
 
     .box-content .btn-group button {
-        border-radius: .5rem !important;
+        width: 75%;
+        border-radius: 10px !important;
     }
 
     .box-content .btn-group button i {
         margin-top: 3px;
     }
 
-    .box-content .btn-group .check-out-btn {
-        display: flex;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding: 10px 25%;
-        text-align: center;
-    }
 }
 
 @media (max-width: 576px) {
@@ -406,6 +441,7 @@ export default {
 
     .box-title.item-total {
         border: none;
+        text-align: center
     }
 
     .in-cart .box-content .btn-group {
@@ -487,8 +523,8 @@ export default {
         font-size: 16px;
     }
 
-    .in-cart .box-content .check-out-btn {
-        display: none;
+    .box-content .btn-group button {
+        width: 100%;
     }
 
 }

@@ -204,9 +204,7 @@ export default {
                         Nmancanti = Ncliente - Ncorrente
                         Timpiegato = (Tinizio * Nmancanti) / Nintotminuti
                         if (+Timpiegato <= Tnoneseguibile) {
-                            this.showQuickVueEliminacode = true
-                            this.Showeliminacode = 3
-                            this.Tminimo = false
+                            this.serviceWorker(Ncorrente)
                         } else {
                             this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
                         }
