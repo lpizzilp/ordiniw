@@ -48,22 +48,22 @@
                                         <div class="item-price col-sm-1">
                                             <label id="iQuantity" class="form-control item-quantity">{{
                                                 itemQuantity[index]
-                                            }}</label>
+                                                }}</label>
                                         </div>
 
                                         <div class="item-qty">
-                                            <button v-for="(value, indexBtn) in group" :key="indexBtn" class="btn"
-                                                value="plus"
+                                            <button v-for="(value, indexBtn) in group[index]" :key="indexBtn"
+                                                class="btn" value="plus"
                                                 :style="{ 'border-radius': '10px 10px 0px 0px', 'background-color': Valorifissi[0][indexBtn] }"
-                                                @click="group[indexBtn]++, onIcrement(index, indexBtn)">
-                                                <i v-if="group[indexBtn] == 0" class="fa-solid fa-plus"></i>
-                                                <i v-else :class="'fa-solid fa-' + group[indexBtn]"></i></button>
+                                                @click="group[index][indexBtn]++, onIcrement(index, indexBtn)">
+                                                <i v-if="group[index][indexBtn] == 0" class="fa-solid fa-plus"></i>
+                                                <i v-else :class="'fa-solid fa-' + group[index][indexBtn]"></i></button>
                                         </div>
 
                                         <div class="cal-total col-sm-2">
                                             <h4 class="item-total">{{
                                                 calculateItemPrice(index)
-                                            }}€
+                                                }}€
                                             </h4>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <ul class="Pricelist" v-for="(value, index) in group" :key="index">
+                                <ul class="Pricelist" v-for="(value, index) in group[0]" :key="index">
                                     <li>
                                         <h3>{{ Valorifissi[1][index] }}: {{ Price[index] }}€</h3>
                                     </li>
@@ -125,12 +125,9 @@ export default {
             itemQuantity: [],
             Coperti: parametriObj.coperti,
             maxBtn: null,
-            group: [],
+            group: [[0], [0]],
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             screenWidth: window.innerWidth,
-            showQuickView: false,
-            dataFromParent: null,
-            Isuser: false,
             Quickerrore: false,
             Valorifissi: [['#E5C000', 'red', 'green', 'blue', 'purple', 'black', 'orange', 'azure', 'brown'], ['Giallo', 'Rosso', 'Verde', 'Blu', 'Viola', 'Nero', 'Arancione', 'Celeste', 'Marrone']]
         };
@@ -155,14 +152,6 @@ export default {
                 (f) => this.matchID(f, this.cartItem)
             );
         },
-
-        isPrenotazione: function () {
-            if (sessionStorage.getItem('filtro') === "PRE") {
-                return true
-            } else {
-                return false
-            }
-        },
     },
 
     methods: {
@@ -175,13 +164,16 @@ export default {
             } {
                 this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : this.Coperti
             }
-
-            for (let i = 0; i < this.Coperti; i++) {
-                this.group.push(0)
-            }
-
-            if (this.Coperti > 9) {
-                this.Coperti = 9
+            if (this.Coperti == "") {
+                this.Coperti = null
+                this.group = []
+                this.Price = []
+            } else {
+                 this.Price = Array(parseInt(this.Coperti)).fill(0)
+                for (let foodindex = 0; foodindex < this.cartItem.length; foodindex++) {
+                    this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
+                    console.log(this.group)
+                }
             }
         },
 
@@ -215,14 +207,6 @@ export default {
             return temp
         },
 
-        handleChildEvent(dataFromChild) {
-            this.showQuickView = dataFromChild.event;
-            let i = dataFromChild.id
-            if (dataFromChild.type === 'si') {
-                this.cancelBtn(i)
-            }
-        },
-
         calculateItemPrice: function (index) {
             return ((parseFloat(this.filterFoods[index].food_price) - parseFloat(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
         },
@@ -237,11 +221,17 @@ export default {
         },
 
         onIcrement(indexItem, indexBtn) {
-            if (this.itemQuantity[indexItem] < this.group[indexBtn]) {
-                this.group = 0
-                this.Price[indexBtn] = 0
+            let sommaqta = 0
+            for (let i = 0; i < this.group[indexItem].length; i++) {
+                sommaqta = this.group[indexItem][i] + sommaqta
+                console.log(sommaqta)
+            }
+            if (this.itemQuantity[indexItem] < sommaqta) {
+                console.log(this.Price[indexBtn] + '-' + parseFloat(this.filterFoods[indexItem].food_price) + '*' + this.group[indexItem][indexBtn])
+                this.Price[indexBtn] = this.Price[indexBtn] - (parseFloat(this.filterFoods[indexItem].food_price) * (this.group[indexItem][indexBtn] - 1))
+                this.group[indexItem][indexBtn] = 0
             } else {
-                this.Price[indexBtn] = parseFloat(this.filterFoods[indexItem].food_price) * this.group[indexBtn]
+                this.Price[indexBtn] = parseFloat(this.filterFoods[indexItem].food_price) + this.Price[indexBtn]
                 console.log(this.group[indexBtn])
             }
 
@@ -251,15 +241,8 @@ export default {
             router.push("/")
         },
 
-        checkOutBtn: function () {
-            this.cartItem = [];
-            this.itemQuantity = [];
-            this.$router.push("/checkout");
-        },
-
         async getAllBillItem() {
             if (sessionStorage.getItem('MatchUser')) {
-                this.Isuser = true
                 let existItem = await axios.get('/billdetails/' + parametriObj.orderid);
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
@@ -458,6 +441,7 @@ export default {
 
     .box-title.item-total {
         border: none;
+        text-align: center
     }
 
     .in-cart .box-content .btn-group {
