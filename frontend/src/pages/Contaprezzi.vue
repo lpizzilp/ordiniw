@@ -3,7 +3,7 @@
 
         <div class="heading">
             <span>Conta Prezzi</span>
-            <h3>Diviti la spesa tra i vari membri</h3>
+            <h3>Dividi la spesa tra i vari membri</h3>
         </div>
 
         <div class="container">
@@ -46,9 +46,9 @@
                                         </div>
 
                                         <div class="item-price col-sm-1">
-                                            <label id="iQuantity" class="form-control item-quantity">{{
+                                            <label id="iQuantity" :style="{ 'border-color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'border-width': '2px'}" class="form-control item-quantity">{{
                                                 itemQuantity[index]
-                                                }}</label>
+                                                }}<i :class="'fa-solid fa-' + (Complete[1][index] === true ? 'check' : 'x')" :style="{ 'color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px'}"></i></label>
                                         </div>
 
                                         <div class="item-qty">
@@ -79,11 +79,12 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <ul class="Pricelist" v-for="(value, index) in group[0]" :key="index">
-                                    <li>
+                                <ul class="Pricelist" v-if="Complete[0][0]">
+                                    <li v-for="(value, index) in group[0]" :key="index" >
                                         <h3>{{ Valorifissi[1][index] }}: {{ Price[index] }}€</h3>
                                     </li>
                                 </ul>
+                                <h3 v-else style="color: #f38609; text-align: center;">Assegna tutte le quantità</h3>
                                 <hr v-if="group.length != 0"
                                     style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
                                 <h3 style="color: #f38609; text-align: center; padding: 10.5px 0; margin: 0;">
@@ -129,6 +130,7 @@ export default {
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             screenWidth: window.innerWidth,
             Quickerrore: false,
+            Complete: [[false],[]],
             Valorifissi: [['#E5C000', 'red', 'green', 'blue', 'purple', 'black', 'orange', 'azure', 'brown'], ['Giallo', 'Rosso', 'Verde', 'Blu', 'Viola', 'Nero', 'Arancione', 'Celeste', 'Marrone']]
         };
     },
@@ -140,7 +142,7 @@ export default {
     mounted() {
         setTimeout(() => {
             this.Calcnumbtn();
-        }, 100);
+        }, 200);
     },
 
 
@@ -168,8 +170,10 @@ export default {
                 this.Coperti = null
                 this.group = []
                 this.Price = []
+                this.Complete = []
             } else {
                  this.Price = Array(parseInt(this.Coperti)).fill(0)
+                 this.Complete[1] = Array(parseInt(this.cartItem.length)).fill(false)
                 for (let foodindex = 0; foodindex < this.cartItem.length; foodindex++) {
                     this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
                     console.log(this.group)
