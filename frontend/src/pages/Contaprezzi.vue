@@ -46,9 +46,12 @@
                                         </div>
 
                                         <div class="item-price col-sm-1">
-                                            <label id="iQuantity" :style="{ 'border-color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'border-width': '2px'}" class="form-control item-quantity">{{
-                                                itemQuantity[index]
-                                                }}<i :class="'fa-solid fa-' + (Complete[1][index] === true ? 'check' : 'x')" :style="{ 'color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px'}"></i></label>
+                                            <label id="iQuantity"
+                                                :style="{ 'border-color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'border-width': '2px' }"
+                                                class="form-control item-quantity">{{
+                                                    itemQuantity[index]
+                                                }}<i :class="'fa-solid fa-' + (Complete[1][index] === true ? 'check' : 'x')"
+                                                    :style="{ 'color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px' }"></i></label>
                                         </div>
 
                                         <div class="item-qty">
@@ -80,7 +83,7 @@
                         <div class="box">
                             <div class="box-title">
                                 <ul class="Pricelist" v-if="Complete[0][0]">
-                                    <li v-for="(value, index) in group[0]" :key="index" >
+                                    <li v-for="(value, index) in group[0]" :key="index">
                                         <h3>{{ Valorifissi[1][index] }}: {{ Price[index] }}€</h3>
                                     </li>
                                 </ul>
@@ -130,7 +133,7 @@ export default {
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             screenWidth: window.innerWidth,
             Quickerrore: false,
-            Complete: [[false],[]],
+            Complete: [[false], []],
             Valorifissi: [['#E5C000', 'red', 'green', 'blue', 'purple', 'black', 'orange', 'azure', 'brown'], ['Giallo', 'Rosso', 'Verde', 'Blu', 'Viola', 'Nero', 'Arancione', 'Celeste', 'Marrone']]
         };
     },
@@ -172,8 +175,8 @@ export default {
                 this.Price = []
                 this.Complete = []
             } else {
-                 this.Price = Array(parseInt(this.Coperti)).fill(0)
-                 this.Complete[1] = Array(parseInt(this.cartItem.length)).fill(false)
+                this.Price = Array(parseInt(this.Coperti)).fill(0)
+                this.Complete[1] = Array(parseInt(this.cartItem.length)).fill(false)
                 for (let foodindex = 0; foodindex < this.cartItem.length; foodindex++) {
                     this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
                     console.log(this.group)
@@ -228,8 +231,9 @@ export default {
             let sommaqta = 0
             for (let i = 0; i < this.group[indexItem].length; i++) {
                 sommaqta = this.group[indexItem][i] + sommaqta
-                console.log(sommaqta)
             }
+            this.CorrectQta(indexItem, indexBtn, sommaqta)
+
             if (this.itemQuantity[indexItem] < sommaqta) {
                 console.log(this.Price[indexBtn] + '-' + parseFloat(this.filterFoods[indexItem].food_price) + '*' + this.group[indexItem][indexBtn])
                 this.Price[indexBtn] = this.Price[indexBtn] - (parseFloat(this.filterFoods[indexItem].food_price) * (this.group[indexItem][indexBtn] - 1))
@@ -239,6 +243,20 @@ export default {
                 console.log(this.group[indexBtn])
             }
 
+        },
+
+
+        async CorrectQta(indexItem, indexBtn, sommaqta) {
+            if (this.itemQuantity[indexItem] == sommaqta) {
+                this.Complete[1][indexItem] = true
+                let Qtaok = this.Complete[1].findIndex(item => item === false)
+                if (Qtaok == -1) {
+                   this.Complete[0][0] = true
+                }
+            } else {
+                this.Complete[1][indexItem] = false
+                this.Complete[0][0] = false
+            }
         },
 
         ToHome() {
