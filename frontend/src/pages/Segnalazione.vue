@@ -21,7 +21,7 @@
                     <label for="uDettagli">Descrizione:
                     </label>
                     <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
-                        placeholder="Descrivi il tuo problema o dacci un suggerimento... (se vuoi essere ricontatto lasciaci la tua mail)"
+                        placeholder="Descrivi il tuo problema o dacci un suggerimento... (se vuoi essere ricontattato lasciaci la tua mail)"
                         v-model="ErrorObj.descrizione"></textarea>
                 </div>
 
@@ -44,7 +44,15 @@ export default {
     data() {
         return {
             ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
-            errori: ["Sulla schermata di Home non ci sono i bottoni", "Bottoni non funzionanti", "Non posso accedere al carrello", "La procedura di ordine si blocca", "Non mi è stato assegnato un numero ordine", "Non mi viene inviata nessuna mail", "Dopo il primo ordine l'app si blocca", 'Altro...', 'Suggerimenti...'],
+            errori: [
+                        "Suggerimenti...",
+                        "Sulla schermata di Home non ci sono i bottoni", 
+                        "Bottoni non funzionanti",
+                        "Non posso accedere al carrello",
+                        "Non mi è stato assegnato il numero ordine",
+                        "Non mi viene inviata nessuna mail",
+                        "Altro..."
+                    ],
             errors: [],
             showQuickVue: false,
         }
