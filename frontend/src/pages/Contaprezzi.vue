@@ -83,8 +83,8 @@
                         <div class="box">
                             <div class="box-title">
                                 <ul class="Pricelist">
-                                    <li v-for="(value, index) in group[0]" :key="index">
-                                        <h3>{{ Valorifissi[1][index] }}: {{ Price[index] }}€</h3>
+                                    <li v-for="(value, index) in group[0]" :key="index" :style="{'color': Valorifissi[0][index] }">
+                                        <h3>{{ Valorifissi[1][index] }}: <span style="color: black;"> {{ Price[index] }}€</span></h3>
                                     </li>
                                 </ul>
                                 <hr v-if="group.length != 0"
