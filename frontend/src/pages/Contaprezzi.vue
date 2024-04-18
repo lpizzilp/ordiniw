@@ -144,7 +144,7 @@ export default {
     mounted() {
         setTimeout(() => {
             this.Calcnumbtn();
-        }, 200);
+        }, 500);
     },
 
 
@@ -255,7 +255,6 @@ export default {
         },
 
         async getAllBillItem() {
-            if (sessionStorage.getItem('MatchUser')) {
                 let existItem = await axios.get('/billdetails/' + parametriObj.orderid);
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
@@ -267,7 +266,6 @@ export default {
                         this.itemQuantity.push(element.item_qty);
                     });
                 }
-            }
         },
 
         async Makelog(err) {

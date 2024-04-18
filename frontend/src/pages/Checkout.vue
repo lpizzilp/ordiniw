@@ -273,7 +273,6 @@ export default {
                 };
                 await axios.post("/prenotazione/dettaglio", bookDetails);
             } else {
-
                 let billDetails = {
                     bill_id: parseInt(billId),
                     food_id: foodId,
@@ -340,6 +339,7 @@ export default {
 
                     await axios.post("/prenotazione", dataprenotazione);
                     sessionStorage.setItem('Bill', dataprenotazione.book_id)
+                    sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
 
                     this.cartItem.forEach((foodId, index) => {
                         this.sendBillDetails(bookId, foodId, this.itemQuantity[index]);
@@ -379,6 +379,7 @@ export default {
 
                     await axios.post("/billstatus", billStatus);
                     sessionStorage.setItem('Bill', billStatus.bill_id)
+                    sessionStorage.setItem('Coperti', billStatus.bill_coperti)
 
                     this.cartItem.forEach((foodId, index) => {
                         this.sendBillDetails(billId, foodId, this.itemQuantity[index]);
