@@ -2,8 +2,7 @@
     <div class="quick-view">
         <div class="quick-view-inner">
             <h2>Segnalazione effettuata</h2><br>
-            <h3>Ti ringraziamo per avverci segnalato un errore nel nostro programma.<br>Ci attiveremo il prima possibile in
-                modo che tu possa utilizare correttamente l'app
+            <h3 style="text-transform: none;">Ti ringraziamo, la tua segnalazione ci aiutera a migliorare l'applicazione
                 <slot></slot>
             </h3>
             <RouterLink to="/" class="btn">Continua</RouterLink>
@@ -53,7 +52,7 @@ export default {
 .quick-view .quick-view-inner h2 {
     text-align: center;
     font-size: 35px;
-    color: #f32009e3;
+    color: #27ae60;
 }
 
 .quick-view .quick-view-inner h3 {

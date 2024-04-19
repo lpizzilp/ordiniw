@@ -7,6 +7,7 @@
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent('E')" style="width: 100%;">Invia email</button>
+            <button class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'E'" class="quick-view-inner">
@@ -26,9 +27,10 @@
         </div>
         <div v-else-if="from === 'I'" class="quick-view-inner">
             <h2 style="color: #27ae60;">Inviata!</h2><br>
-            <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.<br>Puoi abbandonare la pagina
+            <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.
                 <slot></slot>
             </h3>
+            <button class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'D'" class="quick-view-inner">
@@ -62,6 +64,7 @@ export default {
     props: {
         parentData: String,
         parentId: Number,
+        Ncoperti: Number
     },
 
     created() {
@@ -102,7 +105,10 @@ export default {
                 sessionStorage.removeItem('MatchUser')
                 sessionStorage.removeItem('Username')
                 sessionStorage.removeItem('TipoOrdine')
+                sessionStorage.removeItem('Coperti')
                 this.$router.push("/");
+            } else if (where === 'D') {
+                this.$router.push("/contaprezzi/?orderid=" + this.parentId + "&coperti=" + this.Ncoperti );
             }
         },
 
@@ -226,7 +232,7 @@ export default {
 
 .quick-view .quick-view-inner .btn {
     font-size: 18px;
-    margin-top: 5vh;
+    margin-top: 10px;
     margin-bottom: 10px;
     width: 45%;
 }

@@ -3,7 +3,7 @@
 
         <div class="heading">
             <span>Conta Prezzi</span>
-            <h3>Diviti la spesa tra i vari membri</h3>
+            <h3>Dividi la spesa tra i vari membri</h3>
         </div>
 
         <div class="container">
@@ -46,9 +46,12 @@
                                         </div>
 
                                         <div class="item-price col-sm-1">
-                                            <label id="iQuantity" class="form-control item-quantity">{{
-                                                itemQuantity[index]
-                                                }}</label>
+                                            <label id="iQuantity"
+                                                :style="{ 'border-color': Complete[index] === true ? '#27ae60' : '#f38609', 'border-width': '2px' }"
+                                                class="form-control item-quantity">{{
+                                                    itemQuantity[index]
+                                                }}<i :class="'fa-solid fa-' + (Complete[index] === true ? 'check' : 'x')"
+                                                    :style="{ 'color': Complete[index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px' }"></i></label>
                                         </div>
 
                                         <div class="item-qty">
@@ -79,9 +82,9 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <ul class="Pricelist" v-for="(value, index) in group[0]" :key="index">
-                                    <li>
-                                        <h3>{{ Valorifissi[1][index] }}: {{ Price[index] }}€</h3>
+                                <ul class="Pricelist">
+                                    <li v-for="(value, index) in group[0]" :key="index" :style="{'color': Valorifissi[0][index] }">
+                                        <h3>{{ Valorifissi[1][index] }}: <span style="color: black;"> {{ Price[index] }}€</span></h3>
                                     </li>
                                 </ul>
                                 <hr v-if="group.length != 0"
@@ -129,6 +132,7 @@ export default {
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             screenWidth: window.innerWidth,
             Quickerrore: false,
+            Complete: [],
             Valorifissi: [['#E5C000', 'red', 'green', 'blue', 'purple', 'black', 'orange', 'azure', 'brown'], ['Giallo', 'Rosso', 'Verde', 'Blu', 'Viola', 'Nero', 'Arancione', 'Celeste', 'Marrone']]
         };
     },
@@ -140,7 +144,7 @@ export default {
     mounted() {
         setTimeout(() => {
             this.Calcnumbtn();
-        }, 100);
+        }, 500);
     },
 
 
@@ -160,19 +164,20 @@ export default {
             this.group = []
             if (this.maxBtn == null) {
                 await this.Lenghtpage()
-                this.Coperti = this.Coperti > this.maxBtn ? null : this.Coperti
+                this.Coperti = this.Coperti > this.maxBtn ? null : Math.abs(this.Coperti)
             } {
-                this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : this.Coperti
+                this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : Math.abs(this.Coperti)
             }
-            if (this.Coperti == "") {
+            if (this.Coperti == "" || this.Coperti == 0 || this.Coperti == null) {
                 this.Coperti = null
                 this.group = []
                 this.Price = []
+                this.Complete = []
             } else {
-                 this.Price = Array(parseInt(this.Coperti)).fill(0)
+                this.Price = Array(parseInt(this.Coperti)).fill(0)
+                this.Complete = Array(parseInt(this.cartItem.length)).fill(false)
                 for (let foodindex = 0; foodindex < this.cartItem.length; foodindex++) {
                     this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
-                    console.log(this.group)
                 }
             }
         },
@@ -182,15 +187,15 @@ export default {
             let divlenght = div.offsetWidth - 400
             switch (true) {
                 case this.screenWidth > 768:
-                    this.maxBtn = Math.floor(divlenght / 58, 35)
+                    this.maxBtn = Math.abs(Math.floor(divlenght / 58, 35))
                     break;
 
                 case this.screenWidth < 768 && this.screenWidth > 567:
-                    this.maxBtn = Math.floor(divlenght / 52, 14)
+                    this.maxBtn = Math.abs(Math.floor(divlenght / 52, 14))
                     break;
 
                 case this.screenWidth < 567:
-                    this.maxBtn = Math.floor(divlenght / 48)
+                    this.maxBtn = Math.abs(Math.floor((divlenght + 400) / 48))
                     break;
             }
 
@@ -224,17 +229,25 @@ export default {
             let sommaqta = 0
             for (let i = 0; i < this.group[indexItem].length; i++) {
                 sommaqta = this.group[indexItem][i] + sommaqta
-                console.log(sommaqta)
             }
+            this.CorrectQta(indexItem, indexBtn, sommaqta)
+
             if (this.itemQuantity[indexItem] < sommaqta) {
-                console.log(this.Price[indexBtn] + '-' + parseFloat(this.filterFoods[indexItem].food_price) + '*' + this.group[indexItem][indexBtn])
                 this.Price[indexBtn] = this.Price[indexBtn] - (parseFloat(this.filterFoods[indexItem].food_price) * (this.group[indexItem][indexBtn] - 1))
                 this.group[indexItem][indexBtn] = 0
             } else {
                 this.Price[indexBtn] = parseFloat(this.filterFoods[indexItem].food_price) + this.Price[indexBtn]
-                console.log(this.group[indexBtn])
             }
 
+        },
+
+
+        async CorrectQta(indexItem, indexBtn, sommaqta) {
+            if (this.itemQuantity[indexItem] == sommaqta) {
+                this.Complete[indexItem] = true
+            } else {
+                this.Complete[indexItem] = false
+            }
         },
 
         ToHome() {
@@ -242,7 +255,6 @@ export default {
         },
 
         async getAllBillItem() {
-            if (sessionStorage.getItem('MatchUser')) {
                 let existItem = await axios.get('/billdetails/' + parametriObj.orderid);
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
@@ -254,7 +266,6 @@ export default {
                         this.itemQuantity.push(element.item_qty);
                     });
                 }
-            }
         },
 
         async Makelog(err) {
@@ -501,22 +512,18 @@ export default {
 
     .item-price {
         position: absolute;
-        margin-top: 30px;
+        margin-top: -5px;
+        margin-left: 200px;
     }
 
     .item-qty {
         position: absolute;
         margin-top: 30px;
-        margin-left: 120px
+        margin-left: 15px
     }
 
     .cal-total {
-        position: absolute;
-        margin-top: 30px;
-        margin-left: 60px;
-
-        display: block;
-        color: black !important;
+       display: none;
     }
 
     .cal-total h4 {

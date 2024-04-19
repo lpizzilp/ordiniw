@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId">
+        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId" :Ncoperti="Ncoperti">
         </QuickViewFinal>
     </div>
 </template>
@@ -46,11 +46,13 @@ export default {
             from: undefined,
             showQuickView: false,
             prenotazione: artprenotabile,
+            Ncoperti: null
         }
     },
 
     created() {
         this.NumId = parseInt(sessionStorage.getItem('Bill'))
+        this.Ncoperti = parseInt(sessionStorage.getItem('Coperti'))
     },
 
 
@@ -60,6 +62,7 @@ export default {
         sessionStorage.removeItem('TipoOrdine')
         sessionStorage.removeItem('Bill')
         sessionStorage.removeItem('filtro')
+        sessionStorage.removeItem('Coperti')
     },
 
     methods: {
