@@ -66,6 +66,7 @@
                         <input type="submit" value="Conferma" class="btn" />
                     </div>
                 </div>
+
                 <div v-else-if="page[1] == 3">
                     <div v-if="errors.length != 0" class="error-box">
                         <ul>
@@ -84,6 +85,7 @@
                         <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Suggerimento'"
                             class="btn" />
                     </div>
+
                 </div>
                 <div v-else-if="page[1] == 4">
                     <div v-if="errors.length != 0" class="error-box">
@@ -122,7 +124,9 @@ export default {
     data() {
         return {
             ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
+
             errori: ["Sulla schermata di Home non ci sono i bottoni", "Bottoni non funzionanti", "Non posso accedere al carrello", "La procedura di ordine si blocca", "Non mi è stato assegnato un numero ordine", "Non mi viene inviata nessuna mail", "Dopo il primo ordine l'app si blocca", 'Altro...'],
+
             errors: [],
             showQuickVue: false,
             page: ['Seleziona un opzione', 0]

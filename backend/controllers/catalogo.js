@@ -100,7 +100,7 @@ export const GetControlOrdini=(req,res)=>{
 };
 
 
-export const Restattivo=(req,res)=>{
+export const KeepAlive=(req,res)=>{
     Wakeup((err,results)=> {
         if (err) {
             res.send(err);
