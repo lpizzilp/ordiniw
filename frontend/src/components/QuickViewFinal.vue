@@ -7,7 +7,7 @@
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent('E')" style="width: 100%;">Invia email</button>
-            <button class="btn" @click="DataParent('D')" style="width: 100%;">Dividi il conto</button>
+            <button class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'E'" class="quick-view-inner">
@@ -30,7 +30,7 @@
             <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent('D')" style="width: 100%;">Dividi il conto</button>
+            <button class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>
             <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'D'" class="quick-view-inner">

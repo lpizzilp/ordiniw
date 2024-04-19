@@ -2,7 +2,7 @@
     <div class="register-container">
         <div class="register-form-container">
             <form id="registerForm" @submit="handleSubmit" novalidate autocomplete="off">
-                <h3>{{ page[0] }}</h3>
+                <h3 style="text-align: center;">{{ page[0] }}</h3>
                 <div v-if="page[1] == 0">
                     <button class="btn" @click="ChangePage(1)" style="background-color: #E5C000;">Aiuto</button>
                     <button class="btn" @click="ChangePage(2)" style="background-color: red;">Segnala Errore</button>
@@ -10,9 +10,35 @@
                         Suggerimento</button>
                     <button class="btn" @click="ChangePage(4)" style="background-color: #27ae60;">Vota App</button>
                 </div>
-                <div v-else-if="page[1] == 1">
-                    <button class="btn" @click="ChangePage(5)">Come ordinare</button>
-                    <button class="btn" @click="ChangePage(6)">Utilità</button>
+                <div v-else-if="page[1] == 1 || page[1] == 5 || page[1] == 6">
+                    <button class="btn" id="ordinare" @click="ChangePage(5)"
+                        style="background-color: white; border-color: #27ae60; color: #27ae60; text-transform: capitalize;"><i
+                            class="fa-solid fa-chevron-down"></i> Come ordinare <i
+                            class="fa-solid fa-chevron-down"></i></button>
+                    <ul v-if="page[1] == 5" class="info-list">
+                        <li style="margin: 20px 5%;">Seleziona i prodotti<br><span>Esplora il nostro menu e seleziona i
+                                piatti e le pietanze che desideri ordinare e mettili nel carrello</span></li>
+                        <li>Vai al carrello<br><span>Clicca sul carrello in alto a destra, oppure clicca il bottone in
+                                fondo all pagina "menu" e procedi alla conferma dell'ordine cliccando "Checkout" nella
+                                pagina dell carrello</span></li>
+                        <li>Salva il numero ordine<br><span>Fatti inviare il numero del pre-ordine alla casella mail o
+                                scrivilo da qualche parte è esenziale visto che ti servirà per il pagamento</span></li>
+                        <li>Vai alla cassa<br><span>Esibisci il numero fornito dall’applicazione alle casse preposte
+                                nello stand.</span></li>
+                        <li>Prenotazione<br><span>La progedura è uguale a quella della cassa ma puoi prenotare un
+                                articolo per volta</span></li>
+                    </ul>
+                    <button class="btn" id="utilita" @click="ChangePage(6)"
+                        style="background-color: white; border-color: #f38609; color: #f38609; text-transform: capitalize;"><i
+                            class="fa-solid fa-chevron-down"></i> Utilità <i
+                            class="fa-solid fa-chevron-down"></i></button>
+                            <ul v-if="page[1] == 6" class="info-list" style="list-style-type: disc;">
+                        <li style="margin: 20px 5%;">Compatta la lista<br><span>Nel menù cliccando il selettore sotto i filtri c'è la possibilità di compattare la lista ed esplorare gli articoli più velocemente</span></li>
+                        <li>Fatti mandare l'email<br><span>Per ricordare il tuo numero pre ordine puoi farti mandare una mail dalla quale potrai controllare il tuo numero ordine, gli articoli ordinati e in caso di bisogno potrai modificare il tuo ordine</span></li>
+                        <li>Modifica l'ordine<br><span>Apri la mail e clicca nel bottone "modifica l'ordine". Se modificherai l'ordine ti verra asegnato un nuovo numero pre-ordine</span></li>
+                        <li>Conto alla romana<br><span>In fase di checkout ti viene presentata la spesa per persona in base al numero di coperti</span></li>
+                        <li>Dividi la spesa<br><span>Puoi far calcolare all'applicazione la spesa per gruppi di persone. Prova la funzone prima di ritornare alla home o riprendi la funzione dalla mail inviata.</span></li>
+                    </ul>
                 </div>
                 <div v-else-if="page[1] == 2">
                     <div v-if="errors.length != 0" class="error-box">
@@ -41,6 +67,11 @@
                     </div>
                 </div>
                 <div v-else-if="page[1] == 3">
+                    <div v-if="errors.length != 0" class="error-box">
+                        <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
                     <div class="form-group">
                         <label for="uDettagli">Descrizione suggerimento:
                         </label>
@@ -50,20 +81,28 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Suggerimento'" class="btn" />
+                        <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Suggerimento'"
+                            class="btn" />
                     </div>
                 </div>
                 <div v-else-if="page[1] == 4">
-                    <div class="form-group">
-                        <label for="uDettagli">Vota:
-                        </label>
-                        <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
-                            placeholder="Lascia un feedback"
-                            v-model="ErrorObj.descrizione"></textarea>
+                    <div v-if="errors.length != 0" class="error-box">
+                        <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
+                    <div class="form-group" style="text-align: center">
+                        <star-rating style="padding-bottom: 10px;" :inline="true" @update:rating="Changerating"
+                            :increment="0.5" :border-width="4" border-color="#d8d8d8" :rounded-corners="true"
+                            :star-size="35"
+                            :star-points="[23, 2, 14, 17, 0, 19, 10, 34, 7, 50, 23, 43, 38, 50, 36, 34, 46, 19, 31, 17]"
+                            :show-rating="false"></star-rating>
+                        <textarea class="form-select" id="text" name="text" rows="3" cols="50" maxlength="500"
+                            placeholder="Lascia un feedback" v-model="ErrorObj.descrizione"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Votazione'" class="btn" />
+                        <input type="submit" value="Conferma" class="btn" />
                     </div>
                 </div>
             </form>
@@ -74,6 +113,7 @@
 
 <script>
 import axios from 'axios';
+import StarRating from 'vue-star-rating'
 import { UAParser } from 'ua-parser-js';
 import QuickViewSegnalazione from '@/components/QuickViewSegnalazione.vue'
 export default {
@@ -98,6 +138,11 @@ export default {
             window.scrollTo(0, 0);
         },
 
+        Changerating: function (rating) {
+            this.ErrorObj.segnalazione = rating + ' stelle'
+        },
+
+
         async getdataphone() {
             const parser = new UAParser();
             let UAresult = parser.getResult();
@@ -112,6 +157,7 @@ export default {
         },
 
         ChangePage(idclick) {
+            let btn = ''
             switch (idclick) {
                 case 0:
                     this.page[0] = 'Seleziona un opzione'
@@ -130,15 +176,31 @@ export default {
                     break;
 
                 case 4:
-                    this.page[0] = 'Dicci la tua opinione'
+                    this.page[0] = 'Dacci la tua opinione'
                     break;
 
                 case 5:
+                    if (this.page[0] == 'Utilità') {
+                        btn = document.getElementById('utilita')
+                        btn.style.background = 'white'
+                        btn.style.color = '#f38609'
+                    }
                     this.page[0] = 'Come ordinare'
+                    btn = document.getElementById('ordinare')
+                    btn.style.background = '#27ae60'
+                    btn.style.color = 'white'
                     break;
 
                 case 6:
+                    if (this.page[0] == 'Come ordinare') {
+                        btn = document.getElementById('ordinare')
+                        btn.style.background = 'white'
+                        btn.style.color = '#27ae60'
+                    }
                     this.page[0] = 'Utilità'
+                    btn = document.getElementById('utilita')
+                    btn.style.background = '#f38609'
+                    btn.style.color = 'white'
                     break;
             }
             this.page[1] = idclick
@@ -202,7 +264,7 @@ export default {
         }
     },
 
-    components: { QuickViewSegnalazione }
+    components: { QuickViewSegnalazione, StarRating }
 
 };
 </script>
@@ -297,6 +359,23 @@ export default {
 .register-container .register-form-container form p a:hover {
     color: #130f40;
     text-decoration: underline;
+}
+
+.info-list {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 2rem;
+    list-style-type: decimal;
+}
+
+.info-list li {
+    margin: 15px 5%;
+}
+
+.info-list li span {
+    font-size: 1.7rem;
+    text-transform: none;
 }
 
 .register-container .register-form-container form .form-group {

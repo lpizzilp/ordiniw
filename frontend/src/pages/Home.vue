@@ -74,12 +74,12 @@
                     <p v-if='Btn[5] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
                     <button class="btn" @click="UpdateTab('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
                             class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button><br>
-                    <button v-if='Btn[3] == 1 && IsIphone == false && Active == true' class="btn" @click="ShowAvviso()"
+                    <!--<button v-if='Btn[3] == 1 && IsIphone == false && Active == true' class="btn" @click="ShowAvviso()"
                         style="padding: 1rem; margin-top: 3vh; margin-bottom: 3vh;"><i class="fa-solid fa-bell"
                             style="padding-right: 2vh;"></i>Avvisami al mio turno</button>
-                    <button v-if='Btn[3] == 1 && IsIphone == false && Active == false' class="btn" @click="ShowAvviso()"
+                        <button v-if='Btn[3] == 1 && IsIphone == false && Active == false' class="btn" @click="ShowAvviso()"
                         style="padding: 1rem; margin-top: 3vh; margin-bottom: 3vh;" disabled><i class="fa-solid fa-bell"
-                            style="padding-right: 2vh;"></i>Avvisami al mio turno</button>
+                            style="padding-right: 2vh;"></i>Avvisami al mio turno</button>-->
                 </div>
             </div>
         </div>
