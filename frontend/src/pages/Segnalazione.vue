@@ -25,7 +25,7 @@
                                 scrivilo da qualche parte è esenziale visto che ti servirà per il pagamento</span></li>
                         <li>Vai alla cassa<br><span>Esibisci il numero fornito dall’applicazione alle casse preposte
                                 nello stand.</span></li>
-                        <li>Prenotazione<br><span>La progedura è uguale a quella della cassa ma puoi prenotare un
+                        <li>Prenotazione<br><span>La procedura è uguale a quella della cassa ma puoi prenotare un solo
                                 articolo per volta</span></li>
                     </ul>
                     <button class="btn" id="utilita" @click="ChangePage(6)"
@@ -365,17 +365,19 @@ export default {
     display: inline;
     margin: 0;
     padding: 0;
-    font-size: 2rem;
     list-style-type: decimal;
 }
 
 .info-list li {
     margin: 15px 5%;
+    font-weight: 600;
+    font-size: 2.2rem;
 }
 
 .info-list li span {
     font-size: 1.7rem;
     text-transform: none;
+    font-weight: 400;
 }
 
 .register-container .register-form-container form .form-group {
