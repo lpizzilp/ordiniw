@@ -2,31 +2,69 @@
     <div class="register-container">
         <div class="register-form-container">
             <form id="registerForm" @submit="handleSubmit" novalidate autocomplete="off">
-                <h3>Segnalazioni</h3>
-
-                <div v-if="errors.length != 0" class="error-box">
-                    <ul>
-                        <li v-for="error in errors" :key="error">{{ error }}</li>
-                    </ul>
+                <h3>{{ page[0] }}</h3>
+                <div v-if="page[1] == 0">
+                    <button class="btn" @click="ChangePage(1)" style="background-color: #E5C000;">Aiuto</button>
+                    <button class="btn" @click="ChangePage(2)" style="background-color: red;">Segnala Errore</button>
+                    <button class="btn" @click="ChangePage(3)" style="background-color: orange;">Dacci un
+                        Suggerimento</button>
+                    <button class="btn" @click="ChangePage(4)" style="background-color: #27ae60;">Vota App</button>
                 </div>
-                <div class="form-group">
-                    <label for="uError">Seleziona voce:
-                    </label>
-                    <select name="uError" id="uError" v-model="ErrorObj.segnalazione" class="form-select">
-                        <option v-for="Tipoerr in errori" :key="Tipoerr" :value="Tipoerr">{{ Tipoerr }}</option>
-                    </select>
+                <div v-else-if="page[1] == 1">
+                    <button class="btn" @click="ChangePage(5)">Come ordinare</button>
+                    <button class="btn" @click="ChangePage(6)">Utilità</button>
                 </div>
+                <div v-else-if="page[1] == 2">
+                    <div v-if="errors.length != 0" class="error-box">
+                        <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="uError">Seleziona voce:
+                        </label>
+                        <select name="uError" id="uError" v-model="ErrorObj.segnalazione" class="form-select">
+                            <option v-for="Tipoerr in errori" :key="Tipoerr" :value="Tipoerr">{{ Tipoerr }}</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="uDettagli">Descrizione:
-                    </label>
-                    <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
-                        placeholder="Descrivi il tuo problema o dacci un suggerimento... (se vuoi essere ricontatto lasciaci la tua mail)"
-                        v-model="ErrorObj.descrizione"></textarea>
+                    <div class="form-group">
+                        <label for="uDettagli">Descrizione:
+                        </label>
+                        <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
+                            placeholder="Descrivi il tuo problema o dacci un suggerimento... (se vuoi essere ricontatto lasciaci la tua mail)"
+                            v-model="ErrorObj.descrizione"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Conferma" class="btn" />
+                    </div>
                 </div>
+                <div v-else-if="page[1] == 3">
+                    <div class="form-group">
+                        <label for="uDettagli">Descrizione suggerimento:
+                        </label>
+                        <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
+                            placeholder="Dacci un suggerimento, cerca di essere il più chiaro possibile"
+                            v-model="ErrorObj.descrizione"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Conferma" class="btn" />
+                    <div class="form-group">
+                        <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Suggerimento'" class="btn" />
+                    </div>
+                </div>
+                <div v-else-if="page[1] == 4">
+                    <div class="form-group">
+                        <label for="uDettagli">Vota:
+                        </label>
+                        <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
+                            placeholder="Lascia un feedback"
+                            v-model="ErrorObj.descrizione"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Votazione'" class="btn" />
+                    </div>
                 </div>
             </form>
         </div>
@@ -44,9 +82,10 @@ export default {
     data() {
         return {
             ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
-            errori: ["Sulla schermata di Home non ci sono i bottoni", "Bottoni non funzionanti", "Non posso accedere al carrello", "La procedura di ordine si blocca", "Non mi è stato assegnato un numero ordine", "Non mi viene inviata nessuna mail", "Dopo il primo ordine l'app si blocca", 'Altro...', 'Suggerimenti...'],
+            errori: ["Sulla schermata di Home non ci sono i bottoni", "Bottoni non funzionanti", "Non posso accedere al carrello", "La procedura di ordine si blocca", "Non mi è stato assegnato un numero ordine", "Non mi viene inviata nessuna mail", "Dopo il primo ordine l'app si blocca", 'Altro...'],
             errors: [],
             showQuickVue: false,
+            page: ['Seleziona un opzione', 0]
         }
     },
 
@@ -71,6 +110,40 @@ export default {
             this.ErrorObj.Webkit = UAresult.engine.name
             this.ErrorObj.versioenwk = UAresult.engine.version
         },
+
+        ChangePage(idclick) {
+            switch (idclick) {
+                case 0:
+                    this.page[0] = 'Seleziona un opzione'
+                    break;
+
+                case 1:
+                    this.page[0] = 'Cosa vuoi sapere?'
+                    break;
+
+                case 2:
+                    this.page[0] = 'Segnala il tuo errore'
+                    break;
+
+                case 3:
+                    this.page[0] = 'Suggerisci una modifica'
+                    break;
+
+                case 4:
+                    this.page[0] = 'Dicci la tua opinione'
+                    break;
+
+                case 5:
+                    this.page[0] = 'Come ordinare'
+                    break;
+
+                case 6:
+                    this.page[0] = 'Utilità'
+                    break;
+            }
+            this.page[1] = idclick
+        },
+
 
         async checkForm() {
             this.errors = [];
