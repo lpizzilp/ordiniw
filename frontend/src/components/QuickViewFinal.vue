@@ -108,7 +108,9 @@ export default {
                 sessionStorage.removeItem('Coperti')
                 this.$router.push("/");
             } else if (where === 'D') {
-                this.$router.push("/contaprezzi/?orderid=" + this.parentId + "&coperti=" + this.Ncoperti );
+                // this.$router.push("/contaprezzi/?orderid=" + this.parentId + "&coperti=" + this.Ncoperti );
+                this.$router.push("/contaprezzi" );
+
             }
         },
 
@@ -152,7 +154,7 @@ export default {
                 .then(response => {
                     if (response.data === '') {
                         this.from = 'I'
-                        this.startTimer()
+                        // this.startTimer()
                     } else {
                         this.from = 'D'
                     }
@@ -163,23 +165,23 @@ export default {
                 });
         },
 
-        startTimer() {
-            sessionStorage.removeItem('MatchUser')
-            sessionStorage.removeItem('Username')
-            sessionStorage.removeItem('TipoOrdine')
-            sessionStorage.removeItem('Bill')
-            sessionStorage.removeItem('filtro')
-            // Decrementa il timer ogni secondo
-            this.timerInterval = setInterval(() => {
-                if (this.timer > 0) {
-                    this.timer--;
-                } else {
-                    // Quando il timer raggiunge zero, ferma l'intervallo e reindirizza alla pagina home
-                    clearInterval(this.timerInterval);
-                    this.$router.push("/");
-                }
-            }, 1000);
-        },
+        // startTimer() {
+        //     sessionStorage.removeItem('MatchUser')
+        //     sessionStorage.removeItem('Username')
+        //     sessionStorage.removeItem('TipoOrdine')
+        //     sessionStorage.removeItem('Bill')
+        //     sessionStorage.removeItem('filtro')
+        //     // Decrementa il timer ogni secondo
+        //     this.timerInterval = setInterval(() => {
+        //         if (this.timer > 0) {
+        //             this.timer--;
+        //         } else {
+        //             // Quando il timer raggiunge zero, ferma l'intervallo e reindirizza alla pagina home
+        //             clearInterval(this.timerInterval);
+        //             this.$router.push("/");
+        //         }
+        //     }, 1000);
+        // },
 
         async Makelog(err) {
             let data = {

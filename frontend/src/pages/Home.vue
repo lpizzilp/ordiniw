@@ -128,6 +128,8 @@ export default {
     },
 
     created() {
+        sessionStorage.removeItem('Bill')
+        sessionStorage.removeItem('Coperti')
         this.getsagra();
         this.eventBus.on("loadBottoniHome", () => {
             this.getsagra();

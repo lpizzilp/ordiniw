@@ -2,8 +2,10 @@
     <div class="shopping-cart-section">
 
         <div class="heading">
-            <span>Conta Prezzi</span>
-            <h3>Dividi la spesa tra i vari membri</h3>
+            <!-- <span>Fai i Conti Giusti</span> -->
+            <h3>Dividi la spesa per gruppi</h3>
+            <h2>Assegna un colore a ogni gruppo e carica le quantità </h2>
+
         </div>
 
         <div class="container">
@@ -19,6 +21,7 @@
                                         @input="this.Calcnumbtn()">
                                 </h3>
                             </div>
+                            <hr v-show="false" id="mioDiv" style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
 
                             <div v-if="!filterFoods.length">
                                 <div class="box-content row no-food">
@@ -32,7 +35,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-else id="mioDiv">
+                            <div v-else >
                                 <hr style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
                                 <div v-for="(f, index) in filterFoods" :key="index">
 
@@ -108,25 +111,18 @@
 </template>
 
 <script>
-var queryString = window.location.search;
-queryString = queryString.substring(1);
-var parametri = queryString.split("&");
-var parametriObj = {};
-for (var i = 0; i < parametri.length; i++) {
-    var coppia = parametri[i].split("=");
-    parametriObj[coppia[0]] = coppia[1];
-}
 import router from "@/router";
 import axios from "axios";
 import { mapState } from "vuex";
 export default {
     name: "Cart",
 
+    
     data() {
         return {
             cartItem: [],
             itemQuantity: [],
-            Coperti: parametriObj.coperti,
+            Coperti: 2,  
             maxBtn: null,
             group: [[0], [0]],
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -138,16 +134,11 @@ export default {
     },
 
     created() {
+        this.minMaxCoperti();
         this.getAllBillItem();
     },
 
-    mounted() {
-        setTimeout(() => {
-            this.Calcnumbtn();
-        }, 500);
-    },
-
-
+ 
     computed: {
         ...mapState(["allFoods", "user"]),
 
@@ -156,14 +147,30 @@ export default {
                 (f) => this.matchID(f, this.cartItem)
             );
         },
+
     },
 
     methods: {
 
-        async Calcnumbtn() {
+        minMaxCoperti () {
+            let cop = sessionStorage.getItem('Coperti');
+            
+            switch (true) {
+                case cop ==  1 || cop  == "" :
+                    this.Coperti = 2 ;
+                    break;
+                case cop  > 7:
+                    this.Coperti = 7 ;
+                    break;
+                default: 
+                    this.Coperti = cop ;
+            }
+        },
+
+         Calcnumbtn() {
             this.group = []
             if (this.maxBtn == null) {
-                await this.Lenghtpage()
+                this.Lenghtpage()
                 this.Coperti = this.Coperti > this.maxBtn ? null : Math.abs(this.Coperti)
             } {
                 this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : Math.abs(this.Coperti)
@@ -180,9 +187,10 @@ export default {
                     this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
                 }
             }
+            
         },
 
-        async Lenghtpage() {
+        Lenghtpage() {
             var div = document.getElementById("mioDiv");
             let divlenght = div.offsetWidth - 400
             switch (true) {
@@ -242,7 +250,7 @@ export default {
         },
 
 
-        async CorrectQta(indexItem, indexBtn, sommaqta) {
+        CorrectQta(indexItem, indexBtn, sommaqta) {
             if (this.itemQuantity[indexItem] == sommaqta) {
                 this.Complete[indexItem] = true
             } else {
@@ -255,7 +263,8 @@ export default {
         },
 
         async getAllBillItem() {
-                let existItem = await axios.get('/billdetails/' + parametriObj.orderid);
+            console.log("--> " + sessionStorage.getItem('Bill'))
+                let existItem = await axios.get('/billdetails/' +sessionStorage.getItem('Bill')); // + parametriObj.orderid);
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
                     this.Quickerrore = true
@@ -266,6 +275,7 @@ export default {
                         this.itemQuantity.push(element.item_qty);
                     });
                 }
+                this.Calcnumbtn();
         },
 
         async Makelog(err) {
