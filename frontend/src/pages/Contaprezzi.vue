@@ -87,13 +87,13 @@
                             <div class="box-title">
                                 <ul class="Pricelist">
                                     <li v-for="(value, index) in group[0]" :key="index" :style="{'color': Valorifissi[0][index] }">
-                                        <h3>{{ Valorifissi[1][index] }}: <span style="color: black;"> {{ Price[index] }}€</span></h3>
+                                        <h2>{{ Valorifissi[1][index] }}: <span style="color: black;"> {{ Price[index] }}€</span></h2>
                                     </li>
                                 </ul>
                                 <hr v-if="group.length != 0"
                                     style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
-                                <h3 style="color: #f38609; text-align: center; padding: 10.5px 0; margin: 0;">
-                                    Totale {{ calculateSummaryPrice()[0] }}€</h3>
+                                <h2 style="color: #f38609; text-align: center; padding: 10.5px 0; margin: 0;">
+                                    Totale {{ calculateSummaryPrice()[0] }}€</h2>
                             </div>
 
                             <div class="box-content" style="text-align: center;">
@@ -382,7 +382,7 @@ export default {
     text-align: center;
     width: 5.85rem;
     height: 30px;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 0px;
     border-color: black;
 }
