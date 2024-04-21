@@ -53,7 +53,7 @@
                                                 :style="{ 'border-color': Complete[index] === true ? '#27ae60' : '#f38609', 'border-width': '2px' }"
                                                 class="form-control item-quantity">{{
                                                     itemQuantity[index]
-                                                }}<i :class="'fa-solid fa-' + (Complete[index] === true ? 'check' : 'x')"
+                                                }}<i :class="'fa-solid fa-' + (Complete[index] === true ? 'check' : '')"
                                                     :style="{ 'color': Complete[index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px' }"></i></label>
                                         </div>
 
@@ -66,12 +66,12 @@
                                                 <i v-else :class="'fa-solid fa-' + group[index][indexBtn]"></i></button>
                                         </div>
 
-                                        <div class="cal-total col-sm-2">
+                                        <!-- <div class="cal-total col-sm-2">
                                             <h4 class="item-total">{{
                                                 calculateItemPrice(index)
                                                 }}€
                                             </h4>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <hr style="border-width: 2px; background-color: #27ae60;">
                                 </div>
