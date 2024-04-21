@@ -16,3 +16,5 @@ export const mailOptions = {
     html: '',
 };
 
+export const adminemail = 'giulio.pizzinato@gmail.com'
+
