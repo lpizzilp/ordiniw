@@ -1,6 +1,7 @@
 // import connection
 import { emaildata } from "../config/emaildata.js";
 import { mailOptions } from "../config/emaildata.js";
+import { adminemail } from "../config/emaildata.js";
 
 export const Emailsender = (data, result) => {
     const transporter = emaildata
@@ -100,7 +101,7 @@ export const Emailregistrazione = (data, result) => {
             <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per la registrazione avvenuta alle ore ` + data.reg_ora + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
         </div>`;
 
-    mailOptions.to = mailOptions.to
+    mailOptions.to = adminemail
     mailOptions.subject = "Richiesta accesso come amministratore"
     mailOptions.html = emailText
 
@@ -244,6 +245,7 @@ export const Emailsegnalazione = (data, result) => {
             <p style="text-align: left; font-size:16px;">Questa email inviata il giorno ` + data.err_ora + `.<br>Valutare al situazione e correggere l'erorre.</p>
         </div>`;
 
+    mailOptions.to = adminemail
     mailOptions.subject = "Segnalazione Errore"
     mailOptions.html = emailText
 
