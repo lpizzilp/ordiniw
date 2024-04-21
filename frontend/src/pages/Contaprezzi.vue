@@ -21,7 +21,8 @@
                                         @input="this.Calcnumbtn()">
                                 </h3>
                             </div>
-                            <hr v-show="shwRow"  id="mioDiv" style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
+                            <hr v-show="shwRow" id="mioDiv"
+                                style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
 
                             <div v-if="!filterFoods.length">
                                 <div class="box-content row no-food">
@@ -35,8 +36,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-else >
-                                <hr  style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
+                            <div v-else>
+                                <hr style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
                                 <div v-for="(f, index) in filterFoods" :key="index">
 
                                     <div class="box-content row">
@@ -50,11 +51,11 @@
 
                                         <div class="item-price col-sm-1">
                                             <label id="iQuantity"
-                                                :style="{ 'border-color': Complete[index] === true ? '#27ae60' : '#f38609', 'border-width': '2px' }"
+                                                :style="{ 'border-color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'border-width': '2px' }"
                                                 class="form-control item-quantity">{{
                                                     itemQuantity[index]
-                                                }}<i :class="'fa-solid fa-' + (Complete[index] === true ? 'check' : '')"
-                                                    :style="{ 'color': Complete[index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px' }"></i></label>
+                                                }}<i :class="'fa-solid fa-' + (Complete[1][index] === true ? 'check' : '')"
+                                                    :style="{ 'color': Complete[1][index] === true ? '#27ae60' : '#f38609', 'padding-left': '4px' }"></i></label>
                                         </div>
 
                                         <div class="item-qty">
@@ -86,14 +87,18 @@
                         <div class="box">
                             <div class="box-title">
                                 <ul class="Pricelist">
-                                    <li v-for="(value, index) in group[0]" :key="index" :style="{'color': Valorifissi[0][index] }">
-                                        <h2>{{ Valorifissi[1][index] }}: <span style="color: black;"> {{ Price[index] }}€</span></h2>
+                                    <li v-for="(value, index) in group[0]" :key="index"
+                                        :style="{ 'color': Valorifissi[0][index] }">
+                                        <h2>{{ Valorifissi[1][index] }}: <span style="color: black;"> {{ Price[index]
+                                                }}€</span></h2>
                                     </li>
                                 </ul>
                                 <hr v-if="group.length != 0"
                                     style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
-                                <h2 style="color: #f38609; text-align: center; padding: 10.5px 0; margin: 0;">
-                                    Totale {{ calculateSummaryPrice()[0] }}€</h2>
+                                <h2
+                                    :style="{ 'color': Complete[0][0] === true ? '#27ae60' : '#f38609', 'text-align-last': 'center', 'padding': '10.5px 0', 'margin': '0' }">
+                                    Totale {{ calculateSummaryPrice()[0] }}€ <i v-show="Complete[0][0]"
+                                        class='fa-solid fa-check'></i></h2>
                             </div>
 
                             <div class="box-content" style="text-align: center;">
@@ -117,19 +122,19 @@ import { mapState } from "vuex";
 export default {
     name: "Cart",
 
-    
+
     data() {
         return {
-            shwRow : true , 
+            shwRow: true,
             cartItem: [],
             itemQuantity: [],
-            Coperti: 2,  
+            Coperti: 2,
             maxBtn: null,
             group: [[0], [0]],
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             screenWidth: window.innerWidth,
             Quickerrore: false,
-            Complete: [],
+            Complete: [[false], []],
             Valorifissi: [['#E5C000', 'red', 'green', 'blue', 'purple', 'black', 'orange', 'azure', 'brown'], ['Giallo', 'Rosso', 'Verde', 'Blu', 'Viola', 'Nero', 'Arancione', 'Celeste', 'Marrone']]
         };
     },
@@ -139,7 +144,7 @@ export default {
         this.getAllBillItem();
     },
 
- 
+
     computed: {
         ...mapState(["allFoods", "user"]),
 
@@ -153,22 +158,22 @@ export default {
 
     methods: {
 
-        minMaxCoperti () {
+        minMaxCoperti() {
             let cop = sessionStorage.getItem('Coperti');
-            
+
             switch (true) {
-                case cop ==  1 || cop  == "" :
-                    this.Coperti = 2 ;
+                case cop == 1 || cop == "":
+                    this.Coperti = 2;
                     break;
-                case cop  > 7:
-                    this.Coperti = 7 ;
+                case cop > 7:
+                    this.Coperti = 7;
                     break;
-                default: 
-                    this.Coperti = cop ;
+                default:
+                    this.Coperti = cop;
             }
         },
 
-         Calcnumbtn() {
+        Calcnumbtn() {
             this.group = []
             if (this.maxBtn == null) {
                 this.Lenghtpage()
@@ -183,20 +188,20 @@ export default {
                 this.Complete = []
             } else {
                 this.Price = Array(parseInt(this.Coperti)).fill(0)
-                this.Complete = Array(parseInt(this.cartItem.length)).fill(false)
+                this.Complete[1] = Array(parseInt(this.cartItem.length)).fill(false)
                 for (let foodindex = 0; foodindex < this.cartItem.length; foodindex++) {
                     this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
                 }
             }
-            
+
         },
 
         Lenghtpage() {
-            this.shwRow = true ; 
+            this.shwRow = true;
             this.$nextTick(() => {
-                this.shwRow = false  ;
+                this.shwRow = false;
             });
-        
+
             var div = document.getElementById("mioDiv");
             let divlenght = div.offsetWidth - 400
             switch (true) {
@@ -258,9 +263,15 @@ export default {
 
         CorrectQta(indexItem, indexBtn, sommaqta) {
             if (this.itemQuantity[indexItem] == sommaqta) {
-                this.Complete[indexItem] = true
+                this.Complete[1][indexItem] = true
             } else {
-                this.Complete[indexItem] = false
+                this.Complete[1][indexItem] = false
+            }
+            var indice = this.Complete[1].findIndex(item => item === false);
+            if (indice == -1) {
+                this.Complete[0][0] = true
+            } else  {
+                this.Complete[0][0] = false
             }
         },
 
@@ -269,18 +280,18 @@ export default {
         },
 
         async getAllBillItem() {
-                let existItem = await axios.get('/billdetails/' +sessionStorage.getItem('Bill')); // + parametriObj.orderid);
-                let response = existItem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                } else {
-                    existItem.data.forEach(element => {
-                        this.cartItem.push(element.food_id);
-                        this.itemQuantity.push(element.item_qty);
-                    });
-                }
-                this.Calcnumbtn();
+            let existItem = await axios.get('/billdetails/' + sessionStorage.getItem('Bill')); // + parametriObj.orderid);
+            let response = existItem.request.response
+            if (response.includes("{\"code\"")) {
+                this.Quickerrore = true
+                this.Makelog(response);
+            } else {
+                existItem.data.forEach(element => {
+                    this.cartItem.push(element.food_id);
+                    this.itemQuantity.push(element.item_qty);
+                });
+            }
+            this.Calcnumbtn();
         },
 
         async Makelog(err) {
@@ -538,7 +549,7 @@ export default {
     }
 
     .cal-total {
-       display: none;
+        display: none;
     }
 
     .cal-total h4 {
