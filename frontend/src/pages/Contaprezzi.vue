@@ -21,7 +21,7 @@
                                         @input="this.Calcnumbtn()">
                                 </h3>
                             </div>
-                            <hr v-show="false" id="mioDiv" style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
+                            <hr v-show="shwRow"  id="mioDiv" style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
 
                             <div v-if="!filterFoods.length">
                                 <div class="box-content row no-food">
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div v-else >
-                                <hr style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
+                                <hr  style="border-width: 2px; background-color: #27ae60; margin-top: 15px;">
                                 <div v-for="(f, index) in filterFoods" :key="index">
 
                                     <div class="box-content row">
@@ -120,6 +120,7 @@ export default {
     
     data() {
         return {
+            shwRow : true , 
             cartItem: [],
             itemQuantity: [],
             Coperti: 2,  
@@ -191,6 +192,11 @@ export default {
         },
 
         Lenghtpage() {
+            this.shwRow = true ; 
+            this.$nextTick(() => {
+                this.shwRow = false  ;
+            });
+        
             var div = document.getElementById("mioDiv");
             let divlenght = div.offsetWidth - 400
             switch (true) {
@@ -263,7 +269,6 @@ export default {
         },
 
         async getAllBillItem() {
-            console.log("--> " + sessionStorage.getItem('Bill'))
                 let existItem = await axios.get('/billdetails/' +sessionStorage.getItem('Bill')); // + parametriObj.orderid);
                 let response = existItem.request.response
                 if (response.includes("{\"code\"")) {
