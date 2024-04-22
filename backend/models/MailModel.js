@@ -206,15 +206,10 @@ export const Emailsegnalazione = (data, result) => {
 
     var emailText = ""
     emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
-            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#f32009e3">Segnalazione Errore</p>
-            <p style="text-align: left; font-size:16px;">Un utente ha riscontrato un problema mentre uttilizzava l'app.<br>I dettagli sono stati elencati qui sotto:</p>
+            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#f32009e3">Segnalazione: ` + data.tipoerr + `</p>
             <form style="text-align: center; background-color: white; border-radius: 10px; whidth: 100%" novalidate autocomplete="off">
                 <div style="text-align: center; margin-top: 10px; whidth: 50%">
-                    <label style="text-align: left; font-size:16px;">Tipo errorre:
-                    </label>
-                    <select readonly style="margin: 0.7rem 0; border-radius: 0.5rem; padding: 2px 15px; font-size: 18px; color: #130f40; text-transform: none; background: #f7f7f7; border: 2px inset black;">
-                        <option dropdown disabled selected>` + data.tipoerr + `</option>
-                    </select>
+                    
                 </div>
 
                 <div style="text-align: center; margin-top: 10px;">
@@ -246,7 +241,7 @@ export const Emailsegnalazione = (data, result) => {
         </div>`;
 
     mailOptions.to = adminemail
-    mailOptions.subject = "Segnalazione Errore"
+    mailOptions.subject = "Segnalazione " + data.tiposegnalazione
     mailOptions.html = emailText
 
     transporter.sendMail(mailOptions, function (error, info) {
