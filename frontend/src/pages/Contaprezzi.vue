@@ -3,7 +3,7 @@
 
         <div class="heading">
             <!-- <span>Fai i Conti Giusti</span> -->
-            <h3>Dividi la spesa per gruppi</h3>
+            <h3 style="font-family: 'Satisfy', cursive; color: #27ae60;">Dividi la spesa per gruppi</h3>
             <h2>Assegna un colore a ogni gruppo e carica le quantità </h2>
 
         </div>

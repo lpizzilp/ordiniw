@@ -18,7 +18,9 @@ export const Emailsender = (data, result) => {
                 <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#27ae60; padding-bottom: 2px;">Hai dei ripensamenti?</p>
                 <p style="text-align: center; font-size:16px;">Se ti sei accorto che nel tuo ordine manca qualcosa,<br>puoi sempre modificarlo cliccando sul bottone qui sotto </p>
                 <p style="margin-top:5px;">ㅤ</p>
-                <a href="` + data.user_data + `" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #27ae60; border-radius: 10px;">Clicca e modifica l'ordine</a>
+                <a href="` + data.user_data + `&contaprezzi=false" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #27ae60; border-radius: 10px;">Clicca e modifica l'ordine</a>
+                <p style="font-family: 'Satisfy', cursive; margin: 20px 0; font-size:18px; color:#27ae60;">Inoltre</p>
+                <a href="` + data.user_data + `&contaprezzi=true" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #E5C000; border-radius: 10px;">Dividi la spesa</a>
                 <p style="margin-top:5px;">ㅤ</p>
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
@@ -206,7 +208,7 @@ export const Emailsegnalazione = (data, result) => {
 
     var emailText = ""
     emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
-            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#f32009e3">Segnalazione: ` + data.tipoerr + `</p>
+            <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:` + ( data.tiposegnalazione === 'ERRORE' ? '#f32009e3' : data.tiposegnalazione === 'SUGGERIMENTO' ? '#f38609' : '#27ae60') + `; text-transform: capitalize;">` + data.tiposegnalazione + `: ` +  data.tipoerr + `</p>
             <form style="text-align: center; background-color: white; border-radius: 10px; whidth: 100%" novalidate autocomplete="off">
                 <div style="text-align: center; margin-top: 10px; whidth: 50%">
                     

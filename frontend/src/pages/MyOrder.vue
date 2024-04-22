@@ -43,44 +43,57 @@ export default {
 
     methods: {
         async getBillItem() {
-            sessionStorage.setItem('MatchUser', parametriObj.match)
-            sessionStorage.setItem('Username', parametriObj.user)
-            sessionStorage.setItem('TipoOrdine', parametriObj.type)
-            sessionStorage.setItem('Bill', parametriObj.id)
-            if (parametriObj.filtroOrd == 'PRE') {
-                sessionStorage.setItem('filtro', parametriObj.filtroOrd)
-                let bookitem = await axios.get('/prenotazione/' + parametriObj.id)
-                let response = bookitem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response)
-                }
-                for (let i = 0; i < bookitem.data.length; i++) {
-                    let data = {
-                        user_id: parseInt(sessionStorage.getItem('Username')),
-                        food_id: bookitem.data[i].food_id,
-                        item_qty: parseInt(bookitem.data[i].item_qty)
+            console.log(parametriObj.contaprezzi)
+            switch (parametriObj.contaprezzi) {
+                case 'true':
+                    sessionStorage.setItem('MatchUser', parametriObj.match)
+                    sessionStorage.setItem('Bill', parametriObj.id)
+                    sessionStorage.setItem('Coperti', "")
+                    this.$router.push("/contaprezzi")
+                    break;
+
+                default:
+                    sessionStorage.setItem('MatchUser', parametriObj.match)
+                    sessionStorage.setItem('Username', parametriObj.user)
+                    sessionStorage.setItem('TipoOrdine', parametriObj.type)
+                    sessionStorage.setItem('Bill', parametriObj.id)
+                    if (parametriObj.filtroOrd == 'PRE') {
+                        sessionStorage.setItem('filtro', (parametriObj.filtroOrd === '-1' ? "" : parametriObj.filtroOrd))
+                        let bookitem = await axios.get('/prenotazione/' + parametriObj.id)
+                        let response = bookitem.request.response
+                        if (response.includes("{\"code\"")) {
+                            this.Quickerrore = true
+                            this.Makelog(response)
+                        }
+                        for (let i = 0; i < bookitem.data.length; i++) {
+                            let data = {
+                                user_id: parseInt(sessionStorage.getItem('Username')),
+                                food_id: bookitem.data[i].food_id,
+                                item_qty: parseInt(bookitem.data[i].item_qty)
+                            }
+                            await axios.post("/cartItem", data);
+                        }
+                    } else {
+                        sessionStorage.setItem('filtro', "")
+                        let billitem = await axios.get('/billdetails/' + parametriObj.id)
+                        let response = billitem.request.response
+                        if (response.includes("{\"code\"")) {
+                            this.Quickerrore = true
+                        }
+                        for (let i = 0; i < billitem.data.length; i++) {
+                            let data = {
+                                user_id: parseInt(sessionStorage.getItem('Username')),
+                                food_id: billitem.data[i].food_id,
+                                item_qty: parseInt(billitem.data[i].item_qty)
+                            }
+                            await axios.post("/cartItem", data);
+                        }
                     }
-                    await axios.post("/cartItem", data);
-                }
-            } else {
-                sessionStorage.setItem('filtro', "")
-                let billitem = await axios.get('/billdetails/' + parametriObj.id)
-                let response = billitem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                }
-                for (let i = 0; i < billitem.data.length; i++) {
-                    let data = {
-                        user_id: parseInt(sessionStorage.getItem('Username')),
-                        food_id: billitem.data[i].food_id,
-                        item_qty: parseInt(billitem.data[i].item_qty)
-                    }
-                    await axios.post("/cartItem", data);
-                }
+
+                    this.$router.push("/menu")
+                    break;
             }
 
-            this.$router.push("/menu")
         },
 
         async Makelog(err) {
