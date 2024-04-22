@@ -12,7 +12,7 @@
                 </div>
                 <div v-else-if="page[1] == 1 || page[1] == 5 || page[1] == 6">
                     <button class="btn" id="ordinare" @click="ChangePage(5)"
-                        style="background-color: white; border-color: #27ae60; color: #27ae60; text-transform: capitalize;"><i
+                        style="background-color: #27ae60; text-transform: capitalize;"><i
                             class="fa-solid fa-chevron-down"></i> Come ordinare <i
                             class="fa-solid fa-chevron-down"></i></button>
                     <ul v-if="page[1] == 5" class="info-list">
@@ -29,16 +29,26 @@
                                 articolo per volta</span></li>
                     </ul>
                     <button class="btn" id="utilita" @click="ChangePage(6)"
-                        style="background-color: white; border-color: #f38609; color: #f38609; text-transform: capitalize;"><i
+                        style="background-color: #f38609; text-transform: capitalize;"><i
                             class="fa-solid fa-chevron-down"></i> Utilità <i
                             class="fa-solid fa-chevron-down"></i></button>
-                            <ul v-if="page[1] == 6" class="info-list" style="list-style-type: disc;">
-                        <li style="margin: 20px 5%;">Compatta la lista<br><span>Nel menù cliccando il selettore sotto i filtri c'è la possibilità di compattare la lista ed esplorare gli articoli più velocemente</span></li>
-                        <li>Fatti mandare l'email<br><span>Per ricordare il tuo numero pre ordine puoi farti mandare una mail dalla quale potrai controllare il tuo numero ordine, gli articoli ordinati e in caso di bisogno potrai modificare il tuo ordine</span></li>
-                        <li>Modifica l'ordine<br><span>Apri la mail e clicca nel bottone "modifica l'ordine". Se modificherai l'ordine ti verra asegnato un nuovo numero pre-ordine</span></li>
-                        <li>Conto alla romana<br><span>In fase di checkout ti viene presentata la spesa per persona in base al numero di coperti</span></li>
-                        <li>Dividi la spesa<br><span>Puoi far calcolare all'applicazione la spesa per gruppi di persone. Prova la funzone prima di ritornare alla home o riprendi la funzione dalla mail inviata.</span></li>
+                    <ul v-if="page[1] == 6" class="info-list" style="list-style-type: disc;">
+                        <li style="margin: 20px 5%;">Compatta la lista<br><span>Nel menù cliccando il selettore sotto i
+                                filtri c'è la possibilità di compattare la lista ed esplorare gli articoli più
+                                velocemente</span></li>
+                        <li>Fatti mandare l'email<br><span>Per ricordare il tuo numero pre ordine puoi farti mandare una
+                                mail dalla quale potrai controllare il tuo numero ordine, gli articoli ordinati e in
+                                caso di bisogno potrai modificare il tuo ordine</span></li>
+                        <li>Modifica l'ordine<br><span>Apri la mail e clicca nel bottone "modifica l'ordine". Se
+                                modificherai l'ordine ti verra asegnato un nuovo numero pre-ordine</span></li>
+                        <li>Conto alla romana<br><span>In fase di checkout ti viene presentata la spesa per persona in
+                                base al numero di coperti</span></li>
+                        <li>Dividi la spesa<br><span>Puoi far calcolare all'applicazione la spesa per gruppi di persone.
+                                Prova la funzone prima di ritornare alla home o riprendi la funzione dalla mail
+                                inviata.</span></li>
                     </ul>
+                    <button class="btn" id="utilita" @click="ChangePage(7)"
+                        style="background-color: #E5C000; text-transform: capitalize;">Torna alla home</button>
                 </div>
                 <div v-else-if="page[1] == 2">
                     <div v-if="errors.length != 0" class="error-box">
@@ -74,6 +84,11 @@
                         </ul>
                     </div>
                     <div class="form-group">
+                        <label for="uSugg">Seleziona voce:
+                        </label>
+                        <select name="uSugg" id="uSugg" v-model="ErrorObj.segnalazione" class="form-select">
+                            <option v-for="Suggerimento in suggerimeti" :key="Suggerimento" :value="Suggerimento">{{ Suggerimento }}</option>
+                        </select>
                         <label for="uDettagli">Descrizione suggerimento:
                         </label>
                         <textarea class="form-select" id="text" name="text" rows="7" cols="50" maxlength="500"
@@ -82,7 +97,7 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Conferma" @click="ErrorObj.segnalazione = 'Suggerimento'"
+                        <input type="submit" value="Conferma"
                             class="btn" />
                     </div>
 
@@ -118,15 +133,15 @@ import axios from 'axios';
 import StarRating from 'vue-star-rating'
 import { UAParser } from 'ua-parser-js';
 import QuickViewSegnalazione from '@/components/QuickViewSegnalazione.vue'
+import router from '@/router';
 export default {
     name: "Confirm",
 
     data() {
         return {
             ErrorObj: { segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
-
+            suggerimeti:  ["Suggerimento App",  "Suggerimento Manifestazione"],
             errori: ["Sulla schermata di Home non ci sono i bottoni", "Bottoni non funzionanti", "Non posso accedere al carrello", "La procedura di ordine si blocca", "Non mi è stato assegnato un numero ordine", "Non mi viene inviata nessuna mail", "Dopo il primo ordine l'app si blocca", 'Altro...'],
-
             errors: [],
             showQuickVue: false,
             page: ['Seleziona un opzione', 0]
@@ -161,7 +176,6 @@ export default {
         },
 
         ChangePage(idclick) {
-            let btn = ''
             switch (idclick) {
                 case 0:
                     this.page[0] = 'Seleziona un opzione'
@@ -184,27 +198,14 @@ export default {
                     break;
 
                 case 5:
-                    if (this.page[0] == 'Utilità') {
-                        btn = document.getElementById('utilita')
-                        btn.style.background = 'white'
-                        btn.style.color = '#f38609'
-                    }
                     this.page[0] = 'Come ordinare'
-                    btn = document.getElementById('ordinare')
-                    btn.style.background = '#27ae60'
-                    btn.style.color = 'white'
                     break;
 
                 case 6:
-                    if (this.page[0] == 'Come ordinare') {
-                        btn = document.getElementById('ordinare')
-                        btn.style.background = 'white'
-                        btn.style.color = '#27ae60'
-                    }
                     this.page[0] = 'Utilità'
-                    btn = document.getElementById('utilita')
-                    btn.style.background = '#f38609'
-                    btn.style.color = 'white'
+                    break;
+                case 7:
+                    router.push('/')
                     break;
             }
             this.page[1] = idclick
