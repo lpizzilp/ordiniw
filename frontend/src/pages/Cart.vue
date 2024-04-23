@@ -269,7 +269,7 @@ export default {
             }
 
             let data = {
-                user_id: parseInt(sessionStorage.getItem('Username')),
+                user_id: sessionStorage.getItem('Username'),
                 food_id: this.cartItem[i],
                 item_qty: this.itemQuantity[i]
             };

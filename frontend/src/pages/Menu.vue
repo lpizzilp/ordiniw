@@ -554,7 +554,8 @@ export default {
             this.sendId = this.currentPageItems[index].food_id;
             this.showCounterCart = !this.showCounterCart;
 
-            let user_id = parseInt(sessionStorage.getItem('Username'));
+            let user_id = sessionStorage.getItem('Username');
+            console.log(user_id)
             let data = {
                 user_id: user_id,
                 food_id: this.sendId,

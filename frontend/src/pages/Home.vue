@@ -96,6 +96,7 @@
 import axios from "axios";
 import AvvisoCoda from "@/assets/sound/suono.mp3"
 import { UAParser } from 'ua-parser-js';
+import uniqid from 'uniqid';
 import QuickViewEliminacode from "@/components/QuickViewEliminacode.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewHome from "@/components/QuickViewHome.vue";
@@ -161,7 +162,8 @@ export default {
             this.showQuickVue = type.vis
             if (type.mode != '') {
                 this.errors = [];
-                var idR = this.randomizza();
+                var idR = uniqid()
+                console.log(idR)
                 let datareg = {
                     user_id: idR,
                     user_email: this.loginObj.email,
@@ -272,22 +274,6 @@ export default {
             }
         },
 
-        randomizza() {
-            var numeriGenerati = new Set();
-            // Funzione per generare un numero casuale unico
-            function generaNumeroUnico() {
-                var numeroCasuale = Math.floor(Math.random() * 999999999) + 1;
-                if (numeriGenerati.has(numeroCasuale)) {
-                    return generaNumeroUnico();
-                }
-                else {
-                    numeriGenerati.add(numeroCasuale);
-                    return numeroCasuale;
-                }
-            }
-            var numeroUnico = generaNumeroUnico();
-            return numeroUnico;
-        },
 
         UpdateTab(type) {
             this.togleTab = false

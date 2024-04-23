@@ -320,7 +320,7 @@ export default {
 
                     let dataprenotazione = {
                         book_id: parseInt(bookId),
-                        user_id: parseInt(sessionStorage.getItem('Username')),
+                        user_id: sessionStorage.getItem('Username'),
                         book_tavolo: this.checkoutObj.Tavolo,
                         book_coperti: this.checkoutObj.Coperti,
                         book_when: this.currentTime(),
@@ -362,7 +362,7 @@ export default {
 
                     let billStatus = {
                         bill_id: parseInt(billId),
-                        user_id: parseInt(sessionStorage.getItem('Username')),
+                        user_id: sessionStorage.getItem('Username'),
                         bill_tavolo: this.checkoutObj.Tavolo,
                         bill_coperti: this.checkoutObj.Coperti,
                         bill_when: this.currentTime(),
