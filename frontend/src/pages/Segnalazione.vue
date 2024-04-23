@@ -5,7 +5,7 @@
                 <h3 style="text-align: center;">{{ page[0] }}</h3>
                 <!-- TESTATE         -->
                 <div v-if="page[1] == 0">
-                    <button class="btn" @click="ChangePage(1)" style="background-color: #E5C000;">Aiuto</button>
+                    <button class="btn" @click="ChangePage(1)" style="background-color: #aea04b;">Aiuto</button>
                     <button class="btn" @click="ChangePage(2)" style="background-color: red;">Segnala Errore</button>
                     <button class="btn" @click="ChangePage(3)" style="background-color: orange;">Dacci un
                         Suggerimento</button>
@@ -52,7 +52,7 @@
                                 di compattare la lista ed esplorare gli articoli più velocemente</span></li>
                     </ul>
                     <button class="btn" id="utilita" @click="ChangePage(7)"
-                        style="background-color: #E5C000; text-transform: capitalize;">Torna alla home</button>
+                        style="background-color: #aea04b; text-transform: capitalize;">Torna alla home</button>
                 </div>
                 <!-- SEGNALAZIONI ERRORI -->
                 <div v-else-if="page[1] == 2">
