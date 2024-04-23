@@ -92,6 +92,7 @@ import {
     cancelBookdetails
 } from "../controllers/prenotazioni.js";
 import { Infolog } from "../log/loggerModel.js";
+import { InserisciErrore } from "../controllers/errore.js";
 
 // init express router
 const router = express.Router();
@@ -223,6 +224,10 @@ router.put("/api/sagraComand", updateControlOrdini);
 
 ////////////////////////// Bill Details ////////////////////////////////
 router.post("/api/importfood", importAnagrafica);
+
+
+/////////////////////////  Errore /////////////////////////////////////*css*/`
+router.post("/api/posterrore", InserisciErrore)
 
 
 ////////////////////////// Esauriti ////////////////////////////////

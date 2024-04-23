@@ -291,6 +291,7 @@ export default {
                     err_ora: await this.getData()
                 }
                 console.log(this.ErrorObj.segnalazione + "-" + this.ErrorObj.descrizione,)
+                axios.post("/posterrore", data);
                 axios.post("/mail/sengalazione/", data);
                 this.showQuickVue = true
             }
