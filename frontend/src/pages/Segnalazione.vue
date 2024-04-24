@@ -147,7 +147,7 @@ export default {
     data() {
         return {
             ErrorObj: { TipoSegnalazione: "", segnalazione: "", descrizione: "", telefono: "", modello: "", os: "", versioneos: "", browser: "", versionebr: "", Webkit: "", versioenwk: "", },
-            suggerimeti: ["Suggerimento App", "Suggerimento Manifestazione"],
+            suggerimeti: ["Suggerimento APP Ordini WEB", "Suggerimento Manifestazione"],
             errori: ["Sulla schermata di Home non ci sono i bottoni",
                 "Bottoni non funzionanti",
                 "Non posso accedere al carrello",
@@ -212,7 +212,7 @@ export default {
                     break;
 
                 case 4:
-                    this.page[0] = 'Dacci la tua opinione'
+                    this.page[0] = 'Vota la nostra Applicazione Web'
                     this.ErrorObj.TipoSegnalazione = "VOTO"
                     break;
 
