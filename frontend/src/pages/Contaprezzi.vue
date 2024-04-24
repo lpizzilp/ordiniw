@@ -15,7 +15,7 @@
                         <div class="box">
                             <div class="box-title item-total row">
                                 <h3 class="group-box">
-                                    Gruppi tra cui dividere il prezzo: <input type="number" :max="maxBtn" min="1"
+                                    Gruppi tra cui dividere il prezzo: <input type="number" :max="maxBtn" min="2"
                                         maxlength="1" style="text-align: center; color: #27ae60;"
                                         :placeholder="Coperti == null ? 'inserire' : Coperti" v-model="Coperti"
                                         @input="this.Calcnumbtn()">
@@ -128,7 +128,7 @@ export default {
             shwRow: true,
             cartItem: [],
             itemQuantity: [],
-            Coperti: 2,
+            Coperti: 4,
             maxBtn: null,
             group: [[0], [0]],
             Price: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -140,7 +140,6 @@ export default {
     },
 
     created() {
-        this.minMaxCoperti();
         this.getAllBillItem();
     },
 
@@ -158,34 +157,17 @@ export default {
 
     methods: {
 
-        minMaxCoperti() {
-            let cop = sessionStorage.getItem('Coperti');
-
-            switch (true) {
-                case cop == 1 || cop == "":
-                    this.Coperti = 2;
-                    break;
-                case cop > 7:
-                    this.Coperti = 7;
-                    break;
-                default:
-                    this.Coperti = cop;
-            }
-        },
-
         Calcnumbtn() {
             this.group = []
             if (this.maxBtn == null) {
                 this.Lenghtpage()
                 this.Coperti = this.Coperti > this.maxBtn ? null : Math.abs(this.Coperti)
+                console.log(this.Coperti + ' > ' + this.maxBtn)
             } {
-                this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : Math.abs(this.Coperti)
+                this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : this.Coperti < 2 ? this.Coperti = null : Math.abs(this.Coperti)
             }
             if (this.Coperti == "" || this.Coperti == 0 || this.Coperti == null) {
                 this.Coperti = null
-                this.group = []
-                this.Price = []
-                this.Complete = []
             } else {
                 this.Price = Array(parseInt(this.Coperti)).fill(0)
                 this.Complete[1] = Array(parseInt(this.cartItem.length)).fill(false)
@@ -193,7 +175,6 @@ export default {
                     this.group[foodindex] = Array(parseInt(this.Coperti)).fill(0)
                 }
             }
-
         },
 
         Lenghtpage() {
