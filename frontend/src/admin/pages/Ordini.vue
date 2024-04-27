@@ -60,7 +60,7 @@ import moment from "moment";
 import ExcelJS from 'exceljs';
 import { mapState, mapMutations } from "vuex";
 export default {
-    name: 'Dashboard',
+    name: 'Ordini',
 
     data() {
         return {

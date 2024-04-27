@@ -12,3 +12,15 @@ export const insertErrore = (data,result) => {
         }
     });
 };
+
+//Select tutto
+export const getAllErr = (result) => {
+    db.query("SELECT * from errors", (err, results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

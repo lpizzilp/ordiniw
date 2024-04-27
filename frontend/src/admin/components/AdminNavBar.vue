@@ -22,6 +22,8 @@
             <li class="td-router" onmouseover="this.style.backgroundColor='#27ae60'">
                 <hr style="width: 100%; border: 2px outset whitesmoke; border-radius: 2%;">
             </li>
+            <li class="td-router" v-if="nav_name === 'Amministratore'"><router-link @click="scrollToTop(), Writelog('Ordini')" to="/admin/errori"><i
+                        class="fa-solid fa-triangle-exclamation" style="padding-right: 2vh;"></i>Tab Errori</router-link></li>
         </ul>
 
 

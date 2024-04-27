@@ -1,19 +1,9 @@
 <template>
     <div class="admin-container">
         <div class="d-flex justify-content-between">
-            <h1><i class="fa-solid fa-users-gear"> Utenti</i></h1>
+            <h1><i class="fa-solid fa-triangle-exclamation"> Errori</i></h1>
             <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i
-                    class="fa-solid fa-pencil" style="padding-right: 1vh;"></i>Modifica Utente{{ Nriga == null ? null :
-                ' N.' + Nriga }}</button>
-            <div v-else style="display: flex; flex-direction: column; gap: 1rem;">
-                <button class="btn pc" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
-                        class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Annulla
-                    Modifiche</button>
-                <button class="btn" style="background-color: red;" @click="GestClick('Elimina')"><i
-                        class="fa-solid fa-user-slash" style="padding-right: 1vh;"></i>Elimina
-                    Acount</button>
-            </div>
-
+                    class="fa-solid fa-info" style="padding-right: 1vh;"></i>Dettagli riga{{ Nriga == null ? null : ' N.' + Nriga }}</button>
         </div>
 
         <div v-if="Showmodifica == false" class="table-open">
@@ -21,67 +11,112 @@
                 <thead>
                     <tr>
                         <td>Id</td>
-                        <td>Nome</td>
-                        <td>Email</td>
-                        <td>Attivo</td>
+                        <td>Tipo</td>
+                        <td>Segnalazione</td>
+                        <td>Dispositivo</td>
+                        <td>OS</td>
+                        <td>Connessione</td>
+                        <td>Ora errore</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(t, index) in filterUte" :key="t.user_id" @click="Selectriga(index, t)"
+                    <tr v-for="(t, index) in filterErr.toReversed()" :key="t.id" @click="Selectriga(index, t)"
                         @dblclick="GestClick('Modifica')">
-                        <td style="border-right: 2px inset #27ae60; background-color: whitesmoke;">{{ t.user_id }}</td>
-                        <td style="border-right: 2px inset #27ae60;">{{ t.user_name }}</td>
-                        <td style="border-right: 2px inset #27ae60; text-transform: none">{{ t.user_email }}</td>
-                        <td style="display: none;">{{ t.user_password }}</td>
-                        <td v-if="t.authlevel == 1" style="background-color: #2ae477c4;">Si</td>
-                        <td v-else-if="t.authlevel == 0" style="background-color: #e95018cb;">No</td>
+                        <td style="border-right: 2px inset #27ae60;" :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' :  t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">{{ t.id }}</td>
+                        <td style="border-right: 2px inset #27ae60; text-transform: lowercase;" :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' :  t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">{{ t.tiposegnalazione }}</td>
+                        <td style="border-right: 2px inset #27ae60;" :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' :  t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">{{ t.tipoerr }}</td>
+                        <td style="border-right: 2px inset #27ae60;">{{ t.telefono === null ? 'PC': t.telefono }}</td>
+                        <td style="border-right: 2px inset #27ae60;">{{ t.os }}</td>
+                        <td  style="border-right: 2px inset #27ae60;">{{ t.connessione }}</td>
+                        <td  style="border-right: 2px inset #27ae60;">{{ t.err_ora }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div v-else class="register-form-container">
             <form id="registerForm" @submit="GestClick('Conferma')" novalidate autocomplete="off">
-                <h3>Modifica l'accout</h3>
-
-                <div v-if="errors.length != 0" class="error-box">
-                    <ul>
-                        <li v-for="error in errors" :key="error">{{ error }}</li>
-                    </ul>
-                </div>
+                <h3 :style="{ 'color': DetailObj.Tipo == 'ERRORE' ? '#e95018cb' :  DetailObj.Tipo == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4', 'margin-top': '2rem', 'text-align': 'center' }">{{ DetailObj.Tipo }}:  <span style="text-transform: lowercase;"> {{ DetailObj.Err }}</span></h3>
 
                 <div class="form-group">
-                    <label for="uName">Nome completo:
-                    </label><input type="text" name="uName" :placeholder="ModifyObj.name" id="uName"
-                        class="form-control" v-model="ModifyObj.name" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uEmail">Email:
+                    <label for="uEmail">Descrizione:
                     </label>
-                    <input type="email" name="uEmail" readonly :placeholder="ModifyObj.email" id="uEmail"
-                        class="form-control" v-model="ModifyObj.email"
-                        style="background-color: rgba(0, 0, 0, 0.5); color: whitesmoke;" />
+                    <input type="email" name="uEmail" readonly :placeholder="DetailObj.Descrizione" id="uEmail"
+                        class="form-control" v-model="DetailObj.Descrizione" />
                 </div>
 
                 <div class="form-group">
-                    <label for="uPass">Password:
+                    <label for="uPass">Dispositivo:
                     </label>
-                    <input type="password" name="uPass" :placeholder="ModifyObj.pass" id="uPass" class="form-control"
-                        v-model="ModifyObj.pass" />
+                    <input type="password" name="uPass" :placeholder="DetailObj.Telefono == null ? 'PC' : DetailObj.Telefono" id="uPass" class="form-control"
+                        v-model="DetailObj.Telefono" />
                 </div>
 
                 <div class="form-group">
-                    <label for="uauthlevel">Autorizzazione:
+                    <label for="uauthlevel">Modello:
                     </label>
-                    <input type="number" name="uauthlevel" :placeholder="ModifyObj.authlevel" id="uauthlevel"
-                        class="form-control" min="0" max="1" v-model="ModifyObj.authlevel" />
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.Modello" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.Modello" />
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Conferma" class="btn" />
-                    <button class="btn mobile" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
-                            class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Annulla
-                        Modifiche</button>
+                    <label for="uauthlevel">Os:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.OS" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.OS" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">Versione Os:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.VersioneOS" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.VersioneOS" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">Browser:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.Browser" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.Browser" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">Versione Browser:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.VersioneBR" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.VersioneBR" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">WebKit:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.WebKit" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.WebKit" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">Versione WebKit:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.Versionewk" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.Versionewk" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">Connessione:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.connessione" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.connessione" />
+                </div>
+
+                <div class="form-group">
+                    <label for="uauthlevel">Ora errore:
+                    </label>
+                    <input type="number" name="uauthlevel" :placeholder="DetailObj.err_ora" id="uauthlevel"
+                        class="form-control" v-model="DetailObj.err_ora" />
+                </div>
+
+                <div class="form-group">
+                    <button class="btn" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
+                        class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Torna indietro</button>
                 </div>
             </form>
         </div>
@@ -95,16 +130,15 @@ import axios from "axios";
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import { mapState, mapMutations } from "vuex";
 export default {
-    name: 'Utenti',
+    name: 'Tabrrori',
 
     data() {
         return {
-            ModifyObj: { id: "", name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
+            DetailObj: { Id: "", Tipo: "", Err: "", Descrizione: "", Telefono: "", Modello: "", OS: "", VersioneOS: "", Browser: "", VersioneBR: "", WebKit: "", Versionewk: "", connessione: "", err_ora: "" },
             Showmodifica: false,
             status: [],
-            Ute: [],
+            Errori: [],
             Nriga: null,
-            errors: [],
             Quickerrore: false,
             showQuickview: false
         }
@@ -114,29 +148,29 @@ export default {
         if (!this.admin) {
             this.$router.push("/login");
         } else {
-            this.GetUte()
+            this.GetErr()
         }
     },
 
     computed: {
         ...mapState(["admin"]),
-        filterUte: function () {
-            return this.Ute;
+        filterErr: function () {
+            return this.Errori;
         },
     },
 
     methods: {
         ...mapMutations(["setAdmin"]),
 
-        async GetUte() {
-            this.Ute = (await axios.get('/users')).data
+        async GetErr() {
+            this.Errori = (await axios.get('/errori')).data
         },
 
         handleLogout: function () {
             this.setAdmin("");
         },
 
-        Selectriga(index, t) {
+        Selectriga(index) {
             this.Nriga = index + 1
             var Tabella = document.getElementById("Tabella");
             for (let i = 1; i < Tabella.rows.length; i++) {
@@ -145,19 +179,27 @@ export default {
                     Tabella.rows[(index + 1)].cells[3].style.backgroundColor = "yellow"
                 } else {
                     Tabella.rows[i].style.backgroundColor = 'transparent';
-                    Tabella.rows[i].cells[3].style.backgroundColor = t.authlevel == 0 ? '#2ae477c4' : '#e95018cb'
+                    Tabella.rows[i].cells[3].style.backgroundColor = 'transparent'
                 }
             }
         },
 
         async Rigadata() {
-            var Tabella = document.getElementById("Tabella");
-            var riga = Tabella.rows[this.Nriga];
-            this.ModifyObj.id = riga.cells[0].innerHTML
-            this.ModifyObj.name = riga.cells[1].innerHTML
-            this.ModifyObj.email = riga.cells[2].innerHTML
-            this.ModifyObj.pass = riga.cells[3].innerHTML
-            this.ModifyObj.authlevel = riga.cells[4].innerHTML == 'Si' ? 1 : 0
+            var Tabella = this.filterErr.toReversed()[(this.Nriga - 1)];
+            this.DetailObj.Id = Tabella.id
+            this.DetailObj.Tipo = Tabella.tiposegnalazione
+            this.DetailObj.Err = Tabella.tipoerr
+            this.DetailObj.Descrizione = Tabella.descrizione
+            this.DetailObj.Telefono = Tabella.telefono
+            this.DetailObj.Modello = Tabella.Modello
+            this.DetailObj.OS = Tabella.os
+            this.DetailObj.VersioneOS = Tabella.versioneos
+            this.DetailObj.Browser = Tabella.browser
+            this.DetailObj.VersioneBR = Tabella.versionebr 
+            this.DetailObj.WebKit = Tabella.Webkit
+            this.DetailObj.Versionewk = Tabella.versionewk 
+            this.DetailObj.connessione = Tabella.connessione
+            this.DetailObj.err_ora = Tabella.err_ora
         },
 
         async Confuser() {
@@ -281,10 +323,12 @@ export default {
 }
 
 .register-form-container {
-    margin-top: -50px;
-    margin-left: 25%;
-    width: 50%;
+    margin-left: 12.5%;
+    width: 75%;
     text-align: center;
+    background-color: white;
+    border: 2px inset black;
+    border-radius: 10px;
 }
 
 .register-form-container form h3 {
