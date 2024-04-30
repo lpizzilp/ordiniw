@@ -66,14 +66,14 @@
                             <label for="uPass" style="margin-top: 10px;">Dispositivo
                             </label>
                             <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                                <input type="text" readonlyname="uTel" style="flex: 50%; border-right: 1px inset black;"
+                                <input type="text" readonly name="uTel" style="flex: 50%; border-right: 1px inset black;"
                                     :placeholder="DetailObj.Telefono == null ? 'PC' : DetailObj.Telefono" id="uTel"
                                     class="form-control" v-model="DetailObj.Telefono" />
-                                <input type="text" name="uMod" style="flex: 50%;" :placeholder="DetailObj.Modello"
+                                <input type="text" name="uMod" readonly style="flex: 50%;" :placeholder="DetailObj.Modello"
                                     id="uMod" class="form-control" v-model="DetailObj.Modello" />
-                                <input type="text" name="uOs" style=" flex: 50%; border-right: 1px inset black;"
+                                <input type="text" name="uOs" readonly style=" flex: 50%; border-right: 1px inset black;"
                                     :placeholder="DetailObj.OS" id="uOs" class="form-control" v-model="DetailObj.OS" />
-                                <input type="text" name="uVersOs" style=" flex: 50%;" :placeholder="VersioneOS"
+                                <input type="text" name="uVersOs" readonly style=" flex: 50%;" :placeholder="VersioneOS"
                                     id="uVersOs" class="form-control" v-model="VersioneOS" />
                             </div>
                         </td>
@@ -83,15 +83,15 @@
                             <label for="uPass" style="margin-top: 10px;">Browser
                             </label>
                             <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                                <input type="text" readonlyname="ubrowser"
+                                <input type="text" readonly name="ubrowser"
                                     style="flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.Browser"
                                     id="ubrowser" class="form-control" v-model="DetailObj.Browser" />
-                                <input type="text" name="uMod" style="flex: 50%;" :placeholder="DetailObj.VersioneBR"
+                                <input type="text" readonly name="uMod" style="flex: 50%;" :placeholder="DetailObj.VersioneBR"
                                     id="uMod" class="form-control" v-model="DetailObj.VersioneBR" />
-                                <input type="text" name="uWebkit" style=" flex: 50%; border-right: 1px inset black;"
+                                <input type="text" readonly name="uWebkit" style=" flex: 50%; border-right: 1px inset black;"
                                     :placeholder="DetailObj.WebKit" id="uWebkit" class="form-control"
                                     v-model="DetailObj.WebKit" />
-                                <input type="text" name="uVerswebkit" style=" flex: 50%;"
+                                <input type="text" readonly name="uVerswebkit" style=" flex: 50%;"
                                     :placeholder="DetailObj.Versionewk" id="uVerswebkit" class="form-control"
                                     v-model="DetailObj.Versionewk" />
                             </div>
