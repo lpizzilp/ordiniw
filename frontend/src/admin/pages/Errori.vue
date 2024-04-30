@@ -2,8 +2,8 @@
     <div class="admin-container">
         <div class="d-flex justify-content-between">
             <h1><i class="fa-solid fa-triangle-exclamation"> Errori</i></h1>
-            <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i
-                    class="fa-solid fa-info" style="padding-right: 1vh;"></i>Dettagli riga{{ Nriga == null ? null : ' N.' + Nriga }}</button>
+            <button v-if="Showmodifica == false" class="btn" @click="GestClick('Modifica')"><i class="fa-solid fa-info"
+                    style="padding-right: 1vh;"></i>Dettagli riga{{ Nriga == null ? null : ' N.' + Nriga }}</button>
         </div>
 
         <div v-if="Showmodifica == false" class="table-open">
@@ -22,102 +22,96 @@
                 <tbody>
                     <tr v-for="(t, index) in filterErr.toReversed()" :key="t.id" @click="Selectriga(index, t)"
                         @dblclick="GestClick('Modifica')">
-                        <td style="border-right: 2px inset #27ae60;" :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' :  t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">{{ t.id }}</td>
-                        <td style="border-right: 2px inset #27ae60; text-transform: lowercase;" :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' :  t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">{{ t.tiposegnalazione }}</td>
-                        <td style="border-right: 2px inset #27ae60;" :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' :  t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">{{ t.tipoerr }}</td>
-                        <td style="border-right: 2px inset #27ae60;">{{ t.telefono === null ? 'PC': t.telefono }}</td>
+                        <td style="border-right: 2px inset #27ae60;"
+                            :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' : t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">
+                            {{ t.id }}</td>
+                        <td style="border-right: 2px inset #27ae60; text-transform: lowercase;"
+                            :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' : t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">
+                            {{ t.tiposegnalazione }}</td>
+                        <td style="border-right: 2px inset #27ae60;"
+                            :style="{ 'background-color': t.tiposegnalazione == 'ERRORE' ? '#e95018cb' : t.tiposegnalazione == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4' }">
+                            {{ t.tipoerr }}</td>
+                        <td style="border-right: 2px inset #27ae60;">{{ t.telefono === null ? 'PC' : t.telefono }}</td>
                         <td style="border-right: 2px inset #27ae60;">{{ t.os }}</td>
-                        <td  style="border-right: 2px inset #27ae60;">{{ t.connessione }}</td>
-                        <td  style="border-right: 2px inset #27ae60;">{{ t.err_ora }}</td>
+                        <td style="border-right: 2px inset #27ae60;">{{ t.connessione }}</td>
+                        <td style="border-right: 2px inset #27ae60;">{{ t.err_ora }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div v-else class="register-form-container">
             <form id="registerForm" @submit="GestClick('Conferma')" novalidate autocomplete="off">
-                <h3 :style="{ 'color': DetailObj.Tipo == 'ERRORE' ? '#e95018cb' :  DetailObj.Tipo == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4', 'margin-top': '2rem', 'text-align': 'center' }">{{ DetailObj.Tipo }}:  <span style="text-transform: lowercase;"> {{ DetailObj.Err }}</span></h3>
-
-                <div class="form-group">
-                    <label for="uEmail">Descrizione:
-                    </label>
-                    <input type="email" name="uEmail" readonly :placeholder="DetailObj.Descrizione" id="uEmail"
-                        class="form-control" v-model="DetailObj.Descrizione" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uPass">Dispositivo:
-                    </label>
-                    <input type="password" name="uPass" :placeholder="DetailObj.Telefono == null ? 'PC' : DetailObj.Telefono" id="uPass" class="form-control"
-                        v-model="DetailObj.Telefono" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Modello:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.Modello" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.Modello" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Os:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.OS" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.OS" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Versione Os:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.VersioneOS" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.VersioneOS" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Browser:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.Browser" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.Browser" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Versione Browser:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.VersioneBR" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.VersioneBR" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">WebKit:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.WebKit" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.WebKit" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Versione WebKit:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.Versionewk" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.Versionewk" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Connessione:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.connessione" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.connessione" />
-                </div>
-
-                <div class="form-group">
-                    <label for="uauthlevel">Ora errore:
-                    </label>
-                    <input type="number" name="uauthlevel" :placeholder="DetailObj.err_ora" id="uauthlevel"
-                        class="form-control" v-model="DetailObj.err_ora" />
-                </div>
-
-                <div class="form-group">
-                    <button class="btn" style="background-color: #f38609;" @click="GestClick('Annulla')"><i
-                        class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Torna indietro</button>
-                </div>
+                <table style="text-align: center; width: 100%;">
+                    <tr style="text-align: center">
+                        <td>
+                            <h3
+                                :style="{ 'color': DetailObj.Tipo == 'ERRORE' ? '#e95018cb' : DetailObj.Tipo == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4', 'margin-top': '2rem', 'text-align': 'center' }">
+                                {{ DetailObj.Tipo }}: <span style="text-transform: lowercase;"> {{ DetailObj.Err
+                                    }}</span></h3>
+                            <h4 style="margin-top: 15px;">{{ DetailObj.err_ora }}</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <textarea type="text area" name="uDesc" id="uDesc" class="form-control" readonly
+                                    :placeholder="DetailObj.Descrizione"
+                                    style="border: 0; border-bottom: 1px inset black;"
+                                    v-model="DetailObj.Descrizione"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="uPass" style="margin-top: 10px;">Dispositivo
+                            </label>
+                            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                                <input type="text" readonlyname="uTel" style="flex: 50%; border-right: 1px inset black;"
+                                    :placeholder="DetailObj.Telefono == null ? 'PC' : DetailObj.Telefono" id="uTel"
+                                    class="form-control" v-model="DetailObj.Telefono" />
+                                <input type="text" name="uMod" style="flex: 50%;" :placeholder="DetailObj.Modello"
+                                    id="uMod" class="form-control" v-model="DetailObj.Modello" />
+                                <input type="text" name="uOs" style=" flex: 50%; border-right: 1px inset black;"
+                                    :placeholder="DetailObj.OS" id="uOs" class="form-control" v-model="DetailObj.OS" />
+                                <input type="text" name="uVersOs" style=" flex: 50%;" :placeholder="VersioneOS"
+                                    id="uVersOs" class="form-control" v-model="VersioneOS" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="uPass" style="margin-top: 10px;">Browser
+                            </label>
+                            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                                <input type="text" readonlyname="ubrowser"
+                                    style="flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.Browser"
+                                    id="ubrowser" class="form-control" v-model="DetailObj.Browser" />
+                                <input type="text" name="uMod" style="flex: 50%;" :placeholder="DetailObj.VersioneBR"
+                                    id="uMod" class="form-control" v-model="DetailObj.VersioneBR" />
+                                <input type="text" name="uWebkit" style=" flex: 50%; border-right: 1px inset black;"
+                                    :placeholder="DetailObj.WebKit" id="uWebkit" class="form-control"
+                                    v-model="DetailObj.WebKit" />
+                                <input type="text" name="uVerswebkit" style=" flex: 50%;"
+                                    :placeholder="DetailObj.Versionewk" id="uVerswebkit" class="form-control"
+                                    v-model="DetailObj.Versionewk" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="uauthlevel" style="margin-top: 10px;">Connessione:
+                            </label>
+                            <input type="text" readonly name="uconnect" :placeholder="DetailObj.connessione"
+                                id="uconnect" class="form-control" v-model="DetailObj.connessione" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn" @click="GestClick('Annulla')" style="margin-top: 20px; width: 50%;">Torna
+                                indietro</button>
+                        </td>
+                    </tr>
+                </table>
             </form>
         </div>
     </div>
@@ -195,9 +189,9 @@ export default {
             this.DetailObj.OS = Tabella.os
             this.DetailObj.VersioneOS = Tabella.versioneos
             this.DetailObj.Browser = Tabella.browser
-            this.DetailObj.VersioneBR = Tabella.versionebr 
+            this.DetailObj.VersioneBR = Tabella.versionebr
             this.DetailObj.WebKit = Tabella.Webkit
-            this.DetailObj.Versionewk = Tabella.versionewk 
+            this.DetailObj.Versionewk = Tabella.versionewk
             this.DetailObj.connessione = Tabella.connessione
             this.DetailObj.err_ora = Tabella.err_ora
         },
@@ -338,13 +332,15 @@ export default {
 }
 
 .register-form-container form .form-control {
-    margin: 3px 0;
+    margin: 0;
     background: white;
     text-align: center;
     padding: 2rem 1.2rem;
     font-size: 1.6rem;
     text-transform: none;
-    border-color: black;
+    border: 0;
+    border-top: 1px inset black;
+    border-bottom: 1px inset black;
     border-radius: 0.5rem;
 }
 
