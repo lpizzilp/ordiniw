@@ -95,7 +95,7 @@ import axios from "axios";
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import { mapState, mapMutations } from "vuex";
 export default {
-    name: 'Prenotazioni',
+    name: 'Utenti',
 
     data() {
         return {

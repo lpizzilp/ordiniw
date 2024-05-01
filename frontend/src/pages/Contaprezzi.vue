@@ -230,7 +230,6 @@ export default {
             for (let i = 0; i < this.group[indexItem].length; i++) {
                 sommaqta = this.group[indexItem][i] + sommaqta
             }
-            this.CorrectQta(indexItem, indexBtn, sommaqta)
 
             if (this.itemQuantity[indexItem] < sommaqta) {
                 this.Price[indexBtn] = this.Price[indexBtn] - (parseFloat(this.filterFoods[indexItem].food_price) * (this.group[indexItem][indexBtn] - 1))
@@ -238,12 +237,18 @@ export default {
             } else {
                 this.Price[indexBtn] = parseFloat(this.filterFoods[indexItem].food_price) + this.Price[indexBtn]
             }
+            
+            this.CorrectQta(indexItem, indexBtn, sommaqta)
 
         },
 
 
-        CorrectQta(indexItem, indexBtn, sommaqta) {
-            if (this.itemQuantity[indexItem] == sommaqta) {
+        CorrectQta(indexItem,) {
+            let qta = 0
+            for (let i = 0; i < this.group[indexItem].length; i++) {
+                qta = this.group[indexItem][i] + qta
+            }
+            if (this.itemQuantity[indexItem] == qta) {
                 this.Complete[1][indexItem] = true
             } else {
                 this.Complete[1][indexItem] = false

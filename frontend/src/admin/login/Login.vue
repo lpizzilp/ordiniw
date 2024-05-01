@@ -2,7 +2,7 @@
     <div class="login-container">
         <div class="login-form-container">
             <form id="loginForm" @submit="handleSubmit" novalidate autocomplete="off">
-                <h3>LOGIN</h3>
+                <h3>LOGIN Amministratore</h3>
 
                 <div v-if="errors.length" class="error-box">
                     <ul>

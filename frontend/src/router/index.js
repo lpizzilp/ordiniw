@@ -15,6 +15,7 @@ import Confirm from '../admin/login/Confirm.vue';
 import Segnalazione from '../pages/Segnalazione.vue'
 import Utenti from '../admin/pages/Utenti.vue'
 import Contaprezzi from "@/pages/Contaprezzi.vue";
+import Errori from "@/admin/pages/Errori.vue";
 
 
 const routes = [
@@ -102,6 +103,11 @@ const routes = [
     path: "/admin/utenti",
     name: "Utenti",
     component: Utenti, 
+  },
+  {
+    path: "/admin/errori",
+    name: "TabErrori",
+    component: Errori, 
   },
   {
     path: '/:pathMatch(.*)*',

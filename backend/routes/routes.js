@@ -92,7 +92,7 @@ import {
     cancelBookdetails
 } from "../controllers/prenotazioni.js";
 import { Infolog } from "../log/loggerModel.js";
-import { InserisciErrore } from "../controllers/errore.js";
+import { InserisciErrore, allErrori } from "../controllers/errore.js";
 
 // init express router
 const router = express.Router();
@@ -226,7 +226,8 @@ router.put("/api/sagraComand", updateControlOrdini);
 router.post("/api/importfood", importAnagrafica);
 
 
-/////////////////////////  Errore /////////////////////////////////////*css*/`
+/////////////////////////  Errore /////////////////////////////////////
+router.get("/api/errori", allErrori)
 router.post("/api/posterrore", InserisciErrore)
 
 
