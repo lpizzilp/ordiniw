@@ -76,8 +76,8 @@
                                 <input type="text" name="uOs" readonly
                                     style=" flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.OS"
                                     id="uOs" class="form-control" v-model="DetailObj.OS" />
-                                <input type="text" name="uVersOs" readonly style=" flex: 50%;" :placeholder="VersioneOS"
-                                    id="uVersOs" class="form-control" v-model="VersioneOS" />
+                                <input type="text" name="uVersOs" readonly style=" flex: 50%;" :placeholder="DetailObj.VersioneOS"
+                                    id="uVersOs" class="form-control" v-model="DetailObj.VersioneOS" />
                             </div>
                         </td>
                     </tr>
@@ -113,7 +113,7 @@
                         <td
                             style="background-color: whitesmoke; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; ">
                             <button class="btn" @click="GestClick('Annulla')"
-                                style="margin-top: 20px; width: 50%;">Torna
+                                style="margin-top: 20px; padding: 0.5rem; width: 50%;">Torna
                                 alla tabella</button>
                         </td>
                     </tr>
@@ -191,7 +191,7 @@ export default {
             this.DetailObj.Err = Tabella.tipoerr
             this.DetailObj.Descrizione = Tabella.descrizione
             this.DetailObj.Telefono = Tabella.telefono
-            this.DetailObj.Modello = Tabella.Modello
+            this.DetailObj.Modello = Tabella.modello
             this.DetailObj.OS = Tabella.os
             this.DetailObj.VersioneOS = Tabella.versioneos
             this.DetailObj.Browser = Tabella.browser
