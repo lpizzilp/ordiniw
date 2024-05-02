@@ -16,8 +16,9 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
-                                class="form-control" v-model="checkoutObj.Coperti" min="1"  @change="calculatePersonaPrice()" />
+                            <input type="number" name="Coperti" id="Coperti"
+                                placeholder="Inserisci il numero di coperti" class="form-control"
+                                v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
                             <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                         </div><br>
 
@@ -25,7 +26,8 @@
                             <input type="text" name="Nominativo" id="Nominativo"
                                 placeholder="Campo nominativo, Non obbligatorio" class="form-control"
                                 v-model="checkoutObj.Nominativo" />
-                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
+                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0]
+                                }}
                             </p>
                         </div>
 
@@ -43,7 +45,8 @@
                         <div class="form-group">
                             <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
                                 class="form-control" v-model="checkoutObj.Nominativo" />
-                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
+                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0]
+                                }}
                             </p>
                         </div>
 
@@ -60,13 +63,15 @@
                         <div class="form-group">
                             <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
                                 class="form-control" v-model="checkoutObj.Nominativo" />
-                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0] }}
+                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0]
+                                }}
                             </p>
                         </div>
 
                         <div class="form-group">
-                            <input type="number" name="Coperti" id="Coperti" placeholder="Inserisci il numero di coperti"
-                                class="form-control" v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
+                            <input type="number" name="Coperti" id="Coperti"
+                                placeholder="Inserisci il numero di coperti" class="form-control"
+                                v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
                             <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                         </div><br>
 
@@ -190,11 +195,11 @@ export default {
                     this.Quickerrore = true
                     this.Makelog(response);
                 } else {
-                existItem.data.forEach(element => {
-                    this.cartItem.push(element.food_id);
-                    this.itemQuantity.push(element.item_qty);
-                });
-            }
+                    existItem.data.forEach(element => {
+                        this.cartItem.push(element.food_id);
+                        this.itemQuantity.push(element.item_qty);
+                    });
+                }
             }
         },
 
@@ -248,7 +253,6 @@ export default {
                     if (!this.checkoutObj.Nominativo) {
                         this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
                     }
-
                     break;
                 case 'PRE':
                     // Nominativo validate
@@ -261,6 +265,21 @@ export default {
                     }
 
                     break;
+            }
+            if (/"/.test(this.checkoutObj.Tavolo)) {
+                this.checkoutObj.Tavolo = this.checkoutObj.Tavolo.replace(/"/g, '')
+            } if (/'/.test(this.checkoutObj.Tavolo)) {
+                this.checkoutObj.Tavolo = this.checkoutObj.Tavolo.replace(/'/g, '')
+            }
+            if (/"/.test(this.checkoutObj.Nominativo)) {
+                this.checkoutObj.Nominativo = this.checkoutObj.Nominativo.replace(/"/g, '')
+            } if ( /'/.test(this.checkoutObj.Nominativo)) {
+                this.checkoutObj.Nominativo = this.checkoutObj.Nominativo.replace(/'/g, "")
+            } 
+            if (/"/.test(this.checkoutObj.Note)) {
+                this.checkoutObj.Note = this.checkoutObj.Note.replace(/"/g, '')
+            } if (/'/.test(this.checkoutObj.Note)) {
+                this.checkoutObj.Note = this.checkoutObj.Note.replace(/'/g, "")
             }
         },
 
@@ -308,7 +327,7 @@ export default {
                     e.preventDefault();
                     let bookId = (await axios.get("/prenotazione/new")).data;
                     if (bookId == "") {
-                        if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') ==  "" || sessionStorage.getItem('Bill') == undefined) {
+                        if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
                             bookId = sessionStorage.getItem('startprt');
                         } else {
                             bookId = sessionStorage.getItem('Bill')
