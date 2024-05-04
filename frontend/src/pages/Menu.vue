@@ -205,7 +205,7 @@ export default {
             showQuickView: false,
             qty: [],
             CartItem: [],
-            perPage: 50,
+            perPage: 70,
             pageNum: 0,
             throttleTimer: null,
             throttleDelay: 600, // Millisecondi   
