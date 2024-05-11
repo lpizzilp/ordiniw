@@ -274,6 +274,7 @@ export default {
                 this.Quickerrore = true
                 Makelog(response);
             } else {
+                console.log(existItem)
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
