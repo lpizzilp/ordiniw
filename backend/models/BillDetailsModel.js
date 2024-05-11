@@ -4,13 +4,11 @@ import db from "../config/database.js";
 // insert Bill Details
 export const insertBillDetails = (data,result) => {
     db.query("INSERT INTO billdetails SET ?",data, (err,results)=> {
-        // err='simulazione '
         if (err){
             console.log(err);
             result(err,null);
         }else{
-            console.log(results)
-            result(null,results[0]);
+            result(null,results);
         }
     });
 };

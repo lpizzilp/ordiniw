@@ -29,7 +29,7 @@ export const createBillStatus=(req,res)=>{
     const data = req.body;
     insertBillStatus(data,(err,results)=> {
         if (err) {
-            res.send(err);    
+            res.send(err);
         }else {
             res.json(results);
             //res.status(500).send("errmessage");
