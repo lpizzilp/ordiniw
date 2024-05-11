@@ -94,13 +94,14 @@
 
 <script>
 import axios from "axios";
-import AvvisoCoda from "@/assets/sound/suono.mp3"
+//import AvvisoCoda from "@/assets/sound/suono.mp3"
 import { UAParser } from 'ua-parser-js';
 import uniqid from 'uniqid';
 import QuickViewEliminacode from "@/components/QuickViewEliminacode.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewHome from "@/components/QuickViewHome.vue";
 import sevenSegmentDisplay from "@/components/seven-segment-display.vue";
+
 export default {
     name: "Home",
     inject: ["eventBus"],
@@ -163,7 +164,7 @@ export default {
             if (type.mode != '') {
                 this.errors = [];
                 var idR = uniqid()
-                console.log(idR)
+                //console.log(idR)
                 let datareg = {
                     user_id: idR,
                     user_email: this.loginObj.email,
@@ -183,98 +184,9 @@ export default {
             } else {
                 this.showQuickVueEliminacode = false
                 this.Active = false
-                await this.Faimedia(data.numero)
+                //await this.Faimedia(data.numero)
             }
         },
-
-
-        async Faimedia(Ncliente) {
-            var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
-            let Ninizio = +sagra.data[0].numcoda
-            let Nintotminuti = null
-            let Ncorrente = null
-            let Nmancanti = null
-            let Timpiegato = null
-            const Tinizio = 120000 // 2 secondi in millisecondi
-            const Tavviso = 300000 // 5 minuti in millisecondi
-            const Tnoneseguibile = Tavviso
-            await new Promise(resolve => {
-                setTimeout(async () => {
-                    try {
-                        const sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
-                        this.Numeroritardato(sagra.data[0].numcoda.toString())
-                        Ncorrente = +sagra.data[0].numcoda
-                        Nintotminuti = Ncorrente - Ninizio
-                        Nmancanti = Ncliente - Ncorrente
-                        Timpiegato = (Tinizio * Nmancanti) / Nintotminuti
-                        if (+Timpiegato <= Tnoneseguibile) {
-                            this.serviceWorker(Ncorrente)
-                        } else {
-                            this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
-                        }
-                        resolve();
-                    } catch (error) {
-                        console.error("Errore durante la richiesta Axios:", error);
-                        resolve(); // Assicura che la Promise venga sempre risolta, anche in caso di errore
-                    }
-                }, Tinizio);
-            });
-        },
-
-        async RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso) {
-            let Nintotminuti = null
-            let Ncorrente = null
-            let Nmancanti = null
-            await new Promise(resolve => {
-                setTimeout(async () => {
-                    try {
-                        const sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
-                        this.Numeroritardato(sagra.data[0].numcoda.toString())
-                        Ncorrente = +sagra.data[0].numcoda
-                        Nintotminuti = Ncorrente - Ninizio
-                        Nmancanti = Ncliente - Ncorrente
-                        Timpiegato = (Tinizio * Nmancanti) / Nintotminuti
-                        if (+Timpiegato <= Tavviso) {
-                            this.serviceWorker(Ncorrente)
-                        } else {
-                            this.RipetiMedia(Ninizio, Ncliente, Timpiegato, Tinizio, Tavviso)
-                        }
-                        resolve();
-                    } catch (error) {
-                        console.error("Errore durante la richiesta Axios:", error);
-                        resolve();
-                    }
-                }, (Timpiegato / 2));
-            });
-
-        },
-
-        serviceWorker(Ncorrente) {
-            // Registrare il Service Worker utilizzando il percorso relativo
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('service.js')
-                    .then(function (registration) {
-                        registration.active.postMessage({
-                            action: 'showNotification',
-                            parametro: Ncorrente
-                        });
-                        const Isaudio = !!window.Audio
-                        if (Isaudio) {
-                            const audio = new Audio(AvvisoCoda);
-                            audio.play();
-                        }
-                        if (navigator.vibrate) {
-                            const pattern = [500, 200, 500, 200, 500]
-                            navigator.vibrate(pattern);
-                        }
-                    })
-                    .catch(function (error) {
-                        console.error('Errore durante la registrazione del Service Worker:', error);
-                    });
-            }
-        },
-
-
         UpdateTab(type) {
             this.togleTab = false
             this.handleSubmit(type)
@@ -289,12 +201,10 @@ export default {
         async handleSubmit(type) {
             this.TypeMess = []
             let div = document.getElementsByClassName('tabelloni')
-            var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
-            let response = sagra.request.response
-            if (response.includes("{\"code\"")) {
-                this.errore = true
-                this.Makelog(response);
-            }
+            try {var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'))
+                    if (sagra.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                }
+
             switch (type) {
                 case 'TAB':
                     if (!this.togleTab) {
@@ -383,13 +293,6 @@ export default {
             }, 30000);
         },
 
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
     },
     components: { QuickViewHome, sevenSegmentDisplay, QuickViewErrore, QuickViewEliminacode }
 };

@@ -26,6 +26,8 @@ for (var i = 0; i < parametri.length; i++) {
 
 import axios from 'axios';
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
+
+
 export default {
     name: 'MyOrder',
 
@@ -43,7 +45,7 @@ export default {
 
     methods: {
         async getBillItem() {
-            console.log(parametriObj.contaprezzi)
+            //console.log(parametriObj.contaprezzi)
             switch (parametriObj.contaprezzi) {
                 case 'true':
                     sessionStorage.setItem('MatchUser', parametriObj.match)
@@ -57,52 +59,30 @@ export default {
                     sessionStorage.setItem('Username', parametriObj.user)
                     sessionStorage.setItem('TipoOrdine', parametriObj.type)
                     sessionStorage.setItem('Bill', parametriObj.id)
+                    var callURL ='/billdetails/'
                     if (parametriObj.filtroOrd == 'PRE') {
                         sessionStorage.setItem('filtro', (parametriObj.filtroOrd === '-1' ? "" : parametriObj.filtroOrd))
-                        let bookitem = await axios.get('/prenotazione/' + parametriObj.id)
-                        let response = bookitem.request.response
-                        if (response.includes("{\"code\"")) {
-                            this.Quickerrore = true
-                            this.Makelog(response)
-                        }
-                        for (let i = 0; i < bookitem.data.length; i++) {
-                            let data = {
-                                user_id: sessionStorage.getItem('Username'),
-                                food_id: bookitem.data[i].food_id,
-                                item_qty: parseInt(bookitem.data[i].item_qty)
-                            }
-                            await axios.post("/cartItem", data);
-                        }
+                        callURL = '/prenotazione/'
                     } else {
                         sessionStorage.setItem('filtro', "")
-                        let billitem = await axios.get('/billdetails/' + parametriObj.id)
-                        let response = billitem.request.response
-                        if (response.includes("{\"code\"")) {
-                            this.Quickerrore = true
-                        }
-                        for (let i = 0; i < billitem.data.length; i++) {
-                            let data = {
-                                user_id: sessionStorage.getItem('Username'),
-                                food_id: billitem.data[i].food_id,
-                                item_qty: parseInt(billitem.data[i].item_qty)
-                            }
-                            await axios.post("/cartItem", data);
-                        }
                     }
-
+                    try {var items = await axios.get(callURL + parametriObj.id)
+                        if (items.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                    }
+                    for (let i = 0; i < items.data.length; i++) {
+                        let data = {
+                            user_id: sessionStorage.getItem('Username'),
+                            food_id: items.data[i].food_id,
+                            item_qty: parseInt(items.data[i].item_qty)
+                        }
+                        await axios.post("/cartItem", data);
+                    }
                     this.$router.push("/menu")
                     break;
             }
 
         },
 
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
     },
 
     components: { QuickViewErrore }

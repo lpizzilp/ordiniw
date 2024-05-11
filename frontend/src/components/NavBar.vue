@@ -29,6 +29,8 @@
 </template>
 
 <script>
+
+
 var queryString = window.location.search;
 queryString = queryString.substring(1);
 var parametri = queryString.split("&");
@@ -40,9 +42,12 @@ for (var i = 0; i < parametri.length; i++) {
 
 import router from "@/router";
 import axios from "axios";
+import { showErrore } from '@/glbFunctions';
+
 export default {
     name: 'NavBar',
     inject: ["eventBus"],
+    Quickerrore: false,
 
     data() {
         return {
@@ -94,12 +99,9 @@ export default {
 
         async getsagra() {
             if (!sessionStorage.getItem('Siglanav')) {
-                var sagra = await axios.get('/sagra/' + parametriObj.id)
-                let response = sagra.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
+                try {var sagra = await axios.get('/sagra/' + parametriObj.id)
+                    if (sagra.errMsg) {showErrore(); return; }} catch (error) {showErrore(); return;
                 }
-                //await this.sleep(1000)  
                 if (sagra.data.length == 0) {
                     sessionStorage.setItem('SagraBottoni', 0)
                 } else {
@@ -154,14 +156,6 @@ export default {
             navbar.classList.remove('active');
             /* let log = document.querySelector('.drop-down-select');
              log.classList.remove('active');*/
-        },
-
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
         },
     }
 }

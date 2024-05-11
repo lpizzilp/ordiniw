@@ -134,36 +134,36 @@ export default {
                     break;
             }
         },
+        // FUNZIONE DI NOTIFICA ELIMINACODA
+        // async requestNotificationPermission() {
+        //     if (!("Notification" in window)) {
+        //         alert("Questo browser non supporta le notifiche desktop");
+        //         this.Show = 4
+        //     } else if (Notification.permission === "granted") {
+        //         // Permesso già concesso
+        //         this.serviceWorker()
+        //     } else if (Notification.permission !== "denied") {
+        //         // Richiedi il permesso
+        //         Notification.requestPermission().then(permission => {
+        //             if (permission === "granted") {
+        //                 this.serviceWorker()
+        //             } else if (permission === "denied") {
+        //                 this.Show = 1
+        //             }
+        //         });
+        //     }
+        // },
 
-        async requestNotificationPermission() {
-            if (!("Notification" in window)) {
-                alert("Questo browser non supporta le notifiche desktop");
-                this.Show = 4
-            } else if (Notification.permission === "granted") {
-                // Permesso già concesso
-                this.serviceWorker()
-            } else if (Notification.permission !== "denied") {
-                // Richiedi il permesso
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        this.serviceWorker()
-                    } else if (permission === "denied") {
-                        this.Show = 1
-                    }
-                });
-            }
-        },
 
 
-
-        serviceWorker() {
-            // Registrare il Service Worker utilizzando il percorso relativo
-            if ('serviceWorker' in navigator) {
-                this.Show = 2
-            } else {
-                this.Show = 4;
-            }
-        },
+        // serviceWorker() {
+        //     // Registrare il Service Worker utilizzando il percorso relativo
+        //     if ('serviceWorker' in navigator) {
+        //         this.Show = 2
+        //     } else {
+        //         this.Show = 4;
+        //     }
+        // },
     }
 };
 </script>

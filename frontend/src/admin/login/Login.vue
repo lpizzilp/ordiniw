@@ -41,6 +41,8 @@ import axios from "axios";
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import QuickViewLogin from "@/admin/components/QuickViewLogin.vue"
 import { mapMutations } from "vuex";
+import { Makelog } from '@/glbFunctions';
+
 export default {
     name: 'Login',
 
@@ -92,7 +94,7 @@ export default {
             let response = Adminuser.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
-                this.Makelog(response);
+                Makelog(response);
             }
 
             if (Adminuser.data.length == 0) {
@@ -119,15 +121,7 @@ export default {
                 this.matchUser = undefined
             }
         },
-
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
-
+        
         async handleSubmit(e) {
             this.checkForm();
             e.preventDefault();

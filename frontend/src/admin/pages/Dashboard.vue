@@ -112,6 +112,8 @@ import axios from "axios";
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import { VueToggles } from "vue-toggles";
 import { mapState, mapMutations } from "vuex";
+import { Makelog } from '@/glbFunctions';
+
 export default {
     name: 'Prenotazioni',
 
@@ -188,23 +190,9 @@ export default {
             }
             
             await axios.put('/SagraComand', uniondata)
-            this.Makelog(index)
+            Makelog((this.toggle[index] === true) ? "Disabilitazione" : "Abilitazione","info")
         },
 
-        async Makelog(index) {
-            let arg = ""
-            if (this.toggle[index] === true) {
-                arg = 'Disabilitazione'
-            } else if (this.toggle[index] === false) {
-                arg = 'Abbilitazione'
-            }
-
-            let data = {
-                mode: 'warn',
-                arg: arg + ' toggle switch numero ' + (index + 1) + ' da parte di ' + sessionStorage.getItem('User')
-            }
-            await axios.post('/log', data)
-        },
     },
     components: { VueToggles, QuickViewErrore }
 }

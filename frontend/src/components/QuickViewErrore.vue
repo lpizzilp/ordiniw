@@ -1,12 +1,15 @@
 <template>
     <div class="quick-view">
         <div class="quick-view-inner">
-            <h2>Errore</h2><br>
-            <h3>L'esecuzione di questo comando è andata in errore ti consigliamo di aggiornare la pagina e riprovare<br>Se
-                l'errore dovesse persistere segnalalo con l'apposito bottono qui sotto
+            <h2>Opsss...</h2><br>
+            <h3>Qualcosa è andato storto!!! Per favore Riprova...<br>Se
+                l'errore dovesse persistere inviaci una Segnalazione.
                 <slot></slot>
             </h3>
-           <RouterLink to="/segnalazioni" class="btn">Segnala errore</RouterLink>
+            <div>
+                <button  @click="Azione()" style=" background-color: #27ae60;" class="btn" >Riprova</button>
+               <RouterLink to="/segnalazioni" class="btn">Segnala errore</RouterLink>
+            </div>
         </div>
     </div>
 </template>
@@ -23,6 +26,12 @@ export default {
     scrollToTop() {
         window.scrollTo(0, 0);
     },
+    methods: {
+        Azione() {
+            this.$emit('childEvent', false);
+
+        }
+    },        
 
 };
 </script>

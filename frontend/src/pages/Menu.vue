@@ -183,13 +183,10 @@ export default {
                 flgartprenotabile = "1"
                 flgvariante = "1"
                 break;
-
-
             default:
                 sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
                 break;
         }
-
         return {
             foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
             showDropDown: false,
@@ -273,7 +270,7 @@ export default {
                 this.wifiquality = connection.effectiveType.indexOf('g')
                 this.wifispeed = connection.downlink
             } else {
-                console.log('API navigator.connection non supportata.');
+                //console.log('API navigator.connection non supportata.');
             }
         },
 
@@ -373,11 +370,8 @@ export default {
         async getAllCartItem() {
             if (this.setqty !== true) {
                 if (sessionStorage.getItem('MatchUser')) {
-                    let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                    let response = existItem.request.response
-                    if (response.includes("{\"code\"")) {
-                        this.Quickerrore = true
-                        this.Makelog(response);
+                    try {var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                        if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                     }
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
@@ -464,21 +458,6 @@ export default {
             }
         },
 
-        /*  displayFilterDrop: function () {
-              let divControl1 = document.getElementsByClassName("filter-heading");
-              let divControl2 = document.getElementsByClassName("filter-section");
-              for (var i = 0; i < divControl1.length; i++) {
-                  if (this.showDropDown) {
-                      divControl1[i].style.display = "block";
-                      divControl2[i].style.display = "block";
-                  }
-                  else {
-                      divControl1[i].style.display = "none";
-                      divControl2[i].style.display = "none";
-                  }
-              }
-              this.showDropDown = !this.showDropDown;
-          }, */
         onQtyChange: function (index) {
             // Cancella il timer se esiste per l'articolo specifico
             if (this.throttleTimers[index]) {
@@ -512,39 +491,35 @@ export default {
             let QtaVarianti =0
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
-                let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                let response = existItem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                } else {
-                    if (existItem.data.length > 0) {
-                        for (var i = existItem.data.length - 1; i >= 0; i--) {
-                            for (let l = 0; l < this.currentPageItems.length; l++) {
-                                if (this.currentPageItems[l].food_id == existItem.data[i].food_id) {
-                                    if (this.currentPageItems[l].FlgVariante == 0) {
-                                        lastItem[0] = existItem.data[i].food_id
-                                        lastItem[1] = existItem.data[i].item_qty
-                                        if (lastItem[1] >= (this.qty[index] + QtaVarianti)) {
-                                            this.addToCart(index, true)
-                                            break;
-                                        } else {
-                                            this.qty[index] = lastItem[1] - QtaVarianti
-                                            this.addToCart(index, true)
-                                        }
+                try {var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                        if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                }
+                if (existItem.data.length > 0) {
+                    for (var i = existItem.data.length - 1; i >= 0; i--) {
+                        for (let l = 0; l < this.currentPageItems.length; l++) {
+                            if (this.currentPageItems[l].food_id == existItem.data[i].food_id) {
+                                if (this.currentPageItems[l].FlgVariante == 0) {
+                                    lastItem[0] = existItem.data[i].food_id
+                                    lastItem[1] = existItem.data[i].item_qty
+                                    if (lastItem[1] >= (this.qty[index] + QtaVarianti)) {
+                                        this.addToCart(index, true)
+                                        break;
                                     } else {
-                                        if (existItem.data[i].food_id != this.sendId) {
-                                            QtaVarianti = existItem.data[i].item_qty + QtaVarianti
-                                        }
+                                        this.qty[index] = lastItem[1] - QtaVarianti
+                                        this.addToCart(index, true)
+                                    }
+                                } else {
+                                    if (existItem.data[i].food_id != this.sendId) {
+                                        QtaVarianti = existItem.data[i].item_qty + QtaVarianti
                                     }
                                 }
                             }
-
                         }
-                    } else {
-                        this.qty[index] = 0
-                        return;
+
                     }
+                } else {
+                    this.qty[index] = 0
+                    return;
                 }
             }
         },
@@ -555,7 +530,7 @@ export default {
             this.showCounterCart = !this.showCounterCart;
 
             let user_id = sessionStorage.getItem('Username');
-            console.log(user_id)
+            //console.log(user_id)
             let data = {
                 user_id: user_id,
                 food_id: this.sendId,
@@ -570,14 +545,10 @@ export default {
                 this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!");
             } else {
                 // Verifica se l'articolo esiste nel carrello
-                let existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
-                let response = existingCartItem.request.response
+                try {var existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
+                        if (existingCartItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                    }
                 var Esiste = existingCartItem.data.length > 0 ? true : false
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                }
-
                 if (Esiste) {
                     // Se l'articolo esiste, aggiorna la quantità
                     await axios.put("/cartItem/", data);
@@ -591,13 +562,9 @@ export default {
 
             if (this.Prenotazione === "1") {
                 // Gestisci la prenotazione dell'articolo
-                let cartItems = await axios.get('/cartItem/' + user_id);
-                let response = cartItems.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                }
-
+                try {var cartItems = await axios.get('/cartItem/' + user_id);
+                        if (cartItems.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                    }
                 IsVariante = this.currentPageItems[index].FlgVariante != 0 ? true : false
                 if (!IsVariante) {
                     IsVariante = Esiste === true ? true : false
@@ -616,77 +583,6 @@ export default {
 
             this.showCart = true;
             this.eventBus.emit("showCart", this.showCart);
-        },
-
-        /*  async addToCart_old(index) {
-              this.sendId = this.currentPageItems[index].food_id;
-              this.showCounterCart = !this.showCounterCart;
-     
-              let existItem = await axios.get("/cartItem/" + parseInt(sessionStorage.getItem('Username')) + "/" + this.sendId)
-              let response = existItem.request.response
-              if (response.includes("{\"code\"")) {
-                  this.Quickerrore = true
-                  this.Makelog(response);
-              }
-              let data = {
-                  user_id: parseInt(sessionStorage.getItem('Username')),
-                  food_id: this.sendId,
-                  item_qty: parseInt(this.qty[index])
-              }
-     
-              this.setqty = false
-     
-              switch (existItem.data.length) {
-                  case 1:
-                      if (data.item_qty <= 0) {
-                          await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
-                          this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!")
-                      } else {
-                          await axios.put("/cartItem/", data);
-                          this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
-                      }
-                      break;
-     
-                  case 0:
-                      if (data.item_qty <= 0) {
-                          this.$refs.alert.showAlert("Errore", "Riprovare!", "Impossibile inserire articolo con con quantità pari a " + data.item_qty + "!")
-                      } else {
-                          await axios.post("/cartItem", data);
-                          this.$refs.alert.showAlert("successo", "Grazie!", "Articolo aggiunto al carrello!")
-                          break;
-                      }
-              }
-     
-              if (this.Prenotazione === "1") {
-                  let Itemprenotabili = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                  let response = Itemprenotabili.request.response
-                  if (response.includes("{\"code\"")) {
-                      this.Quickerrore = true
-                      this.Makelog(response);
-                  }
-                  if (Itemprenotabili.data.length > 1) {
-                      await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.sendId)
-                      this.qty[index] = 0
-                      this.showQuickView = true
-                      this.$refs.alert.showAlert("Errore", "Riprovare!", "Puoi prenotare solo una articolo per ordine!");
-                  } else {
-                      await axios.put("/cartItem/", data);
-                      this.$refs.alert.showAlert("successo", "Grazie!", "Articolo modificato correttamente!");
-                  }
-              }
-     
-              this.showCart = true
-              this.eventBus.emit("showCart", this.showCart);
-     
-          },*/
-
-
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
         },
     },
 

@@ -238,20 +238,6 @@ export default {
             }
         },
 
-        async Makelog(index) {
-            let arg = ""
-            if (this.toggle[index] === true) {
-                arg = 'Disabilitazione'
-            } else if (this.toggle[index] === false) {
-                arg = 'Abbilitazione'
-            }
-
-            let data = {
-                mode: 'warn',
-                arg: arg + ' toggle switch numero ' + (index + 1) + ' da parte di ' + sessionStorage.getItem('User')
-            }
-            await axios.post('/log', data)
-        },
     },
     components: { QuickViewErrore }
 }

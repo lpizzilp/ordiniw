@@ -119,6 +119,8 @@
 import router from "@/router";
 import axios from "axios";
 import { mapState } from "vuex";
+import { Makelog } from '@/glbFunctions';
+
 export default {
     name: "Cart",
 
@@ -162,7 +164,7 @@ export default {
             if (this.maxBtn == null) {
                 this.Lenghtpage()
                 this.Coperti = this.Coperti > this.maxBtn ? null : Math.abs(this.Coperti)
-                console.log(this.Coperti + ' > ' + this.maxBtn)
+                //console.log(this.Coperti + ' > ' + this.maxBtn)
             } {
                 this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : this.Coperti < 2 ? this.Coperti = null : Math.abs(this.Coperti)
             }
@@ -270,7 +272,7 @@ export default {
             let response = existItem.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
-                this.Makelog(response);
+                Makelog(response);
             } else {
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
@@ -280,13 +282,6 @@ export default {
             this.Calcnumbtn();
         },
 
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
     },
 }
 </script>
