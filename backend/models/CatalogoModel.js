@@ -33,7 +33,7 @@ export const insertSagra = (data,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results); //was results[0]
         }
     });
 };
@@ -45,7 +45,7 @@ export const deleteSagra = (id,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results); //was results[0]
         }
     });
 };

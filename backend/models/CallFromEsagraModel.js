@@ -10,7 +10,7 @@ export const insertAnagrafica = (data,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results); //was results[0]
         }
     });
 };
@@ -22,7 +22,7 @@ export const deleteAnagrafica = (data,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results); //was results[0]
         }
     });
 };
@@ -35,7 +35,7 @@ export const insertEsauriti = (data,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results); //was results[0]
         }
     });
 };
@@ -47,7 +47,7 @@ export const deleteEsauriti = (data,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results); //was results[0]
         }
     });
 };
