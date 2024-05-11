@@ -325,7 +325,7 @@ export default {
             if (!this.checkEmptyErr()) {
                 return;
             }
-            //PRENOTAZIONE 
+            //PRENOTAZIONE ----------------------------------------------------
             if (this.type === 'PRE') {  
                 if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
                     axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
@@ -338,7 +338,7 @@ export default {
                     } else {
                         bookId = sessionStorage.getItem('Bill')
                     }
-                }else {
+                }else{
                     bookId = parseInt(bookId.book_id) + 1;
                 }
                 let dataprenotazione = {
@@ -362,27 +362,21 @@ export default {
 
                 try {
                     const response = await axios.post("/prenotazione", dataprenotazione);
-                    if (response.errMsg) {
-                        alert("Opss..Qualcosa è andato storto! Per favore Riprova."); return; }
-                } catch (error) {
-                    alert("Opsss..Qualcosa è andato storto! Per favore Riprova."); return; 
+                    if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
-
                 sessionStorage.setItem('Bill', dataprenotazione.book_id)
                 sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
-            //ORDINI         
+            //ORDINI ----------------------------------------------------         
             } else {
                 if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
                     axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
                     axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
                 }
                 let billId = (await axios.get("/billstatus/new")).data;
-                if (billId == "") {
-                    billId = 1;
-                }else {
-                    billId = parseInt(billId.bill_id)   + 1;
+                if (billId == "") billId = 1;
+                else {
+                    billId = parseInt(billId.bill_id)  + 1;
                 }
-
                 let billStatus = {
                     bill_id: parseInt(billId),
                     user_id: sessionStorage.getItem('Username'),
@@ -402,31 +396,22 @@ export default {
 
                 try {
                     const response = await axios.post("/billstatus", billStatus);
-                    if (response.errMsg) {
-                        this.Quickerrore = true
-                        return;
-                    }
-                      //  alert("Opss..Qualcosa è andato storto! Per favore Riprova."); return; }
-                } catch (error) {
-                    this.Quickerrore = true
-                    return;
-                    //alert("Opsss..Qualcosa è andato storto! Per favore Riprova."); return; 
+                    if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', billStatus.bill_id)
                 sessionStorage.setItem('Coperti', billStatus.bill_coperti)
-
             }
-            //inserisco dettaglio per tutti 
-            // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
-            let detailPromises = [];
+
+            //COMMON -> dettaglio per tutti ----------------------------------------- 
+            let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
             this.cartItem.forEach((foodId, index) => {
                 detailPromises.push(this.sendBillDetails(sessionStorage.getItem('Bill'), foodId, this.itemQuantity[index]));
             });
             try {
                 await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
             } catch (error) {
-                alert("Opsssssssssssssss..Qualcosa è andato storto! Per favore Riprova.");
-                return ;    
+                this.Quickerrore = true;
+                return;
             }
 
             axios.delete("/cartItem/" + sessionStorage.getItem('Username'));

@@ -27,6 +27,5 @@ export function sleep(milliseconds) {
 }
 
 export function showErrore(){
-  console.log("alert")
   alert("Opss..Qualcosa è andato storto! Per favore Riprova.")
 }

@@ -45,7 +45,6 @@ export default {
 
     methods: {
         async getBillItem() {
-            //console.log(parametriObj.contaprezzi)
             switch (parametriObj.contaprezzi) {
                 case 'true':
                     sessionStorage.setItem('MatchUser', parametriObj.match)

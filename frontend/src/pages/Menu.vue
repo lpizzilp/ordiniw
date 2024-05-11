@@ -530,7 +530,6 @@ export default {
             this.showCounterCart = !this.showCounterCart;
 
             let user_id = sessionStorage.getItem('Username');
-            //console.log(user_id)
             let data = {
                 user_id: user_id,
                 food_id: this.sendId,

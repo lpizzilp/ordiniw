@@ -164,7 +164,6 @@ export default {
             if (type.mode != '') {
                 this.errors = [];
                 var idR = uniqid()
-                //console.log(idR)
                 let datareg = {
                     user_id: idR,
                     user_email: this.loginObj.email,

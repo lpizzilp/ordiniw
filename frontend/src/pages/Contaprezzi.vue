@@ -164,7 +164,6 @@ export default {
             if (this.maxBtn == null) {
                 this.Lenghtpage()
                 this.Coperti = this.Coperti > this.maxBtn ? null : Math.abs(this.Coperti)
-                //console.log(this.Coperti + ' > ' + this.maxBtn)
             } {
                 this.Coperti = this.Coperti > this.maxBtn ? this.maxBtn : this.Coperti < 2 ? this.Coperti = null : Math.abs(this.Coperti)
             }
@@ -274,7 +273,6 @@ export default {
                 this.Quickerrore = true
                 Makelog(response);
             } else {
-                console.log(existItem)
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);

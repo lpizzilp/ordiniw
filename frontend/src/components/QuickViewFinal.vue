@@ -128,7 +128,6 @@ export default {
                 price = price + (element.food_price * element.item_qty)
             });
             this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:17px; color: #f38609;">Totale</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:17px; text-align: center; color: #f38609;">' + parseFloat(price) + ' €')
-                //console.log(sessionStorage.getItem('filtro'))
                 let ripresalink = process.env.NODE_ENV === 'production' ? "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd="  + (sessionStorage.getItem('filtro') == "" ? '-1' : sessionStorage.getItem('filtro')) : "http://" + window.location.hostname.toString() + ":8080/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd=" + (sessionStorage.getItem('filtro') == "" ? '-1' : sessionStorage.getItem('filtro'))
             let data = {
                 user_email: this.Dataform.email,
