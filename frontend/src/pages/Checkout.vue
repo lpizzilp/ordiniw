@@ -115,7 +115,7 @@
         </div>
 
         <QuickViewCheckout v-if="showQuickView" @childEvent="Quickshow"></QuickViewCheckout>
-        <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
+        <QuickViewErrore v-if="Quickerrore" @childEvent="Quickshow"></QuickViewErrore>
     </div>
 </template>
 
@@ -124,6 +124,7 @@ import axios from "axios";
 import QuickViewCheckout from "@/components/QuickViewCheckout.vue";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import { mapState } from "vuex";
+
 export default {
     name: "Checkout",
     data() {
@@ -189,22 +190,19 @@ export default {
         },
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
-                let existItem = await axios.get("/cartItem/" + sessionStorage.getItem('Username'));
-                let response = existItem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                } else {
-                    existItem.data.forEach(element => {
-                        this.cartItem.push(element.food_id);
-                        this.itemQuantity.push(element.item_qty);
-                    });
+                try {var existItem = await axios.get("/cartItem/" + sessionStorage.getItem('Username'));
+                    if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
+                existItem.data.forEach(element => {
+                    this.cartItem.push(element.food_id);
+                    this.itemQuantity.push(element.item_qty);
+                });
             }
         },
 
         Quickshow(dataFromChild) {
             this.showQuickView = dataFromChild
+            this.Quickerrore = false
         },
 
         resetCheckErr: function () {
@@ -284,22 +282,33 @@ export default {
         },
 
         async sendBillDetails(billId, foodId, qty) {
+            let callURL = null
+            let Details = null
             if (sessionStorage.getItem('filtro') === 'PRE') {
-                let bookDetails = {
+                Details = {
                     book_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
                 };
-                await axios.post("/prenotazione/dettaglio", bookDetails);
+                callURL = "/prenotazione/dettaglio"
             } else {
-                let billDetails = {
+                Details = {
                     bill_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
                 };
-                await axios.post("/billdetails", billDetails);
+                callURL = "/billdetails";
+            }
+            try {
+                const response = await axios.post(callURL, Details);
+                if (response.errMsg ) {
+                    throw new Error("Whoops!");
+                }
+            } catch (error) {
+                throw new Error("Whoops!");
             }
         },
+
         currentTime: function () {
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
@@ -311,117 +320,121 @@ export default {
         },
 
         async handleSubmit(e) {
+            e.preventDefault(); //importante
             this.checkForm();
             if (!this.checkEmptyErr()) {
-                e.preventDefault();
+                return;
             }
-            else {
-                e.preventDefault(); //importante
-
-                if (this.type === 'PRE') {
-                    if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
-                        axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
-                        axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
+            //PRENOTAZIONE 
+            if (this.type === 'PRE') {  
+                if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
+                    axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
+                    axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
+                }
+                let bookId = (await axios.get("/prenotazione/new")).data;
+                if (bookId == "") {
+                    if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
+                        bookId = sessionStorage.getItem('startprt');
+                    } else {
+                        bookId = sessionStorage.getItem('Bill')
                     }
+                }else {
+                    bookId = parseInt(bookId.book_id) + 1;
+                }
+                let dataprenotazione = {
+                    book_id: parseInt(bookId),
+                    user_id: sessionStorage.getItem('Username'),
+                    book_tavolo: this.checkoutObj.Tavolo,
+                    book_coperti: this.checkoutObj.Coperti,
+                    book_when: this.currentTime(),
+                    book_method: this.checkoutObj.paymentMethod,
+                    book_discount: parseFloat(this.calculateSummaryPrice()[1]),
+                    book_delivery: parseFloat(this.calculateSummaryPrice()[2]),
+                    book_total: parseFloat(this.calculateSummaryPrice()[3]),
+                    book_paid: "false",
+                    book_status: 0,
+                    book_tipocassa: sessionStorage.getItem('filtro'),
+                    book_nominativo: this.checkoutObj.Nominativo,
+                    book_phone: this.checkoutObj.Telefono,
+                    book_note: this.checkoutObj.Note
 
-                    e.preventDefault();
-                    let bookId = (await axios.get("/prenotazione/new")).data;
-                    if (bookId == "") {
-                        if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
-                            bookId = sessionStorage.getItem('startprt');
-                        } else {
-                            bookId = sessionStorage.getItem('Bill')
-                        }
-                    }
-                    else {
-                        bookId = parseInt(bookId.book_id) + 1;
-                    }
+                };
 
-                    let dataprenotazione = {
-                        book_id: parseInt(bookId),
-                        user_id: sessionStorage.getItem('Username'),
-                        book_tavolo: this.checkoutObj.Tavolo,
-                        book_coperti: this.checkoutObj.Coperti,
-                        book_when: this.currentTime(),
-                        book_method: this.checkoutObj.paymentMethod,
-                        book_discount: parseFloat(this.calculateSummaryPrice()[1]),
-                        book_delivery: parseFloat(this.calculateSummaryPrice()[2]),
-                        book_total: parseFloat(this.calculateSummaryPrice()[3]),
-                        book_paid: "false",
-                        book_status: 0,
-                        book_tipocassa: sessionStorage.getItem('filtro'),
-                        book_nominativo: this.checkoutObj.Nominativo,
-                        book_phone: this.checkoutObj.Telefono,
-                        book_note: this.checkoutObj.Note
-
-                    };
-
-                    await axios.post("/prenotazione", dataprenotazione);
-                    sessionStorage.setItem('Bill', dataprenotazione.book_id)
-                    sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
-
-                    this.cartItem.forEach((foodId, index) => {
-                        this.sendBillDetails(bookId, foodId, this.itemQuantity[index]);
-                    });
-
-                } else {
-                    if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
-                        axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
-                        axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
-                    }
-
-                    e.preventDefault();
-                    let billId = (await axios.get("/billstatus/new")).data;
-                    if (billId == "") {
-                        billId = 1;
-                    }
-                    else {
-                        billId = parseInt(billId.bill_id) + 1;
-                    }
-
-                    let billStatus = {
-                        bill_id: parseInt(billId),
-                        user_id: sessionStorage.getItem('Username'),
-                        bill_tavolo: this.checkoutObj.Tavolo,
-                        bill_coperti: this.checkoutObj.Coperti,
-                        bill_when: this.currentTime(),
-                        bill_method: this.checkoutObj.paymentMethod,
-                        bill_discount: parseFloat(this.calculateSummaryPrice()[1]),
-                        bill_delivery: parseFloat(this.calculateSummaryPrice()[2]),
-                        bill_total: parseFloat(this.calculateSummaryPrice()[3]),
-                        bill_paid: "false",
-                        bill_status: 1,
-                        TipoCassa: sessionStorage.getItem('TipoOrdine'),
-                        Nominativo: this.checkoutObj.Nominativo,
-                        bill_note: this.checkoutObj.Note
-                    };
-
-                    await axios.post("/billstatus", billStatus);
-                    sessionStorage.setItem('Bill', billStatus.bill_id)
-                    sessionStorage.setItem('Coperti', billStatus.bill_coperti)
-
-                    this.cartItem.forEach((foodId, index) => {
-                        this.sendBillDetails(billId, foodId, this.itemQuantity[index]);
-                    });
+                try {
+                    const response = await axios.post("/prenotazione", dataprenotazione);
+                    if (response.errMsg) {
+                        alert("Opss..Qualcosa è andato storto! Per favore Riprova."); return; }
+                } catch (error) {
+                    alert("Opsss..Qualcosa è andato storto! Per favore Riprova."); return; 
                 }
 
-                axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
-                this.cartItem = [];
-                this.itemQuantity = [];
-                this.$router.push("/thank");
+                sessionStorage.setItem('Bill', dataprenotazione.book_id)
+                sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
+            //ORDINI         
+            } else {
+                if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
+                    axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
+                    axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
+                }
+                let billId = (await axios.get("/billstatus/new")).data;
+                if (billId == "") {
+                    billId = 1;
+                }else {
+                    billId = parseInt(billId.bill_id)   + 1;
+                }
+
+                let billStatus = {
+                    bill_id: parseInt(billId),
+                    user_id: sessionStorage.getItem('Username'),
+                    bill_tavolo: this.checkoutObj.Tavolo,
+                    bill_coperti: this.checkoutObj.Coperti,
+                    bill_when: this.currentTime(),
+                    bill_method: this.checkoutObj.paymentMethod,
+                    bill_discount: parseFloat(this.calculateSummaryPrice()[1]),
+                    bill_delivery: parseFloat(this.calculateSummaryPrice()[2]),
+                    bill_total: parseFloat(this.calculateSummaryPrice()[3]),
+                    bill_paid: "false",
+                    bill_status: 1,
+                    TipoCassa: sessionStorage.getItem('TipoOrdine'),
+                    Nominativo: this.checkoutObj.Nominativo,
+                    bill_note: this.checkoutObj.Note
+                };
+
+                try {
+                    const response = await axios.post("/billstatus", billStatus);
+                    if (response.errMsg) {
+                        this.Quickerrore = true
+                        return;
+                    }
+                      //  alert("Opss..Qualcosa è andato storto! Per favore Riprova."); return; }
+                } catch (error) {
+                    this.Quickerrore = true
+                    return;
+                    //alert("Opsss..Qualcosa è andato storto! Per favore Riprova."); return; 
+                }
+                sessionStorage.setItem('Bill', billStatus.bill_id)
+                sessionStorage.setItem('Coperti', billStatus.bill_coperti)
+
+            }
+            //inserisco dettaglio per tutti 
+            // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
+            let detailPromises = [];
+            this.cartItem.forEach((foodId, index) => {
+                detailPromises.push(this.sendBillDetails(sessionStorage.getItem('Bill'), foodId, this.itemQuantity[index]));
+            });
+            try {
+                await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
+            } catch (error) {
+                alert("Opsssssssssssssss..Qualcosa è andato storto! Per favore Riprova.");
+                return ;    
             }
 
-        },
-
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
-    },
-
+            axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
+            this.cartItem = [];
+            this.itemQuantity = [];
+            this.$router.push("/thank");
+        }
+    },    
     components: {
         QuickViewCheckout,
         QuickViewErrore
@@ -499,7 +512,7 @@ export default {
 }
 
 .checkout-container .checkout-form-container form p a {
-    color: #27ae60;
+    color: #*;
 }
 
 .checkout-container .checkout-form-container form p a:hover {

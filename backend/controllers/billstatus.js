@@ -32,6 +32,8 @@ export const createBillStatus=(req,res)=>{
             res.send(err);
         }else {
             res.json(results);
+            //res.status(500).send("errmessage");
+
         }
     });
 };

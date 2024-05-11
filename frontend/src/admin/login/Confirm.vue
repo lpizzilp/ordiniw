@@ -73,6 +73,8 @@ for (var i = 0; i < parametri.length; i++) {
 import axios from 'axios';
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import QuickViewConfirm from '@/admin/components/QuickViewConfirm.vue';
+import { Makelog } from '@/glbFunctions';
+
 export default {
     name: "Confirm",
 
@@ -102,13 +104,13 @@ export default {
             let response = Adminuser.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
-                this.Makelog(response);
+                Makelog(response);
             }
             let Sagra = await axios.get('/sagra/' + parametriObj.id)
             response = Sagra.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
-                this.Makelog(response);
+                Makelog(response);
             }
             this.ConfirmObj.name = Adminuser.data.user_name
             this.ConfirmObj.email = Adminuser.data.user_email
@@ -120,7 +122,7 @@ export default {
             response = sagredata.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
-                this.Makelog(response);
+                Makelog(response);
             }
 
             sagredata.data.forEach(element => {
@@ -152,7 +154,7 @@ export default {
                 sagra_link: "http://" + window.location.hostname.toString()
             }
             await axios.delete("/users/delete/" + this.ConfirmObj.email)
-            await axios.post("/mail/confirm/", data)
+            axios.post("/mail/confirm/", data)
             this.QuickView_ute = false
             this.showQuickVue = true
         },
@@ -189,19 +191,11 @@ export default {
                         admin_password: this.ConfirmObj.pass,
                         sagra_link: "http://" + window.location.hostname.toString()
                     }
-                    await axios.post("/mail/confirm/", data)
+                    axios.post("/mail/confirm/", data)
                     this.QuickView_ute = true
                     this.showQuickVue = true
                 }
             }
-        },
-
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
         },
     },
 

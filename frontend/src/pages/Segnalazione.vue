@@ -273,7 +273,7 @@ export default {
                 if (connection) {
                     connection = connection.effectiveType + ', velocità di connessione: ' + connection.downlink + ' Mbps'
                 } else {
-                    connection = 'API navigator.connection non supportata'
+                    //connection = 'API navigator.connection non supportata'
                 }
                 let data = {
                     tiposegnalazione: this.ErrorObj.TipoSegnalazione,
@@ -290,7 +290,7 @@ export default {
                     connessione: connection,
                     err_ora: await this.getData()
                 }
-                console.log(this.ErrorObj.segnalazione + "-" + this.ErrorObj.descrizione,)
+                //console.log(this.ErrorObj.segnalazione + "-" + this.ErrorObj.descrizione,)
                 axios.post("/posterrore", data);
                 axios.post("/mail/sengalazione/", data);
                 this.showQuickVue = true

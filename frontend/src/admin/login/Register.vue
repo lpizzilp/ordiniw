@@ -58,6 +58,8 @@
 import axios from 'axios';
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
 import QuickViewRegister from '@/admin/components/QuickViewRegister.vue';
+import { Makelog } from '@/glbFunctions';
+
 export default {
     name: "Register",
 
@@ -188,7 +190,7 @@ export default {
                 let response = data.request.response
                 if (response.includes("{\"code\"")) {
                     this.Quickerrore = true
-                    this.Makelog(response);
+                    Makelog(response);
                 } else {
                     if (data.data) {
                         this.errorObj.emailErr.push("Questa email è associata a un account esistente");
@@ -210,13 +212,7 @@ export default {
             }
         },
 
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
+        
     },
 
     components: { QuickViewRegister, QuickViewErrore }

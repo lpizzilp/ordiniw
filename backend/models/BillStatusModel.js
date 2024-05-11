@@ -18,10 +18,9 @@ export const getNewestId = (result) => {
 export const insertBillStatus = (data,result) => {
     db.query("INSERT INTO billstatus SET ?",data, (err,results)=> {
         if (err){
-            console.log(err);
             result(err,null);
         }else{
-            result(null,results[0]);
+            result(null,results);
         }
     });
 };

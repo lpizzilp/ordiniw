@@ -47,8 +47,9 @@
 <script>
 import axios from 'axios';
 import QuickViewErrore from './QuickViewErrore.vue';
+
 export default {
-    name: "QuickView",
+    name: "QuickViewFinal",
     data() {
         return {
             from: 'H',
@@ -116,21 +117,10 @@ export default {
 
         async submitForm() {
             this.buttonDisabled = true
-            if (sessionStorage.getItem('filtro') == 'PRE') {
-                var billitem = await axios.get('/prenotazione/' + this.Dataform.id)
-                let response = billitem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
+            var callURL = (sessionStorage.getItem('filtro') == 'PRE')? '/prenotazione/':'/billdetails/'
+            try {var billitem = await axios.get(callURL + this.Dataform.id)
+                    if (billitem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
-            } else {
-                billitem = await axios.get('/billdetails/' + this.Dataform.id)
-                let response = billitem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                }
-            }
 
             let price = 0 
             billitem.data.forEach(element => {
@@ -138,7 +128,7 @@ export default {
                 price = price + (element.food_price * element.item_qty)
             });
             this.Item.push('<tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:17px; color: #f38609;">Totale</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:17px; text-align: center; color: #f38609;">' + parseFloat(price) + ' €')
-                console.log(sessionStorage.getItem('filtro'))
+                //console.log(sessionStorage.getItem('filtro'))
                 let ripresalink = process.env.NODE_ENV === 'production' ? "http://" + window.location.hostname.toString() + "/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd="  + (sessionStorage.getItem('filtro') == "" ? '-1' : sessionStorage.getItem('filtro')) : "http://" + window.location.hostname.toString() + ":8080/myorder?match=" + sessionStorage.getItem('MatchUser') + "&user=" + sessionStorage.getItem('Username') + "&id=" + this.Dataform.id + "&type=" + sessionStorage.getItem('TipoOrdine') + "&filtroOrd=" + (sessionStorage.getItem('filtro') == "" ? '-1' : sessionStorage.getItem('filtro'))
             let data = {
                 user_email: this.Dataform.email,
@@ -150,7 +140,7 @@ export default {
                 ord_item: this.Item,
             }
 
-            await axios.post('/mail/', data)
+            axios.post('/mail/', data)
                 .then(response => {
                     if (response.data === '') {
                         this.from = 'I'
@@ -165,31 +155,6 @@ export default {
                 });
         },
 
-        // startTimer() {
-        //     sessionStorage.removeItem('MatchUser')
-        //     sessionStorage.removeItem('Username')
-        //     sessionStorage.removeItem('TipoOrdine')
-        //     sessionStorage.removeItem('Bill')
-        //     sessionStorage.removeItem('filtro')
-        //     // Decrementa il timer ogni secondo
-        //     this.timerInterval = setInterval(() => {
-        //         if (this.timer > 0) {
-        //             this.timer--;
-        //         } else {
-        //             // Quando il timer raggiunge zero, ferma l'intervallo e reindirizza alla pagina home
-        //             clearInterval(this.timerInterval);
-        //             this.$router.push("/");
-        //         }
-        //     }, 1000);
-        // },
-
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
     },
 
     components: { QuickViewErrore }

@@ -4,8 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import "@/axios"
-
-const currentVersion = '1.4.6'; // Versione corrente impostata durante il deploy
+const currentVersion = '1.5.0'; // Versione corrente impostata durante il deploy
 const eventBus = mitt();
 
 //controllo di versione 

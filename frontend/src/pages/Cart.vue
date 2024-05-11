@@ -182,6 +182,7 @@ import axios from "axios";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
+
 export default {
     name: "Cart",
 
@@ -276,7 +277,7 @@ export default {
 
             let IsVariante = this.filterFoods.find(item => item.food_id == this.cartItem[i])
             IsVariante = IsVariante.FlgVariante == 0 ? false : true
-            console.log(IsVariante)
+            //console.log(IsVariante)
             if (IsVariante) {
                 let Nonvariante = this.filterFoods.findIndex(item => item.FlgVariante == 0)
                 let Maxqta = this.itemQuantity[Nonvariante]
@@ -313,28 +314,16 @@ export default {
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
-                let existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                let response = existItem.request.response
-                if (response.includes("{\"code\"")) {
-                    this.Quickerrore = true
-                    this.Makelog(response);
-                } else {
-                    console.log(existItem)
-                    existItem.data.forEach(element => {
-                        this.cartItem.push(element.food_id);
-                        this.itemQuantity.push(element.item_qty);
-                    });
+                try {var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                    if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
+                existItem.data.forEach(element => {
+                    this.cartItem.push(element.food_id);
+                    this.itemQuantity.push(element.item_qty);
+                });
             }
         },
 
-        async Makelog(err) {
-            let data = {
-                mode: 'err',
-                arg: err
-            }
-            await axios.post('/log', data)
-        },
     },
 
     components: {
