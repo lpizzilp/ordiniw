@@ -34,29 +34,20 @@ export const allSagre=(req,res)=>{
 //------------------------------------------------
 // crea il record per il catalogo sagre 
 //-------------------------------------------------
-export const createSagra=(req,res)=>{
-    const data = req.body;
-    //Cancellazione preventiva del  record prima della immissione 
-    deleteSagra(data[0].id_sagra,(err,results)=> {
-        if (err) {
-            res.send(err);
-            return;
+export const createSagra = async (req, res) => {
+    try {
+        const data = req.body;
+        
+        // Cancellazione preventiva del record prima dell'inserimento 
+        await deleteSagra(data[0].id_sagra);
 
-        }else {
-            res.json(results);
-        }
-    });
-    //INSERISCI il record sagra ex-novo 
-    insertSagra(data[0],(err,results)=> {
-
-        if (err) {
-            res.send(err);
-            return; 
-
-        }else {
-            res.json(results);
-        }
-    });
+        // Inserimento del nuovo record sagra 
+        const insertedSagra = await insertSagra(data[0]);
+        
+        res.json(insertedSagra);
+    } catch (error) {
+        res.status(500).json({ error: "Errore durante la creazione della sagra", details: error.message });
+    }
 };
 
 
