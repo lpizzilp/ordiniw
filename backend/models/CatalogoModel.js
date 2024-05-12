@@ -27,27 +27,42 @@ export const getAllSagre = (ord, result) => {
 
 //------------------------------------------
 // insert catalogo sagra 
-export const insertSagra = (data,result) => {
-    db.query("INSERT INTO catalogo_sagre SET ?",data, (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results[0]);
-        }
-    });
+export const insertSagra = async (data) => {
+    try {
+        const results = await new Promise((resolve, reject) => {
+            db.query("INSERT INTO catalogo_sagre SET ?", data, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+        return results;
+    } catch (error) {
+        throw error;
+    }
 };
 
-// delete catalogo sagra x id 
-export const deleteSagra = (id,result) => {
-    db.query("DELETE FROM catalogo_sagre WHERE id_sagra = ?",[id], (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results[0]);
-        }
-    });
+//------------------------------------------
+// Delete catalogo sagra per id 
+export const deleteSagra = async (id) => {
+    try {
+        const results = await new Promise((resolve, reject) => {
+            db.query("DELETE FROM catalogo_sagre WHERE id_sagra = ?", [id], (err, results) => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+        return results;
+    } catch (error) {
+        throw error;
+    }
 };
 
 

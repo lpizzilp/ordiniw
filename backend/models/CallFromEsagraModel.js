@@ -3,51 +3,90 @@
 // import connection
 import db from "../config/database.js";
 
-// insert anagrafica articoli 
-export const insertAnagrafica = (data,result) => {
-    db.query("INSERT INTO food SET ?",data, (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results[0]);
-        }
+//-------------------------------
+//-------------------------------
+export const insertAnagrafica = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query("INSERT INTO food SET ?", data, (err, results) => {
+            if (err) {
+                console.error('Errore durante l\'inserimento:', err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-// delete anagrafica articoli 
-export const deleteAnagrafica = (data,result) => {
-    db.query("DELETE FROM food",'' , (err,results)=> {        
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results[0]);
-        }
+export const deleteAnagrafica = () => {
+    return new Promise((resolve, reject) => {
+        db.query("DELETE FROM food", (err, results) => {
+            if (err) {
+                console.error('Errore durante la cancellazione:', err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
+
+
+
+
+
+
+// // insert anagrafica articoli 
+// export const insertAnagrafica = (data,result) => {
+//     db.query("INSERT INTO food SET ?",data, (err,results)=> {
+//         if (err){
+//             console.log(err);
+//             result(err,null);
+//         }else{
+//             result(null,results);
+//         }
+//     });
+// };
+
+// // Cancella tutta l'anagrafica
+// export const deleteAnagrafica = (result) => {
+//     db.query("DELETE FROM food", '', (err, results) => {
+//         if (err) {
+//             console.log(err);
+//             result(err, null);
+//         } else {
+//             result(null, results); // Invia null come primo argomento
+//         }
+//     });
+// };
 
 //------------------------------------------
+//------------------------------------------
 // insert esauriti 
-export const insertEsauriti = (data,result) => {
-    db.query("INSERT INTO esauriti SET ?",data, (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results[0]);
-        }
+export const insertEsauriti = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query("INSERT INTO esauriti SET ?", data, (err, results) => {
+            if (err) {
+                console.error("Errore durante l'inserimento di esauriti:", err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
 
-// delete  esauriti
-export const deleteEsauriti = (data,result) => {
-    db.query("DELETE FROM esauriti",'' , (err,results)=> {        
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results[0]);
-        }
+// delete esauriti
+export const deleteEsauriti = () => {
+    return new Promise((resolve, reject) => {
+        db.query("DELETE FROM esauriti", (err, results) => {
+            if (err) {
+                console.error("Errore durante la cancellazione degli esauriti:", err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
 };
+//------------------------------------------
