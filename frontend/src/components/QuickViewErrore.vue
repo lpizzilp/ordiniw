@@ -52,7 +52,7 @@ export default {
 }
 
 .quick-view .quick-view-inner {
-    width: 70vw;
+    width: 40vw;
     background-color: #fff;
     padding: 30px;
     border-radius: 10px;
@@ -76,8 +76,7 @@ export default {
     font-size: 18px;
     margin-top: 5vh;
     margin-bottom: 10px;
-    margin-left: 25%;
-    width: 50%;
+    width: 100%;
     background-color: #f38609;
 }
 

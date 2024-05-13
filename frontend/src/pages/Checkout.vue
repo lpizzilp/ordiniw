@@ -375,7 +375,7 @@ export default {
                 let billId = (await axios.get("/billstatus/new")).data;
                 if (billId == "") billId = 1;
                 else {
-                    billId = parseInt(billId.bill_id)  + 1;
+                    billId = parseInt(billId.bill_id) + 1;
                 }
                 let billStatus = {
                     bill_id: parseInt(billId),
