@@ -496,10 +496,6 @@ export default {
     margin: 0;
 }
 
-.checkout-container .checkout-form-container form p a {
-    color: #*;
-}
-
 .checkout-container .checkout-form-container form p a:hover {
     color: #130f40;
     text-decoration: underline;

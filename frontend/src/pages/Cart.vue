@@ -154,7 +154,7 @@
                     <div class="col-md-3">
                         <div class="box">
                             <div class="box-title">
-                                <h3 style="color: #f38609;">Totale {{ calculateSummaryPrice()[0] }}€</h3>
+                                <h3 style="color: #f38609; font-size: 2.7rem;">Totale {{ calculateSummaryPrice()[0] }}€</h3>
                             </div>
 
                             <div class="box-content">
