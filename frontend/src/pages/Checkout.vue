@@ -1,7 +1,7 @@
 <template>
     <div class="checkout-container">
         <div class="checkout-form-container">
-            <form id="checkoutForm" @submit="handleSubmit" novalidate autocomplete="off">
+            <form id="checkoutForm" @submit="handleSubmit" novalidate autocomplete="off" >
                 <div class="checkout-heading">
                     <h3>Manca solo un passaggio</h3>
                 </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Conferma" class="btn" />
+                    <input type="submit" value="Conferma" class="btn"   :disabled="buttonDisabled" />
                 </div>
                 <div>
                     <button class="btn" type="button" style="margin-top: 20px; background-color: #ff8902;"
@@ -136,7 +136,8 @@ export default {
             showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
             type: sessionStorage.getItem('filtro') == 'PRE' ? sessionStorage.getItem('filtro') : sessionStorage.getItem('TipoOrdine'),
-            Quickerrore: false
+            Quickerrore: false,
+            buttonDisabled: false
         };
     },
     created() {
@@ -149,6 +150,16 @@ export default {
         },
     },
     methods: {
+
+        handleConfermaClick() {
+            // Disabilita il pulsante
+            this.buttonDisabled = true;
+
+            setTimeout(() => {
+                this.buttonDisabled = false;
+            }, 500); // 1000 millisecondi = 1 secondo
+        },
+        
         availableTime: function () {
             var now = new Date();
             var currentMonth = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -325,6 +336,7 @@ export default {
             if (!this.checkEmptyErr()) {
                 return;
             }
+            this.handleConfermaClick()
             //PRENOTAZIONE ----------------------------------------------------
             if (this.type === 'PRE') {  
                 if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
@@ -373,6 +385,7 @@ export default {
                     axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
                 }
                 let billId = (await axios.get("/billstatus/new")).data;
+
                 if (billId == "") billId = 1;
                 else {
                     billId = parseInt(billId.bill_id) + 1;
