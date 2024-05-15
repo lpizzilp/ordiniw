@@ -17,9 +17,9 @@ axios.interceptors.response.use(
     response => {
         // Gestisci la risposta normale qui
         var errMsg = null
-        
+        console.log(response)
         if (response.data.errno != undefined    ) {
-            errMsg = response.config.url + " - "+ response.data.errno + " -" + response.data.sqlMessage
+            errMsg = response.config.url + " - "+ response.data.errno + " - " + response.data.sqlMessage +" -" + response.data.sql
         }
         if (response.data.serverStatus != undefined && (response.data.serverStatus != 0 && response.data.serverStatus !=2)   ) {
             errMsg = response.data.serverStatus + " - Errore interno database"
@@ -32,7 +32,7 @@ axios.interceptors.response.use(
     error => {
         // Gestisci gli di rete o errori generati lato server non sql
         var errMsg = null
-        errMsg = error.config.url + " - "+ error.code + " -" + error.message ;
+        errMsg = error.config.url + " + "+ error.code + " + " + error.message ;
 
         Makelog(errMsg) 
         return Promise.reject(error);    }
