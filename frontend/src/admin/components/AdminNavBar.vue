@@ -40,21 +40,21 @@
     </div>
     <div class="navigation">
         <ul class="table-phone">
-            <li @click="RouteNav('/admin/dashboard'), Writelog('Dashboard')" class="td-router"><router-link
+            <li id="/admin/dashboard" @click="RouteNav('/admin/dashboard'), Writelog('Dashboard')" class="td-router"><router-link
                     to="/admin/dashboard"><i class="fa-solid fa-chart-line"
                         style="padding-right: 2vh;"></i>Dashboard</router-link></li>
-            <li @click="RouteNav('/admin/prenotazioni'), Writelog('Prenotazioni')" class="td-router"><router-link
+            <li id="/admin/prenotazioni" @click="RouteNav('/admin/prenotazioni'), Writelog('Prenotazioni')" class="td-router"><router-link
                     to="/admin/prenotazioni"><i class="fa-solid fa-book-open"
                         style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
-            <li @click="RouteNav('/admin/ordini'), Writelog('Ordini')" class="td-router"><router-link
+            <li id="/admin/ordini" @click="RouteNav('/admin/ordini'), Writelog('Ordini')" class="td-router"><router-link
                     to="/admin/ordini"><i class="fa-solid fa-utensils"
                         style="padding-right: 2vh;"></i>Ordini</router-link>
             </li>
-            <li @click="RouteNav('/admin/utenti'), Writelog('Tabella utenti')" class="td-router"><router-link
+            <li id="/admin/utenti" @click="RouteNav('/admin/utenti'), Writelog('Tabella utenti')" class="td-router"><router-link
                     to="/admin/utenti"><i class="fa-solid fa-users-between-lines"
                         style="padding-right: 2vh;"></i>Utenti</router-link>
             </li>
-            <li @click="RouteNav('/admin/errori'), Writelog('Tabella errori')" class="td-router"><router-link
+            <li id="/admin/errori" @click="RouteNav('/admin/errori'), Writelog('Tabella errori')" class="td-router"><router-link
                     to="/admin/errori"><i class="fa-solid fa-triangle-exclamation"
                         style="padding-right: 2vh;"></i>Tab errori</router-link>
             </li>
@@ -109,8 +109,10 @@ export default {
                 nav[0].style.display = 'block'
                 this.route = router.currentRoute.value.path
                 if (this.route == '/admin/dashboard' || this.route == '/admin/utenti' || this.route == '/admin/errori') {
+                    nav[0].style.background = 'white'
                     nav[0].style.marginTop = '70px'
                 } else {
+                    nav[0].style.background = '#fcfcfc'
                     nav[0].style.marginTop = '0px'
                 }
             } else {
@@ -240,7 +242,10 @@ export default {
         position: absolute;
         z-index: 99;
         width: 100%;
-        background-color: #ffffff;
+        background-color: #fff;
+        border-bottom: 1px solid black;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
 
     .navigation .table-phone {
@@ -252,8 +257,9 @@ export default {
     .navigation .table-phone li {
         padding: 1rem 10rem;
         color: black;
-        border: 2px inset black;
-        border-radius: 5px;
+        border-top: 2px inset black;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
 
     .navigation .table-phone a {
@@ -261,6 +267,7 @@ export default {
     }
 
     .table-phone a:hover {
+        background-color: antiquewhite;
         color: #f38609;
     }
 
