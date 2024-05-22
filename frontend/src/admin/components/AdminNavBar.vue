@@ -40,22 +40,22 @@
     </div>
     <div class="navigation">
         <ul class="table-phone">
-            <li id="/admin/dashboard" @click="RouteNav('/admin/dashboard'), Writelog('Dashboard')" class="td-router"><router-link
-                    to="/admin/dashboard"><i class="fa-solid fa-chart-line"
+            <li id="/admin/dashboard" @click="RouteNav('/admin/dashboard'), Writelog('Dashboard')" class="td-router">
+                <router-link to="/admin/dashboard"><i class="fa-solid fa-chart-line"
                         style="padding-right: 2vh;"></i>Dashboard</router-link></li>
-            <li id="/admin/prenotazioni" @click="RouteNav('/admin/prenotazioni'), Writelog('Prenotazioni')" class="td-router"><router-link
-                    to="/admin/prenotazioni"><i class="fa-solid fa-book-open"
+            <li id="/admin/prenotazioni" @click="RouteNav('/admin/prenotazioni'), Writelog('Prenotazioni')"
+                class="td-router"><router-link to="/admin/prenotazioni"><i class="fa-solid fa-book-open"
                         style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
             <li id="/admin/ordini" @click="RouteNav('/admin/ordini'), Writelog('Ordini')" class="td-router"><router-link
                     to="/admin/ordini"><i class="fa-solid fa-utensils"
                         style="padding-right: 2vh;"></i>Ordini</router-link>
             </li>
-            <li id="/admin/utenti" @click="RouteNav('/admin/utenti'), Writelog('Tabella utenti')" class="td-router"><router-link
-                    to="/admin/utenti"><i class="fa-solid fa-users-between-lines"
+            <li id="/admin/utenti" @click="RouteNav('/admin/utenti'), Writelog('Tabella utenti')" class="td-router">
+                <router-link to="/admin/utenti"><i class="fa-solid fa-users-between-lines"
                         style="padding-right: 2vh;"></i>Utenti</router-link>
             </li>
-            <li id="/admin/errori" @click="RouteNav('/admin/errori'), Writelog('Tabella errori')" class="td-router"><router-link
-                    to="/admin/errori"><i class="fa-solid fa-triangle-exclamation"
+            <li id="/admin/errori" @click="RouteNav('/admin/errori'), Writelog('Tabella errori')" class="td-router">
+                <router-link to="/admin/errori"><i class="fa-solid fa-triangle-exclamation"
                         style="padding-right: 2vh;"></i>Tab errori</router-link>
             </li>
             <li @click="RouteNav('/'), setAdmin('')" class="td-router"><router-link to="/"><i
@@ -246,6 +246,10 @@ export default {
         border-bottom: 1px solid black;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
+        -webkit-box-shadow: -1px 30px 44px -11px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: -1px 30px 44px -11px rgba(0, 0, 0, 0.75);
+        box-shadow: -1px 30px 44px -11px rgba(0, 0, 0, 0.75);
+        
     }
 
     .navigation .table-phone {
