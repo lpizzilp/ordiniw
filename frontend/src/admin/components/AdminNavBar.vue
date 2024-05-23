@@ -42,7 +42,8 @@
         <ul class="table-phone">
             <li id="/admin/dashboard" @click="RouteNav('/admin/dashboard'), Writelog('Dashboard')" class="td-router">
                 <router-link to="/admin/dashboard"><i class="fa-solid fa-chart-line"
-                        style="padding-right: 2vh;"></i>Dashboard</router-link></li>
+                        style="padding-right: 2vh;"></i>Dashboard</router-link>
+            </li>
             <li id="/admin/prenotazioni" @click="RouteNav('/admin/prenotazioni'), Writelog('Prenotazioni')"
                 class="td-router"><router-link to="/admin/prenotazioni"><i class="fa-solid fa-book-open"
                         style="padding-right: 2vh;"></i>Prenotazioni</router-link></li>
@@ -140,6 +141,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 2em 2em;
+    box-shadow: 18px 0px 70px -37px rgba(0,0,0,0.75);
 }
 
 .header .testa {
@@ -221,6 +223,7 @@ export default {
         flex-direction: row;
         justify-content: space-between;
         padding: 2em 2em;
+        box-shadow: 0px 20px 30px -23px rgba(0, 0, 0, 0.75);
     }
 
     .table-element {
@@ -246,10 +249,8 @@ export default {
         border-bottom: 1px solid black;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
-        -webkit-box-shadow: -1px 30px 44px -11px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: -1px 30px 44px -11px rgba(0, 0, 0, 0.75);
         box-shadow: -1px 30px 44px -11px rgba(0, 0, 0, 0.75);
-        
+
     }
 
     .navigation .table-phone {
