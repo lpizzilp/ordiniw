@@ -292,14 +292,14 @@ export default {
         position: absolute;
         display: flex;
         flex-wrap: wrap;
-        border-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
         top: 99%;
         left: 0;
         right: 0;
         background: #fff;
         border-bottom: 0.1rem solid black;
         clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-        box-shadow: 0px 43px 69px -33px rgba(0,0,0,0.75);
     }
 
     .header .navbar.active {
@@ -311,7 +311,8 @@ export default {
     .header .navbar a {
         width: 100%;
         border-top: 1px inset black;
-        
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
         padding: 2px 0px;
         margin: 0;
         font-size: 2rem;
