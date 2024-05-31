@@ -15,8 +15,8 @@ export const getAllUser = (result) => {
 
 
 // get single user
-export const getUserByEmail = (data, result) => {
-    db.query("SELECT * FROM user WHERE user_email = ?", [data], (err, results) => {
+export const getUserByEmail = (id,email, result) => {
+    db.query("SELECT * FROM user WHERE id_sagra = ? and user_email = ?", [id, email], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -41,7 +41,7 @@ export const insertUser = (data, result) => {
 
 // update authlevel
 export const updateauthlevel = (data, result) => {
-    db.query("UPDATE user SET authlevel = ?, id_sagra = ? where user_email = ?",[data.authlevel, data.id_sagra, data.user_email], (err,results)=> {
+    db.query("UPDATE user SET authlevel = ? where id_sagra = ? and user_email = ?",[data.authlevel, data.id_sagra, data.user_email], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

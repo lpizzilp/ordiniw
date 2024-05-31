@@ -90,20 +90,21 @@ export default {
 
 
         async validateuser() {
-            let Adminuser = await axios.get('/users/' + this.loginObj.email);
+            console.log('/users/' + sessionStorage.getItem('SagraId') +'/'+ this.loginObj.email)
+            let Adminuser = await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ this.loginObj.email);
             let response = Adminuser.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
                 Makelog(response);
             }
 
+            console.log(Adminuser.data.length)
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
-
             } else if (Adminuser.data.authlevel != 0) {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
-                    sessionStorage.setItem('AdminSagraId', (await axios.get('/users/' + this.loginObj.email)).data.id_sagra);
+                    sessionStorage.setItem('AdminSagraId', (await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ sessionStorage.getItem('Admin'))).data.id_sagra);
                     if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != "") {
                         this.matchUser = true
                         let data = {
@@ -121,7 +122,7 @@ export default {
                 this.matchUser = undefined
             }
         },
-        
+
         async handleSubmit(e) {
             this.checkForm();
             e.preventDefault();
@@ -273,15 +274,15 @@ export default {
 
 @media (max-width: 576px) {
 
-.form-group .fa-eye-slash,
-.form-group .fa-eye {
-    position: absolute;
-    top: 98px;
-    left: 265px;
-    text-align: center;
-    padding-left: 5px;
-    font-size: 20px;
-}
+    .form-group .fa-eye-slash,
+    .form-group .fa-eye {
+        position: absolute;
+        top: 98px;
+        left: 265px;
+        text-align: center;
+        padding-left: 5px;
+        font-size: 20px;
+    }
 
 }
 </style>

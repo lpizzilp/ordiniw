@@ -100,7 +100,7 @@ export default {
 
         async getName() {
             let user = ''
-            user = (await axios.get('/users/' + sessionStorage.getItem('Admin'))).data.user_name.split(' ')
+            user = (await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ sessionStorage.getItem('Admin'))).data.user_name.split(' ')
             this.nav_name = user[0]
         },
 

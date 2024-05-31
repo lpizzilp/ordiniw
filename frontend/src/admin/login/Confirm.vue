@@ -100,7 +100,7 @@ export default {
         },
 
         async getuser() {
-            let Adminuser = await axios.get('/users/' + parametriObj.email);
+            let Adminuser = await axios.get('/users/' + parametriObj.id +'/'+ parametriObj.email);
             let response = Adminuser.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
@@ -182,6 +182,7 @@ export default {
                         id_sagra: this.ConfirmObj.id_sagra,
                         authlevel: this.ConfirmObj.authlevel,
                     }
+                    console.log(data)
                     await axios.put("/users/update/", data);
 
                     data = {

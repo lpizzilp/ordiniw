@@ -186,7 +186,7 @@ export default {
                 e.preventDefault();
             } else {
                 e.preventDefault();
-                let data = await axios.get('/users/' + this.registerObj.email);
+                let data = await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ this.registerObj.email);
                 let response = data.request.response
                 if (response.includes("{\"code\"")) {
                     this.Quickerrore = true

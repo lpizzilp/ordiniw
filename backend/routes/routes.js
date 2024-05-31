@@ -122,7 +122,7 @@ router.delete("/api/foods/:id", deleteFood);
 router.get("/api/users", allUsers)
 
 // get user
-router.get("/api/users/:name", showAUser);
+router.get("/api/users/:id/:email", showAUser);
 
 // create account
 router.post("/api/users/", createAccount);

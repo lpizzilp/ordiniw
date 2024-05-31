@@ -152,7 +152,7 @@ CREATE TABLE `user` (
   `user_name` varchar(50) DEFAULT NULL,
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_un` (`user_email`)
+  UNIQUE KEY `user_id_sagra_IDX` (`id_sagra`,`user_email`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
