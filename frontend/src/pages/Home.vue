@@ -14,7 +14,7 @@
                 <span v-if="Btn[3] == 1 || Btn[5] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button @click="handleSubmit('TAB')" v-if="Btn[3] == 1 || Btn[5] == 1" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Tabellone
-                    Eliminacode
+                    Eliminacode / Info
                 </button><br>
                 <span v-if="linksito[0] != null" style="padding-left: 30px;">Nel frattempo</span><br>
                 <a v-if="linksito[0] != null" :href="Btn[8]" target="_blank" class="btn"
