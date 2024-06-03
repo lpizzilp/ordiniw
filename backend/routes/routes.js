@@ -133,7 +133,7 @@ router.post("/api/users/error/", Errors);
 // update authlevel
 router.put("/api/users/update/", updateUserauthlevel);
 
-router.delete("/api/users/delete/:email", Userdelete);
+router.delete("/api/users/delete/:email/:sagra", Userdelete);
 
 
 ////////////////////////// MAIL ////////////////////////////////

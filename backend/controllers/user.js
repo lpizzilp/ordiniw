@@ -60,7 +60,7 @@ export const updateUserauthlevel=(req,res)=>{
 
 // delete user
 export const Userdelete = (req,res)=>{
-    deleteuserbyemail(req.params.email,(err,results)=> {
+    deleteuserbyemail(req.params.email,req.params.sagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

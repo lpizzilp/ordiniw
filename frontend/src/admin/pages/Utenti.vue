@@ -20,7 +20,7 @@
             <table class="project-list" id="Tabella">
                 <thead>
                     <tr>
-                        <td>Id</td>
+                        <td>Id sagra</td>
                         <td>Nome</td>
                         <td>Email</td>
                         <td>Attivo</td>
@@ -29,7 +29,7 @@
                 <tbody>
                     <tr v-for="(t, index) in filterUte" :key="t.user_id" @click="Selectriga(index, t)"
                         @dblclick="GestClick('Modifica')">
-                        <td style="border-right: 2px inset #27ae60; background-color: whitesmoke;">{{ t.user_id }}</td>
+                        <td style="border-right: 2px inset #27ae60; background-color: whitesmoke;">{{ t.id_sagra }}</td>
                         <td style="border-right: 2px inset #27ae60;">{{ t.user_name }}</td>
                         <td style="border-right: 2px inset #27ae60; text-transform: none">{{ t.user_email }}</td>
                         <td style="display: none;">{{ t.user_password }}</td>
@@ -62,6 +62,15 @@
                         class="form-control" v-model="ModifyObj.email"
                         style="background-color: rgba(0, 0, 0, 0.5); color: whitesmoke;" />
                 </div>
+
+                <div class="form-group">
+                    <label for="uEmail">Sagra:
+                    </label>
+                    <input type="email" name="uEmail" readonly :placeholder="ModifyObj.id_sagra" id="uEmail"
+                        class="form-control" v-model="ModifyObj.id_sagra"
+                        style="background-color: rgba(0, 0, 0, 0.5); color: whitesmoke;" />
+                </div>
+
 
                 <div class="form-group">
                     <label for="uPass">Password:
@@ -153,7 +162,7 @@ export default {
         async Rigadata() {
             var Tabella = document.getElementById("Tabella");
             var riga = Tabella.rows[this.Nriga];
-            this.ModifyObj.id = riga.cells[0].innerHTML
+            this.ModifyObj.id_sagra = riga.cells[0].innerHTML
             this.ModifyObj.name = riga.cells[1].innerHTML
             this.ModifyObj.email = riga.cells[2].innerHTML
             this.ModifyObj.pass = riga.cells[3].innerHTML
@@ -178,11 +187,13 @@ export default {
                     break;
 
                 case 'Elimina':
-                    await axios.delete("/users/delete/" + this.ModifyObj.email)
+                    await axios.delete("/users/delete/" + this.ModifyObj.email + '/' + this.ModifyObj.id_sagra)
+                    this.Showmodifica = false
+                    this.GetUte()
                     break;
 
                 case 'Conferma':
-                    await axios.delete("/users/delete/" + this.ModifyObj.email)
+                    await axios.delete("/users/delete/" + this.ModifyObj.email + '/' + this.ModifyObj.id_sagra)
                     await this.Confuser()
                     break;
 

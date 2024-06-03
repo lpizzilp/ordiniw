@@ -52,8 +52,8 @@ export const updateauthlevel = (data, result) => {
 };
 
 //delete user
-export const deleteuserbyemail = (email, result) => {
-    db.query("Delete from `user`  where user_email = ?",[email], (err,results)=> {
+export const deleteuserbyemail = (email, sagra, result) => {
+    db.query("Delete from `user`  where user_email = ? and id_sagra = ?",[email, sagra], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
