@@ -103,6 +103,7 @@ export default {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
                     sessionStorage.setItem('AdminSagraId',Adminuser.data.id_sagra );
+                    console.log(sessionStorage.getItem('AdminSagraId') + 'nel login')
                     if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != "") {
                         this.matchUser = true
                         let data = {

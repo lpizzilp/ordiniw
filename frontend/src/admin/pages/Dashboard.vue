@@ -130,6 +130,7 @@ export default {
         if (!this.admin) {
             this.$router.push("/login");
         } else {
+            console.log(sessionStorage.getItem('AdminSagraId'))
             this.GetSwitch()
         }
     },
@@ -186,7 +187,7 @@ export default {
             replacestatus = replacestatus.replace(/Disabilitato/g, '0')
             let uniondata = {
                 type: replacestatus,
-                id: this.idSagra
+                id: sessionStorage.getItem('AdminSagraId')
             }
            
             await axios.put('/SagraComand', uniondata)
