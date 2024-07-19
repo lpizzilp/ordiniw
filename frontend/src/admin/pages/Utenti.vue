@@ -27,8 +27,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(t, index) in filterUte" :key="t.user_id" @click="Selectriga(index, t)"
-                        @dblclick="GestClick('Modifica')">
+                    <tr  v-for="(t, index) in filterUte" :key="t.user_id" @click="Selectriga(index, t)"
+                        @dblclick="GestClick('Modifica')" :style="{ display: t.id_sagra == Idsagra ? null : 'none',}">
                         <td style="border-right: 2px inset #27ae60; background-color: whitesmoke;">{{ t.id_sagra }}</td>
                         <td style="border-right: 2px inset #27ae60;">{{ t.user_name }}</td>
                         <td style="border-right: 2px inset #27ae60; text-transform: none">{{ t.user_email }}</td>
@@ -107,10 +107,12 @@ export default {
     name: 'Utenti',
 
     data() {
+        let sagraid = sessionStorage.getItem('AdminSagraId')
         return {
             ModifyObj: { id: "", name: "", email: "", pass: "", id_sagra: "", authlevel: "" },
             Showmodifica: false,
             status: [],
+            Idsagra: sagraid,
             Ute: [],
             Nriga: null,
             errors: [],
