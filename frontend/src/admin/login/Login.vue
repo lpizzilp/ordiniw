@@ -12,11 +12,11 @@
 
                 <div class="form-group">
                     <input type="email" id="uEmail" name="uEmail" class="form-control" placeholder="Inserisci l'email"
-                        v-model="loginObj.email" />
+                       autocomplete="username" v-model="loginObj.email" />
                 </div>
 
                 <div class="form-group">
-                    <input type="password" id="uPass" name="uPass" class="form-control"
+                    <input type="password" id="uPass" name="uPass" class="form-control" autocomplete="current-password"
                         placeholder="Inserisci la tua password" v-model="loginObj.pass" />
                     <i v-if="showPassword == false" class="fa-regular fa-eye" @click="ShowPass()"></i>
                     <i v-else class="fa-regular fa-eye-slash" @click="ShowPass()"></i>
@@ -90,7 +90,6 @@ export default {
 
 
         async validateuser() {
-            console.log('/users/' + sessionStorage.getItem('SagraId') +'/'+ this.loginObj.email)
             let Adminuser = await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ this.loginObj.email);
             let response = Adminuser.request.response
             if (response.includes("{\"code\"")) {
@@ -98,13 +97,12 @@ export default {
                 Makelog(response);
             }
 
-            console.log(Adminuser.data.length)
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
             } else if (Adminuser.data.authlevel != 0) {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
-                    sessionStorage.setItem('AdminSagraId', (await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ sessionStorage.getItem('Admin'))).data.id_sagra);
+                    sessionStorage.setItem('AdminSagraId',Adminuser.data.id_sagra );
                     if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != "") {
                         this.matchUser = true
                         let data = {

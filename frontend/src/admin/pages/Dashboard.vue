@@ -123,7 +123,6 @@ export default {
             status: [],
             toggle: [],
             Quickerrore: false,
-            idSagra: null
         }
     },
 
@@ -131,7 +130,6 @@ export default {
         if (!this.admin) {
             this.$router.push("/login");
         } else {
-            this.idSagra = sessionStorage.getItem('AdminSagraId')
             this.GetSwitch()
         }
     },
@@ -144,7 +142,7 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async GetSwitch() {
-            let switchdata = await axios.get('/sagra/controlli/' + this.idSagra)
+            let switchdata = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
             let response = switchdata.request.response
             if (response.includes("{\"code\"")) {
                 this.Quickerrore = true
@@ -190,7 +188,7 @@ export default {
                 type: replacestatus,
                 id: this.idSagra
             }
-            console.log(uniondata.id)
+           
             await axios.put('/SagraComand', uniondata)
             Makelog((this.toggle[index] === true) ? "Disabilitazione" : "Abilitazione","info")
         },

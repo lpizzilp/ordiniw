@@ -277,7 +277,6 @@ export default {
 
             let IsVariante = this.filterFoods.find(item => item.food_id == this.cartItem[i])
             IsVariante = IsVariante.FlgVariante == 0 ? false : true
-            //console.log(IsVariante)
             if (IsVariante) {
                 let Nonvariante = this.filterFoods.findIndex(item => item.FlgVariante == 0)
                 let Maxqta = this.itemQuantity[Nonvariante]
