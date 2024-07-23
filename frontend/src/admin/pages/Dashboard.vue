@@ -130,7 +130,6 @@ export default {
         if (!this.admin) {
             this.$router.push("/login");
         } else {
-            console.log(sessionStorage.getItem('AdminSagraId'))
             this.GetSwitch()
         }
     },

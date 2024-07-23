@@ -343,6 +343,7 @@ export default {
                     axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                 }
+
                 let bookId = (await axios.get("/prenotazione/new")).data;
                 if (bookId == "") {
                     if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
@@ -350,9 +351,14 @@ export default {
                     } else {
                         bookId = sessionStorage.getItem('Bill')
                     }
-                }else{
-                    bookId = parseInt(bookId.book_id) + 1;
+                } else {
+                    if (bookId.book_id < sessionStorage.getItem('startprt')) {
+                        bookId =  sessionStorage.getItem('startprt')
+                    } else {
+                        bookId = parseInt(bookId.book_id) + 1;
+                    }
                 }
+
                 let dataprenotazione = {
                     book_id: parseInt(bookId),
                     user_id: sessionStorage.getItem('Username'),
@@ -378,6 +384,7 @@ export default {
                 }
                 sessionStorage.setItem('Bill', dataprenotazione.book_id)
                 sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
+
             //ORDINI ----------------------------------------------------         
             } else {
                 if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
