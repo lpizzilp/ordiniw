@@ -27,7 +27,9 @@
         </div>
         <div v-else-if="from === 'I'" class="quick-view-inner">
             <h2 style="color: #27ae60;">Inviata!</h2><br>
-            <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.
+            <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.<br>
+            <h4>(Se non la trovi verifica anche nello Spam)</h4>
+
                 <slot></slot>
             </h3>
             <button v-if="Isprenot != 'PRE'" class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>

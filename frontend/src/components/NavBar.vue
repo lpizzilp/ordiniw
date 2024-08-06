@@ -43,6 +43,7 @@ for (var i = 0; i < parametri.length; i++) {
 import router from "@/router";
 import axios from "axios";
 import { showErrore } from '@/glbFunctions';
+import { UAParser } from 'ua-parser-js';
 
 export default {
     name: 'NavBar',
@@ -99,8 +100,24 @@ export default {
 
         async getsagra() {
             if (!sessionStorage.getItem('Siglanav')) {
-                try {var sagra = await axios.get('/sagra/' + parametriObj.id)
-                    if (sagra.errMsg) {showErrore(); return; }} catch (error) {showErrore(); return;
+                const parser = new UAParser();
+                    let UAresult = parser.getResult();
+                    var os = UAresult.os.name ;
+                    os = os.toUpperCase(); 
+                try {
+                    var sagra = await axios.get('/sagra/' + parametriObj.id);
+                    if (sagra.errMsg) {
+                        if (os != 'IOS'){
+                            showErrore();
+                            return; 
+                        }else return;   
+                    }
+                } catch (error) {
+                    if (os != 'IOS'){
+                            showErrore();
+                            return; 
+                        }else return;   
+                    
                 }
                 if (sagra.data.length == 0) {
                     sessionStorage.setItem('SagraBottoni', 0)
