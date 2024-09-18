@@ -96,8 +96,51 @@ export const updateContrOrdini = (data,result) => {
     });
 };
 
+export const updateContrVisibilita = (data,result) => {
+    db.query("UPDATE catalogo_sagre SET MaskVisibilita = ? WHERE id_sagra = ?",[data.type, data.id],(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+export const updateContrObbligo = (data,result) => {
+    db.query("UPDATE catalogo_sagre SET MaskObbligo = ? WHERE id_sagra = ?",[data.type, data.id],(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
 export const getContrOrdini = (id,result) => {
     db.query("Select StrOrdini from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+export const getContrVisibilita = (id,result) => {
+    db.query("Select MaskVisibilita from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
+        if (err){
+            console.log(err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+export const getContrObbligo = (id,result) => {
+    db.query("Select MaskObbligo from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

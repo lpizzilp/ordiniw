@@ -6,7 +6,11 @@ import {
     getAllSagre,
     updateContrOrdini,
     getContrOrdini,
-    Wakeup
+    Wakeup,
+    getContrVisibilita,
+    getContrObbligo,
+    updateContrVisibilita,
+    updateContrObbligo
 } from "../models/CatalogoModel.js";
 
 
@@ -79,9 +83,53 @@ export const updateControlOrdini=(req,res)=>{
     });
 };
 
+export const updateControlVisibilita=(req,res)=>{
+    const data = req.body
+    updateContrVisibilita(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const updateControlObbligo=(req,res)=>{
+    const data = req.body
+    updateContrObbligo(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
 export const GetControlOrdini=(req,res)=>{
     const id = req.params.id;
     getContrOrdini(id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const GetControlVisibilita=(req,res)=>{
+    const id = req.params.id;
+    getContrVisibilita(id,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const GetControlObbligo=(req,res)=>{
+    const id = req.params.id;
+    getContrObbligo(id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

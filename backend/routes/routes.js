@@ -74,6 +74,10 @@ import {
     updateControlOrdini,
     GetControlOrdini,
     KeepAlive,
+    GetControlVisibilita,
+    GetControlObbligo,
+    updateControlVisibilita,
+    updateControlObbligo,
 } from "../controllers/catalogo.js";
 
 import {
@@ -218,9 +222,13 @@ router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/keepalive", KeepAlive)
 router.get("/api/sagra/:sigla", getSagraSig);
 router.get("/api/sagra/controlli/:id", GetControlOrdini);
+router.get("/api/sagra/visibilita/:id", GetControlVisibilita);
+router.get("/api/sagra/obbligo/:id", GetControlObbligo);
 router.post("/api/catalogosagre", createSagra);
 router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);
 router.put("/api/sagraComand", updateControlOrdini);
+router.put("/api/sagraVisibilita", updateControlVisibilita)
+router.put("/api/sagraObbligo", updateControlObbligo)
 
 ////////////////////////// Bill Details ////////////////////////////////
 router.post("/api/importfood", importAnagrafica);
