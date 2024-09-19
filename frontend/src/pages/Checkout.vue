@@ -9,20 +9,20 @@
                 <div v-if="type === 'W'">
                     <div class="form-group details-group" id="Tavolo">
                         <h4>Completa dettagli ordine</h4>
-                        <div class="form-group">
+                        <div class="form-group" :style="{ display: maskVisibilita[0] == 1 ? 'block' : 'none',}">
                             <input type="text" name="Tavolo" id="Tavolo" placeholder="Inserisci il numero del tavolo"
                                 class="form-control" v-model="checkoutObj.Tavolo" />
                             <p class="error-mess" v-if="errorObj.TavoloErr.length > 0">{{ errorObj.TavoloErr[0] }}</p>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" :style="{ display: maskVisibilita[1] == 1 ? 'block' : 'none',}">
                             <input type="number" name="Coperti" id="Coperti"
                                 placeholder="Inserisci il numero di coperti" class="form-control"
                                 v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
                             <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
                         </div><br>
 
-                        <div class="form-group">
+                        <div class="form-group" :style="{ display: maskVisibilita[2] == 1 ? 'block' : 'none',}">
                             <input type="text" name="Nominativo" id="Nominativo"
                                 placeholder="Campo nominativo, Non obbligatorio" class="form-control"
                                 v-model="checkoutObj.Nominativo" />
@@ -31,10 +31,11 @@
                             </p>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" :style="{ display: maskVisibilita[3] == 1 ? 'block' : 'none',}">
                             <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
                                 placeholder="Inserisci Nota o Variante, Non obbligatorio"
                                 v-model="checkoutObj.Note"></textarea>
+                                <p class="error-mess" v-if="errorObj.NoteErr.length > 0">{{ errorObj.NoteErr[0] }}</p>
                         </div>
 
                     </div>
@@ -130,9 +131,11 @@ export default {
     data() {
         return {
             checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Telefono: "", Type: "", paymentMethod: "cash", Note: "" },
-            errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], payErr: [] },
+            errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], NoteErr: [], payErr: [] },
             cartItem: [],
             itemQuantity: [],
+            maskVisibilita: [],
+            maskObbligo: [],
             showQuickView: false,
             Ute: sessionStorage.getItem('MatchUser'),
             type: sessionStorage.getItem('filtro') == 'PRE' ? sessionStorage.getItem('filtro') : sessionStorage.getItem('TipoOrdine'),
@@ -141,6 +144,7 @@ export default {
         };
     },
     created() {
+        this.buildForm();
         this.getAllCartItem();
     },
     computed: {
@@ -150,6 +154,12 @@ export default {
         },
     },
     methods: {
+
+        buildForm () {
+            let bitData = sessionStorage.getItem('SagraBottoni').split("µ")
+           this.maskVisibilita = bitData[9].split('')
+           this.maskObbligo = bitData[10].split('')
+        },
 
         handleConfermaClick() {
             // Disabilita il pulsante
@@ -220,6 +230,7 @@ export default {
             this.errorObj.TavoloErr = [];
             this.errorObj.CopertiErr = [];
             this.errorObj.NominativoErr = [];
+            this.errorObj.NoteErr = [];
             this.errorObj.payErr = [];
         },
 
@@ -247,13 +258,22 @@ export default {
             switch (this.type) {
                 case 'W':
                     // Tavolo validate
-                    if (!this.checkoutObj.Tavolo) {
+                    if (this.maskObbligo[0] == 1 && !this.checkoutObj.Tavolo) {
                         this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
                     }
 
                     // Coperti validate
-                    if (!this.checkoutObj.Coperti) {
+                    if (this.maskObbligo[1] == 1 && !this.checkoutObj.Coperti) {
                         this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
+                    }
+
+                    // Nominativo validate
+                    if (this.maskObbligo[2] == 1 && !this.checkoutObj.Nominativo) {
+                        this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
+                    }
+
+                    if (this.maskObbligo[3] == 1 && !this.checkoutObj.Note) {
+                        this.errorObj.NoteErr.push("Il campo note è oblligatorio");
                     }
 
                     break;
@@ -263,6 +283,7 @@ export default {
                         this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
                     }
                     break;
+
                 case 'PRE':
                     // Nominativo validate
                     if (!this.checkoutObj.Nominativo) {
