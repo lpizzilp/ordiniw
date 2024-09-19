@@ -258,21 +258,21 @@ export default {
             switch (this.type) {
                 case 'W':
                     // Tavolo validate
-                    if (this.maskObbligo[0] == 1 && !this.checkoutObj.Tavolo) {
+                    if (this.maskVisibilita[0] == 1 && this.maskObbligo[0] == 1 && !this.checkoutObj.Tavolo) {
                         this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
                     }
 
                     // Coperti validate
-                    if (this.maskObbligo[1] == 1 && !this.checkoutObj.Coperti) {
+                    if (this.maskVisibilita[1] == 1 && this.maskObbligo[1] == 1 && !this.checkoutObj.Coperti) {
                         this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
                     }
 
                     // Nominativo validate
-                    if (this.maskObbligo[2] == 1 && !this.checkoutObj.Nominativo) {
+                    if (this.maskVisibilita[2] == 1 && this.maskObbligo[2] == 1 && !this.checkoutObj.Nominativo) {
                         this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
                     }
 
-                    if (this.maskObbligo[3] == 1 && !this.checkoutObj.Note) {
+                    if (this.maskVisibilita[3] == 1 && this.maskObbligo[3] == 1 && !this.checkoutObj.Note) {
                         this.errorObj.NoteErr.push("Il campo note è oblligatorio");
                     }
 

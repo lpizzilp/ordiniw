@@ -124,7 +124,7 @@
                             checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[4] == 'Abilitato'">
                     <td style="padding-left: 0px;">
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
@@ -135,7 +135,7 @@
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[4] == 'Abilitato'">
                     <td>
                         <h3>Obbligatorietà campo tavolo</h3>
                     </td>
@@ -160,7 +160,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <h3>Visibilità campo Asporto</h3>
+                        <h3>Visibilità campo Coperti</h3>
                     </td>
                     <td style="text-align: center;">
                         <h3>{{ status[6] }}</h3>
@@ -170,7 +170,7 @@
                             checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[6] == 'Abilitato'">
                     <td style="padding-left: 0px;">
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
@@ -181,9 +181,9 @@
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[6] == 'Abilitato'">
                     <td>
-                        <h3>Obbligatorietà campo Asporto</h3>
+                        <h3>Obbligatorietà campo Coperti</h3>
                     </td>
                     <td style="text-align: center;">
                         <h3>{{ status[7] }}</h3>
@@ -216,7 +216,7 @@
                             checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[8] == 'Abilitato'">
                     <td style="padding-left: 0px;">
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
@@ -227,7 +227,7 @@
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[8] == 'Abilitato'">
                     <td>
                         <h3>Obbligatorietà campo Nominativo</h3>
                     </td>
@@ -262,7 +262,7 @@
                             checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[10] == 'Abilitato'">
                     <td style="padding-left: 0px;">
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
@@ -273,7 +273,7 @@
                         <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="status[10] == 'Abilitato'">
                     <td>
                         <h3>Obbligatorietà campo Note</h3>
                     </td>
