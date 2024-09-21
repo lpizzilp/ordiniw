@@ -6,91 +6,30 @@
                     <h3>Manca solo un passaggio</h3>
                 </div>
 
-                <div v-if="type === 'W'">
-                    <div class="form-group details-group" id="Tavolo">
-                        <h4>Completa dettagli ordine</h4>
-                        <div class="form-group" :style="{ display: maskVisibilita[0] == 1 ? 'block' : 'none',}">
-                            <input type="text" name="Tavolo" id="Tavolo" placeholder="Inserisci il numero del tavolo"
-                                class="form-control" v-model="checkoutObj.Tavolo" />
-                            <p class="error-mess" v-if="errorObj.TavoloErr.length > 0">{{ errorObj.TavoloErr[0] }}</p>
-                        </div>
+                <!-- openai dynamic versione  --------------------------------------------->
+                <template v-for="(field, index) in fields" :key="field.name">
+                    <div class="form-group" :style="{ display: getFieldVisibility(index) }">
+                        <component
+                            :is="field.type === 'textarea' ? 'textarea' : 'input'"  
+                            :type="field.inputType || 'text'"
+                            :name="field.name"
+                            :id="field.name"
+                            :placeholder="getPlaceholderText(field.name, index)" 
+                            class="form-control"
+                            :value="checkoutObj[field.name]"  
+                            @input="updateFieldValue($event, field.name)"  
+                            v-bind="field.attrs || {}"                        
+                        ></component>
 
-                        <div class="form-group" :style="{ display: maskVisibilita[1] == 1 ? 'block' : 'none',}">
-                            <input type="number" name="Coperti" id="Coperti"
-                                placeholder="Inserisci il numero di coperti" class="form-control"
-                                v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
-                            <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
-                        </div><br>
-
-                        <div class="form-group" :style="{ display: maskVisibilita[2] == 1 ? 'block' : 'none',}">
-                            <input type="text" name="Nominativo" id="Nominativo"
-                                placeholder="Campo nominativo, Non obbligatorio" class="form-control"
-                                v-model="checkoutObj.Nominativo" />
-                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0]
-                                }}
-                            </p>
-                        </div>
-
-                        <div class="form-group" :style="{ display: maskVisibilita[3] == 1 ? 'block' : 'none',}">
-                            <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
-                                placeholder="Inserisci Nota o Variante, Non obbligatorio"
-                                v-model="checkoutObj.Note"></textarea>
-                                <p class="error-mess" v-if="errorObj.NoteErr.length > 0">{{ errorObj.NoteErr[0] }}</p>
-                        </div>
-
+                        <p class="error-mess" v-if="errorObj[`${field.name}Err`] && errorObj[`${field.name}Err`].length > 0">
+                            {{ errorObj[`${field.name}Err`][0] }}
+                        </p>
                     </div>
-                </div>
-                <div v-else-if="type === 'Y'">
-                    <div class="form-group details-group" id="Asporto">
-                        <h4>Dettagli dell'acquirente</h4>
-                        <div class="form-group">
-                            <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
-                                class="form-control" v-model="checkoutObj.Nominativo" />
-                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0]
-                                }}
-                            </p>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
-                                placeholder="Inserisci Nota o Variante, Non obbligatorio"
-                                v-model="checkoutObj.Note"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div v-else-if="type === 'PRE'">
-                    <div class="form-group details-group" id="Asporto">
-                        <h4>Dettagli dell'acquirente</h4>
-                        <div class="form-group">
-                            <input type="text" name="Nominativo" id="Nominativo" placeholder="Inserisci un nominativo"
-                                class="form-control" v-model="checkoutObj.Nominativo" />
-                            <p class="error-mess" v-if="errorObj.NominativoErr.length > 0">{{ errorObj.NominativoErr[0]
-                                }}
-                            </p>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="number" name="Coperti" id="Coperti"
-                                placeholder="Inserisci il numero di coperti" class="form-control"
-                                v-model="checkoutObj.Coperti" min="1" @change="calculatePersonaPrice()" />
-                            <p class="error-mess" v-if="errorObj.CopertiErr.length > 0">{{ errorObj.CopertiErr[0] }}</p>
-                        </div><br>
-
-                        <div class="form-group">
-                            <input type="tel" name="Telefono" id="Telefono"
-                                placeholder="Inserisci un numero di telefono, Non obbligatorio" class="form-control"
-                                v-model="checkoutObj.Telefono" />
-                        </div>
-
-                        <div class="form-group">
-                            <textarea class="form-control" id="text" name="text" rows="2" cols="50" maxlength="100"
-                                placeholder="Inserisci una nota o un desiderata, Non obbligatorio"
-                                v-model="checkoutObj.Note"></textarea>
-                        </div>
-                    </div>
-                </div>
+                </template>                 
+                <!-- openai dynamic versione  ------------------------------------------>
 
                 <div class="form-group details-group" id="General">
+                    <div>proacaca {{ checkoutObj.Note }}fssd</div>                    
                     <div class="checkout-headings">
                         <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
                         <h3 v-if="Ute"><span>Totale per persona {{ calculatePersonaPrice() }}</span></h3>
@@ -132,6 +71,7 @@ export default {
         return {
             checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Telefono: "", Type: "", paymentMethod: "cash", Note: "" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], NoteErr: [], payErr: [] },
+             tempCoperti: "",
             cartItem: [],
             itemQuantity: [],
             maskVisibilita: [],
@@ -152,8 +92,139 @@ export default {
         filterFoods: function () {
             return this.allFoods.filter((f) => this.matchID(f, this.cartItem));
         },
+        /*---------------------------------------------- */
+        /* Gestione logiche Mashera Visibilità e Obbligo */
+        /*---------------------------------------------- */
+        formId() {
+        return this.type === 'W' ? 'Tavolo' : 'Asporto';
+        },
+        formTitle() {
+        return this.type === 'W' ? 'Completa dettagli ordine' : 'Dettagli dell\'acquirente';
+        },
+        fields() {
+            const commonFields = [
+                {
+                name: 'Nominativo',
+                type: 'input',
+                placeholder: this.type === 'PRE' ? 'Inserisci un nominativo' : 'Campo nominativo, Non obbligatorio'
+                },
+                {
+                name: 'Note',
+                type: 'textarea',
+                attrs: { rows: 2, cols: 50, maxlength: 100 },
+                placeholder: this.type === 'PRE' ? 'Inserisci una nota o un desiderata, Non obbligatorio' : 'Inserisci Nota o Variante, Non obbligatorio'
+                }
+            ];
+
+            const typeSpecificFields = {
+                'W': [
+                    {
+                        name: 'Tavolo',
+                        type: 'input',
+                        placeholder: 'Inserisci il numero del tavolo'
+                    },
+                    {
+                        name: 'Coperti',
+                        type: 'input',
+                        inputType: 'number',
+                        placeholder: 'Inserisci il numero di coperti',
+                        attrs: { min: 1 },
+                        onChange: this.calculatePersonaPrice
+                    }
+                ],
+                'Y': [
+                    {
+                        name: 'Nominativo',
+                        type: 'input',
+                        placeholder: 'Inserisci un nominativo'
+                    }
+                ],
+                'PRE': [
+                    {
+                        name: 'Coperti',
+                        type: 'input',
+                        inputType: 'number',
+                        placeholder: 'Inserisci il numero di coperti',
+                        attrs: { min: 1 },
+                        onChange: this.calculatePersonaPrice
+                    },
+                    {
+                        name: 'Telefono',
+                        type: 'input',
+                        inputType: 'tel',
+                        placeholder: 'Inserisci un numero di telefono, Non obbligatorio'
+                    }
+                ]
+            };
+
+            return [...(typeSpecificFields[this.type] || []), ...commonFields];
+        }
+        /*end---------------------------------------------- */        
     },
     methods: {
+        /*---------------------------------------------- */
+        /* Gestione logiche Mashera Visibilità e Obbligo */
+        /*---------------------------------------------- */
+        getPlaceholderText(fieldName, index) {
+            const maskIndex = this.type === 'Y' ? index + 5 : index;  // Adatta l'index come hai fatto per la visibilità
+            const isObligatory = this.maskObbligo[maskIndex] == 1;
+            const basePlaceholder = this.fields.find(f => f.name === fieldName).placeholder || '';
+            return isObligatory ? `${basePlaceholder} (Obbligatorio)` : `${basePlaceholder} (Facoltativo)`;
+        },        
+        updateFieldValue(event, fieldName) {
+            this.checkoutObj[fieldName] = event.target.value;  // Aggiorniamo direttamente il valore nel checkoutObj
+            this.validateField(fieldName);  // Validiamo il campo dopo l'input
+        },
+        updateCheckoutObj() {
+
+            console.log(this.checkoutObj.Coperti);
+        } ,
+        getFieldVisibility(index) {
+            const maskIndex = this.type === 'Y' ? index + 5 : index;
+            return this.maskVisibilita[maskIndex] == 1 ? 'block' : 'none';
+        },
+        checkForm() {
+            this.resetCheckErr();
+            const startIndex = this.type === 'Y' ? 5 : 0;
+            
+            this.fields.forEach((field, index) => {
+                const maskIndex = startIndex + index;
+                if (this.maskVisibilita[maskIndex] == 1 && this.maskObbligo[maskIndex] == 1 && !this.checkoutObj[field.name]) {
+                this.errorObj[`${field.name}Err`].push(`Il campo ${field.name.toLowerCase()} è obbligatorio`);
+                }
+            });
+
+            if (this.type === 'PRE') {
+                if (!this.checkoutObj.Nominativo) {
+                this.errorObj.NominativoErr.push("Il campo nominativo è obbligatorio");
+                }
+                if (!this.checkoutObj.Coperti) {
+                this.errorObj.CopertiErr.push("Il campo coperti è obbligatorio");
+                }
+            }
+        },
+        resetCheckErr() {
+            Object.keys(this.errorObj).forEach(key => {
+                this.errorObj[key] = [];
+            });
+        },
+
+        validateField(fieldName) {
+            //console.log(`Current value for ${fieldName}:`, this.checkoutObj[fieldName]);
+            const startIndex = this.type === 'Y' ? 5 : 0;
+            const fieldIndex = this.fields.findIndex(f => f.name === fieldName);
+            const maskIndex = startIndex + fieldIndex;
+
+            this.errorObj[`${fieldName}Err`] = [];
+
+            //console.log(`Validating ${fieldName}:`, this.checkoutObj[fieldName]);
+
+
+            if (this.maskVisibilita[maskIndex] == 1 && this.maskObbligo[maskIndex] == 1 && !this.checkoutObj[fieldName]) {
+            this.errorObj[`${fieldName}Err`].push(`Il campo ${fieldName.toLowerCase()} è obbligatorio`);
+            }
+        },        
+        /*-------------------------------------------END */
 
         buildForm () {
             let bitData = sessionStorage.getItem('SagraBottoni').split("µ")
@@ -225,15 +296,6 @@ export default {
             this.showQuickView = dataFromChild
             this.Quickerrore = false
         },
-
-        resetCheckErr: function () {
-            this.errorObj.TavoloErr = [];
-            this.errorObj.CopertiErr = [];
-            this.errorObj.NominativoErr = [];
-            this.errorObj.NoteErr = [];
-            this.errorObj.payErr = [];
-        },
-
         typeOrd: function (click) {
             if (click === "C") {
                 this.showQuickView = true
@@ -251,66 +313,6 @@ export default {
 
         inputUpcase: function (e) {
             e.target.value = e.target.value.toUpperCase();
-        },
-
-        checkForm: function () {
-            this.resetCheckErr();
-            switch (this.type) {
-                case 'W':
-                    // Tavolo validate
-                    if (this.maskVisibilita[0] == 1 && this.maskObbligo[0] == 1 && !this.checkoutObj.Tavolo) {
-                        this.errorObj.TavoloErr.push("Il campo tavoli è obbligatorio");
-                    }
-
-                    // Coperti validate
-                    if (this.maskVisibilita[1] == 1 && this.maskObbligo[1] == 1 && !this.checkoutObj.Coperti) {
-                        this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
-                    }
-
-                    // Nominativo validate
-                    if (this.maskVisibilita[2] == 1 && this.maskObbligo[2] == 1 && !this.checkoutObj.Nominativo) {
-                        this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
-                    }
-
-                    if (this.maskVisibilita[3] == 1 && this.maskObbligo[3] == 1 && !this.checkoutObj.Note) {
-                        this.errorObj.NoteErr.push("Il campo note è oblligatorio");
-                    }
-
-                    break;
-                case 'Y':
-                    // Nominativo validate
-                    if (!this.checkoutObj.Nominativo) {
-                        this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
-                    }
-                    break;
-
-                case 'PRE':
-                    // Nominativo validate
-                    if (!this.checkoutObj.Nominativo) {
-                        this.errorObj.NominativoErr.push("Il campo nominativo è oblligatorio");
-                    }
-                    // Coperti validate
-                    if (!this.checkoutObj.Coperti) {
-                        this.errorObj.CopertiErr.push("Il campo coperti è oblligatorio");
-                    }
-
-                    break;
-            }
-            if (/"/.test(this.checkoutObj.Tavolo)) {
-                this.checkoutObj.Tavolo = this.checkoutObj.Tavolo.replace(/"/g, '')
-            } if (/'/.test(this.checkoutObj.Tavolo)) {
-                this.checkoutObj.Tavolo = this.checkoutObj.Tavolo.replace(/'/g, '')
-            }
-            if (/"/.test(this.checkoutObj.Nominativo)) {
-                this.checkoutObj.Nominativo = this.checkoutObj.Nominativo.replace(/"/g, '')
-            } if ( /'/.test(this.checkoutObj.Nominativo)) {
-                this.checkoutObj.Nominativo = this.checkoutObj.Nominativo.replace(/'/g, "")
-            } 
-            if (/"/.test(this.checkoutObj.Note)) {
-                this.checkoutObj.Note = this.checkoutObj.Note.replace(/"/g, '')
-            } if (/'/.test(this.checkoutObj.Note)) {
-                this.checkoutObj.Note = this.checkoutObj.Note.replace(/'/g, "")
-            }
         },
 
         async sendBillDetails(billId, foodId, qty) {
