@@ -109,7 +109,12 @@
             <h2 @click="OpenGrid(2)"><i class="fa-solid fa-sliders"
                     style="padding-right: 2vh; color: #f38609;"></i>Preferenze Checkout
             </h2>
-            <i @click="OpenGrid(2)" class="fa-solid fa-chevron-up"></i>
+            <h3>Visualizza<button @click="TogleCheckout(0)" id="BtnT"
+                    style="margin-left: 10px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;"
+                    class="btn">Tavolo</button>
+                <button @click="TogleCheckout(1)" id="BtnA"
+                    style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" class="btn">Asporto</button>
+            </h3>
             <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
             <table class="project-list">
                 <tr>
@@ -312,6 +317,9 @@ export default {
             tabFunzioni: [true, true, true],
             status: [],
             toggle: [],
+            DataVisibilità: [],
+            DataObbligo: [],
+            buttonActive: 'T',
             Quickerrore: false,
         }
     },
@@ -319,9 +327,11 @@ export default {
     created() {
         if (!this.admin) {
             this.$router.push("/login");
-        } else {
-            this.GetSwitch()
         }
+    },
+
+    mounted() {
+        this.TogleCheckout(0)
     },
 
     computed: {
@@ -332,42 +342,54 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async GetSwitch() {
-            let switchdataOrdini = await axios.get('/sagra/controlli/' + sessionStorage.getItem('AdminSagraId'))
-            let switchdataVisibilita = await axios.get('/sagra/visibilita/' + sessionStorage.getItem('AdminSagraId'))
-            let switchdataObbligo = await axios.get('/sagra/obbligo/' + sessionStorage.getItem('AdminSagraId'))
-            let response = switchdataOrdini.request.response + " " + switchdataVisibilita.request.response + " " + switchdataObbligo
-            if (response.includes("{\"code\"")) {
-                this.Quickerrore = true
-            } else {
+            try {
+                const adminId = sessionStorage.getItem('AdminSagraId');
+                const [switchdataOrdini, switchdataVisibilita, switchdataObbligo] = await Promise.all([
+                    axios.get(`/sagra/controlli/${adminId}`),
+                    axios.get(`/sagra/visibilita/${adminId}`),
+                    axios.get(`/sagra/obbligo/${adminId}`)
+                ]);
+
+                this.DataVisibilità = switchdataVisibilita.data[0].MaskVisibilita.split('')
+                this.DataObbligo = switchdataObbligo.data[0].MaskObbligo.split('')
+
+                const puntoStart = this.buttonActive === 'T' ? 0 : 5;
+                if (`${switchdataOrdini.request.response} ${switchdataVisibilita.request.response} ${switchdataObbligo.request.response}`.includes("{\"code\"")) {
+                    this.Quickerrore = true;
+                    return;
+                }
+
+                const updateStatusToggle = (splitArray, startIndex, sequence) => {
+                    for (let i = startIndex; i < splitArray.length; i++) {
+                        const index = sequence[(startIndex == 5 ? (i - 5) : i)];
+                        this.status[index] = splitArray[i] == '0' ? 'Disabilitato' : 'Abilitato';
+                        this.toggle[index] = splitArray[i] != '0';
+                    }
+                };
+
                 if (switchdataOrdini.data.length > 0) {
-                    let switchsplit = switchdataOrdini.data[0].StrOrdini.split('')
-                    for (let i = 0; i < switchsplit.length; i++) {
-                        this.status[i] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
-                        this.toggle[i] = switchsplit[i] == 0 ? false : true
-                    }
+                    updateStatusToggle(switchdataOrdini.data[0].StrOrdini.split(''), 0, Array.from({ length: switchdataOrdini.data[0].StrOrdini.length }, (_, i) => i));
+                    updateStatusToggle(this.DataVisibilità, puntoStart, [4, 6, 8, 10]);
+                    updateStatusToggle(this.DataObbligo, puntoStart, [5, 7, 9, 11]);
                 }
-                if (switchdataVisibilita.data.length > 0) {
-                    console.log(switchdataVisibilita)
-                    let switchsplit = switchdataVisibilita.data[0].MaskVisibilita.split('')
-                    for (let i = 0; i < switchsplit.length; i++) {
-                        let sequence = [4, 6, 8, 10]
-                        this.status[sequence[i]] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
-                        this.toggle[sequence[i]] = switchsplit[i] == 0 ? false : true
-                    }
-                }
-                if (switchdataObbligo.data.length > 0) {
-                    let switchsplit = switchdataObbligo.data[0].MaskObbligo.split('')
-                    for (let i = 0; i < switchsplit.length; i++) {
-                        let sequence = [5, 7, 9, 11]
-                        this.status[sequence[i]] = switchsplit[i] == 0 ? 'Disabilitato' : 'Abilitato'
-                        this.toggle[sequence[i]] = switchsplit[i] == 0 ? false : true
-                    }
-                }
+            } catch (error) {
+                this.Quickerrore = true;
             }
         },
 
         handleLogout: function () {
             this.setAdmin("");
+        },
+
+        TogleCheckout(id) {
+            let BtnArray = ['BtnT', 'BtnA']
+            let Active = document.getElementById(BtnArray[id])
+            let Disativate = document.getElementById(BtnArray[id == 0 ? 1 : 0])
+            this.buttonActive = BtnArray[id].slice(3, 4)
+
+            Active.style.backgroundColor = '#f38609'
+            Disativate.style.backgroundColor = '#27ae60'
+            this.GetSwitch()
         },
 
         OpenGrid(index) {
@@ -379,41 +401,31 @@ export default {
         },
 
         async ChangeStatus(index) {
-            if (this.toggle[index] === true) {
-                this.status[index] = 'Disabilitato'
-                this.toggle[index] = false
-            } else if (this.toggle[index] === false) {
-                this.status[index] = 'Abilitato'
-                this.toggle[index] = true
-            } else {
-                this.status[index] = 'Abilitato'
-                this.toggle[index] = true
-            }
+            this.toggle[index] = !this.toggle[index];
+            this.status[index] = this.toggle[index] ? 'Abilitato' : 'Disabilitato';
 
-            let unionStatus = this.status.slice(0, 4)
-            let uniondata = {
-                type: this.status.slice(0, 4).join('').replace(/Abilitato/g, '1').replace(/Disabilitato/g, '0'),
-                id: sessionStorage.getItem('AdminSagraId')
-            }
+            const updateSagra = async (url, statusIndexes, dataArray) => {
+                let unionStatus = []
+                if (url != '/SagraComand') {
+                    if (this.buttonActive == 'T') {
+                        unionStatus = [...statusIndexes.map(i => this.status[i]), ...['0'], ...dataArray.slice(5,10)]
+                    } else {
+                        unionStatus = [...dataArray.slice(0,5),...statusIndexes.map(i => this.status[i]), ...['0']]
+                    } 
+                } else {
+                    unionStatus = statusIndexes.map(i => this.status[i])
+                }
+               const uniondata = {
+                    type: unionStatus.join('').replace(/Abilitato/g, '1').replace(/Disabilitato/g, '0'),
+                    id: sessionStorage.getItem('AdminSagraId')
+                };
+                await axios.put(url, uniondata);
+                Makelog(this.toggle[index] ? "Disabilitazione" : "Abilitazione", "info");
+            };
 
-            await axios.put('/SagraComand', uniondata)
-            Makelog((this.toggle[index] === true) ? "Disabilitazione" : "Abilitazione", "info")
-
-            unionStatus = [this.status[4], this.status[6], this.status[8], this.status[10]]
-            uniondata = {
-                type: unionStatus.join('').replace(/Abilitato/g, '1').replace(/Disabilitato/g, '0'),
-                id: sessionStorage.getItem('AdminSagraId')
-            }
-            await axios.put('/SagraVisibilita', uniondata)
-            Makelog((this.toggle[index] === true) ? "Disabilitazione" : "Abilitazione", "info")
-
-            unionStatus = [this.status[5], this.status[7], this.status[9], this.status[11]]
-            uniondata = {
-                type: unionStatus.join('').replace(/Abilitato/g, '1').replace(/Disabilitato/g, '0'),
-                id: sessionStorage.getItem('AdminSagraId')
-            }
-            await axios.put('/SagraObbligo', uniondata)
-            Makelog((this.toggle[index] === true) ? "Disabilitazione" : "Abilitazione", "info")
+            await updateSagra('/SagraComand', [0, 1, 2, 3]);
+            await updateSagra('/SagraVisibilita', [4, 6, 8, 10], this.DataVisibilità);
+            await updateSagra('/SagraObbligo', [5, 7, 9, 11], this.DataObbligo);
         },
 
     },
@@ -471,6 +483,11 @@ export default {
     background-color: white;
     border: 1px outset black;
     border-radius: 5px;
+}
+
+.bnt:active {
+    background-color: #f38609;
+    border: 3px inset black;
 }
 
 @media (max-width: 983px) {
