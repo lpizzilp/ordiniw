@@ -28,8 +28,7 @@
                 </template>                 
                 <!-- openai dynamic versione  ------------------------------------------>
 
-                <div class="form-group details-group" id="General">
-                    <div>proacaca {{ checkoutObj.Note }}fssd</div>                    
+                <div class="form-group details-group" id="General">                
                     <div class="checkout-headings">
                         <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
                         <h3 v-if="Ute"><span>Totale per persona {{ calculatePersonaPrice() }}</span></h3>
@@ -106,13 +105,13 @@ export default {
                 {
                 name: 'Nominativo',
                 type: 'input',
-                placeholder: this.type === 'PRE' ? 'Inserisci un nominativo' : 'Campo nominativo, Non obbligatorio'
+                placeholder: this.type === 'PRE' ? 'Inserisci un nominativo' : 'Campo nominativo'
                 },
                 {
                 name: 'Note',
                 type: 'textarea',
                 attrs: { rows: 2, cols: 50, maxlength: 100 },
-                placeholder: this.type === 'PRE' ? 'Inserisci una nota o un desiderata, Non obbligatorio' : 'Inserisci Nota o Variante, Non obbligatorio'
+                placeholder: this.type === 'PRE' ? 'Inserisci una nota o un desiderata' : 'Inserisci Nota o Variante'
                 }
             ];
 
@@ -180,12 +179,12 @@ export default {
             console.log(this.checkoutObj.Coperti);
         } ,
         getFieldVisibility(index) {
-            const maskIndex = this.type === 'Y' ? index + 5 : index;
+            const maskIndex = this.type === 'Y' ? index + 6 : index;
             return this.maskVisibilita[maskIndex] == 1 ? 'block' : 'none';
         },
         checkForm() {
             this.resetCheckErr();
-            const startIndex = this.type === 'Y' ? 5 : 0;
+            const startIndex = this.type === 'Y' ? 6 : 0;
             
             this.fields.forEach((field, index) => {
                 const maskIndex = startIndex + index;
