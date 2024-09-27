@@ -7,10 +7,10 @@ export const getFoods = (result) => {
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
     var datacorrente = now.getFullYear() + month + day
-    let sql1 = "SELECT f.*, e.QtaDisponibile  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id "
+    let sql1 = "SELECT f.*, e.QtaDisponibile, c.peso  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id LEFT JOIN categorie c on c.idCategoria = f.food_category"
     let sql11 = sql1 + " WHERE f.FlgValidita = 0 "
     let sql2 = " UNION "
-    let sql3 = sql1 + " WHERE f.FlgValidita != 0 AND " + datacorrente.toString() + " >= f.DataInizioValidita AND " + datacorrente.toString() + " <= f.DataFineValidita ORDER BY food_category desc, food_name asc"
+    let sql3 = sql1 + " WHERE f.FlgValidita != 0 AND " + datacorrente.toString() + " >= f.DataInizioValidita AND " + datacorrente.toString() + " <= f.DataFineValidita ORDER BY peso asc, food_category desc, food_name asc"
     let sql = sql11 + sql2 + sql3
     db.query(sql, (err, results) => {
         if (err) {

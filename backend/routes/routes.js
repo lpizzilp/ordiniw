@@ -97,6 +97,7 @@ import {
 } from "../controllers/prenotazioni.js";
 import { Infolog } from "../log/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
+import { getAllCategorie } from "../controllers/categorie.js";
 
 // init express router
 const router = express.Router();
@@ -229,6 +230,9 @@ router.put("/api/sagracodaeinfo/:id", updateSagraCodaeInfo);
 router.put("/api/sagraComand", updateControlOrdini);
 router.put("/api/sagraVisibilita", updateControlVisibilita)
 router.put("/api/sagraObbligo", updateControlObbligo)
+
+////////////////////////////// Categorie /////////////////////////////
+router.get("/api/categorie", getAllCategorie);
 
 ////////////////////////// Bill Details ////////////////////////////////
 router.post("/api/importfood", importAnagrafica);

@@ -22,8 +22,8 @@
                     </div> -->
 
                     <div class="row filter-section">
-                        <ul class="filter-option">
-                            <li id="filter0">
+                        <ul class="filter-option" v-for="(f, index) in currentPageItems" :key="index">
+                            <li id="filter">
                                 <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
                                     @click="filterFoodBtn($event, 0)" />
                                 <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
@@ -233,6 +233,8 @@ export default {
 
     computed: {
         ...mapState(["allFoods"]),
+        ...mapState(["allCategories"]),
+
         filterFoods: function () {
             return this.allFoods.filter((f) => f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
                 (f.food_category.match(this.foodObj.category) || this.foodObj.category == "all" || this.foodObj.category == "") &&
@@ -259,6 +261,10 @@ export default {
         },
         selectedFood: function () {
             return this.allFoods.filter((f) => f.food_id == this.food);
+        },
+
+        loadCategories: function (){
+            return this.allCategories
         },
     },
 
