@@ -33,7 +33,7 @@ const store = createStore({
             });
         },
 
-        async getCaterieData(context){
+        async getCategorieData(context){
             await axios.get('/categorie')
             .then(function (response) {
                 context.commit("setCategorieData", response.data);

@@ -87,6 +87,15 @@ CREATE TABLE `catalogo_sagre` (
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- db_restaurant.categorie definition
+
+CREATE TABLE `categorie` (
+  `idCategoria` varchar(5) NOT NULL,
+  `descCategoria` varchar(25) NOT NULL,
+  `peso` int(5) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`idCategoria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- db_restaurant.errors definition
 

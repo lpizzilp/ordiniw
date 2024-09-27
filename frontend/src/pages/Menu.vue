@@ -22,42 +22,23 @@
                     </div> -->
 
                     <div class="row filter-section">
-                        <ul class="filter-option" v-for="(f, index) in currentPageItems" :key="index">
-                            <li id="filter">
+                        <ul class="filter-option">
+                            <li id="filter0">
                                 <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
-                                    @click="filterFoodBtn($event, 0)" />
+                                    @click="filterFoodBtn($event.target.value, 0)" />
                                 <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
                             </li>
 
-
-                            <li id="filter1">
-                                <input type="button" name="cbStatus" id="ooStatus" value="P" hidden
-                                    @click="filterFoodBtn($event, 1)" />
-                                <label for="ooStatus" class="d-flex justify-content-between">Primi</label>
+                            <li :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind">
+                                <input type="button" :id="'bsStatus' + (ind + 1)" hidden
+                                    @click="filterFoodBtn(c.idCategoria, (ind + 1))" />
+                                <label :for="'bsStatus' + (ind + 1)" class="d-flex justify-content-between">{{
+                                    c.descCategoria
+                                    }}</label>
                             </li>
-
-
-                            <li id="filter2">
-                                <input type="button" name="cbStatus" id="soStatus" value="C" hidden
-                                    @click="filterFoodBtn($event, 2)" />
-                                <label for="soStatus" class="d-flex justify-content-between">Cucina</label>
-                            </li>
-
-
-                            <!-- <li>
-                            <input type="button" name="cbStatus" id="sdStatus" value="pesce" hidden
-                                @click="filterFoodBtn($event)" />
-                            <label for="sdStatus" class="d-flex justify-content-between">Pesce</label>
-                        </li> -->
-
-                            <li id="filter3">
-                                <input type="button" name="cbStatus" id="ndStatus" value="B" hidden
-                                    @click="filterFoodBtn($event, 3)" />
-                                <label for="ndStatus" class="d-flex justify-content-between">Bevande</label>
-                            </li>
-
 
                             <hr />
+
                             <li id="Compress" style="display: flex; width: 75%; ">
                                 <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
                                 <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
@@ -263,7 +244,7 @@ export default {
             return this.allFoods.filter((f) => f.food_id == this.food);
         },
 
-        loadCategories: function (){
+        loadCategories: function () {
             return this.allCategories
         },
     },
@@ -376,8 +357,11 @@ export default {
         async getAllCartItem() {
             if (this.setqty !== true) {
                 if (sessionStorage.getItem('MatchUser')) {
-                    try {var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                        if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                    try {
+                        var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                        if (existItem.errMsg) { this.Quickerrore = true; return; }
+                    } catch (error) {
+                        this.Quickerrore = true; return;
                     }
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
@@ -438,29 +422,35 @@ export default {
             }
         },
 
-        filterFoodBtn: function (e, id) {
-            this.FilterBtncolor(id)
+        filterFoodBtn: function (value, index) {
+
+            this.FilterBtncolor(index)
             this.foodObj.name = ""
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
-            this.foodObj.category = e.target.value;
+            this.foodObj.category = value;
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }
         },
 
-        FilterBtncolor(id) {
+        FilterBtncolor(index) {
             if (this.Prenotazione == 0) {
+                const element = document.getElementById('filter' + index);
+                document.querySelectorAll('[id^="filter"]').forEach(el => {
+                    el.style.background = 'white';
+                    el.style.color = 'black';
+                    el.style.width = '100%';
+                });
 
-                for (let i = 0; i < 4; i++) {
-                    document.getElementById('filter' + i).style.background = 'white'
-                    document.getElementById('filter' + i).style.color = 'black'
-                    document.getElementById('filter' + i).style.width = '100%'
+                if (element) {
+                    element.style.cssText = `
+                    background: #f38609;
+                    border-radius: 10px;
+                    color: white;
+                    width: 75%;
+                `;
                 }
-                document.getElementById('filter' + id).style.background = '#f38609'
-                document.getElementById('filter' + id).style.borderRadius = '10px'
-                document.getElementById('filter' + id).style.color = 'white'
-                document.getElementById('filter' + id).style.width = '75%'
             }
         },
 
@@ -494,11 +484,14 @@ export default {
         async AltreVarianti(index) {
             this.sendId = this.currentPageItems[index].food_id;
             let lastItem = []
-            let QtaVarianti =0
+            let QtaVarianti = 0
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
-                try {var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                        if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                try {
+                    var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                    if (existItem.errMsg) { this.Quickerrore = true; return; }
+                } catch (error) {
+                    this.Quickerrore = true; return;
                 }
                 if (existItem.data.length > 0) {
                     for (var i = existItem.data.length - 1; i >= 0; i--) {
@@ -550,9 +543,12 @@ export default {
                 this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!");
             } else {
                 // Verifica se l'articolo esiste nel carrello
-                try {var existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
-                        if (existingCartItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
-                    }
+                try {
+                    var existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
+                    if (existingCartItem.errMsg) { this.Quickerrore = true; return; }
+                } catch (error) {
+                    this.Quickerrore = true; return;
+                }
                 var Esiste = existingCartItem.data.length > 0 ? true : false
                 if (Esiste) {
                     // Se l'articolo esiste, aggiorna la quantità
@@ -567,9 +563,12 @@ export default {
 
             if (this.Prenotazione === "1") {
                 // Gestisci la prenotazione dell'articolo
-                try {var cartItems = await axios.get('/cartItem/' + user_id);
-                        if (cartItems.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
-                    }
+                try {
+                    var cartItems = await axios.get('/cartItem/' + user_id);
+                    if (cartItems.errMsg) { this.Quickerrore = true; return; }
+                } catch (error) {
+                    this.Quickerrore = true; return;
+                }
                 IsVariante = this.currentPageItems[index].FlgVariante != 0 ? true : false
                 if (!IsVariante) {
                     IsVariante = Esiste === true ? true : false
