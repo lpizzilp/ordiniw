@@ -13,6 +13,23 @@
                     <input type="text" class="search-input" v-model="foodObj.name" placeholder="Cerca.." />
                 </div>
 
+
+                <div class="menu-page">
+                    <div class="filter-menu-wrapper">
+                        <FilterMenu 
+                            :filters="categoryFilters" 
+                            :activeFilter="activeFilter"
+                            @filter-changed="handleFilterChange"
+                        />
+                    </div>
+                    <div class="menu-content">
+                        <!-- Qui inserisci il contenuto del tuo menu, ad esempio: -->
+                        <div v-for="item in filteredMenuItems" :key="item.id" class="menu-item">
+                            {{ item.name }} - {{ item.price }}€
+                        </div>
+                    </div>
+                </div>
+
                 <div v-if="Prenotazione == '0'">
                     <!-- <div class="row filter-drop-down">
                         <p @click="displayFilterDrop">Filtri<span v-if="showDropDown">V</span><span v-else>X</span></p>
@@ -148,6 +165,7 @@ import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import axios from "axios";
+import FilterMenu from '@/components/FilterMenu.vue'
 
 export default {
     props: ["food"],
@@ -190,7 +208,16 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
-            Quickerrore: false
+            Quickerrore: false,
+
+            categoryFilters: ['Tutti', 'Bevande', 'Panini', 'Dolci', 'Vino', 'Antipasti', 'Primi', 'Secondi'],
+            activeFilter: 'Tutti',
+            menuItems: [
+                { id: 1, name: 'Espresso', category: 'Bevande', price: 1.5 },
+                { id: 2, name: 'Panino al prosciutto', category: 'Panini', price: 4.5 },
+                { id: 3, name: 'Tiramisu', category: 'Dolci', price: 5 },
+                // Aggiungi altri elementi del menu qui
+            ]            
         };
     },
 
@@ -215,6 +242,13 @@ export default {
     computed: {
         ...mapState(["allFoods"]),
         ...mapState(["allCategories"]),
+
+        filteredMenuItems() {
+            if (this.activeFilter === 'Tutti') {
+                return this.menuItems
+            }
+            return this.menuItems.filter(item => item.category === this.activeFilter)
+        },        
 
         filterFoods: function () {
             return this.allFoods.filter((f) => f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
@@ -250,6 +284,9 @@ export default {
     },
 
     methods: {
+        handleFilterChange(filter) {
+            this.activeFilter = filter
+        },
 
         getWIFIConnection() {
             const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -594,12 +631,48 @@ export default {
         VueBasicAlert,
         QuickViewPrenotazione,
         QuickViewErrore,
-        VueToggles
+        VueToggles,
+        FilterMenu
     }
 };
 </script>
 
 <style scoped>
+.menu-page {
+  padding-top: 100px; /* Spazio per NavBar + FilterMenu */
+}
+
+.filter-menu-wrapper {
+  position: fixed;
+  top: 60px; /* Altezza della NavBar */
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.menu-content {
+  padding: 20px;
+}
+
+.menu-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Stili per il FilterMenu */
+:deep(.filter-menu-container) {
+  position: relative;
+  top: 0;
+}
+
+
+
+
+
 input[type="button"] {
     background: none;
     color: inherit;
