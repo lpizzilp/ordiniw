@@ -1,5 +1,17 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
+    <div class="filter-menu-container">
+        <div class="filter-menu" ref="menuRef">
+            <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
+                Mostra Tutto
+            </button>
+            <button :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind"
+                @click="filterFoodBtn(c.idCategoria, (ind + 1))">
+                {{ c.descCategoria }}
+            </button>
+        </div>
+    </div>
+
     <div class="menu-section">
         <div class="heading">
             <span>menu</span>
@@ -10,25 +22,9 @@
         <div class="row">
             <div class="col-sm-4 col-12 filter-box">
                 <div class="row search-box">
-                    <input type="text" class="search-input" v-model="foodObj.name" placeholder="Cerca.." />
+                    <input type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
                 </div>
 
-
-                <div class="menu-page">
-                    <div class="filter-menu-wrapper">
-                        <FilterMenu 
-                            :filters="categoryFilters" 
-                            :activeFilter="activeFilter"
-                            @filter-changed="handleFilterChange"
-                        />
-                    </div>
-                    <div class="menu-content">
-                        <!-- Qui inserisci il contenuto del tuo menu, ad esempio: -->
-                        <div v-for="item in filteredMenuItems" :key="item.id" class="menu-item">
-                            {{ item.name }} - {{ item.price }}€
-                        </div>
-                    </div>
-                </div>
 
                 <div v-if="Prenotazione == '0'">
                     <!-- <div class="row filter-drop-down">
@@ -40,22 +36,7 @@
 
                     <div class="row filter-section">
                         <ul class="filter-option">
-                            <li id="filter0">
-                                <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
-                                    @click="filterFoodBtn($event.target.value, 0)" />
-                                <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
-                            </li>
-
-                            <li :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind">
-                                <input type="button" :id="'bsStatus' + (ind + 1)" hidden
-                                    @click="filterFoodBtn(c.idCategoria, (ind + 1))" />
-                                <label :for="'bsStatus' + (ind + 1)" class="d-flex justify-content-between">{{
-                                    c.descCategoria
-                                    }}</label>
-                            </li>
-
                             <hr />
-
                             <li id="Compress" style="display: flex; width: 75%; ">
                                 <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
                                 <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
@@ -165,7 +146,6 @@ import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import axios from "axios";
-import FilterMenu from '@/components/FilterMenu.vue'
 
 export default {
     props: ["food"],
@@ -217,7 +197,7 @@ export default {
                 { id: 2, name: 'Panino al prosciutto', category: 'Panini', price: 4.5 },
                 { id: 3, name: 'Tiramisu', category: 'Dolci', price: 5 },
                 // Aggiungi altri elementi del menu qui
-            ]            
+            ]
         };
     },
 
@@ -231,12 +211,15 @@ export default {
         }
     },
 
+    mounted() {
+        setTimeout(() => {
+            this.FilterBtncolor(0)
+        }, 200);
+    },
+
     updated() {
         this.buildArray()
         this.getAllCartItem()
-    },
-    mounted() {
-        this.FilterBtncolor(0)
     },
 
     computed: {
@@ -248,7 +231,7 @@ export default {
                 return this.menuItems
             }
             return this.menuItems.filter(item => item.category === this.activeFilter)
-        },        
+        },
 
         filterFoods: function () {
             return this.allFoods.filter((f) => f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
@@ -472,20 +455,35 @@ export default {
         },
 
         FilterBtncolor(index) {
+            console.log('entro')
             if (this.Prenotazione == 0) {
+                console.log('entroif')
                 const element = document.getElementById('filter' + index);
+                console.log(document.querySelectorAll('[id^="filter"]'))
                 document.querySelectorAll('[id^="filter"]').forEach(el => {
-                    el.style.background = 'white';
-                    el.style.color = 'black';
-                    el.style.width = '100%';
+                    el.style.cssText = `
+                        padding: 7px 25px;
+                        margin: 0px 10px;
+                        width: 100%;
+                        background-color: #f0f0f0;
+                        border-radius: 20px;
+                        font-size: 2rem;
+                        border: 1px inset black;
+                        cursor: pointer;
+                        transition: background-color 0.3s;`;
                 });
 
                 if (element) {
+                    console.log('entroelemente')
                     element.style.cssText = `
+                    padding: 7px 25px;
+                    margin: 0px 10px;
+                    width: 100%;
                     background: #f38609;
-                    border-radius: 10px;
+                    border: 2px inset black;
+                    border-radius: 20px;
+                    font-size: 2rem;
                     color: white;
-                    width: 75%;
                 `;
                 }
             }
@@ -632,44 +630,39 @@ export default {
         QuickViewPrenotazione,
         QuickViewErrore,
         VueToggles,
-        FilterMenu
     }
 };
 </script>
 
 <style scoped>
-.menu-page {
-  padding-top: 100px; /* Spazio per NavBar + FilterMenu */
+.filter-menu-container {
+    position: fixed;
+    top: 1;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 2px inset  black;
+    -webkit-overflow-scrolling: touch;
 }
 
-.filter-menu-wrapper {
-  position: fixed;
-  top: 60px; /* Altezza della NavBar */
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  z-index: 100;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.filter-menu-container::-webkit-scrollbar-thumb {
+    background-color: #f38609;
+    border-radius: 5px;
 }
 
-.menu-content {
-  padding: 20px;
+.filter-menu-container::-webkit-scrollbar {
+    background-color: #f5f5f5;
+    border-radius: 5px;
 }
 
-.menu-item {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.filter-menu {
+    display: flex;
+    padding: 12px 2px;
 }
-
-/* Stili per il FilterMenu */
-:deep(.filter-menu-container) {
-  position: relative;
-  top: 0;
-}
-
-
 
 
 
@@ -753,7 +746,7 @@ hr {
 }
 
 .menu-section {
-    padding: 2rem 9%;
+    padding: 11rem 9%;
 }
 
 .menu-section .box-container {
@@ -916,31 +909,6 @@ hr {
         width: 100%;
     }
 
-    /*  .filter-drop-down {
-        display: block;
-        background-color: #27ae5f;
-        border-radius: 10px;
-        color: white;
-        font-weight: 400;
-        margin-top: 15px;
-        margin-bottom: 5px;
-
-    }
-
-    .filter-drop-down p {
-        font-size: 20px;
-        padding: 5px 10px;
-        margin: 0;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .filter-drop-down p span {
-        font-size: 20px;
-        padding-right: 10px;
-        text-transform: lowercase;
-        font-weight: 300;
-    } */
 
     .filter-heading,
     .filter-section {
