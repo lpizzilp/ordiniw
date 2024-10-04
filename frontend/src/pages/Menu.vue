@@ -22,17 +22,12 @@
         <div class="row">
             <div class="col-sm-4 col-12 filter-box">
                 <div class="row search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
                 </div>
 
 
                 <div v-if="Prenotazione == '0'">
-                    <!-- <div class="row filter-drop-down">
-                        <p @click="displayFilterDrop">Filtri<span v-if="showDropDown">V</span><span v-else>X</span></p>
-                    </div> -->
-                    <!--  <div class="row filter-heading">
-                        <h1>Tipo</h1>
-                    </div> -->
 
                     <div class="row filter-section">
                         <ul class="filter-option">
@@ -462,7 +457,7 @@ export default {
                 console.log(document.querySelectorAll('[id^="filter"]'))
                 document.querySelectorAll('[id^="filter"]').forEach(el => {
                     el.style.cssText = `
-                        padding: 7px 25px;
+                        padding: 5px 25px;
                         margin: 0px 10px;
                         width: 100%;
                         background-color: #f0f0f0;
@@ -476,7 +471,7 @@ export default {
                 if (element) {
                     console.log('entroelemente')
                     element.style.cssText = `
-                    padding: 7px 25px;
+                    padding: 5px 25px;
                     margin: 0px 10px;
                     width: 100%;
                     background: #f38609;
@@ -661,7 +656,7 @@ export default {
 
 .filter-menu {
     display: flex;
-    padding: 12px 2px;
+    padding: 10px 2px;
 }
 
 
@@ -693,14 +688,6 @@ hr {
     width: inherit;
 }
 
-.filter-heading {
-    padding-top: 20px;
-}
-
-.filter-heading h1 {
-    color: #27ae60;
-    padding-left: 10px;
-}
 
 .filter-option {
     list-style-type: none;
@@ -734,14 +721,22 @@ hr {
     border-radius: 10px;
     margin: 0;
     width: 100%;
-    padding-left: 10px;
     height: 40px;
+    padding-left: 35px;
     font-size: 20px;
     color: white;
     background: #27ae60;
 }
 
-::placeholder {
+.fa-magnifying-glass {
+    position: absolute;
+    top: 12px;
+    left: 7px;
+    color: white;
+    font-size: 17px;
+}
+
+.search-input::placeholder {
     color: white;
 }
 
@@ -866,10 +861,6 @@ hr {
     margin-left: 15px;
 }
 
-.filter-drop-down {
-    display: none;
-}
-
 .to-cart {
     width: 50%;
     margin-left: 25%;
@@ -879,7 +870,6 @@ hr {
 
 @media (min-width: 576px) {
 
-    .filter-heading,
     .filter-section {
         display: block !important;
     }
@@ -900,7 +890,6 @@ hr {
 @media (max-width: 576px) {
 
     .search-box,
-    .filter-heading,
     .filter-section {
         width: auto;
     }
@@ -909,8 +898,6 @@ hr {
         width: 100%;
     }
 
-
-    .filter-heading,
     .filter-section {
         display: block;
         margin-bottom: 20px;
