@@ -4,7 +4,7 @@
             <div class="content">
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
-                <p>Ordina online, paga alla cassa e aspetta comodamente al tavolo.</p>
+                <p>Ordina online, paga alla cassa {{ MetodOrdineString }}</p>
                 <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a
                     Ordinare</button><br>
                 <span v-if="Btn[2] == 1" style="padding-left: 30px;">oppure</span><br>
@@ -115,6 +115,7 @@ export default {
             showQuickVueEliminacode: false,
             Category: undefined,
             sagra_name: "",
+            MetodOrdineString: "",
             Btn: [],
             TypeMess: [],
             linksito: [null, null],
@@ -148,6 +149,7 @@ export default {
             if (this.sagra_name != undefined || null) {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("µ")
                 this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
+                this.MetodOrdineString = this.Btn[10].split('')[0] == 1 ? 'e aspetta comodamente al tavolo' : ''
                 sessionStorage.setItem('startprt', this.Btn[7])
                 this.Display[0] = this.Btn[4].split('')
                 this.Display[1] = this.Btn[6]
