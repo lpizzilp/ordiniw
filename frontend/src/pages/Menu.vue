@@ -1,5 +1,17 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
+    <div class="filter-menu-container">
+        <div class="filter-menu" ref="menuRef">
+            <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
+                Mostra Tutto
+            </button>
+            <button :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind"
+                @click="filterFoodBtn(c.idCategoria, (ind + 1))">
+                {{ c.descCategoria }}
+            </button>
+        </div>
+    </div>
+
     <div class="menu-section">
         <div class="heading">
             <span>menu</span>
@@ -10,35 +22,16 @@
         <div class="row">
             <div class="col-sm-4 col-12 filter-box">
                 <div class="row search-box">
-                    <input type="text" class="search-input" v-model="foodObj.name" placeholder="Cerca.." />
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
                 </div>
 
+
                 <div v-if="Prenotazione == '0'">
-                    <!-- <div class="row filter-drop-down">
-                        <p @click="displayFilterDrop">Filtri<span v-if="showDropDown">V</span><span v-else>X</span></p>
-                    </div> -->
-                    <!--  <div class="row filter-heading">
-                        <h1>Tipo</h1>
-                    </div> -->
 
                     <div class="row filter-section">
                         <ul class="filter-option">
-                            <li id="filter0">
-                                <input type="button" name="cbStatus" id="bsStatus" value="all" hidden
-                                    @click="filterFoodBtn($event.target.value, 0)" />
-                                <label for="bsStatus" class="d-flex justify-content-between">Mostra tutto</label>
-                            </li>
-
-                            <li :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind">
-                                <input type="button" :id="'bsStatus' + (ind + 1)" hidden
-                                    @click="filterFoodBtn(c.idCategoria, (ind + 1))" />
-                                <label :for="'bsStatus' + (ind + 1)" class="d-flex justify-content-between">{{
-                                    c.descCategoria
-                                    }}</label>
-                            </li>
-
                             <hr />
-
                             <li id="Compress" style="display: flex; width: 75%; ">
                                 <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
                                 <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
@@ -190,7 +183,16 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
-            Quickerrore: false
+            Quickerrore: false,
+
+            categoryFilters: ['Tutti', 'Bevande', 'Panini', 'Dolci', 'Vino', 'Antipasti', 'Primi', 'Secondi'],
+            activeFilter: 'Tutti',
+            menuItems: [
+                { id: 1, name: 'Espresso', category: 'Bevande', price: 1.5 },
+                { id: 2, name: 'Panino al prosciutto', category: 'Panini', price: 4.5 },
+                { id: 3, name: 'Tiramisu', category: 'Dolci', price: 5 },
+                // Aggiungi altri elementi del menu qui
+            ]
         };
     },
 
@@ -204,17 +206,27 @@ export default {
         }
     },
 
+    mounted() {
+        setTimeout(() => {
+            this.FilterBtncolor(0)
+        }, 200);
+    },
+
     updated() {
         this.buildArray()
         this.getAllCartItem()
-    },
-    mounted() {
-        this.FilterBtncolor(0)
     },
 
     computed: {
         ...mapState(["allFoods"]),
         ...mapState(["allCategories"]),
+
+        filteredMenuItems() {
+            if (this.activeFilter === 'Tutti') {
+                return this.menuItems
+            }
+            return this.menuItems.filter(item => item.category === this.activeFilter)
+        },
 
         filterFoods: function () {
             return this.allFoods.filter((f) => f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
@@ -250,6 +262,9 @@ export default {
     },
 
     methods: {
+        handleFilterChange(filter) {
+            this.activeFilter = filter
+        },
 
         getWIFIConnection() {
             const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -435,20 +450,35 @@ export default {
         },
 
         FilterBtncolor(index) {
+            console.log('entro')
             if (this.Prenotazione == 0) {
+                console.log('entroif')
                 const element = document.getElementById('filter' + index);
+                console.log(document.querySelectorAll('[id^="filter"]'))
                 document.querySelectorAll('[id^="filter"]').forEach(el => {
-                    el.style.background = 'white';
-                    el.style.color = 'black';
-                    el.style.width = '100%';
+                    el.style.cssText = `
+                        padding: 5px 25px;
+                        margin: 0px 10px;
+                        width: 100%;
+                        background-color: #f0f0f0;
+                        border-radius: 20px;
+                        font-size: 2rem;
+                        border: 1px inset black;
+                        cursor: pointer;
+                        transition: background-color 0.3s;`;
                 });
 
                 if (element) {
+                    console.log('entroelemente')
                     element.style.cssText = `
+                    padding: 5px 25px;
+                    margin: 0px 10px;
+                    width: 100%;
                     background: #f38609;
-                    border-radius: 10px;
+                    border: 2px inset black;
+                    border-radius: 20px;
+                    font-size: 2rem;
                     color: white;
-                    width: 75%;
                 `;
                 }
             }
@@ -594,12 +624,43 @@ export default {
         VueBasicAlert,
         QuickViewPrenotazione,
         QuickViewErrore,
-        VueToggles
+        VueToggles,
     }
 };
 </script>
 
 <style scoped>
+.filter-menu-container {
+    position: fixed;
+    top: 1;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 2px inset  black;
+    -webkit-overflow-scrolling: touch;
+}
+
+.filter-menu-container::-webkit-scrollbar-thumb {
+    background-color: #f38609;
+    border-radius: 5px;
+}
+
+.filter-menu-container::-webkit-scrollbar {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.filter-menu {
+    display: flex;
+    padding: 10px 2px;
+}
+
+
+
 input[type="button"] {
     background: none;
     color: inherit;
@@ -627,14 +688,6 @@ hr {
     width: inherit;
 }
 
-.filter-heading {
-    padding-top: 20px;
-}
-
-.filter-heading h1 {
-    color: #27ae60;
-    padding-left: 10px;
-}
 
 .filter-option {
     list-style-type: none;
@@ -668,19 +721,27 @@ hr {
     border-radius: 10px;
     margin: 0;
     width: 100%;
-    padding-left: 10px;
     height: 40px;
+    padding-left: 35px;
     font-size: 20px;
     color: white;
     background: #27ae60;
 }
 
-::placeholder {
+.fa-magnifying-glass {
+    position: absolute;
+    top: 12px;
+    left: 7px;
+    color: white;
+    font-size: 17px;
+}
+
+.search-input::placeholder {
     color: white;
 }
 
 .menu-section {
-    padding: 2rem 9%;
+    padding: 11rem 9%;
 }
 
 .menu-section .box-container {
@@ -800,10 +861,6 @@ hr {
     margin-left: 15px;
 }
 
-.filter-drop-down {
-    display: none;
-}
-
 .to-cart {
     width: 50%;
     margin-left: 25%;
@@ -813,7 +870,6 @@ hr {
 
 @media (min-width: 576px) {
 
-    .filter-heading,
     .filter-section {
         display: block !important;
     }
@@ -834,7 +890,6 @@ hr {
 @media (max-width: 576px) {
 
     .search-box,
-    .filter-heading,
     .filter-section {
         width: auto;
     }
@@ -843,33 +898,6 @@ hr {
         width: 100%;
     }
 
-    /*  .filter-drop-down {
-        display: block;
-        background-color: #27ae5f;
-        border-radius: 10px;
-        color: white;
-        font-weight: 400;
-        margin-top: 15px;
-        margin-bottom: 5px;
-
-    }
-
-    .filter-drop-down p {
-        font-size: 20px;
-        padding: 5px 10px;
-        margin: 0;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .filter-drop-down p span {
-        font-size: 20px;
-        padding-right: 10px;
-        text-transform: lowercase;
-        font-weight: 300;
-    } */
-
-    .filter-heading,
     .filter-section {
         display: block;
         margin-bottom: 20px;
