@@ -867,6 +867,22 @@ hr {
     margin-right: 25%;
     margin-top: 5vh;
 }
+/*---------------------------------*/
+h3 {
+  /*font-size: 1.2em; */
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita il titolo a 2 righe */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Nasconde il testo oltre la seconda riga */
+  text-overflow: ellipsis; /* Aggiunge "..." alla fine se il testo è troppo lungo */
+  /*max-height: calc(1.2em * 2); /* Altezza massima impostata per 2 righe di testo */
+  line-height: 1.1em; /* Altezza della linea specifica per mantenere proporzioni corrette */
+  word-wrap: break-word; /* Permette al testo di andare a capo correttamente */
+}
+
+
+/*---------------------------------*/
 
 @media (min-width: 576px) {
 
@@ -883,7 +899,7 @@ hr {
     }
 
     .menu-section .box-container .box .content h3 {
-        height: 4rem;
+        height: 5rem;
     }
 }
 
@@ -954,7 +970,7 @@ hr {
         }
 
         .menu-section .box-container .box .content h3 {
-            height: 4rem;
+            height: 5rem;
             font-size: 15px !important;
         }
 
