@@ -2,7 +2,7 @@
     <div class="quick-view">
         <div v-if="BtnAttivi[0] == true || BtnAttivi[1] == true" class="quick-view-inner">
             <h2>Scelgi il tipo ordine</h2><br>
-            <h3>Se desideri essere servito al tavolo, scegli "Arena del Gusto"
+            <h3>Se desideri mangiare Qui, scegli "Arena del Gusto"
                 <slot></slot>
             </h3>
             <button v-if="BtnAttivi[0] == true" class="btn" @click="DataParent('W')">Arena del Gusto</button>
