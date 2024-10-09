@@ -149,7 +149,7 @@ export default {
             if (this.sagra_name != undefined || null) {
                 this.Btn = sessionStorage.getItem('SagraBottoni').split("µ")
                 this.Btn[8] == 0 ? this.linksito = [null, null] : this.linksito = [1, this.Btn[8]]
-                this.MetodOrdineString = this.Btn[10].split('')[0] == 1 ? 'e aspetta comodamente al tavolo' : 'e degusta in nostri piatti'
+                this.MetodOrdineString = this.Btn[10].split('')[0] == 1 ? 'e aspetta comodamente al tavolo' : 'e degusta i nostri piatti'
                 sessionStorage.setItem('startprt', this.Btn[7])
                 this.Display[0] = this.Btn[4].split('')
                 this.Display[1] = this.Btn[6]
