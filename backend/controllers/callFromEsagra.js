@@ -91,18 +91,32 @@ export const importEsauriti = async (req, res) => {
     }
 };
 
-export const deleteAllEsauriti=(req,res)=>{
-    const data = req.body;
-    //Cancella tutta la tabella esauriti
-    deleteEsauriti(data,(err,results)=> {
-        if (err) {
-            res.send(err);
-            return;
+export const deleteAllEsauriti = async (req, res) => {
+    try {
+        const data = req.body;
 
-        }else {
-            res.json(results);
-        }
-    });
+        // Cancella tutta la tabella esauriti
+        await deleteEsauriti(); 
 
+        // Rispondi solo una volta dopo l'inserimento completato
+        res.json({ message: 'Inserimento completato con successo' });
+    } catch (error) {
+        console.error("Errore nella cancellazione esauriti:", error);
+        res.status(500).json({ error: "Si è verificato un errore nella cancellazione  degli esauriti" });
+    }
 };
 
+// export const deleteAllEsauriti=(req,res)=>{
+//     const data = req.body;
+//     //Cancella tutta la tabella esauriti
+//     deleteEsauriti(data,(err,results)=> {
+//         if (err) {
+//             res.send(err);
+//             return;
+
+//         }else {
+//             res.json(results);
+//         }
+//     });
+
+// };
