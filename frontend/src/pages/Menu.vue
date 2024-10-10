@@ -131,7 +131,7 @@
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
-    <quick-view-errore v-if="Quickerrore"></quick-view-errore>
+    <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 
 <script>
@@ -295,6 +295,7 @@ export default {
 
         CloseQuickvue(data) {
             this.showQuickView = data
+            this.Quickerrore = data
         },
 
         scrollToTop() {
