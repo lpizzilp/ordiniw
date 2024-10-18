@@ -33,8 +33,9 @@ export const showFoodById=(req,res)=>{
 
 // create Food
 export const createFood=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
-    insertFood(data,(err,results)=> {
+    insertFood(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -47,7 +48,8 @@ export const createFood=(req,res)=>{
 export const updateFood=(req,res)=>{
     const data = req.body;
     const id = req.params.id;
-    updateFoodById(data,id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    updateFoodById(idsagra,data,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -60,7 +62,8 @@ export const updateFood=(req,res)=>{
 // delete Food
 export const deleteFood=(req,res)=>{
     const id = req.params.id;
-    deleteFoodById(id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    deleteFoodById(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

@@ -15,7 +15,8 @@ import {
 
 
 export const getSagraSig=(req,res)=>{
-    getSagrabySig(req.params.sigla,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getSagrabySig(idsagra,req.params.sigla,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -26,7 +27,8 @@ export const getSagraSig=(req,res)=>{
 
 // recupera tutte le sagre
 export const allSagre=(req,res)=>{
-    getAllSagre(req.params.ordine,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getAllSagre(idsagra,req.params.ordine,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -40,13 +42,14 @@ export const allSagre=(req,res)=>{
 //-------------------------------------------------
 export const createSagra = async (req, res) => {
     try {
+        const idsagra = req.params.idsagra
         const data = req.body;
         
         // Cancellazione preventiva del record prima dell'inserimento 
-        await deleteSagra(data[0].id_sagra);
+        await deleteSagra(idsagra,data[0].id_sagra);
 
         // Inserimento del nuovo record sagra 
-        const insertedSagra = await insertSagra(data[0]);
+        const insertedSagra = await insertSagra(idsagra,data[0]);
         
         res.json(insertedSagra);
     } catch (error) {
@@ -60,9 +63,10 @@ export const createSagra = async (req, res) => {
 //-------------------------------------------------------
 
 export const updateSagraCodaeInfo=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
     const id = req.params.id;
-    updateSagraCodaeInfoByID(data[0],id,(err,results)=> {
+    updateSagraCodaeInfoByID(idsagra,data[0],id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -73,8 +77,9 @@ export const updateSagraCodaeInfo=(req,res)=>{
 
 
 export const updateControlOrdini=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body
-    updateContrOrdini(data,(err,results)=> {
+    updateContrOrdini(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -84,8 +89,9 @@ export const updateControlOrdini=(req,res)=>{
 };
 
 export const updateControlVisibilita=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body
-    updateContrVisibilita(data,(err,results)=> {
+    updateContrVisibilita(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -95,8 +101,9 @@ export const updateControlVisibilita=(req,res)=>{
 };
 
 export const updateControlObbligo=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body
-    updateContrObbligo(data,(err,results)=> {
+    updateContrObbligo(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -106,8 +113,9 @@ export const updateControlObbligo=(req,res)=>{
 };
 
 export const GetControlOrdini=(req,res)=>{
+    const idsagra = req.params.idsagra
     const id = req.params.id;
-    getContrOrdini(id,(err,results)=> {
+    getContrOrdini(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -118,7 +126,8 @@ export const GetControlOrdini=(req,res)=>{
 
 export const GetControlVisibilita=(req,res)=>{
     const id = req.params.id;
-    getContrVisibilita(id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getContrVisibilita(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -128,8 +137,9 @@ export const GetControlVisibilita=(req,res)=>{
 };
 
 export const GetControlObbligo=(req,res)=>{
+    const idsagra = req.params.idsagra
     const id = req.params.id;
-    getContrObbligo(id,(err,results)=> {
+    getContrObbligo(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

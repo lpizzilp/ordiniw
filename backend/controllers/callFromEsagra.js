@@ -11,6 +11,7 @@ import {
 //----------------------------------------
 export const importAnagrafica = async (req, res) => {
     try {
+        const idsagra = req.params.idsagra
         const data = req.body;
 
         // Cancella la tabella anagrafica
@@ -18,7 +19,7 @@ export const importAnagrafica = async (req, res) => {
 
         // Inserisci i nuovi record
         for (const element of data) {
-            await insertAnagrafica(element);
+            await insertAnagrafica(idsagra,element);
         }
 
         res.json({ message: 'Importazione completata con successo' });
@@ -73,6 +74,7 @@ export const importAnagrafica = async (req, res) => {
 //-------------------------------------------
 export const importEsauriti = async (req, res) => {
     try {
+        const idsagra = req.params.idsagra
         const data = req.body;
 
         // Cancella tutta la tabella esauriti
@@ -80,7 +82,7 @@ export const importEsauriti = async (req, res) => {
 
         // INSERISCI BLOB ESAURITI 
         for (const element of data) {
-            await insertEsauriti(element);
+            await insertEsauriti(idsagra,element);
         }
 
         // Rispondi solo una volta dopo l'inserimento completato
@@ -92,9 +94,10 @@ export const importEsauriti = async (req, res) => {
 };
 
 export const deleteAllEsauriti=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
     //Cancella tutta la tabella esauriti
-    deleteEsauriti(data,(err,results)=> {
+    deleteEsauriti(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
             return;

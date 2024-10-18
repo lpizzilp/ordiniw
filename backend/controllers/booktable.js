@@ -4,8 +4,9 @@ import {
 
 // create Booking
 export const createBooking=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
-    insertBooking(data,(err,results)=> {
+    insertBooking(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

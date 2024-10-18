@@ -17,7 +17,8 @@ import {
 
 // Prendi nuovo id
 export const PredinuovoId=(req,res)=>{
-    PrendiId((err,results)=> {
+    const idsagra = req.params.idsagra
+    PrendiId(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -28,8 +29,9 @@ export const PredinuovoId=(req,res)=>{
 
 // crea nuova Prenotazione
 export const createPrenotazione=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
-    insertPrenotazione(data,(err,results)=> {
+    insertPrenotazione(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -40,8 +42,9 @@ export const createPrenotazione=(req,res)=>{
 
 // crea dettaglio
 export const createDettaglio=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
-    insertDettaglio(data,(err,results)=> {
+    insertDettaglio(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -52,7 +55,8 @@ export const createDettaglio=(req,res)=>{
 
 // controllo quantità
 export const checkquantita=(req,res)=>{
-    checkfood((err,results)=> {
+    const idsagra = req.params.idsagra
+    checkfood(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -64,7 +68,8 @@ export const checkquantita=(req,res)=>{
 // get tutte le prenotazioni inserite maggiori un determinato id 
 // ...Se l'id non viene passato  vengono fornite tutte  
 export const getAllPrenotGtId=(req,res)=>{
-    getPrenotGtId(req.params.id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getPrenotGtId(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -75,8 +80,9 @@ export const getAllPrenotGtId=(req,res)=>{
 
 
 export const deleteAllBook=(req,res)=>{
+    const idsagra = req.params.idsagra
     const id = req.params.id;
-    deleteAllBooks (id,(err,results)=> {
+    deleteAllBooks(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -88,7 +94,8 @@ export const deleteAllBook=(req,res)=>{
       
 
 export const getPrenDetailsById=(req,res)=>{
-    getPrenDetails(req.params.id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getPrenDetails(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -99,7 +106,8 @@ export const getPrenDetailsById=(req,res)=>{
 
 // prendi tutte le prenotazoni
 export const getAllPrenot=(req,res)=>{
-    getAll(req.params.id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getAll(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -109,8 +117,9 @@ export const getAllPrenot=(req,res)=>{
 };
 
 export const PutAction=(req,res)=>{
+    const idsagra = req.params.idsagra
     const data = req.body;
-    Updatestatus(data,(err,results)=> {
+    Updatestatus(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -120,7 +129,8 @@ export const PutAction=(req,res)=>{
 };
 
 export const Totsum=(req,res)=>{
-    getsum((err,results)=> {
+    const idsagra = req.params.idsagra
+    getsum(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -130,7 +140,8 @@ export const Totsum=(req,res)=>{
 };
 
 export const SumPerOrdine=(req,res)=>{
-    getqtaperordine((err,results)=> {
+    const idsagra = req.params.idsagra
+    getqtaperordine(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -140,7 +151,8 @@ export const SumPerOrdine=(req,res)=>{
 };
 
 export const cancelBookstatus=(req,res)=>{
-    deleteBookstatusById(req.params.id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    deleteBookstatusById(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -150,7 +162,8 @@ export const cancelBookstatus=(req,res)=>{
 };
 
 export const cancelBookdetails=(req,res)=>{
-    deleteBookdetailsById(req.params.id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    deleteBookdetailsById(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
