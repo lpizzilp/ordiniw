@@ -77,9 +77,9 @@ export const insertEsauriti = (data) => {
 };
 
 // delete esauriti
-export const deleteEsauriti = () => {
+export const deleteEsauriti = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM esauriti", (err, results) => {
+        db.query("DELETE FROM esauriti WHERE id_sagra = ?", idsagra, (err, results) => {
             if (err) {
                 console.error("Errore durante la cancellazione degli esauriti:", err);
                 reject(err);

@@ -27,9 +27,8 @@ export const showNewestStatusId=(req,res)=>{
 
 // create BillStatus
 export const createBillStatus=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertBillStatus(idsagra,data,(err,results)=> {
+    insertBillStatus(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

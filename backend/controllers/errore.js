@@ -1,9 +1,8 @@
 import { getAllErr, insertErrore } from "../models/ErroreModel.js";
 
 export const InserisciErrore=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertErrore(idsagra,data,(err,results)=> {
+    insertErrore(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

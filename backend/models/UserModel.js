@@ -40,8 +40,8 @@ export const insertUser = (data, result) => {
 
 
 // update authlevel
-export const updateauthlevel = (data, result) => {
-    db.query("UPDATE user SET authlevel = ? where id_sagra = ? and user_email = ?",[data.authlevel, data.id_sagra, data.user_email], (err,results)=> {
+export const updateauthlevel = (idsagra,data, result) => {
+    db.query("UPDATE user SET authlevel = ? where id_sagra = ? and user_email = ?",[data.authlevel, idsagra, data.user_email], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -52,8 +52,8 @@ export const updateauthlevel = (data, result) => {
 };
 
 //delete user
-export const deleteuserbyemail = (email, sagra, result) => {
-    db.query("Delete from `user`  where user_email = ? and id_sagra = ?",[email, sagra], (err,results)=> {
+export const deleteuserbyemail = (idsagra, email, result) => {
+    db.query("Delete from `user`  where user_email = ? and id_sagra = ?",[email, idsagra], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

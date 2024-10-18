@@ -24,8 +24,8 @@ export const allUsers=(req,res)=>{
 
 // get single user
 export const showAUser = (req,res)=>{
-    const idsagra = req.params.idsagra
-    getUserByEmail(idsagra,req.params.id,req.params.email,(err,results)=> {
+    const idsagra = req.params.id
+    getUserByEmail(idsagra,req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -36,9 +36,8 @@ export const showAUser = (req,res)=>{
 
 // create user
 export const createAccount=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertUser(idsagra,data,(err,results)=> {
+    insertUser(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -50,7 +49,7 @@ export const createAccount=(req,res)=>{
 
 // update user
 export const updateUserauthlevel=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = data.id_sagra
     const data = req.body;
     updateauthlevel(idsagra,data, (err,results)=> {
         if (err) {
@@ -64,7 +63,7 @@ export const updateUserauthlevel=(req,res)=>{
 // delete user
 export const Userdelete = (req,res)=>{
     const idsagra = req.params.idsagra
-    deleteuserbyemail(idsagra,req.params.email,req.params.sagra,(err,results)=> {
+    deleteuserbyemail(idsagra,req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -75,9 +74,8 @@ export const Userdelete = (req,res)=>{
 
 // insert error
 export const Errors=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertError(idsagra,data,(err,results)=> {
+    insertError(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

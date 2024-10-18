@@ -29,9 +29,8 @@ export const PredinuovoId=(req,res)=>{
 
 // crea nuova Prenotazione
 export const createPrenotazione=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertPrenotazione(idsagra,data,(err,results)=> {
+    insertPrenotazione(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -42,7 +41,6 @@ export const createPrenotazione=(req,res)=>{
 
 // crea dettaglio
 export const createDettaglio=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
     insertDettaglio(idsagra,data,(err,results)=> {
         if (err) {

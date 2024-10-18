@@ -23,8 +23,8 @@ export const getFoods = (result) => {
 };
 
 // get single Foods
-export const getFoodById = (id, result) => {
-    db.query("SELECT * FROM food WHERE food_id = ?", [id], (err, results) => {
+export const getFoodById = (idsagra, id, result) => {
+    db.query("SELECT * FROM food WHERE id_sagra ? AND food_id = ?", [idsagra,id], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -36,7 +36,7 @@ export const getFoodById = (id, result) => {
 
 // insert Food
 export const insertFood = (data, result) => {
-    db.query("INSERT INTO food SET ?", data, (err, results) => {
+    db.query("INSERT INTO food SET ? ", data, (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -60,8 +60,8 @@ export const updateFoodById = (data, id, result) => {
 
 
 // delete Food
-export const deleteFoodById = (id, result) => {
-    db.query("DELETE FROM food WHERE food_id = ?", [id], (err, results) => {
+export const deleteFoodById = (idsagra,id, result) => {
+    db.query("DELETE FROM food WHERE id_sagra = ? AND food_id = ?", [idsagra,id], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);

@@ -6,9 +6,8 @@ import {
 
 // create BillDetails
 export const createBillDetails=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertBillDetails(idsagra,data,(err,results)=> {
+    insertBillDetails(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

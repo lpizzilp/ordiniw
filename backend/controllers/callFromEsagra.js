@@ -11,7 +11,6 @@ import {
 //----------------------------------------
 export const importAnagrafica = async (req, res) => {
     try {
-        const idsagra = req.params.idsagra
         const data = req.body;
 
         // Cancella la tabella anagrafica
@@ -19,7 +18,7 @@ export const importAnagrafica = async (req, res) => {
 
         // Inserisci i nuovi record
         for (const element of data) {
-            await insertAnagrafica(idsagra,element);
+            await insertAnagrafica(element);
         }
 
         res.json({ message: 'Importazione completata con successo' });
@@ -74,7 +73,6 @@ export const importAnagrafica = async (req, res) => {
 //-------------------------------------------
 export const importEsauriti = async (req, res) => {
     try {
-        const idsagra = req.params.idsagra
         const data = req.body;
 
         // Cancella tutta la tabella esauriti
@@ -82,7 +80,7 @@ export const importEsauriti = async (req, res) => {
 
         // INSERISCI BLOB ESAURITI 
         for (const element of data) {
-            await insertEsauriti(idsagra,element);
+            await insertEsauriti(element);
         }
 
         // Rispondi solo una volta dopo l'inserimento completato

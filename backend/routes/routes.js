@@ -67,7 +67,7 @@ import {
 
 
 import {
-    getSagraSig,
+    getSagraId,
     createSagra,
     updateSagraCodaeInfo,
     allSagre,
@@ -108,10 +108,10 @@ const router = express.Router();
 router.get("/api/foods", showFoods);
 
 // get single Food 
-router.get("/api/foods/:id", showFoodById);
+router.get("/api/foods/:idsagra/:id", showFoodById);
 
 // create Food
-router.post("/api/:idsagra/foods", createFood);
+router.post("/api/foods", createFood);
 
 // update Food 
 router.put("/api/foods/:idsagra/:id", updateFood);
@@ -127,18 +127,18 @@ router.delete("/api/foods/:idsagra/:id", deleteFood);
 router.get("/api/users", allUsers)
 
 // get user
-router.get("/api/users/:idsagra/:id/:email", showAUser);
+router.get("/api/users/:id/:email", showAUser);
 
 // create account
-router.post("/api/:idsagra/users/", createAccount);
+router.post("/api/users/", createAccount);
 
 // create account
-router.post("/api/users/:idsagra/error/", Errors);
+router.post("/api/users/error/", Errors);
 
 // update authlevel
 router.put("/api/users/:idsagra/update/", updateUserauthlevel);
 
-router.delete("/api/users/delete/:idsagra/:email/:sagra", Userdelete);
+router.delete("/api/users/delete/:email/:idsagra", Userdelete);
 
 
 ////////////////////////// MAIL ////////////////////////////////
@@ -178,7 +178,7 @@ router.delete("/api/cartItem/:id", deleteItems);
 
 
 ////////////////////////// Booking ////////////////////////////////
-router.post("/api/:idsagra/booking", createBooking);
+router.post("/api/booking", createBooking);
 
 ////////////////////////// Prenotazione ////////////////////////////////
 router.get("/api/prenotazione/:idsagra/sum", Totsum);
@@ -189,8 +189,8 @@ router.get("/api/prenotazione/:idsagra/:id", getPrenDetailsById);
 router.get("/api/getprenotazione/:idsagra/:id", getAllPrenot);
 router.get("/api/prenotazione/:idsagra/check", checkquantita);
 
-router.post("/api/:idsagra/prenotazione", createPrenotazione);
-router.post("/api/prenotazione/:idsagra/dettaglio", createDettaglio);
+router.post("/api/prenotazione", createPrenotazione);
+router.post("/api/prenotazione/dettaglio", createDettaglio);
 router.get("/api/prenotazione/allgt/:idsagra/:id", getAllPrenotGtId);
 router.delete("/api/prenotazioni/:idsagra/delete", deleteAllBook);
 router.put("/api/prenotazione/:idsagra/status", PutAction);
@@ -198,7 +198,7 @@ router.delete("/api/prenotazioni/status/delete/:idsagra/:id", cancelBookstatus);
 router.delete("/api/prenotazioni/details/delete/:idsagra/:id", cancelBookdetails);
 
 ////////////////////////// Bill Details ////////////////////////////////
-router.post("/api/:idsagra/billdetails", createBillDetails);
+router.post("/api/billdetails", createBillDetails);
 router.get("/api/billdetails/:idsagra/:id", getBillDetailsById);
 router.delete("/api/billdetails/delete/:idsagra/:id", deleteBillById)
 
@@ -206,7 +206,7 @@ router.delete("/api/billdetails/delete/:idsagra/:id", deleteBillById)
 
 ////////////////////////// Bill Status ////////////////////////////////
 router.get("/api/billstatus/:idsagra/new", showNewestStatusId);
-router.post("/api/:idsagra/billstatus", createBillStatus);
+router.post("/api/billstatus", createBillStatus);
 router.get("/api/billstatus/user/:idsagra/:id", getAllBillsByUser);
 router.get("/api/billstatus/bill/:idsagra/:id", getAllBillsByBill);
 router.get("/api/:idsagra/billstatus", getAllBills);
@@ -219,14 +219,14 @@ router.delete("/api/billstatus/:idsagra/delete", deleteAllBill)
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
-router.get("/api/sagra/ute/:idsagra/:ordine", allSagre);
+router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/keepalive", KeepAlive)
-router.get("/api/sagra/:idsagra/:sigla", getSagraSig);
-router.get("/api/sagra/controlli/:idsagra/:id", GetControlOrdini);
-router.get("/api/sagra/visibilita/:idsagra/:id", GetControlVisibilita);
-router.get("/api/sagra/obbligo/:idsagra/:id", GetControlObbligo);
-router.post("/api/:idsagra/catalogosagre", createSagra);
-router.put("/api/sagracodaeinfo/:idsagra/:id", updateSagraCodaeInfo);
+router.get("/api/sagra/:idsagra", getSagraId);
+router.get("/api/sagra/controlli/:idsagra", GetControlOrdini);
+router.get("/api/sagra/visibilita/:idsagra", GetControlVisibilita);
+router.get("/api/sagra/obbligo/:idsagra", GetControlObbligo);
+router.post("/api/catalogosagre", createSagra);
+router.put("/api/sagracodaeinfo/:idsagra", updateSagraCodaeInfo);
 router.put("/api/:idsagra/sagraComand", updateControlOrdini);
 router.put("/api/:idsagra/sagraVisibilita", updateControlVisibilita)
 router.put("/api/:idsagra/sagraObbligo", updateControlObbligo)
@@ -235,16 +235,16 @@ router.put("/api/:idsagra/sagraObbligo", updateControlObbligo)
 router.get("/api/:idsagra/categorie", getAllCategorie);
 
 ////////////////////////// Bill Details ////////////////////////////////
-router.post("/api/:idsagra/importfood", importAnagrafica);
+router.post("/api/importfood", importAnagrafica);
 
 
 /////////////////////////  Errore /////////////////////////////////////
 router.get("/api/:idsagra/errori", allErrori)
-router.post("/api/:idsagra/posterrore", InserisciErrore)
+router.post("/api/posterrore", InserisciErrore)
 
 
 ////////////////////////// Esauriti ////////////////////////////////
-router.post("/api/:idsagra/importesauriti", importEsauriti);
+router.post("/api/importesauriti", importEsauriti);
 router.delete("/api/:idsagra/deleteesauriti", deleteAllEsauriti);
 
 ////////////////////////// Log ////////////////////////////////

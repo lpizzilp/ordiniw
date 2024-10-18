@@ -14,8 +14,8 @@ export const insertErrore = (data,result) => {
 };
 
 //Select tutto
-export const getAllErr = (result) => {
-    db.query("SELECT * from errors", (err, results)=> {
+export const getAllErr = (idsagra,result) => {
+    db.query("SELECT * from errors WHERE id_sagra = ?", idsagra, (err, results)=> {
         if (err){
             console.log(err);
             result(err,null);

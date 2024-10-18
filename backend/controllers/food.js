@@ -22,7 +22,8 @@ export const showFoods=(req,res)=>{
 
 // get single Food
 export const showFoodById=(req,res)=>{
-    getFoodById(req.params.id,(err,results)=> {
+    const idsagra = req.params.idsagra
+    getFoodById(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -33,9 +34,8 @@ export const showFoodById=(req,res)=>{
 
 // create Food
 export const createFood=(req,res)=>{
-    const idsagra = req.params.idsagra
     const data = req.body;
-    insertFood(idsagra,data,(err,results)=> {
+    insertFood(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
