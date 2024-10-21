@@ -15,6 +15,9 @@ import {
 
 
 export const getSagraSig=(req,res)=>{
+    //const IdSagra = req.headers['id-sagra'];
+    //console.log( IdSagra);
+
     getSagrabySig(req.params.sigla,(err,results)=> {
         if (err) {
             res.send(err);

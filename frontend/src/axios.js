@@ -37,3 +37,13 @@ axios.interceptors.response.use(
         Makelog(errMsg) 
         return Promise.reject(error);    }
 );  
+
+// Aggiungi un interceptor per includere il codice sagra in ogni richiesta
+axios.interceptors.request.use(config => {
+    const IdSagra = '00100' //riprendere id sagra  localStorage o Vuex o sessions storage;
+    config.headers['Id-Sagra'] = IdSagra;
+    return config;
+  }, error => {
+    return Promise.reject(error);
+  }
+);

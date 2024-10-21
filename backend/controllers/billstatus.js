@@ -51,6 +51,9 @@ export const getAllBillsByUser=(req,res)=>{
 
 // get Bills Status
 export const getAllBillsByBill=(req,res)=>{
+    //console.log('ciaooo')
+    //const IdSagra = req.headers['id-sagra'];
+    //console.log( IdSagra);
     getBillsByBill(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
