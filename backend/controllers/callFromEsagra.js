@@ -1,10 +1,34 @@
 //CHIAMATE DA SISTEMA CENTRALE 
 import {
+    insertReparti,
+    deleteReparti,
     insertAnagrafica,
     deleteAnagrafica,
     insertEsauriti,
     deleteEsauriti
 } from "../models/CallFromEsagraModel.js";
+
+//----------------------------------------
+// Inserimento reparti da sistema remoto 
+//----------------------------------------
+export const importReparti = async (req, res) => {
+    try {
+        const data = req.body;
+
+        // Cancella la tabella anagrafica
+        await deleteReparti();
+
+        // Inserisci i nuovi record
+        for (const element of data) {
+            await insertReparti(element);
+        }
+
+        res.json({ message: 'Importazione completata con successo' });
+    } catch (error) {
+        console.error('Errore durante l\'importazione:', error);
+        res.status(500).json({ error: 'Si è verificato un errore durante l\'importazione' });
+    }
+};
 
 //----------------------------------------
 // Iserimento anagrafiche da sistema remoto 
@@ -27,6 +51,64 @@ export const importAnagrafica = async (req, res) => {
         res.status(500).json({ error: 'Si è verificato un errore durante l\'importazione' });
     }
 };
+
+//-------------------------------------------
+// Iserimento Esauriti da sistema remoto 
+//-------------------------------------------
+export const importEsauriti = async (req, res) => {
+    try {
+        const data = req.body;
+
+        // Cancella tutta la tabella esauriti
+        await deleteEsauriti(); 
+
+        // INSERISCI BLOB ESAURITI 
+        for (const element of data) {
+            await insertEsauriti(element);
+        }
+
+        // Rispondi solo una volta dopo l'inserimento completato
+        res.json({ message: 'Inserimento completato con successo' });
+    } catch (error) {
+        console.error("Errore nell'importazione degli esauriti:", error);
+        res.status(500).json({ error: "Si è verificato un errore nell'importazione degli esauriti" });
+    }
+};
+
+export const deleteAllEsauriti = async (req, res) => {
+    try {
+        const data = req.body;
+
+        // Cancella tutta la tabella esauriti
+        await deleteEsauriti(); 
+
+        // Rispondi solo una volta dopo l'inserimento completato
+        res.json({ message: 'Inserimento completato con successo' });
+    } catch (error) {
+        console.error("Errore nella cancellazione esauriti:", error);
+        res.status(500).json({ error: "Si è verificato un errore nella cancellazione  degli esauriti" });
+    }
+};
+
+
+
+//------------------------------------------------
+// DA CANCELLAREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE //
+//------------------------------------------------
+// export const deleteAllEsauriti=(req,res)=>{
+//     const data = req.body;
+//     //Cancella tutta la tabella esauriti
+//     deleteEsauriti(data,(err,results)=> {
+//         if (err) {
+//             res.send(err);
+//             return;
+
+//         }else {
+//             res.json(results);
+//         }
+//     });
+
+// };
 
 // export const importAnagrafica=(req,res)=>{
 //     const data = req.body;
@@ -67,56 +149,4 @@ export const importAnagrafica = async (req, res) => {
 //             }
 //         });
 //     });
-// };
-//-------------------------------------------
-// Iserimento Esauriti da sistema remoto 
-//-------------------------------------------
-export const importEsauriti = async (req, res) => {
-    try {
-        const data = req.body;
-
-        // Cancella tutta la tabella esauriti
-        await deleteEsauriti(); 
-
-        // INSERISCI BLOB ESAURITI 
-        for (const element of data) {
-            await insertEsauriti(element);
-        }
-
-        // Rispondi solo una volta dopo l'inserimento completato
-        res.json({ message: 'Inserimento completato con successo' });
-    } catch (error) {
-        console.error("Errore nell'importazione degli esauriti:", error);
-        res.status(500).json({ error: "Si è verificato un errore nell'importazione degli esauriti" });
-    }
-};
-
-export const deleteAllEsauriti = async (req, res) => {
-    try {
-        const data = req.body;
-
-        // Cancella tutta la tabella esauriti
-        await deleteEsauriti(); 
-
-        // Rispondi solo una volta dopo l'inserimento completato
-        res.json({ message: 'Inserimento completato con successo' });
-    } catch (error) {
-        console.error("Errore nella cancellazione esauriti:", error);
-        res.status(500).json({ error: "Si è verificato un errore nella cancellazione  degli esauriti" });
-    }
-};
-
-// export const deleteAllEsauriti=(req,res)=>{
-//     const data = req.body;
-//     //Cancella tutta la tabella esauriti
-//     deleteEsauriti(data,(err,results)=> {
-//         if (err) {
-//             res.send(err);
-//             return;
-
-//         }else {
-//             res.json(results);
-//         }
-//     });
-
 // };

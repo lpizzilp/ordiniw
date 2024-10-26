@@ -60,6 +60,7 @@ import {
 } from "../controllers/billstatus.js";
 
 import {
+    importReparti,
     importAnagrafica,
     importEsauriti,
     deleteAllEsauriti
@@ -234,29 +235,23 @@ router.put("/api/sagraObbligo", updateControlObbligo)
 ////////////////////////////// Categorie /////////////////////////////
 router.get("/api/categorie", getAllCategorie);
 
-////////////////////////// Bill Details ////////////////////////////////
-router.post("/api/importfood", importAnagrafica);
-
-
 /////////////////////////  Errore /////////////////////////////////////
 router.get("/api/errori", allErrori)
 router.post("/api/posterrore", InserisciErrore)
 
+////////////////////////// Log ////////////////////////////////
+router.post("/api/log", Infolog)
+
+//----------------------------------------------------
+// Chiamate da sistema centrale VB
+//----------------------------------------------------
+router.post("/api/importfood", importAnagrafica);
+router.post("/api/importreparti", importReparti);
 
 ////////////////////////// Esauriti ////////////////////////////////
 router.post("/api/importesauriti", importEsauriti);
 router.delete("/api/deleteesauriti", deleteAllEsauriti);
 
-////////////////////////// Log ////////////////////////////////
-router.post("/api/log", Infolog)
 
 // export default router
 export default router;
-
-
-
-
-
-
-
-

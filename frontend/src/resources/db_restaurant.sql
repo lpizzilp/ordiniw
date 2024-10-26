@@ -187,3 +187,12 @@ CREATE TABLE `bookdetails` (
   PRIMARY KEY (`book_id`,`food_id`),
   CONSTRAINT `bookdetails_FK` FOREIGN KEY (`book_id`) REFERENCES `bookstatus` (`book_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- db_restaurant.reparti definition
+
+CREATE TABLE `reparti` (
+  `idReparto` varchar(5) NOT NULL,
+  `descReparto` varchar(25) NOT NULL,
+  `peso` int(5) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`idReparto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
