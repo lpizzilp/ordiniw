@@ -14,17 +14,18 @@ import {
 } from "../models/CatalogoModel.js";
 
 
-<<<<<<< HEAD
+
 export const getSagraId=(req,res)=>{
     const idsagra = req.params.idsagra
     getSagrabyId(idsagra,(err,results)=> {
-=======
+    });
+};
+
 export const getSagraSig=(req,res)=>{
     //const IdSagra = req.headers['id-sagra'];
     //console.log( IdSagra);
 
     getSagrabySig(req.params.sigla,(err,results)=> {
->>>>>>> origin/main
         if (err) {
             res.send(err);
         }else {
