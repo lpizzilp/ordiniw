@@ -202,4 +202,39 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_sagra_IDX` (`id_sagra`,`user_email`) USING BTREE
+<<<<<<< HEAD
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+=======
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.billdetails definition
+
+CREATE TABLE `billdetails` (
+  `bill_id` int(11) NOT NULL,
+  `food_id` varchar(5) NOT NULL,
+  `item_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`bill_id`,`food_id`),
+  CONSTRAINT `billdetails_FK` FOREIGN KEY (`bill_id`) REFERENCES `billstatus` (`bill_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.bookdetails definition
+
+CREATE TABLE `bookdetails` (
+  `book_id` int(11) NOT NULL,
+  `food_id` varchar(5) NOT NULL,
+  `item_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`book_id`,`food_id`),
+  CONSTRAINT `bookdetails_FK` FOREIGN KEY (`book_id`) REFERENCES `bookstatus` (`book_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- db_restaurant.reparti definition
+
+CREATE TABLE `reparti` (
+  `idReparto` varchar(5) NOT NULL,
+  `descReparto` varchar(25) NOT NULL,
+  `peso` int(5) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`idReparto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+>>>>>>> origin/main

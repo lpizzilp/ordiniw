@@ -4,6 +4,36 @@
 import db from "../config/database.js";
 
 //-------------------------------
+//REPARTI
+//-------------------------------
+export const insertReparti = (data) => {
+    return new Promise((resolve, reject) => {
+        db.query("INSERT INTO reparti SET ?", data, (err, results) => {
+            if (err) {
+                console.error('Errore durante l\'inserimento:', err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+
+export const deleteReparti = () => {
+    return new Promise((resolve, reject) => {
+        db.query("DELETE FROM reparti", (err, results) => {
+            if (err) {
+                console.error('Errore durante la cancellazione:', err);
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+
+//-------------------------------
+// ANAGRAFICA ARTICOLI
 //-------------------------------
 export const insertAnagrafica = (data) => {
     return new Promise((resolve, reject) => {
@@ -30,35 +60,6 @@ export const deleteAnagrafica = () => {
         });
     });
 };
-
-
-
-
-
-
-// // insert anagrafica articoli 
-// export const insertAnagrafica = (data,result) => {
-//     db.query("INSERT INTO food SET ?",data, (err,results)=> {
-//         if (err){
-//             console.log(err);
-//             result(err,null);
-//         }else{
-//             result(null,results);
-//         }
-//     });
-// };
-
-// // Cancella tutta l'anagrafica
-// export const deleteAnagrafica = (result) => {
-//     db.query("DELETE FROM food", '', (err, results) => {
-//         if (err) {
-//             console.log(err);
-//             result(err, null);
-//         } else {
-//             result(null, results); // Invia null come primo argomento
-//         }
-//     });
-// };
 
 //------------------------------------------
 //------------------------------------------
@@ -90,3 +91,34 @@ export const deleteEsauriti = (idsagra) => {
     });
 };
 //------------------------------------------
+
+
+
+
+
+
+
+
+// // insert anagrafica articoli 
+// export const insertAnagrafica = (data,result) => {
+//     db.query("INSERT INTO food SET ?",data, (err,results)=> {
+//         if (err){
+//             console.log(err);
+//             result(err,null);
+//         }else{
+//             result(null,results);
+//         }
+//     });
+// };
+
+// // Cancella tutta l'anagrafica
+// export const deleteAnagrafica = (result) => {
+//     db.query("DELETE FROM food", '', (err, results) => {
+//         if (err) {
+//             console.log(err);
+//             result(err, null);
+//         } else {
+//             result(null, results); // Invia null come primo argomento
+//         }
+//     });
+// };
