@@ -1,19 +1,6 @@
--- db_restaurant.billdetails definition
-
-CREATE TABLE `billdetails` (
-  `id_sagra` varchar(5) NOT NULL,
-  `bill_id` int(11) NOT NULL,
-  `food_id` varchar(5) NOT NULL,
-  `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`),
-  KEY `billdetails_bill_id_IDX` (`bill_id`,`food_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 -- db_restaurant.billstatus definition
 
 CREATE TABLE `billstatus` (
-  `id_sagra` varchar(5) NOT NULL,
   `bill_id` int(11) NOT NULL,
   `user_id` varchar(20) DEFAULT NULL,
   `bill_tavolo` varchar(255) DEFAULT NULL,
@@ -28,27 +15,13 @@ CREATE TABLE `billstatus` (
   `TipoCassa` varchar(1) DEFAULT NULL,
   `Nominativo` varchar(50) DEFAULT NULL,
   `bill_note` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `billstatus_unique` (`bill_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
--- db_restaurant.bookdetails definition
-
-CREATE TABLE `bookdetails` (
-  `id_sagra` varchar(5) NOT NULL,
-  `book_id` int(11) NOT NULL,
-  `food_id` varchar(5) NOT NULL,
-  `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`),
-  KEY `bookdetails_book_id_IDX` (`book_id`,`food_id`) USING BTREE
+  PRIMARY KEY (`bill_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.bookstatus definition
 
 CREATE TABLE `bookstatus` (
-  `id_sagra` varchar(5) NOT NULL,
   `book_id` int(11) NOT NULL,
   `user_id` varchar(20) DEFAULT NULL,
   `book_tavolo` varchar(255) DEFAULT NULL,
@@ -64,14 +37,13 @@ CREATE TABLE `bookstatus` (
   `book_nominativo` varchar(50) DEFAULT NULL,
   `book_phone` varchar(50) DEFAULT NULL,
   `book_note` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`)
+  PRIMARY KEY (`book_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.booktable definition
 
 CREATE TABLE `booktable` (
-  `id_sagra` varchar(5) NOT NULL,
   `book_id` int(11) NOT NULL AUTO_INCREMENT,
   `book_name` varchar(255) DEFAULT NULL,
   `book_phone` varchar(255) DEFAULT NULL,
@@ -80,9 +52,8 @@ CREATE TABLE `booktable` (
   `user_id` varchar(20) DEFAULT NULL,
   `book_when` varchar(255) DEFAULT NULL,
   `book_note` text DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `booktable_unique` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`book_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.cart definition
@@ -112,27 +83,23 @@ CREATE TABLE `catalogo_sagre` (
   `linkSito` varchar(100) DEFAULT NULL,
   `StrOrdini` varchar(10) NOT NULL DEFAULT '011',
   `MaskVisibilita` varchar(10) NOT NULL DEFAULT '1111000110',
-  `MaskObbligo` varchar(10) NOT NULL DEFAULT '1100000100',
+  `MaskObbligo` varchar(10) NOT NULL DEFAULT    '1100000100',
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 -- db_restaurant.categorie definition
 
 CREATE TABLE `categorie` (
-  `id_sagra` varchar(5) NOT NULL,
   `idCategoria` varchar(5) NOT NULL,
   `descCategoria` varchar(25) NOT NULL,
   `peso` int(5) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `categorie_unique` (`idCategoria`)
+  PRIMARY KEY (`idCategoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.errors definition
 
 CREATE TABLE `errors` (
-  `id_sagra` varchar(5) NOT NULL,
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `tiposegnalazione` varchar(50) NOT NULL,
   `tipoerr` varchar(50) NOT NULL,
@@ -147,26 +114,22 @@ CREATE TABLE `errors` (
   `versionewk` varchar(25) DEFAULT NULL,
   `connessione` varchar(100) DEFAULT NULL,
   `err_ora` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `errors_unique` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.esauriti definition
 
 CREATE TABLE `esauriti` (
-  `id_sagra` varchar(5) NOT NULL,
   `food_id` varchar(5) NOT NULL,
   `QtaDisponibile` int(10) unsigned NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `esauriti_unique` (`food_id`)
+  PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.food definition
 
 CREATE TABLE `food` (
-  `id_sagra` varchar(5) NOT NULL,
   `food_id` varchar(5) NOT NULL,
   `food_name` varchar(255) DEFAULT NULL,
   `food_star` varchar(255) DEFAULT NULL,
@@ -186,8 +149,7 @@ CREATE TABLE `food` (
   `FlgPrenotabile` tinyint(1) DEFAULT 0,
   `DataFinePRT` varchar(10) DEFAULT NULL,
   `FlgVariante` tinyint(1) DEFAULT 0,
-  PRIMARY KEY (`id_sagra`),
-  UNIQUE KEY `food_unique` (`food_id`)
+  PRIMARY KEY (`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -202,9 +164,6 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_sagra_IDX` (`id_sagra`,`user_email`) USING BTREE
-<<<<<<< HEAD
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -237,4 +196,3 @@ CREATE TABLE `reparti` (
   `peso` int(5) NOT NULL DEFAULT 0,
   PRIMARY KEY (`idReparto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
->>>>>>> origin/main
