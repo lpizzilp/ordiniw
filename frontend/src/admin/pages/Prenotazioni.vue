@@ -140,7 +140,7 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async getAllPenot() {
-            this.totqty = (await axios.get('/prenotazione/sum')).data;
+            this.totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sum')).data;
             this.changeopengrid();
         },
 
@@ -154,7 +154,7 @@ export default {
                     break;
 
                 case false:
-                    this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
+                    this.allPenot = (await axios.get('/getprenotazione/' + sessionStorage.getItem('SagraId') + '/' + food_id)).data;
                     for (let i = 0; i < this.showSerata.length; i++) {
                         if (id == i) {
                             this.showSerata[i] = true
@@ -232,7 +232,7 @@ export default {
 
             this.showAction[index] = false
             await axios.put("/prenotazione/status", data)
-            this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
+            this.allPenot = (await axios.get('/getprenotazione/' + sessionStorage.getItem('SagraId') + '/' + food_id)).data;
         },
 
 
@@ -246,13 +246,13 @@ export default {
             var data = [[]] //array dei dati
             let plus = 0
             // recupera prenotazioni
-            this.totqty = (await axios.get('/prenotazione/sum')).data;
+            this.totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sum')).data;
 
             data[0] = ['Id Prenotazione', 'Codice', 'Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Validità', 'Note', 'Prezzo Tot']
             plus = plus + 1
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
-                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
+                this.allPenot = (await axios.get('/getprenotazione/' + sessionStorage.getItem('SagraId') + '/' + this.totqty[i].food_id)).data;
                 for (let l = 0; l < this.allPenot.length; l++) {
                     switch (this.allPenot[l].book_status) {
                         case 0:
@@ -280,7 +280,7 @@ export default {
 
 
         async Exportfunction() {
-            this.totqty = (await axios.get('/prenotazione/sum')).data;
+            this.totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sum')).data;
             // Creare un nuovo workbook e foglio Excel
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Dati');

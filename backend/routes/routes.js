@@ -136,9 +136,9 @@ router.post("/api/users/", createAccount);
 router.post("/api/users/error/", Errors);
 
 // update authlevel
-router.put("/api/users/:idsagra/update/", updateUserauthlevel);
+router.put("/api/users/update/", updateUserauthlevel);
 
-router.delete("/api/users/delete/:email/:idsagra", Userdelete);
+router.delete("/api/users/delete/:email", Userdelete);
 
 
 ////////////////////////// MAIL ////////////////////////////////

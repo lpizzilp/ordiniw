@@ -366,7 +366,7 @@ export default {
                     axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                 }
 
-                let bookId = (await axios.get("/prenotazione/new")).data;
+                let bookId = (await axios.get("/prenotazione/" + sessionStorage.getItem('SagraId') + "/new")).data;
                 if (bookId == "") {
                     if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
                         bookId = sessionStorage.getItem('startprt');

@@ -49,9 +49,8 @@ export const createAccount=(req,res)=>{
 
 // update user
 export const updateUserauthlevel=(req,res)=>{
-    const idsagra = data.id_sagra
     const data = req.body;
-    updateauthlevel(idsagra,data, (err,results)=> {
+    updateauthlevel(data, (err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -62,8 +61,7 @@ export const updateUserauthlevel=(req,res)=>{
 
 // delete user
 export const Userdelete = (req,res)=>{
-    const idsagra = req.params.idsagra
-    deleteuserbyemail(idsagra,req.params.email,(err,results)=> {
+    deleteuserbyemail(req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
