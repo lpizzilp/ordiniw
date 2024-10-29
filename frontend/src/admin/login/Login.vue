@@ -96,11 +96,11 @@ export default {
                 this.Quickerrore = true
                 Makelog(response);
             }
-
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
             } else if (Adminuser.data.authlevel != 0) {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
+                    console.log('entor')
                     Adminuser.data.user_password = "";
                     sessionStorage.setItem('AdminSagraId',Adminuser.data.id_sagra );
                     if (sessionStorage.getItem('AdminSagraId') != null || sessionStorage.getItem('AdminSagraId') != undefined || sessionStorage.getItem('AdminSagraId') != "") {

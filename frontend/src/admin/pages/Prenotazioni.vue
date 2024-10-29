@@ -140,7 +140,7 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async getAllPenot() {
-            this.totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sum')).data;
+            this.totqty = (await axios.get('/prenotazione/sum')).data;
             this.changeopengrid();
         },
 

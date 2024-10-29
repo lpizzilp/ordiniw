@@ -165,7 +165,7 @@ export default {
 
 
         async Exportfunction() {
-            this.totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sum')).data;
+            this.totqty = (await axios.get('/prenotazione/sum')).data;
             // Creare un nuovo workbook e foglio Excel
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Dati');

@@ -68,7 +68,6 @@ import {
 
 
 import {
-    getSagraSig,
     createSagra,
     updateSagraCodaeInfo,
     allSagre,
@@ -79,6 +78,7 @@ import {
     GetControlObbligo,
     updateControlVisibilita,
     updateControlObbligo,
+    getSagraId,
 } from "../controllers/catalogo.js";
 
 import {
@@ -222,7 +222,7 @@ router.delete("/api/billstatus/delete", deleteAllBill)
 //recupera sagra in base alla sigla
 router.get("/api/sagra/ute/:ordine", allSagre);
 router.get("/api/sagra/keepalive", KeepAlive)
-router.get("/api/sagra/:sigla", getSagraSig);
+router.get("/api/sagra/:sigla", getSagraId);
 router.get("/api/sagra/controlli/:id", GetControlOrdini);
 router.get("/api/sagra/visibilita/:id", GetControlVisibilita);
 router.get("/api/sagra/obbligo/:id", GetControlObbligo);

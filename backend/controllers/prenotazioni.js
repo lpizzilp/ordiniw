@@ -17,7 +17,7 @@ import {
 
 // Prendi nuovo id
 export const PredinuovoId=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     PrendiId(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
@@ -53,7 +53,7 @@ export const createDettaglio=(req,res)=>{
 
 // controllo quantità
 export const checkquantita=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     checkfood(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
@@ -66,7 +66,7 @@ export const checkquantita=(req,res)=>{
 // get tutte le prenotazioni inserite maggiori un determinato id 
 // ...Se l'id non viene passato  vengono fornite tutte  
 export const getAllPrenotGtId=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     getPrenotGtId(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
@@ -78,7 +78,7 @@ export const getAllPrenotGtId=(req,res)=>{
 
 
 export const deleteAllBook=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     const id = req.params.id;
     deleteAllBooks(idsagra,id,(err,results)=> {
         if (err) {
@@ -92,7 +92,7 @@ export const deleteAllBook=(req,res)=>{
       
 
 export const getPrenDetailsById=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     getPrenDetails(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
@@ -104,7 +104,7 @@ export const getPrenDetailsById=(req,res)=>{
 
 // prendi tutte le prenotazoni
 export const getAllPrenot=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     getAll(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
@@ -115,7 +115,7 @@ export const getAllPrenot=(req,res)=>{
 };
 
 export const PutAction=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     const data = req.body;
     Updatestatus(idsagra,data,(err,results)=> {
         if (err) {
@@ -127,7 +127,7 @@ export const PutAction=(req,res)=>{
 };
 
 export const Totsum=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     getsum(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
@@ -138,7 +138,7 @@ export const Totsum=(req,res)=>{
 };
 
 export const SumPerOrdine=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     getqtaperordine(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
@@ -149,7 +149,7 @@ export const SumPerOrdine=(req,res)=>{
 };
 
 export const cancelBookstatus=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     deleteBookstatusById(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
@@ -160,7 +160,7 @@ export const cancelBookstatus=(req,res)=>{
 };
 
 export const cancelBookdetails=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     deleteBookdetailsById(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);

@@ -15,7 +15,12 @@ if (savedVersion !== currentVersion) {
     location.reload(true);
 }
 
-
+// Id sagra param
+const queryString = window.location.search.substring(1);
+const parametriObj = Object.fromEntries(new URLSearchParams(queryString));
+if (parametriObj.id != null) {
+    sessionStorage.setItem('SagraId', parametriObj.id)
+}
 
 //create vue 
 createApp(App)

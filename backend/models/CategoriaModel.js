@@ -1,7 +1,7 @@
 import db from "../config/database.js";
 
 export const allCategorie = (idsagra,result) => {
-    db.query("SELECT DISTINCT c.* FROM categorie c INNER JOIN food f ON c.idCategoria = f.food_category WHERE id_sagra = ? AND f.FlgPrenotabile = 0 ORDER BY c.peso asc", idsagra, (err, results) => {
+    db.query("SELECT DISTINCT c.* FROM categorie c INNER JOIN food f ON c.idCategoria = f.food_category WHERE c.id_sagra = ? AND f.id_sagra = c.id_sagra AND f.FlgPrenotabile = 0 ORDER BY c.peso asc", idsagra, (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);

@@ -18,7 +18,7 @@ export const createBillDetails=(req,res)=>{
 
 // get BillDetails
 export const getBillDetailsById=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     getBillDetails(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
@@ -30,7 +30,7 @@ export const getBillDetailsById=(req,res)=>{
 
 // delete BillDetails
 export const deleteBillById=(req,res)=>{
-    const idsagra = req.params.idsagra
+    const idsagra = req.headers['id-sagra']
     deleteBill(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
