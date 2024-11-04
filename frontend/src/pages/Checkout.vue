@@ -314,11 +314,12 @@ export default {
             e.target.value = e.target.value.toUpperCase();
         },
 
-        async sendBillDetails(billId, foodId, qty) {
+        async sendBillDetails(idSagra, billId, foodId, qty) {
             let callURL = null
             let Details = null
             if (sessionStorage.getItem('filtro') === 'PRE') {
                 Details = {
+                    id_sagra: idSagra,
                     book_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
@@ -326,6 +327,7 @@ export default {
                 callURL = "/prenotazione/dettaglio"
             } else {
                 Details = {
+                    id_sagra: idSagra,
                     bill_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
@@ -382,6 +384,7 @@ export default {
                 }
 
                 let dataprenotazione = {
+                    id_sagra: sessionStorage.getItem('Sagraid'),
                     book_id: parseInt(bookId),
                     user_id: sessionStorage.getItem('Username'),
                     book_tavolo: this.checkoutObj.Tavolo,
@@ -402,6 +405,7 @@ export default {
 
                 try {
                     const response = await axios.post("/prenotazione", dataprenotazione);
+                    console.log(response + " prenotaizo")
                     if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', dataprenotazione.book_id)
@@ -419,7 +423,9 @@ export default {
                 else {
                     billId = parseInt(billId.bill_id) + 1;
                 }
+                console.log(billId)
                 let billStatus = {
+                    id_sagra: sessionStorage.getItem('SagraId'),
                     bill_id: parseInt(billId),
                     user_id: sessionStorage.getItem('Username'),
                     bill_tavolo: this.checkoutObj.Tavolo,
@@ -438,6 +444,7 @@ export default {
 
                 try {
                     const response = await axios.post("/billstatus", billStatus);
+                    console.log(response.errMsg + " bill satus")
                     if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', billStatus.bill_id)
@@ -447,11 +454,12 @@ export default {
             //COMMON -> dettaglio per tutti ----------------------------------------- 
             let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
             this.cartItem.forEach((foodId, index) => {
-                detailPromises.push(this.sendBillDetails(sessionStorage.getItem('Bill'), foodId, this.itemQuantity[index]));
+                detailPromises.push(this.sendBillDetails(sessionStorage.getItem('SagraId'), sessionStorage.getItem('Bill'), foodId, this.itemQuantity[index]));
             });
             try {
                 await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
             } catch (error) {
+                console.log(error + " fine")
                 this.Quickerrore = true;
                 return;
             }

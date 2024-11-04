@@ -10,7 +10,8 @@ import {
 
 // get all Foods
 export const showFoods=(req,res)=>{
-    getFoods((err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getFoods(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

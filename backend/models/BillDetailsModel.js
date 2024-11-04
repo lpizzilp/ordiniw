@@ -18,7 +18,7 @@ export const insertBillDetails = (data,result) => {
 export const getBillDetails = (idsagra,id,result) => {
     db.query("SELECT bill_id, b.food_id, item_qty, food_name, f.food_price" + 
         "  FROM billdetails b, food f " + 
-        " WHERE id_sagra = ? AND bill_id = ? "  +
+        " WHERE b.id_sagra = ? AND f.id_sagra = b.id_sagra AND bill_id = ? "  +
         "   AND f.food_id = b.food_id " +
         " ORDER BY f.food_category desc, f.food_name asc"     ,[idsagra,id], (err,results)=> {
         if (err){

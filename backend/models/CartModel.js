@@ -3,7 +3,7 @@ import db from "../config/database.js";
 
 // get all items by user id
 export const getAllItems = (id,result) => {
-    db.query("SELECT c.*, f.food_name, f.food_category, cy.peso  FROM cart c, food f LEFT JOIN categorie cy on cy.idCategoria = f.food_category WHERE f.food_name != 'ZZ' and user_id = ? and c.food_id = f.food_id ORDER BY peso asc, food_category desc, food_name asc;",[id], (err,results)=> {
+    db.query("SELECT DISTINCT  c.*, f.food_name, f.food_category, cy.peso FROM cart c JOIN food f ON c.food_id = f.food_id LEFT JOIN categorie cy ON cy.idCategoria = f.food_category WHERE f.food_name != 'ZZ' AND c.user_id = ? ORDER BY cy.peso ASC, f.food_category DESC, f.food_name ASC;",[id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

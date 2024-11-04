@@ -89,7 +89,7 @@ export const updatePaid = (idsagra,id,result) => {
 };
 
 export const cancelStatus = (idsagra,id,result) => {
-    db.query("UPDATE billstatus SET bill_status = 0  WHERE id_sagra = ?, bill_id = ?",[idsagra,id], (err,results)=> {
+    db.query("UPDATE billstatus SET bill_status = 0  WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

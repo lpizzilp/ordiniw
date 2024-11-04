@@ -2,24 +2,25 @@
 import db from "../config/database.js";
 
 // get all Foods
-export const getFoods = (result) => {
-    var now = new Date();
-        var day = ("0" + now.getDate()).slice(-2);
-        var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var datacorrente = now.getFullYear() + month + day
-    let sql1 = "SELECT f.*, e.QtaDisponibile, c.peso  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id LEFT JOIN categorie c on c.idCategoria = f.food_category WHERE f.food_name != 'ZZ' "
-    let sql11 = sql1 + " AND f.FlgValidita = 0 "
-    let sql2 = " UNION "
-    let sql3 = sql1 + " AND f.FlgValidita != 0 AND " + datacorrente.toString() + " >= f.DataInizioValidita AND " + datacorrente.toString() + " <= f.DataFineValidita ORDER BY peso asc, food_category desc, food_name asc"
-    let sql = sql11 + sql2 + sql3
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.log(err);
-            result(err, null);
-        } else {
-            result(null, results);
-        }
-    });
+export const getFoods = (idsagra, result) => {
+    if (idsagra != null) {
+        var datacorrente = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+        let sql1 = "SELECT f.*, e.QtaDisponibile, c.peso  FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id LEFT JOIN categorie c on c.idCategoria = f.food_category WHERE f.id_sagra = ? AND c.id_sagra = f.id_sagra AND f.food_name != 'ZZ' "
+        let sql11 = sql1 + " AND f.FlgValidita = 0 "
+        let sql2 = " UNION "
+        let sql3 = sql1 + " AND f.FlgValidita != 0 AND " + datacorrente.toString() + " >= f.DataInizioValidita AND " + datacorrente.toString() + " <= f.DataFineValidita ORDER BY peso asc, food_category desc, food_name asc"
+        let sql = sql11 + sql2 + sql3
+        db.query(sql,[idsagra, idsagra],(err, results) => {
+            if (err) {
+                console.log(err);
+                result(err, null);
+            } else {
+                result(null, results);
+            }
+        });
+    } else {
+        result(null, null)
+    }
 };
 
 // get single Foods

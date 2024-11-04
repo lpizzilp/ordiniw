@@ -96,8 +96,8 @@ export const updateContrOrdini = (idsagra,data,result) => {
     });
 };
 
-export const updateContrVisibilita = (data,result) => {
-    db.query("UPDATE catalogo_sagre SET MaskVisibilita = ? WHERE id_sagra = ?",[data.type, data.id],(err,results)=> {
+export const updateContrVisibilita = (idsagra, data,result) => {
+    db.query("UPDATE catalogo_sagre SET MaskVisibilita = ? WHERE id_sagra = ?",[data.type, idsagra],(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -110,7 +110,6 @@ export const updateContrVisibilita = (data,result) => {
 export const updateContrObbligo = (idsagra,data,result) => {
     db.query("UPDATE catalogo_sagre SET MaskObbligo = ? WHERE id_sagra = ?",[data.type, idsagra],(err,results)=> {
         if (err){
-            console.log(err);
             result(err,null);
         }else{
             result(null,results);

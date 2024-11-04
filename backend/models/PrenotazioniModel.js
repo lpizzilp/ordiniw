@@ -121,7 +121,7 @@ export const Updatestatus = (idsagra,data, result) => {
 };
 
 export const getsum = (idsagra,result) => {
-    db.query("SELECT f.food_id, f.food_name, f.FlgVariante, SUM(bd.item_qty) AS somma_qty FROM food AS f JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id JOIN bookstatus bs ON bd.id_sagra_id = bs.id_sagra AND bd.book_id = bs.book_id AND bs.book_status != 3 WHERE f.id_sagra = ?, GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
+    db.query("SELECT f.food_id, f.food_name, f.FlgVariante, SUM(bd.item_qty) AS somma_qty FROM food AS f JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id JOIN bookstatus bs ON bd.id_sagra= bs.id_sagra AND bd.book_id = bs.book_id AND bs.book_status != 3 WHERE f.id_sagra = ? GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
