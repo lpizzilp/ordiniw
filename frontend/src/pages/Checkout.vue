@@ -174,10 +174,6 @@ export default {
             this.checkoutObj[fieldName] = event.target.value;  // Aggiorniamo direttamente il valore nel checkoutObj
             this.validateField(fieldName);  // Validiamo il campo dopo l'input
         },
-        updateCheckoutObj() {
-
-            console.log(this.checkoutObj.Coperti);
-        } ,
         getFieldVisibility(index) {
             const maskIndex = this.type === 'Y' ? index + 6 : index;
             return this.maskVisibilita[maskIndex] == 1 ? 'block' : 'none';
@@ -405,7 +401,6 @@ export default {
 
                 try {
                     const response = await axios.post("/prenotazione", dataprenotazione);
-                    console.log(response + " prenotaizo")
                     if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', dataprenotazione.book_id)
@@ -423,7 +418,6 @@ export default {
                 else {
                     billId = parseInt(billId.bill_id) + 1;
                 }
-                console.log(billId)
                 let billStatus = {
                     id_sagra: sessionStorage.getItem('SagraId'),
                     bill_id: parseInt(billId),
@@ -444,7 +438,6 @@ export default {
 
                 try {
                     const response = await axios.post("/billstatus", billStatus);
-                    console.log(response.errMsg + " bill satus")
                     if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', billStatus.bill_id)
@@ -459,7 +452,6 @@ export default {
             try {
                 await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
             } catch (error) {
-                console.log(error + " fine")
                 this.Quickerrore = true;
                 return;
             }

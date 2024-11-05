@@ -17,7 +17,6 @@ axios.interceptors.response.use(
     response => {
         // Gestisci la risposta normale qui
         var errMsg = null
-        // console.log(response)
         if (response.data.errno != undefined    ) {
             errMsg = response.config.url + " - "+ response.data.errno + " - " + response.data.sqlMessage +" -" + response.data.sql
         }

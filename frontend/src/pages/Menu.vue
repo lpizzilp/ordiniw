@@ -451,11 +451,8 @@ export default {
         },
 
         FilterBtncolor(index) {
-            console.log('entro')
             if (this.Prenotazione == 0) {
-                console.log('entroif')
                 const element = document.getElementById('filter' + index);
-                console.log(document.querySelectorAll('[id^="filter"]'))
                 document.querySelectorAll('[id^="filter"]').forEach(el => {
                     el.style.cssText = `
                         padding: 5px 25px;
@@ -470,7 +467,6 @@ export default {
                 });
 
                 if (element) {
-                    console.log('entroelemente')
                     element.style.cssText = `
                     padding: 5px 25px;
                     margin: 0px 10px;

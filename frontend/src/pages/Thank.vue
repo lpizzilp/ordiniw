@@ -60,9 +60,7 @@ export default {
         sessionStorage.removeItem('MatchUser')
         sessionStorage.removeItem('Username')
         sessionStorage.removeItem('TipoOrdine')
-        //sessionStorage.removeItem('Bill')
         sessionStorage.removeItem('filtro')
-        //sessionStorage.removeItem('Coperti')
     },
 
     methods: {

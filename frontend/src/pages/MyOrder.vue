@@ -30,6 +30,7 @@ import QuickViewErrore from '@/components/QuickViewErrore.vue';
 
 export default {
     name: 'MyOrder',
+    inject: ["eventBus"],
 
     data() {
         return {
@@ -48,7 +49,7 @@ export default {
             switch (parametriObj.contaprezzi) {
                 case 'true':
                     sessionStorage.setItem('MatchUser', parametriObj.match)
-                    sessionStorage.setItem('Bill', parametriObj.id)
+                    sessionStorage.setItem('Bill', parametriObj.idData)
                     sessionStorage.setItem('Coperti', "")
                     this.$router.push("/contaprezzi")
                     break;
@@ -57,7 +58,7 @@ export default {
                     sessionStorage.setItem('MatchUser', parametriObj.match)
                     sessionStorage.setItem('Username', parametriObj.user)
                     sessionStorage.setItem('TipoOrdine', parametriObj.type)
-                    sessionStorage.setItem('Bill', parametriObj.id)
+                    sessionStorage.setItem('Bill', parametriObj.idData)
                     var callURL ='/billdetails/'
                     if (parametriObj.filtroOrd == 'PRE') {
                         sessionStorage.setItem('filtro', (parametriObj.filtroOrd === '-1' ? "" : parametriObj.filtroOrd))
@@ -65,7 +66,7 @@ export default {
                     } else {
                         sessionStorage.setItem('filtro', "")
                     }
-                    try {var items = await axios.get(callURL + parametriObj.id)
+                    try {var items = await axios.get(callURL + parametriObj.idData)
                         if (items.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                     }
                     for (let i = 0; i < items.data.length; i++) {
@@ -76,6 +77,7 @@ export default {
                         }
                         await axios.post("/cartItem", data);
                     }
+                    this.eventBus.emit("showCart", true);
                     this.$router.push("/menu")
                     break;
             }

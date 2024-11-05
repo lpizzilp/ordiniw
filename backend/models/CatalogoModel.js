@@ -14,8 +14,8 @@ export const getSagrabyId = (idsagra,result) => {
 };
 
 // recupera sagre
-export const getAllSagre = (ord, result) => {
-    db.query("SELECT id_sagra, descrizione  FROM catalogo_sagre ORDER BY CASE WHEN id_sagra = ? THEN 0 ELSE 1 END, id_sagra;",[ord], (err, results)=> {
+export const getAllSagre = (id, result) => {
+    db.query("SELECT id_sagra, descrizione  FROM catalogo_sagre ORDER BY CASE WHEN id_sagra = ? THEN 0 ELSE 1 END, id_sagra;",[id], (err, results)=> {
         if (err){
             console.log(err);
             result(err,null);

@@ -40,7 +40,7 @@ export const insertUser = (data, result) => {
 
 
 // update authlevel
-export const updateauthlevel = (idsagra,data, result) => {
+export const updateauthlevel = (data, result) => {
     db.query("UPDATE user SET authlevel = ? where id_sagra = ? and user_email = ?",[data.authlevel, data.id_sagra, data.user_email], (err,results)=> {
         if (err){
             console.log(err);

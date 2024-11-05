@@ -220,7 +220,7 @@ router.delete("/api/billstatus/delete", deleteAllBill)
 
 ////////////////////////// Catalogo /////////////////////////////
 //recupera sagra in base alla sigla
-router.get("/api/sagra/ute/:ordine", allSagre);
+router.get("/api/sagra/ute/:id", allSagre);
 router.get("/api/sagra/keepalive", KeepAlive)
 router.get("/api/sagra/:sigla", getSagraId);
 router.get("/api/sagra/controlli/:id", GetControlOrdini);

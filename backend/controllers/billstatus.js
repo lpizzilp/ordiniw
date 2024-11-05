@@ -55,9 +55,7 @@ export const getAllBillsByUser=(req,res)=>{
 export const getAllBillsByBill=(req,res)=>{
     const idsagra = req.headers['id-sagra']
     getBillsByBill(idsagra,req.params.id,(err,results)=> {
-    //console.log('ciaooo')
     //const IdSagra = req.headers['id-sagra'];
-    //console.log( IdSagra);
     });
     getBillsByBill(req.params.id,(err,results)=> {
 

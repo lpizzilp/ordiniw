@@ -26,7 +26,7 @@ export const getSagraId=(req,res)=>{
 
 // recupera tutte le sagre
 export const allSagre=(req,res)=>{
-    getAllSagre(idsagra,req.params.ordine,(err,results)=> {
+    getAllSagre(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
