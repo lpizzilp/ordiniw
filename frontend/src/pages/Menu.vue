@@ -5,9 +5,9 @@
             <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
                 Mostra Tutto
             </button>
-            <button :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind"
-                @click="filterFoodBtn(c.idCategoria, (ind + 1))">
-                {{ c.descCategoria }}
+            <button :id="'filter' + (ind + 1)" v-for="(r, ind) in loadReparti" :key="ind"
+                @click="filterFoodBtn(r.idReparto, (ind + 1))">
+                {{ r.descReparto }}
             </button>
         </div>
     </div>
@@ -219,7 +219,7 @@ export default {
 
     computed: {
         ...mapState(["allFoods"]),
-        ...mapState(["allCategories"]),
+        ...mapState(["allReparti"]),
 
         filteredMenuItems() {
             if (this.activeFilter === 'Tutti') {
@@ -256,8 +256,8 @@ export default {
             return this.allFoods.filter((f) => f.food_id == this.food);
         },
 
-        loadCategories: function () {
-            return this.allCategories
+        loadReparti: function () {
+            return this.allReparti
         },
     },
 
@@ -870,6 +870,7 @@ h3 {
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2; /* Limita il titolo a 2 righe */
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden; /* Nasconde il testo oltre la seconda riga */
   text-overflow: ellipsis; /* Aggiunge "..." alla fine se il testo è troppo lungo */

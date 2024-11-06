@@ -101,18 +101,6 @@ CREATE TABLE `catalogo_sagre` (
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
--- db_restaurant.categorie definition
-
-CREATE TABLE `categorie` (
-  `id_sagra` varchar(5) NOT NULL,
-  `idCategoria` varchar(5) NOT NULL,
-  `descCategoria` varchar(25) NOT NULL,
-  `peso` int(5) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id_sagra`,`idCategoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 -- db_restaurant.errors definition
 
 CREATE TABLE `errors` (
@@ -203,7 +191,5 @@ CREATE TABLE `bookdetails` (
   `book_id` int(11) NOT NULL,
   `food_id` varchar(5) NOT NULL,
   `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`,`book_id`),
-  UNIQUE KEY `bookdetails_unique` (`food_id`),
-  CONSTRAINT `bookdetails_FK` FOREIGN KEY (`book_id`) REFERENCES `bookstatus` (`book_id`) ON DELETE CASCADE
+  PRIMARY KEY (`id_sagra`,`book_id`,`food_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

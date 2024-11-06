@@ -38,7 +38,7 @@ export default {
 
     created() {
         this.getFoodsData()
-        this.getCategorieData()
+        this.getRepartiData()
     },
 
     computed: {
@@ -47,7 +47,7 @@ export default {
 
     methods: {
         ...mapActions(["getFoodsData"]),
-        ...mapActions(["getCategorieData"])
+        ...mapActions(["getRepartiData"])
     }
 }
 </script>
