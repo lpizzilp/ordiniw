@@ -97,7 +97,7 @@ export const cancelStatus = (idsagra,id,result) => {
             result(null,results);
         }
     });
-    db.query("UPDATE billstatus SET bill_paid = 'false' WHERE bill_id = ?",id, (err,results)=> {
+    db.query("UPDATE billstatus SET bill_paid = 'false' WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -134,7 +134,7 @@ export const getBillsGtId = (idsagra,id,result) => {
 };
 
 //cancella tutti gli orini
-export const deleteAllBills = (data,result) => {
+export const deleteAllBills = (idsagra,data,result) => {
     db.query("DELETE FROM billstatus WHERE id_sagra = ? ",[idsagra,data], (err,results)=> {
         if (err){
             console.log(err);
