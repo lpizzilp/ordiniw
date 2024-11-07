@@ -20,7 +20,7 @@ export const getBillDetails = (idsagra,id,result) => {
         "  FROM billdetails b, food f " + 
         " WHERE b.id_sagra = ? AND f.id_sagra = b.id_sagra AND bill_id = ? "  +
         "   AND f.food_id = b.food_id " +
-        " ORDER BY f.food_category desc, f.food_name asc"     ,[idsagra,id], (err,results)=> {
+        " ORDER BY f.IdReparto desc, f.food_name asc"     ,[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

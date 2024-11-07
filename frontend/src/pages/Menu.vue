@@ -230,7 +230,7 @@ export default {
 
         filterFoods: function () {
             return this.allFoods.filter((f) => f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
-                (f.food_category.match(this.foodObj.category) || this.foodObj.category == "all" || this.foodObj.category == "") &&
+                (f.IdReparto.match(this.foodObj.category) || this.foodObj.category == "all" || this.foodObj.category == "") &&
                 (this.evaluatePrice(f, this.foodObj.price)) &&
                 f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
                 (this.evaluateStatus(f, this.foodObj.status)) &&
