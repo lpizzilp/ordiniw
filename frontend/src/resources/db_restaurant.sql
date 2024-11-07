@@ -191,5 +191,6 @@ CREATE TABLE `bookdetails` (
   `book_id` int(11) NOT NULL,
   `food_id` varchar(5) NOT NULL,
   `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`,`book_id`,`food_id`)
+  PRIMARY KEY (`id_sagra`,`book_id`,`food_id`),
+  CONSTRAINT `bookdetails_FK` FOREIGN KEY (`id_sagra`,`book_id`) REFERENCES `bookstatus` (`id_sagra`,`book_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

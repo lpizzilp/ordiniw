@@ -13,10 +13,12 @@ import {
 //----------------------------------------
 export const importReparti = async (req, res) => {
     try {
+        const idsagra = req.headers['id-sagra']
+        //console.log("=>>>>>>>>>>>>>>: ",idsagra)
         const data = req.body;
 
         // Cancella la tabella anagrafica
-        await deleteReparti();
+        await deleteReparti(idsagra);
 
         // Inserisci i nuovi record
         for (const element of data) {
@@ -34,11 +36,13 @@ export const importReparti = async (req, res) => {
 // Iserimento anagrafiche da sistema remoto 
 //----------------------------------------
 export const importAnagrafica = async (req, res) => {
+    
     try {
+        const idsagra = req.headers['id-sagra']
         const data = req.body;
 
         // Cancella la tabella anagrafica
-        await deleteAnagrafica();
+        await deleteAnagrafica(idsagra);
 
         // Inserisci i nuovi record
         for (const element of data) {
@@ -57,10 +61,11 @@ export const importAnagrafica = async (req, res) => {
 //-------------------------------------------
 export const importEsauriti = async (req, res) => {
     try {
+        const idsagra = req.headers['id-sagra']
         const data = req.body;
 
         // Cancella tutta la tabella esauriti
-        await deleteEsauriti(); 
+        await deleteEsauriti(idsagra); 
 
         // INSERISCI BLOB ESAURITI 
         for (const element of data) {
@@ -77,10 +82,11 @@ export const importEsauriti = async (req, res) => {
 
 export const deleteAllEsauriti = async (req, res) => {
     try {
+        const idsagra = req.headers['id-sagra']
         const data = req.body;
 
         // Cancella tutta la tabella esauriti
-        await deleteEsauriti(); 
+        await deleteEsauriti(idsagra); 
 
         // Rispondi solo una volta dopo l'inserimento completato
         res.json({ message: 'Inserimento completato con successo' });
