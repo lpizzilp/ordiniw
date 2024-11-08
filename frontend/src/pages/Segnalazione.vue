@@ -276,6 +276,7 @@ export default {
                     //connection = 'API navigator.connection non supportata'
                 }
                 let data = {
+                    id_sagra: sessionStorage.getItem('SagraId'),
                     tiposegnalazione: this.ErrorObj.TipoSegnalazione,
                     tipoerr: this.ErrorObj.segnalazione,
                     descrizione: this.ErrorObj.descrizione,

@@ -30,16 +30,6 @@
 
 <script>
 
-
-var queryString = window.location.search;
-queryString = queryString.substring(1);
-var parametri = queryString.split("&");
-var parametriObj = {};
-for (var i = 0; i < parametri.length; i++) {
-    var coppia = parametri[i].split("=");
-    parametriObj[coppia[0]] = coppia[1];
-}
-
 import router from "@/router";
 import axios from "axios";
 import { showErrore } from '@/glbFunctions';
@@ -105,7 +95,7 @@ export default {
                     var os = UAresult.os.name ;
                     os = os.toUpperCase(); 
                 try {
-                    var sagra = await axios.get('/sagra/' + parametriObj.id);
+                    var sagra = await axios.get('/sagra/' + sessionStorage.getItem('SagraId'));
                     if (sagra.errMsg) {
                         if (os != 'IOS'){
                             showErrore();
@@ -124,7 +114,6 @@ export default {
                 } else {
                     this.nav_name = sagra.data[0].descrizione
                     this.sagra_name = "" + sagra.data[0].desc_prefix + " " + sagra.data[0].descrizione
-                    sessionStorage.setItem('SagraId', parametriObj.id)
                     sessionStorage.setItem('Siglanav', this.nav_name)
                     sessionStorage.setItem('SiglaHome', this.sagra_name)
 

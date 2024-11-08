@@ -5,9 +5,9 @@
             <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
                 Mostra Tutto
             </button>
-            <button :id="'filter' + (ind + 1)" v-for="(c, ind) in loadCategories" :key="ind"
-                @click="filterFoodBtn(c.idCategoria, (ind + 1))">
-                {{ c.descCategoria }}
+            <button :id="'filter' + (ind + 1)" v-for="(r, ind) in loadReparti" :key="ind"
+                @click="filterFoodBtn(r.idReparto, (ind + 1))">
+                {{ r.descReparto }}
             </button>
         </div>
     </div>
@@ -131,7 +131,7 @@
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
-    <quick-view-errore v-if="Quickerrore"></quick-view-errore>
+    <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 
 <script>
@@ -219,7 +219,7 @@ export default {
 
     computed: {
         ...mapState(["allFoods"]),
-        ...mapState(["allCategories"]),
+        ...mapState(["allReparti"]),
 
         filteredMenuItems() {
             if (this.activeFilter === 'Tutti') {
@@ -256,8 +256,8 @@ export default {
             return this.allFoods.filter((f) => f.food_id == this.food);
         },
 
-        loadCategories: function () {
-            return this.allCategories
+        loadReparti: function () {
+            return this.allReparti
         },
     },
 
@@ -295,6 +295,7 @@ export default {
 
         CloseQuickvue(data) {
             this.showQuickView = data
+            this.Quickerrore = data
         },
 
         scrollToTop() {
@@ -343,7 +344,7 @@ export default {
         },
 
         async chekQty() {
-            let totqty = (await axios.get('/prenotazione/sumordine')).data;
+            let totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
@@ -450,11 +451,8 @@ export default {
         },
 
         FilterBtncolor(index) {
-            console.log('entro')
             if (this.Prenotazione == 0) {
-                console.log('entroif')
                 const element = document.getElementById('filter' + index);
-                console.log(document.querySelectorAll('[id^="filter"]'))
                 document.querySelectorAll('[id^="filter"]').forEach(el => {
                     el.style.cssText = `
                         padding: 5px 25px;
@@ -469,7 +467,6 @@ export default {
                 });
 
                 if (element) {
-                    console.log('entroelemente')
                     element.style.cssText = `
                     padding: 5px 25px;
                     margin: 0px 10px;
@@ -873,6 +870,7 @@ h3 {
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2; /* Limita il titolo a 2 righe */
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden; /* Nasconde il testo oltre la seconda riga */
   text-overflow: ellipsis; /* Aggiunge "..." alla fine se il testo è troppo lungo */

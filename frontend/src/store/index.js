@@ -5,7 +5,7 @@ const store = createStore({
     state() {
         return {
             allFoods: [],
-            allCategories: [],
+            allReparti: [],
             admin: undefined,
         }
     },
@@ -14,8 +14,8 @@ const store = createStore({
             state.allFoods = payload;
         },
 
-        setCategorieData(state, payload){
-            state.allCategories = payload;
+        setRepartiData(state, payload){
+            state.allReparti = payload;
         },
 
         setAdmin(state, payload){
@@ -33,10 +33,10 @@ const store = createStore({
             });
         },
 
-        async getCategorieData(context){
+        async getRepartiData(context){
             await axios.get('/categorie')
             .then(function (response) {
-                context.commit("setCategorieData", response.data);
+                context.commit("setRepartiData", response.data);
             })
             .catch(function (error) {
                 console.log(error);

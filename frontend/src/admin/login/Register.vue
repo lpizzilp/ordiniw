@@ -173,7 +173,7 @@ export default {
                 admin_email: this.registerObj.email,
                 admin_password: this.registerObj.pass,
                 admin_sagra: sessionStorage.getItem('Siglanav'),
-                confirm_link: "http://" + window.location.hostname + "/admin/confirm/?email=" + this.registerObj.email + "&id=" + sessionStorage.getItem('SagraId')
+                confirm_link: "http://" + window.location.hostname + "/admin/confirm/?id=" + sessionStorage.getItem('SagraId') + "&email=" + this.registerObj.email
             }
             await axios.post("/mail/registrazione/", data);
         },

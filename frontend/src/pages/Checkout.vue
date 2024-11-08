@@ -174,10 +174,6 @@ export default {
             this.checkoutObj[fieldName] = event.target.value;  // Aggiorniamo direttamente il valore nel checkoutObj
             this.validateField(fieldName);  // Validiamo il campo dopo l'input
         },
-        updateCheckoutObj() {
-
-            console.log(this.checkoutObj.Coperti);
-        } ,
         getFieldVisibility(index) {
             const maskIndex = this.type === 'Y' ? index + 6 : index;
             return this.maskVisibilita[maskIndex] == 1 ? 'block' : 'none';
@@ -314,11 +310,12 @@ export default {
             e.target.value = e.target.value.toUpperCase();
         },
 
-        async sendBillDetails(billId, foodId, qty) {
+        async sendBillDetails(idSagra, billId, foodId, qty) {
             let callURL = null
             let Details = null
             if (sessionStorage.getItem('filtro') === 'PRE') {
                 Details = {
+                    id_sagra: idSagra,
                     book_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
@@ -326,6 +323,7 @@ export default {
                 callURL = "/prenotazione/dettaglio"
             } else {
                 Details = {
+                    id_sagra: idSagra,
                     bill_id: parseInt(billId),
                     food_id: foodId,
                     item_qty: parseInt(qty)
@@ -366,7 +364,7 @@ export default {
                     axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                 }
 
-                let bookId = (await axios.get("/prenotazione/new")).data;
+                let bookId = (await axios.get("/prenotazione/" + sessionStorage.getItem('SagraId') + "/new")).data;
                 if (bookId == "") {
                     if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
                         bookId = sessionStorage.getItem('startprt');
@@ -382,6 +380,7 @@ export default {
                 }
 
                 let dataprenotazione = {
+                    id_sagra: sessionStorage.getItem('Sagraid'),
                     book_id: parseInt(bookId),
                     user_id: sessionStorage.getItem('Username'),
                     book_tavolo: this.checkoutObj.Tavolo,
@@ -420,6 +419,7 @@ export default {
                     billId = parseInt(billId.bill_id) + 1;
                 }
                 let billStatus = {
+                    id_sagra: sessionStorage.getItem('SagraId'),
                     bill_id: parseInt(billId),
                     user_id: sessionStorage.getItem('Username'),
                     bill_tavolo: this.checkoutObj.Tavolo,
@@ -447,7 +447,7 @@ export default {
             //COMMON -> dettaglio per tutti ----------------------------------------- 
             let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
             this.cartItem.forEach((foodId, index) => {
-                detailPromises.push(this.sendBillDetails(sessionStorage.getItem('Bill'), foodId, this.itemQuantity[index]));
+                detailPromises.push(this.sendBillDetails(sessionStorage.getItem('SagraId'), sessionStorage.getItem('Bill'), foodId, this.itemQuantity[index]));
             });
             try {
                 await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine

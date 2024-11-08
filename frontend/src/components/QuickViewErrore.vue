@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         Azione() {
-            this.$emit('childEvent', false);
+            this.$emit('childError', false);
 
         }
     },        

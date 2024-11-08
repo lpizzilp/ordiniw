@@ -1,5 +1,5 @@
 import { 
-    getSagrabySig,
+    getSagrabyId,
     deleteSagra,
     insertSagra,
     updateSagraCodaeInfoByID,
@@ -13,12 +13,9 @@ import {
     updateContrObbligo
 } from "../models/CatalogoModel.js";
 
-
-export const getSagraSig=(req,res)=>{
-    //const IdSagra = req.headers['id-sagra'];
-    //console.log( IdSagra);
-
-    getSagrabySig(req.params.sigla,(err,results)=> {
+export const getSagraId=(req,res)=>{
+    const IdSagra = req.headers['id-sagra'];
+    getSagrabyId(IdSagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -29,7 +26,7 @@ export const getSagraSig=(req,res)=>{
 
 // recupera tutte le sagre
 export const allSagre=(req,res)=>{
-    getAllSagre(req.params.ordine,(err,results)=> {
+    getAllSagre(req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -63,9 +60,9 @@ export const createSagra = async (req, res) => {
 //-------------------------------------------------------
 
 export const updateSagraCodaeInfo=(req,res)=>{
+    const idsagra = req.headers['id-sagra']
     const data = req.body;
-    const id = req.params.id;
-    updateSagraCodaeInfoByID(data[0],id,(err,results)=> {
+    updateSagraCodaeInfoByID(data[0],idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -76,8 +73,9 @@ export const updateSagraCodaeInfo=(req,res)=>{
 
 
 export const updateControlOrdini=(req,res)=>{
+    const idsagra = req.headers['id-sagra']
     const data = req.body
-    updateContrOrdini(data,(err,results)=> {
+    updateContrOrdini(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -87,8 +85,9 @@ export const updateControlOrdini=(req,res)=>{
 };
 
 export const updateControlVisibilita=(req,res)=>{
+    const idsagra = req.headers['id-sagra']
     const data = req.body
-    updateContrVisibilita(data,(err,results)=> {
+    updateContrVisibilita(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -98,8 +97,9 @@ export const updateControlVisibilita=(req,res)=>{
 };
 
 export const updateControlObbligo=(req,res)=>{
+    const idsagra = req.headers['id-sagra']
     const data = req.body
-    updateContrObbligo(data,(err,results)=> {
+    updateContrObbligo(idsagra,data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -109,8 +109,8 @@ export const updateControlObbligo=(req,res)=>{
 };
 
 export const GetControlOrdini=(req,res)=>{
-    const id = req.params.id;
-    getContrOrdini(id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getContrOrdini(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -120,8 +120,8 @@ export const GetControlOrdini=(req,res)=>{
 };
 
 export const GetControlVisibilita=(req,res)=>{
-    const id = req.params.id;
-    getContrVisibilita(id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getContrVisibilita(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -131,8 +131,8 @@ export const GetControlVisibilita=(req,res)=>{
 };
 
 export const GetControlObbligo=(req,res)=>{
-    const id = req.params.id;
-    getContrObbligo(id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getContrObbligo(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

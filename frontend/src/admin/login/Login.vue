@@ -96,7 +96,6 @@ export default {
                 this.Quickerrore = true
                 Makelog(response);
             }
-
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
             } else if (Adminuser.data.authlevel != 0) {

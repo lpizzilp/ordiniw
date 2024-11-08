@@ -2,8 +2,8 @@
 import db from "../config/database.js";
 
 // get newest Bill Status
-export const getNewestId = (result) => {
-    db.query("SELECT bill_id FROM billstatus ORDER BY bill_id DESC LIMIT 0, 1", (err,results)=> {
+export const getNewestId = (idsagra,result) => {
+    db.query("SELECT bill_id FROM billstatus WHERE id_sagra = ? ORDER BY bill_id DESC LIMIT 0, 1", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -26,8 +26,8 @@ export const insertBillStatus = (data,result) => {
 };
 
 // get all Bills Status
-export const getBillsByUser = (id,result) => {
-    db.query("SELECT * FROM billstatus WHERE user_id = ?",id, (err,results)=> {
+export const getBillsByUser = (idsagra,id,result) => {
+    db.query("SELECT * FROM billstatus WHERE id_sagra = ? AND user_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -40,8 +40,8 @@ export const getBillsByUser = (id,result) => {
 
 
 // get all Bills Status
-export const getBillsByBill = (id,result) => {
-    db.query("SELECT * FROM billstatus WHERE bill_id = ?",id, (err,results)=> {
+export const getBillsByBill = (idsagra,id,result) => {
+    db.query("SELECT * FROM billstatus WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -53,8 +53,8 @@ export const getBillsByBill = (id,result) => {
 };
 
 // get all Bills Status
-export const getAll = (result) => {
-    db.query("SELECT * FROM billstatus order by case WHEN bill_status = 1 THEN 1 WHEN bill_status = 2 THEN 2 WHEN bill_status = 3 THEN 3 ELSE 4 end, bill_id desc, bill_when desc", (err,results)=> {
+export const getAll = (idsagra,result) => {
+    db.query("SELECT * FROM billstatus WHERE id_sagra = ? order by case WHEN bill_status = 1 THEN 1 WHEN bill_status = 2 THEN 2 WHEN bill_status = 3 THEN 3 ELSE 4 end, bill_id desc, bill_when desc", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -66,8 +66,8 @@ export const getAll = (result) => {
 };
 
 
-export const updateStatus = (id,result) => {
-    db.query("UPDATE billstatus SET bill_status = bill_status + 1  WHERE bill_id = ?",id, (err,results)=> {
+export const updateStatus = (idsagra,id,result) => {
+    db.query("UPDATE billstatus SET bill_status = bill_status + 1  WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -77,8 +77,8 @@ export const updateStatus = (id,result) => {
     });
 };
 
-export const updatePaid = (id,result) => {
-    db.query("UPDATE billstatus SET bill_paid = 'true' WHERE bill_id = ?",id, (err,results)=> {
+export const updatePaid = (idsagra,id,result) => {
+    db.query("UPDATE billstatus SET bill_paid = 'true' WHERE id_sagra = ?, bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -88,8 +88,8 @@ export const updatePaid = (id,result) => {
     });
 };
 
-export const cancelStatus = (id,result) => {
-    db.query("UPDATE billstatus SET bill_status = 0  WHERE bill_id = ?",id, (err,results)=> {
+export const cancelStatus = (idsagra,id,result) => {
+    db.query("UPDATE billstatus SET bill_status = 0  WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -97,7 +97,7 @@ export const cancelStatus = (id,result) => {
             result(null,results);
         }
     });
-    db.query("UPDATE billstatus SET bill_paid = 'false' WHERE bill_id = ?",id, (err,results)=> {
+    db.query("UPDATE billstatus SET bill_paid = 'false' WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -106,8 +106,8 @@ export const cancelStatus = (id,result) => {
 };
 
 
-export const deleteBillById = (id,result) => {
-    db.query("DELETE FROM billstatus WHERE bill_id = ?",[id], (err,results)=> {
+export const deleteBillById = (idsagra,id,result) => {
+    db.query("DELETE FROM billstatus WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -118,10 +118,10 @@ export const deleteBillById = (id,result) => {
 };
 
 // get all bills  per data > parametro 
-export const getBillsGtId = (id,result) => {
+export const getBillsGtId = (idsagra,id,result) => {
     db.query("SELECT * FROM billstatus  " +   
-            " WHERE bill_id > ? "  
-            ,id, (err,results)=> {
+            " WHERE id_sagra = ? AND bill_id > ? "  
+            ,[idsagra,id], (err,results)=> {
 
         if (err){
             console.log(err);
@@ -134,8 +134,8 @@ export const getBillsGtId = (id,result) => {
 };
 
 //cancella tutti gli orini
-export const deleteAllBills = (data,result) => {
-    db.query("DELETE FROM billstatus ",data, (err,results)=> {
+export const deleteAllBills = (idsagra,data,result) => {
+    db.query("DELETE FROM billstatus WHERE id_sagra = ? ",[idsagra,data], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

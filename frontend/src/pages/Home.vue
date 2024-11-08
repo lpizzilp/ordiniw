@@ -24,27 +24,8 @@
             </div>
             <div class="image">
                 <img src="../assets/images/Homechef.png" alt="" class="home-img">
-                <!-- <img src="../assets/images/a.png" alt="" class="home-parallax-img">-->
             </div>
         </div>
-
-
-        <!--<div class="home-category">
-            <button @click="handleSubmit('P')" class="box">
-                <img src="../assets/images/pasta-img.png" alt="">
-                <h3>Primi</h3>
-            </button>
-
-            <button @click="handleSubmit('C')" class="box">
-                <img src="../assets/images/grigliata-img.png" alt="">
-                <h3>Cucina</h3>
-            </button>
-
-            <button @click="handleSubmit('B')" class="box">
-                <img src="../assets/images/coca-img.png" alt="">
-                <h3>Bevande</h3>
-            </button>
-        </div>-->
 
         <div class="home-about">
 
@@ -351,47 +332,6 @@ export default {
 
 .home-main .image .home-img {
     width: 100%;
-}
-
-.home-main .home-parallax-img {
-    position: absolute;
-    top: -15rem;
-    right: -15rem;
-    width: 80vw;
-
-}
-
-
-/* home category */
-.home-category {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    gap: 1.5rem;
-    padding-bottom: 5rem;
-}
-
-.home-category .box {
-    padding: 2rem;
-    text-align: center;
-    border-radius: .5rem;
-    background: #f7f7f7;
-}
-
-.home-category .box:hover {
-    background: #f38609;
-}
-
-.home-category .box:hover h3 {
-    color: #fff;
-}
-
-.home-category .box img {
-    height: 7rem;
-}
-
-.home-category .box h3 {
-    font-size: 1.8rem;
-    color: #130f40;
 }
 
 /* home about */

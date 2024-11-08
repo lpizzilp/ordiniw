@@ -15,8 +15,8 @@ export const getAllUser = (result) => {
 
 
 // get single user
-export const getUserByEmail = (id,email, result) => {
-    db.query("SELECT * FROM user WHERE id_sagra = ? and user_email = ?", [id, email], (err, results) => {
+export const getUserByEmail = (idsagra,email, result) => {
+    db.query("SELECT * FROM user WHERE id_sagra = ? and user_email = ?", [idsagra, email], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -52,8 +52,8 @@ export const updateauthlevel = (data, result) => {
 };
 
 //delete user
-export const deleteuserbyemail = (email, sagra, result) => {
-    db.query("Delete from `user`  where user_email = ? and id_sagra = ?",[email, sagra], (err,results)=> {
+export const deleteuserbyemail = (email, result) => {
+    db.query("Delete from `user`  where user_email = ?",[email], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

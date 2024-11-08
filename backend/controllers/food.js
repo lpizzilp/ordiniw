@@ -10,7 +10,8 @@ import {
 
 // get all Foods
 export const showFoods=(req,res)=>{
-    getFoods((err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getFoods(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -22,7 +23,8 @@ export const showFoods=(req,res)=>{
 
 // get single Food
 export const showFoodById=(req,res)=>{
-    getFoodById(req.params.id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getFoodById(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -47,7 +49,8 @@ export const createFood=(req,res)=>{
 export const updateFood=(req,res)=>{
     const data = req.body;
     const id = req.params.id;
-    updateFoodById(data,id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    updateFoodById(idsagra,data,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -60,7 +63,8 @@ export const updateFood=(req,res)=>{
 // delete Food
 export const deleteFood=(req,res)=>{
     const id = req.params.id;
-    deleteFoodById(id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    deleteFoodById(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

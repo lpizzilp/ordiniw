@@ -4,7 +4,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import "@/axios"
-const currentVersion = '1.7.4'; // Versione corrente impostata durante il deploy
+
+const currentVersion = '1.8.0'; // Versione corrente impostata durante il deploy
 const eventBus = mitt();
 
 //controllo di versione 
@@ -14,7 +15,12 @@ if (savedVersion !== currentVersion) {
     location.reload(true);
 }
 
-
+// Id sagra param
+const queryString = window.location.search.substring(1);
+const parametriObj = Object.fromEntries(new URLSearchParams(queryString));
+if (parametriObj.id != null) {
+    sessionStorage.setItem('SagraId', parametriObj.id)
+}
 
 //create vue 
 createApp(App)

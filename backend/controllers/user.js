@@ -24,7 +24,8 @@ export const allUsers=(req,res)=>{
 
 // get single user
 export const showAUser = (req,res)=>{
-    getUserByEmail(req.params.id,req.params.email,(err,results)=> {
+    const idsagra = req.params.id
+    getUserByEmail(idsagra,req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -60,7 +61,7 @@ export const updateUserauthlevel=(req,res)=>{
 
 // delete user
 export const Userdelete = (req,res)=>{
-    deleteuserbyemail(req.params.email,req.params.sagra,(err,results)=> {
+    deleteuserbyemail(req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

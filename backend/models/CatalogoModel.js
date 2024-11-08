@@ -2,8 +2,8 @@
 import db from "../config/database.js";
 
 // recupera sagra con sigla
-export const getSagrabySig = (sig,result) => {
-    db.query("select * from catalogo_sagre where id_sagra = ?",[sig], (err,results)=> {
+export const getSagrabyId = (idsagra,result) => {
+    db.query("select * from catalogo_sagre where id_sagra = ?",[idsagra], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -14,8 +14,8 @@ export const getSagrabySig = (sig,result) => {
 };
 
 // recupera sagre
-export const getAllSagre = (ord, result) => {
-    db.query("SELECT id_sagra, descrizione  FROM catalogo_sagre ORDER BY CASE WHEN id_sagra = ? THEN 0 ELSE 1 END, id_sagra;",[ord], (err, results)=> {
+export const getAllSagre = (id, result) => {
+    db.query("SELECT id_sagra, descrizione  FROM catalogo_sagre ORDER BY CASE WHEN id_sagra = ? THEN 0 ELSE 1 END, id_sagra;",[id], (err, results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -69,8 +69,8 @@ export const deleteSagra = async (id) => {
 //-------------------------------------------------------
 //UPDATE delle informazioni numcoda E info 
 //-------------------------------------------------------
-export const updateSagraCodaeInfoByID = (data,id,result) => {
-    db.query("UPDATE catalogo_sagre SET flgEliminacode = ? , flgInfo = ? , numcoda  = ?, info = ? WHERE id_sagra = ?",[data.flgEliminacode, data.flgInfo, data.numcoda, data.info, id], (err,results)=> {
+export const updateSagraCodaeInfoByID = (data,idsagra,result) => {
+    db.query("UPDATE catalogo_sagre SET flgEliminacode = ? , flgInfo = ? , numcoda  = ?, info = ? WHERE id_sagra = ?",[data.flgEliminacode, data.flgInfo, data.numcoda, data.info, idsagra], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -85,8 +85,8 @@ export const updateSagraCodaeInfoByID = (data,id,result) => {
 //UPDATE inizio e fine sagra
 //-------------------------------------------------------
 
-export const updateContrOrdini = (data,result) => {
-    db.query("UPDATE catalogo_sagre SET StrOrdini = ? WHERE id_sagra = ?",[data.type, data.id],(err,results)=> {
+export const updateContrOrdini = (idsagra,data,result) => {
+    db.query("UPDATE catalogo_sagre SET StrOrdini = ? WHERE id_sagra = ?",[data.type, idsagra],(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -96,8 +96,8 @@ export const updateContrOrdini = (data,result) => {
     });
 };
 
-export const updateContrVisibilita = (data,result) => {
-    db.query("UPDATE catalogo_sagre SET MaskVisibilita = ? WHERE id_sagra = ?",[data.type, data.id],(err,results)=> {
+export const updateContrVisibilita = (idsagra, data,result) => {
+    db.query("UPDATE catalogo_sagre SET MaskVisibilita = ? WHERE id_sagra = ?",[data.type, idsagra],(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -107,8 +107,18 @@ export const updateContrVisibilita = (data,result) => {
     });
 };
 
-export const updateContrObbligo = (data,result) => {
-    db.query("UPDATE catalogo_sagre SET MaskObbligo = ? WHERE id_sagra = ?",[data.type, data.id],(err,results)=> {
+export const updateContrObbligo = (idsagra,data,result) => {
+    db.query("UPDATE catalogo_sagre SET MaskObbligo = ? WHERE id_sagra = ?",[data.type, idsagra],(err,results)=> {
+        if (err){
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+export const getContrOrdini = (idsagra,result) => {
+    db.query("Select StrOrdini from catalogo_sagre WHERE id_sagra = ?",idsagra,(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -118,8 +128,8 @@ export const updateContrObbligo = (data,result) => {
     });
 };
 
-export const getContrOrdini = (id,result) => {
-    db.query("Select StrOrdini from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
+export const getContrVisibilita = (idsagra,result) => {
+    db.query("Select MaskVisibilita from catalogo_sagre WHERE id_sagra = ?",idsagra,(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -128,19 +138,8 @@ export const getContrOrdini = (id,result) => {
         }
     });
 };
-
-export const getContrVisibilita = (id,result) => {
-    db.query("Select MaskVisibilita from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results);
-        }
-    });
-};
-export const getContrObbligo = (id,result) => {
-    db.query("Select MaskObbligo from catalogo_sagre WHERE id_sagra = ?",id,(err,results)=> {
+export const getContrObbligo = (idsagra,result) => {
+    db.query("Select MaskObbligo from catalogo_sagre WHERE id_sagra = ?",idsagra,(err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

@@ -15,7 +15,8 @@ import {
 
 // get newest Bill Status
 export const showNewestStatusId=(req,res)=>{
-    getNewestId((err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getNewestId(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -40,7 +41,8 @@ export const createBillStatus=(req,res)=>{
 
 // get Bills Status
 export const getAllBillsByUser=(req,res)=>{
-    getBillsByUser(req.params.id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getBillsByUser(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -51,10 +53,12 @@ export const getAllBillsByUser=(req,res)=>{
 
 // get Bills Status
 export const getAllBillsByBill=(req,res)=>{
-    //console.log('ciaooo')
+    const idsagra = req.headers['id-sagra']
+ //   getBillsByBill(idsagra,req.params.id,(err,results)=> {
     //const IdSagra = req.headers['id-sagra'];
-    //console.log( IdSagra);
-    getBillsByBill(req.params.id,(err,results)=> {
+ //   });
+    getBillsByBill(idsagra, req.params.id,(err,results)=> {
+
         if (err) {
             res.send(err);
         }else {
@@ -65,7 +69,8 @@ export const getAllBillsByBill=(req,res)=>{
 
 // get Bills Status
 export const getAllBills=(req,res)=>{
-    getAll((err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getAll(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -77,7 +82,8 @@ export const getAllBills=(req,res)=>{
 
 // update Status
 export const updateBillStatus=(req,res)=>{
-    updateStatus(req.params.id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    updateStatus(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -88,7 +94,8 @@ export const updateBillStatus=(req,res)=>{
 
 // update Paid
 export const updateBillPaid=(req,res)=>{
-    updatePaid(req.params.id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    updatePaid(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -99,7 +106,8 @@ export const updateBillPaid=(req,res)=>{
 
 // cancel Status
 export const cancelBillStatus=(req,res)=>{
-    cancelStatus(req.params.id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    cancelStatus(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -109,8 +117,9 @@ export const cancelBillStatus=(req,res)=>{
 };
 
 export const deleteBill=(req,res)=>{
+    const idsagra = req.headers['id-sagra']
     const id = req.params.id;
-    deleteBillById (id,(err,results)=> {
+    deleteBillById(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -123,7 +132,8 @@ export const deleteBill=(req,res)=>{
 // get tutti gli ordini inserite maggiori un determinato id 
 // ...Se l'id non viene passato  vengono fornite tutte  
 export const getAllBillsGtId=(req,res)=>{
-    getBillsGtId(req.params.id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getBillsGtId(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -135,7 +145,8 @@ export const getAllBillsGtId=(req,res)=>{
 
 export const deleteAllBill=(req,res)=>{
     const id = req.params.id;
-    deleteAllBills (id,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    deleteAllBills(idsagra,id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

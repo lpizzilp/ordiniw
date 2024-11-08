@@ -19,11 +19,11 @@ export const insertReparti = (data) => {
     });
 };
 
-export const deleteReparti = () => {
+export const deleteReparti = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM reparti", (err, results) => {
+        db.query("DELETE FROM reparti WHERE id_sagra = ?;",idsagra, (err, results) => {
             if (err) {
-                console.error('Errore durante la cancellazione:', err);
+                console.error('Errore durante la cancellazione:', idsagra);
                 reject(err);
             } else {
                 resolve(results);
@@ -48,9 +48,9 @@ export const insertAnagrafica = (data) => {
     });
 };
 
-export const deleteAnagrafica = () => {
+export const deleteAnagrafica = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM food", (err, results) => {
+        db.query("DELETE FROM food WHERE id_sagra = ?; ", idsagra, (err, results) => {
             if (err) {
                 console.error('Errore durante la cancellazione:', err);
                 reject(err);
@@ -78,9 +78,9 @@ export const insertEsauriti = (data) => {
 };
 
 // delete esauriti
-export const deleteEsauriti = () => {
+export const deleteEsauriti = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM esauriti", (err, results) => {
+        db.query("DELETE FROM esauriti WHERE id_sagra = ? ;",idsagra, (err, results) => {
             if (err) {
                 console.error("Errore durante la cancellazione degli esauriti:", err);
                 reject(err);
@@ -94,31 +94,3 @@ export const deleteEsauriti = () => {
 
 
 
-
-
-
-
-
-// // insert anagrafica articoli 
-// export const insertAnagrafica = (data,result) => {
-//     db.query("INSERT INTO food SET ?",data, (err,results)=> {
-//         if (err){
-//             console.log(err);
-//             result(err,null);
-//         }else{
-//             result(null,results);
-//         }
-//     });
-// };
-
-// // Cancella tutta l'anagrafica
-// export const deleteAnagrafica = (result) => {
-//     db.query("DELETE FROM food", '', (err, results) => {
-//         if (err) {
-//             console.log(err);
-//             result(err, null);
-//         } else {
-//             result(null, results); // Invia null come primo argomento
-//         }
-//     });
-// };

@@ -12,7 +12,8 @@ export const InserisciErrore=(req,res)=>{
 };
 
 export const allErrori=(req,res)=>{
-    getAllErr((err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getAllErr(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

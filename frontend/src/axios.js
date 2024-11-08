@@ -17,7 +17,6 @@ axios.interceptors.response.use(
     response => {
         // Gestisci la risposta normale qui
         var errMsg = null
-        // console.log(response)
         if (response.data.errno != undefined    ) {
             errMsg = response.config.url + " - "+ response.data.errno + " - " + response.data.sqlMessage +" -" + response.data.sql
         }
@@ -40,8 +39,7 @@ axios.interceptors.response.use(
 
 // Aggiungi un interceptor per includere il codice sagra in ogni richiesta
 axios.interceptors.request.use(config => {
-    const IdSagra = '00100' //riprendere id sagra  localStorage o Vuex o sessions storage;
-    config.headers['Id-Sagra'] = IdSagra;
+    config.headers['Id-Sagra'] = sessionStorage.getItem('SagraId');
     return config;
   }, error => {
     return Promise.reject(error);
