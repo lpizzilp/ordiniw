@@ -42,81 +42,83 @@
         <div v-else class="register-form-container">
             <form id="registerForm" @submit="GestClick('Conferma')" novalidate autocomplete="off">
                 <table style="text-align: center; width: 100%;">
-                    <tr style="text-align: center">
-                        <td>
-                            <h3
-                                :style="{ 'color': DetailObj.Tipo == 'ERRORE' ? '#e95018cb' : DetailObj.Tipo == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4', 'margin-top': '2rem', 'text-align': 'center' }">
-                                {{ DetailObj.Tipo }}: <span style="text-transform: lowercase;"> {{ DetailObj.Err
-                                    }}</span></h3>
-                            <h4 style="margin-top: 15px;">{{ DetailObj.err_ora }}</h4>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <textarea type="text area" name="uDesc" id="uDesc" class="form-control" readonly
-                                    :placeholder="DetailObj.Descrizione"
-                                    style="border: 0; border-bottom: 1px inset black;"
-                                    v-model="DetailObj.Descrizione"></textarea>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: whitesmoke;">
-                            <label for="uPass" style="margin-top: 10px;">Dispositivo
-                            </label>
-                            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                                <input type="text" readonly name="uTel"
-                                    style="flex: 50%; border-right: 1px inset black;"
-                                    :placeholder="DetailObj.Telefono == null ? 'PC' : DetailObj.Telefono" id="uTel"
-                                    class="form-control" v-model="DetailObj.Telefono" />
-                                <input type="text" name="uMod" readonly style="flex: 50%;"
-                                    :placeholder="DetailObj.Modello" id="uMod" class="form-control"
-                                    v-model="DetailObj.Modello" />
-                                <input type="text" name="uOs" readonly
-                                    style=" flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.OS"
-                                    id="uOs" class="form-control" v-model="DetailObj.OS" />
-                                <input type="text" name="uVersOs" readonly style=" flex: 50%;" :placeholder="DetailObj.VersioneOS"
-                                    id="uVersOs" class="form-control" v-model="DetailObj.VersioneOS" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: whitesmoke;">
-                            <label for="uPass" style="margin-top: 10px;">Browser
-                            </label>
-                            <div style="display: flex; justify-content: center; flex-wrap: wrap;">
-                                <input type="text" readonly name="ubrowser"
-                                    style="flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.Browser"
-                                    id="ubrowser" class="form-control" v-model="DetailObj.Browser" />
-                                <input type="text" readonly name="uMod" style="flex: 50%;"
-                                    :placeholder="DetailObj.VersioneBR" id="uMod" class="form-control"
-                                    v-model="DetailObj.VersioneBR" />
-                                <input type="text" readonly name="uWebkit"
-                                    style=" flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.WebKit"
-                                    id="uWebkit" class="form-control" v-model="DetailObj.WebKit" />
-                                <input type="text" readonly name="uVerswebkit" style=" flex: 50%;"
-                                    :placeholder="DetailObj.Versionewk" id="uVerswebkit" class="form-control"
-                                    v-model="DetailObj.Versionewk" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: whitesmoke;">
-                            <label for="uauthlevel" style="margin-top: 10px;">Connessione:
-                            </label>
-                            <input type="text" readonly name="uconnect" :placeholder="DetailObj.connessione"
-                                id="uconnect" class="form-control" v-model="DetailObj.connessione" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td
-                            style="background-color: whitesmoke; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; ">
-                            <button class="btn" @click="GestClick('Annulla')"
-                                style="margin-top: 20px; padding: 0.5rem; width: 50%;">Torna
-                                alla tabella</button>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr style="text-align: center">
+                            <td>
+                                <h3
+                                    :style="{ 'color': DetailObj.Tipo == 'ERRORE' ? '#e95018cb' : DetailObj.Tipo == 'SUGGERIMENTO' ? '#ffa500' : '#2ae477c4', 'margin-top': '2rem', 'text-align': 'center' }">
+                                    {{ DetailObj.Tipo }}: <span style="text-transform: lowercase;"> {{ DetailObj.Err
+                                        }}</span></h3>
+                                <h4 style="margin-top: 15px;">{{ DetailObj.err_ora }}</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <textarea type="text area" name="uDesc" id="uDesc" class="form-control" readonly
+                                        :placeholder="DetailObj.Descrizione"
+                                        style="border: 0; border-bottom: 1px inset black;"
+                                        v-model="DetailObj.Descrizione"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: whitesmoke;">
+                                <label for="uPass" style="margin-top: 10px;">Dispositivo
+                                </label>
+                                <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                                    <input type="text" readonly name="uTel"
+                                        style="flex: 50%; border-right: 1px inset black;"
+                                        :placeholder="DetailObj.Telefono == null ? 'PC' : DetailObj.Telefono" id="uTel"
+                                        class="form-control" v-model="DetailObj.Telefono" />
+                                    <input type="text" name="uMod" readonly style="flex: 50%;"
+                                        :placeholder="DetailObj.Modello" id="uMod" class="form-control"
+                                        v-model="DetailObj.Modello" />
+                                    <input type="text" name="uOs" readonly
+                                        style=" flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.OS"
+                                        id="uOs" class="form-control" v-model="DetailObj.OS" />
+                                    <input type="text" name="uVersOs" readonly style=" flex: 50%;" :placeholder="DetailObj.VersioneOS"
+                                        id="uVersOs" class="form-control" v-model="DetailObj.VersioneOS" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: whitesmoke;">
+                                <label for="uPass" style="margin-top: 10px;">Browser
+                                </label>
+                                <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+                                    <input type="text" readonly name="ubrowser"
+                                        style="flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.Browser"
+                                        id="ubrowser" class="form-control" v-model="DetailObj.Browser" />
+                                    <input type="text" readonly name="uMod" style="flex: 50%;"
+                                        :placeholder="DetailObj.VersioneBR" id="uMod" class="form-control"
+                                        v-model="DetailObj.VersioneBR" />
+                                    <input type="text" readonly name="uWebkit"
+                                        style=" flex: 50%; border-right: 1px inset black;" :placeholder="DetailObj.WebKit"
+                                        id="uWebkit" class="form-control" v-model="DetailObj.WebKit" />
+                                    <input type="text" readonly name="uVerswebkit" style=" flex: 50%;"
+                                        :placeholder="DetailObj.Versionewk" id="uVerswebkit" class="form-control"
+                                        v-model="DetailObj.Versionewk" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: whitesmoke;">
+                                <label for="uauthlevel" style="margin-top: 10px;">Connessione:
+                                </label>
+                                <input type="text" readonly name="uconnect" :placeholder="DetailObj.connessione"
+                                    id="uconnect" class="form-control" v-model="DetailObj.connessione" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="background-color: whitesmoke; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; ">
+                                <button class="btn" @click="GestClick('Annulla')"
+                                    style="margin-top: 20px; padding: 0.5rem; width: 50%;">Torna
+                                    alla tabella</button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </form>
         </div>

@@ -11,64 +11,66 @@
             <i @click="OpenGrid(0)" class="fa-solid fa-chevron-up"></i>
             <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
             <table class="project-list">
-                <tr>
-                    <td>
-                        <h3>Apertura/chiusura automatica</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[0] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[0]" @click="ChangeStatus(0)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Ordini al Tavolo</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[1] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[1]" @click="ChangeStatus(1)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 2px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 2px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 2px;">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Ordini Asporto</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[2] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[2]" @click="ChangeStatus(2)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>Apertura/chiusura automatica</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[0] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[0]" @click="ChangeStatus(0)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Ordini al Tavolo</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[1] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[1]" @click="ChangeStatus(1)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 2px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 2px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 2px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Ordini Asporto</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[2] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[2]" @click="ChangeStatus(2)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                </tbody>    
             </table>
         </div>
         <div v-else class="table-close" @click="OpenGrid(0)">
@@ -85,18 +87,20 @@
             <i @click="OpenGrid(1)" class="fa-solid fa-chevron-up"></i>
             <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
             <table class="project-list">
-                <tr>
-                    <td>
-                        <h3>Apertura/chiusura</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[3] == 'Abilitato' ? 'Aperto' : 'Chiuso' }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[3]" @click="ChangeStatus(3)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>Apertura/chiusura</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[3] == 'Abilitato' ? 'Aperto' : 'Chiuso' }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[3]" @click="ChangeStatus(3)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         <div v-else class="table-close" @click="OpenGrid(1)">
@@ -117,179 +121,181 @@
             </h3>
             <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
             <table class="project-list">
-                <tr>
-                    <td>
-                        <h3>Visibilità campo tavolo</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[4] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[4]" @click="ChangeStatus(4)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr v-if="status[4] == 'Abilitato'">
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                </tr>
-                <tr v-if="status[4] == 'Abilitato'">
-                    <td>
-                        <h3>Obbligatorietà campo tavolo</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[5] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[5]" @click="ChangeStatus(5)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Visibilità campo Coperti</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[6] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[6]" @click="ChangeStatus(6)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr v-if="status[6] == 'Abilitato'">
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                </tr>
-                <tr v-if="status[6] == 'Abilitato'">
-                    <td>
-                        <h3>Obbligatorietà campo Coperti</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[7] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[7]" @click="ChangeStatus(7)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Visibilità campo Nominativo</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[8] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[8]" @click="ChangeStatus(8)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr v-if="status[8] == 'Abilitato'">
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                </tr>
-                <tr v-if="status[8] == 'Abilitato'">
-                    <td>
-                        <h3>Obbligatorietà campo Nominativo</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[9] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[9]" @click="ChangeStatus(9)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Visibilità campo Note</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[10] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[10]" @click="ChangeStatus(10)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
-                <tr v-if="status[10] == 'Abilitato'">
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                    <td style="padding-left: 0px;">
-                        <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
-                    </td>
-                </tr>
-                <tr v-if="status[10] == 'Abilitato'">
-                    <td>
-                        <h3>Obbligatorietà campo Note</h3>
-                    </td>
-                    <td style="text-align: center;">
-                        <h3>{{ status[11] }}</h3>
-                    </td>
-                    <td>
-                        <VueToggles :value="toggle[11]" @click="ChangeStatus(11)" :height="28" :width="56"
-                            checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h3>Visibilità campo tavolo</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[4] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[4]" @click="ChangeStatus(4)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr v-if="status[4] == 'Abilitato'">
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                    </tr>
+                    <tr v-if="status[4] == 'Abilitato'">
+                        <td>
+                            <h3>Obbligatorietà campo tavolo</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[5] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[5]" @click="ChangeStatus(5)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Visibilità campo Coperti</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[6] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[6]" @click="ChangeStatus(6)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr v-if="status[6] == 'Abilitato'">
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                    </tr>
+                    <tr v-if="status[6] == 'Abilitato'">
+                        <td>
+                            <h3>Obbligatorietà campo Coperti</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[7] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[7]" @click="ChangeStatus(7)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Visibilità campo Nominativo</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[8] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[8]" @click="ChangeStatus(8)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr v-if="status[8] == 'Abilitato'">
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                    </tr>
+                    <tr v-if="status[8] == 'Abilitato'">
+                        <td>
+                            <h3>Obbligatorietà campo Nominativo</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[9] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[9]" @click="ChangeStatus(9)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>Visibilità campo Note</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[10] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[10]" @click="ChangeStatus(10)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr v-if="status[10] == 'Abilitato'">
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px;">
+                        </td>
+                    </tr>
+                    <tr v-if="status[10] == 'Abilitato'">
+                        <td>
+                            <h3>Obbligatorietà campo Note</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[11] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[11]" @click="ChangeStatus(11)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         <div v-else class="table-close" @click="OpenGrid(2)">
