@@ -42,7 +42,7 @@ export const createPrenotazione=(req,res)=>{
 // crea dettaglio
 export const createDettaglio=(req,res)=>{
     const data = req.body;
-    insertDettaglio(idsagra,data,(err,results)=> {
+    insertDettaglio(data,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

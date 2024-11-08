@@ -5,7 +5,8 @@ CREATE TABLE `billdetails` (
   `bill_id` int(11) NOT NULL,
   `food_id` varchar(5) NOT NULL,
   `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`,`bill_id`,`food_id`)
+  PRIMARY KEY (`id_sagra`,`bill_id`,`food_id`),
+  CONSTRAINT `billdetails_FK` FOREIGN KEY (`id_sagra`,`bill_id`) REFERENCES `billstatus` (`id_sagra`,`bill_id`) ON DELETE CASCADE 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

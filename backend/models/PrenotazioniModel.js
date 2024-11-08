@@ -55,7 +55,9 @@ export const checkfood = (idsagra, result) => {
 // get all prenotazioni per data > parametro 
 export const getPrenotGtId = (idsagra,id,result) => {
     db.query("SELECT bs.*, bd.item_qty, f.food_id, f.food_name FROM bookstatus bs, bookdetails bd, food f " +   
-            " WHERE id_sagra = ? and bs.book_id > ? " + 
+            " WHERE bs.id_sagra = ?  " + 
+            " and bs.id_sagra = bd.id_sagra " +
+            " and bs.book_id > ? " + 
             " and bs.book_id = bd.book_id " +
             " and f.food_id = bd.food_id " 
 
