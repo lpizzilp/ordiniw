@@ -1,13 +1,3 @@
--- db_restaurant.billdetails definition
-
-CREATE TABLE `billdetails` (
-  `id_sagra` varchar(5) NOT NULL,
-  `bill_id` int(11) NOT NULL,
-  `food_id` varchar(5) NOT NULL,
-  `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`,`bill_id`,`food_id`),
-  CONSTRAINT `billdetails_FK` FOREIGN KEY (`id_sagra`,`bill_id`) REFERENCES `billstatus` (`id_sagra`,`bill_id`) ON DELETE CASCADE 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billstatus definition
@@ -29,6 +19,17 @@ CREATE TABLE `billstatus` (
   `Nominativo` varchar(50) DEFAULT NULL,
   `bill_note` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id_sagra`,`bill_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- db_restaurant.billdetails definition
+
+CREATE TABLE `billdetails` (
+  `id_sagra` varchar(5) NOT NULL,
+  `bill_id` int(11) NOT NULL,
+  `food_id` varchar(5) NOT NULL,
+  `item_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_sagra`,`bill_id`,`food_id`),
+  CONSTRAINT `billdetails_FK` FOREIGN KEY (`id_sagra`,`bill_id`) REFERENCES `billstatus` (`id_sagra`,`bill_id`) ON DELETE CASCADE 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
