@@ -16,6 +16,7 @@ import Segnalazione from '../pages/Segnalazione.vue'
 import Utenti from '../admin/pages/Utenti.vue'
 import Contaprezzi from "@/pages/Contaprezzi.vue";
 import Errori from "@/admin/pages/Errori.vue";
+import Cashboard from "@/cassiere/pages/Cashboard.vue";
 
 
 const routes = [
@@ -108,6 +109,11 @@ const routes = [
     path: "/admin/errori",
     name: "TabErrori",
     component: Errori, 
+  },
+  {
+    path: "/cassiere/Cashboard",
+    name: "Cashboard",
+    component: Cashboard,
   },
   {
     path: '/:pathMatch(.*)*',

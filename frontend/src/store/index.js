@@ -7,6 +7,7 @@ const store = createStore({
             allFoods: [],
             allReparti: [],
             admin: undefined,
+            cassaBarraWidth: null,
         }
     },
     mutations: {
@@ -20,7 +21,11 @@ const store = createStore({
 
         setAdmin(state, payload){
             state.admin = payload;
-        }
+        },
+
+        setCassaBarraWidth(state, width) {
+            state.cassaBarraWidth = width
+        },
     },
     actions: {
         async getFoodsData(context){

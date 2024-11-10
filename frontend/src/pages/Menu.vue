@@ -23,7 +23,7 @@
             <div class="col-sm-4 col-12 filter-box">
                 <div class="row search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
+                    <input id="search" type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
                 </div>
 
 
@@ -33,7 +33,7 @@
                         <ul class="filter-option">
                             <hr />
                             <li id="Compress" style="display: flex; width: 75%; ">
-                                <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
+                                <label class="d-flex justify-content-between">Comprimi spazio</label>
                                 <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
                                     checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey"
                                     style="margin-left: -58px;" />
