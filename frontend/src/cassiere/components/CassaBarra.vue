@@ -1,8 +1,12 @@
 <template>
-    <div v-if="!PannelAction" class="close-button" ref="RefCassaOpen" @click="TooglePannel()"><i class="fa-solid fa-chevron-left"></i>
+    <div :class="!PannelAction ? 'close-button' : 'open-button'" :ref="!PannelAction ? 'RefCassaOpen' : 'RefCassaClose'"
+        @click="TooglePannel()">
+        <i :class="!PannelAction ? 'fa-solid fa-chevron-left' : 'fa-solid fa-chevron-right'"
+            style="font-size: 3rem;"></i>
+        <p style="writing-mode: vertical-rl; text-orientation: upright">{{ !PannelAction ? 'COMPIRMI' : 'ESTENDI' }}</p>
+        <i :class="!PannelAction ? 'fa-solid fa-chevron-left' : 'fa-solid fa-chevron-right'"
+            style="font-size: 3rem;"></i>
     </div>
-    <div v-else ref="RefCassaClose" class="open-button" @click="TooglePannel()" style="width: fit-content;"><i
-            class="fa-solid fa-chevron-right"></i></div>
     <div class="header">
         <router-link @click="scrollToTop()" to="/cassiere/prenotazioni" class="testa"><i
                 class="fa-solid fa-cash-register" style="padding-right: 2vh;"></i>Ciao {{ nav_name }}!
@@ -17,8 +21,9 @@
             <li class="td-router" onmouseover="this.style.backgroundColor='#273dae'">
                 <hr style="width: 100%; border: 2px outset white; border-radius: 10px;">
             </li>
-            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Ordini')" to="/cassiere/ordini"><i
-                        class="fa-solid fa-utensils" style="padding-right: 2vh;"></i>Casse</router-link></li>
+            <li class="td-router" @click="!PannelAction ? TooglePannel() : null"><router-link
+                    @click="scrollToTop(), Writelog('Cassa')" to="/cassiere/cassa"><i class="fa-solid fa-utensils"
+                        style="padding-right: 2vh;"></i>Casse</router-link></li>
             <li class="td-router" onmouseover="this.style.backgroundColor='#273dae'">
                 <hr style="width: 100%; border: 2px outset white; border-radius: 10px;">
             </li>
@@ -79,6 +84,10 @@ export default {
         this.getName()
     },
 
+    mounted() {
+        this.updateWidth()
+    },
+
     methods: {
         ...mapMutations(["setAdmin"]),
         ...mapMutations(["setCassaBarraWidth"]),
@@ -103,14 +112,23 @@ export default {
 
         async TooglePannel() {
             this.PannelAction = !this.PannelAction
-            this.PannelAction ? document.getElementsByClassName('header')[0].style.display = 'none' : document.getElementsByClassName('header')[0].style.display = 'flex'
+            if (!this.PannelAction) {
+                document.getElementsByClassName('header')[0].style.display = 'flex'
+                document.exitFullscreen().catch((err) => {
+                    console.error(`Errore durante l'uscita dalla modalità schermo intero: ${err.message}`);
+                });
+            } else {
+                document.getElementsByClassName('header')[0].style.display = 'none'
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.error(`Errore durante l'entrata in modalità schermo intero: ${err.message}`)
+                });
+            }
             this.updateWidth()
         },
 
         async updateWidth() {
             await nextTick(); // Aspetta che il DOM sia aggiornato
             var width = this.PannelAction ? this.$refs.RefCassaClose.offsetWidth : this.$refs.RefCassaOpen.offsetWidth
-            
             this.setCassaBarraWidth(width); // Aggiorna la larghezza nello store
         },
 
@@ -148,16 +166,25 @@ export default {
     z-index: 998;
     top: 0;
     left: 0;
+    bottom: 0;
     width: 20%;
-    height: fit-content;
+    padding-right: 10px;
     background: #273dae;
 
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     text-align: right;
-    padding: 10px 10px;
     color: white;
-    font-size: 3rem;
+    font-size: 2rem;
     box-shadow: 18px 0px 70px -37px rgba(0, 0, 0, 0.75);
+}
+
+.open-button {
+    width: fit-content;
+    text-align: center;
+    font-size: 2.5rem;
+    padding: 0;
 }
 
 .header {
@@ -232,6 +259,10 @@ export default {
 }
 
 .btn {
+    display: none;
+}
+
+.navigation {
     display: none;
 }
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="admin-container">
+    <div class="admin-container" :style="{ marginLeft: `${cassaBarraWidth - 39}px` }">
         <div class="d-flex justify-content-between">
             <h1><i class="fa-solid fa-chart-line"> Dashboard</i></h1>
         </div>
@@ -342,7 +342,10 @@ export default {
 
     computed: {
         ...mapState(["admin"]),
-        ...mapState(["cassaBarraWidth"]),
+        ...mapState({
+      cassaBarraWidth: state => state.cassaBarraWidth
+    })
+
     },
 
     methods: {

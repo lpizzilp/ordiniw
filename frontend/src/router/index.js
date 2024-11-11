@@ -17,6 +17,7 @@ import Utenti from '../admin/pages/Utenti.vue'
 import Contaprezzi from "@/pages/Contaprezzi.vue";
 import Errori from "@/admin/pages/Errori.vue";
 import Cashboard from "@/cassiere/pages/Cashboard.vue";
+import Cassa from "@/cassiere/pages/Cassa.vue";
 
 
 const routes = [
@@ -114,6 +115,11 @@ const routes = [
     path: "/cassiere/Cashboard",
     name: "Cashboard",
     component: Cashboard,
+  },
+  {
+    path: "/cassiere/cassa",
+    name: "Cassa",
+    component: Cassa,
   },
   {
     path: '/:pathMatch(.*)*',
