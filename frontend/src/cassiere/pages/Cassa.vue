@@ -1,5 +1,26 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
+    <div class="info-container" :style="{ marginLeft: `${cassaBarraWidth}px` }">
+        <div class="form-group">
+            <label :id="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'" style="padding-right: 10px;">
+                {{ foodObj.type ? 'Inserisci il Tavolo' : 'Inserisci il Nominativo' }}
+            </label>
+            <input type="text" :id="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'"
+                :name="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'" class="form-control"
+                :placeholder="foodObj.type == 'w' ? 'Inserisci il tavolo' : 'Inserisci il nominativo'"
+                v-model="currentTableOrName" :ref="foodObj.type ? 'Itavolo' : null" />
+        </div>
+        <hr class="divisor" />
+        <div class="form-group">
+            <label :for="foodObj.type ? 'uCoperti' : 'uNote'" style="padding-right: 10px;">
+                {{ foodObj.type ? 'Inserisci i Coperti' : 'Note' }}
+            </label>
+            <input type="text" :id="foodObj.type ? 'uCoperti' : 'uNote'" :name="foodObj.type ? 'uCoperti' : 'uNote'"
+                class="form-control" :placeholder="foodObj.type ? 'Inserisci i coperti' : 'Inserisci una specifica'"
+                v-model="currentCoversOrNotes" />
+        </div>
+    </div>
+
     <div class="filter-menu-container" :style="{ marginLeft: `${cassaBarraWidth}px` }">
         <div class="filter-menu" ref="menuRef">
             <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
@@ -11,60 +32,19 @@
             </button>
         </div>
     </div>
-
+    <hr id="Copertura"
+        style="position: fixed; top: 68px; left: 0; right: 0; bottom: 0; z-index: 996; width: 100%; height: 100%; border: 200vh solid #0000004f;">
     <div class="menu-section" :style="{ marginLeft: `${cassaBarraWidth - 39}px` }">
-        <div class="heading">
-            <span>menu</span>
-            <h3 v-if="Prenotazione == '0'">Vi presentiamo i nostri piatti</h3>
-            <h3 v-else>Prenotazione Eventi / Specialità</h3>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-4 col-12 filter-box">
-                <div class="row search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="search" type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
-                </div>
-
-
-                <div v-if="Prenotazione == '0'">
-
-                    <div class="row filter-section">
-                        <ul class="filter-option">
-                            <hr />
-                            <li id="Compress" style="display: flex; width: 75%; ">
-                                <label class="d-flex justify-content-between">Comprimi spazio</label>
-                                <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
-                                    checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey"
-                                    style="margin-left: -58px;" />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-8">
+        <div class="row-container">
+            <div class="grid-container">
                 <div class="row box-container">
-                    <div v-for="(f, index) in currentPageItems" :key="index">
+                    <div v-for="(f, index) in currentPageItems" :key="index" @click="onQtyChange($event.button, index)"
+                        @contextmenu.prevent="onQtyChange($event.button, index)">
                         <div class="box">
                             <!--<a href="" class="fas fa-heart"></a>-->
-                            <div v-if="Artimage(f.food_src) != '' && Compress == false" class="image">
-                                <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)"
-                                    :alt="require('@/assets/images/no.png')"
-                                    @click="qty[index]++, onQtyChange(index)" />
-                                <img v-else :src="Artimage(f.food_src)" :alt="require('@/assets/images/no.png')" />
-                            </div>
                             <div class="content">
                                 <h3>{{ f.FlgVariante != 0 ? '++ ' + f.food_name + ' ++' : f.food_name }}</h3>
-                                <div class="desc" v-if="Compress == false">
-                                    <p>{{ f.food_desc }}</p>
-                                </div>
-                                <div class="price" v-if="Compress == false">
-                                    {{ parseFloat(f.food_price) - parseFloat(f.food_discount) }} €
-                                    <span v-if="parseFloat(f.food_discount) != 0.00">{{ parseFloat(f.food_price) }}
-                                        €</span>
-                                </div>
-
                                 <div v-if="f.FlgPrenotabile == 0 && f.QtaDisponibile == 0" class="add-to-cart">
                                     <h4
                                         style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
@@ -79,17 +59,12 @@
                                     </h4>
                                 </div>
                                 <div v-else class="add-to-cart">
-                                    <button class="btn"
-                                        style="border-right-color: black; border-bottom-right-radius: 0%;  border-top-right-radius: 0%;"
-                                        value="minus" @click="qty[index]--, onQtyChange(index)"><i
-                                            class="fa-solid fa-minus"></i></button>
-                                    <h4 v-if="qty[index] == 0">{{ qty[index] }}</h4>
-                                    <h4 v-else style="background-color: #f38609f4; color: white;">{{ qty[index] }}
+                                    <h4 class="btn" style="background-color: white; padding: 0px 10px;"
+                                        v-if="qty[index] == 0">{{ qty[index] }}</h4>
+                                    <h4 class="btn" v-else
+                                        style="background-color: #f38609f4; padding: 1px 10px; color: white;">{{
+                                            qty[index] }}
                                     </h4>
-                                    <button class="btn"
-                                        style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
-                                        value="plus" @click="qty[index]++, onQtyChange(index)"><i
-                                            class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -120,13 +95,31 @@
                             </button>
                 </div>
             </div>
-        </div>
-        <div class="to-cart">
-            <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
-                <i class="fas fa-shopping-cart cart"></i> Vai al carrello
-            </router-link>
-            <button v-else class="btn" style="width: 100%;" :disabled="true">
-                <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
+            <div class="filter-box" ref="filterbox">
+                <h4 class="row price-box">{{ calculateSummaryPrice() }} €</h4>
+                <hr />
+                <div class="close-table">
+                    <table class="table-cart">
+                        <thead>
+                            <tr>
+                                <th>Qta</th>
+                                <th>Articolo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(i, index) in Cartarray" :key="index">
+                                <td>{{ i.qty }}</td>
+                                <td>{{ i.artDesc }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn" style="width: 100%;"><i class="fa-solid fa-print"
+                        style="padding-right: 2vh;"></i>STAMPA</button>
+                <button class="btn" style="width: 100%; background-color: #f38609; margin-top: 2vh;"
+                    @click="ClearAll()"><i class="fa-solid fa-xmark" style="padding-right: 2vh;"></i>Annulla
+                    l'ordine</button>
+            </div>
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
@@ -136,11 +129,11 @@
 
 <script>
 import { mapState } from "vuex";
-import { VueToggles } from "vue-toggles";
 import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import axios from "axios";
+//import { nextTick } from "vue";
 
 export default {
     props: ["food"],
@@ -151,7 +144,8 @@ export default {
         let categorytype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
-        let Ordertype =  "w" // sessionStorage.getItem('TipoOrdine')
+        let Ordertype = "w"
+        // sessionStorage.getItem('TipoOrdine')
         /*switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
@@ -161,8 +155,19 @@ export default {
                 sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
                 break;
         }*/
+        const currentTime = (() => {
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var hour = ("0" + (now.getHours())).slice(-2);
+            var min = ("0" + (now.getMinutes())).slice(-2);
+            return now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
+        })();
+
         return {
             foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
+            checkoutObj: { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
+            Cartarray: [], //{ id: "", artDesc: "", price: "", qty: "" }
             showDropDown: false,
             matchUser: undefined,
             setqty: false,
@@ -184,15 +189,6 @@ export default {
             wifiquality: null,
             wifispeed: null,
             Quickerrore: false,
-
-            categoryFilters: ['Tutti', 'Bevande', 'Panini', 'Dolci', 'Vino', 'Antipasti', 'Primi', 'Secondi'],
-            activeFilter: 'Tutti',
-            menuItems: [
-                { id: 1, name: 'Espresso', category: 'Bevande', price: 1.5 },
-                { id: 2, name: 'Panino al prosciutto', category: 'Panini', price: 4.5 },
-                { id: 3, name: 'Tiramisu', category: 'Dolci', price: 5 },
-                // Aggiungi altri elementi del menu qui
-            ]
         };
     },
 
@@ -209,20 +205,21 @@ export default {
     mounted() {
         setTimeout(() => {
             this.FilterBtncolor(0)
+            this.setupWatcher();
         }, 200);
     },
 
     updated() {
-        this.buildArray()
-        this.getAllCartItem()
+        this.buildArray(),
+            this.getAllCartItem()
     },
 
     computed: {
         ...mapState(["allFoods"]),
         ...mapState(["allReparti"]),
         ...mapState({
-      cassaBarraWidth: state => state.cassaBarraWidth
-    }),
+            cassaBarraWidth: state => state.cassaBarraWidth,
+        }),
 
         filteredMenuItems() {
             if (this.activeFilter === 'Tutti') {
@@ -260,13 +257,93 @@ export default {
         },
 
         loadReparti: function () {
-            return this.allReparti
+            const IdRepartomap = [...new Set(this.allFoods.map(f => f.IdReparto))];
+            return this.allReparti.filter((r) => IdRepartomap.includes(r.idReparto));
         },
+
+        currentTableOrName: {
+            get() {
+                return this.foodObj.type ? this.checkoutObj.bill_tavolo : this.checkoutObj.Nominativo;
+            },
+            set(value) {
+                if (this.foodObj.type == 'w') {
+                    this.checkoutObj.bill_tavolo = value;
+                } else {
+                    this.checkoutObj.Nominativo = value;
+                }
+            }
+        },
+        currentCoversOrNotes: {
+            get() {
+                return this.foodObj.type ? this.checkoutObj.bill_coperti : this.checkoutObj.bill_note;
+            },
+            set(value) {
+                if (this.foodObj.type == 'w') {
+                    this.checkoutObj.bill_coperti = value;
+                } else {
+                    this.checkoutObj.bill_note = value;
+                }
+            }
+        },
+        /*gridStyle() {
+            let neWidth = 0
+            nextTick(() => {
+                setTimeout(() => {
+                    // Ottieni gli stili calcolati del container grid
+                    const box = document.querySelector('.box-container');
+                    const styles = window.getComputedStyle(box);
+                    const columns = styles.gridTemplateColumns.split(' ').length
+
+                    const rect = box.getBoundingClientRect();
+                    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+                    const visual = rect.bottom > (viewportHeight + 50)
+
+                    console.log(this.getElementsInLastRow(box) + ' visual ' + visual + ' colums ' + columns)
+
+                    if (!visual) {
+                        if ( columns > this.getElementsInLastRow(box) && columns > '1') {
+                    neWidth = ((columns - this.getElementsInLastRow(box)) / 100) + 100
+                    console.log(neWidth + 'new widtch')
+                       }
+                   }
+                }, 200);
+            });
+            return 'repeat(auto-fill, minmax(' + neWidth + ', 1fr))'
+        },*/
     },
 
     methods: {
+        ClearAll() {
+            let Ordertype = this.foodObj.Ordertype
+            let currentTime = this.checkoutObj.bill_when
+            this.checkoutObj = []
+            this.checkoutObj = { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
+
+                sessionStorage.removeItem("QtyArray")
+            sessionStorage.removeItem("CartArray")
+            this.CartItem = []
+            this.Cartarray = []
+            this.qty = []
+        },
+
         handleFilterChange(filter) {
             this.activeFilter = filter
+        },
+
+        setupWatcher() {
+            const props = this.foodObj.type === 'w'
+                ? ['bill_tavolo', 'bill_coperti']
+                : ['Nominativo', 'bill_note'];
+
+            const updateVisibility = () => {
+                const visibility = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'none' : 'block';
+                document.getElementById('Copertura').style.display = visibility;
+            };
+
+            this.$watch(() => this.checkoutObj[props[0]], updateVisibility);
+            this.$watch(() => this.checkoutObj[props[1]], updateVisibility);
+
+            updateVisibility(); // Imposta la visibilità all'inizio
         },
 
         getWIFIConnection() {
@@ -279,21 +356,22 @@ export default {
             }
         },
 
-        Artimage(food) {
-            if (food === '') {
-                return '';
-            } else {
-                if (this.wifiquality == -1 || this.wifispeed < '0.25' && this.wifispeed != null) {
-                    return ''
-                } else {
-                    try {
-                        return require(`@/assets/images/${food}`);
+        getElementsInLastRow(gridContainer) {
+            const gridItems = Array.from(gridContainer.children); // Ottieni tutti gli elementi figli
+            if (gridItems.length === 0) return 0; // Se non ci sono elementi, ritorna 0
 
-                    } catch (ex) {
-                        return require(`@/assets/images/no.png`);
-                    }
-                }
-            }
+            // Ottieni la posizione inferiore di ogni elemento
+            const itemPositions = gridItems.map(item => item.getBoundingClientRect().bottom);
+
+            // Trova la posizione inferiore massima (ultima riga)
+            const lastRowBottom = Math.max(...itemPositions);
+
+            // Conta gli elementi che appartengono all'ultima riga
+            const elementsInLastRow = gridItems.filter(
+                item => item.getBoundingClientRect().bottom === lastRowBottom
+            );
+
+            return elementsInLastRow.length; // Ritorna il numero di elementi nell'ultima riga
         },
 
         CloseQuickvue(data) {
@@ -347,7 +425,7 @@ export default {
         },
 
         async chekQty() {
-            let totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sumordine')).data;
+            let totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') + '/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
@@ -374,27 +452,31 @@ export default {
         },
 
         async getAllCartItem() {
-            if (this.setqty !== true) {
-                if (sessionStorage.getItem('MatchUser')) {
-                    try {
-                        var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
-                        if (existItem.errMsg) { this.Quickerrore = true; return; }
-                    } catch (error) {
-                        this.Quickerrore = true; return;
-                    }
-                    var pageItem = Object.keys(this.currentPageItems).length;
-                    for (var ix = 0; ix < existItem.data.length; ix++) {
-                        let FoodID = existItem.data[ix].food_id
-                        for (var l = 0; l < pageItem; l++) {
-                            var Itempage = this.currentPageItems[l].food_id
-                            if (Itempage == FoodID) {
-                                this.qty[l] = parseInt(existItem.data[ix].item_qty)
-                                break;
-                            }
+            if (this.setqty) return;
+            const qtyArray = JSON.parse(sessionStorage.getItem("QtyArray") || '[]');
+            const cartArray = JSON.parse(sessionStorage.getItem("CartArray") || '[]');
+            console.log(qtyArray + '  ' + cartArray)
+            if (qtyArray.length && cartArray.length) {
+                this.Cartarray = cartArray;
+                this.qty = qtyArray;
+                const pageItems = this.currentPageItems;
+                const giavalorizati = new Set();
+
+                cartArray.forEach(cartItem => {
+                    const foodID = cartItem.id;
+                    pageItems.forEach((pageItem, index) => {
+                        const itemPageID = pageItem.food_id;
+                        if (itemPageID === foodID) {
+                            this.qty[index] = parseInt(cartItem.qty);
+                            giavalorizati.add(itemPageID);
+                        } else if (!giavalorizati.has(itemPageID)) {
+                            this.qty[index] = 0;
                         }
-                    }
-                }
+                    });
+                });
             }
+
+            this.setqty = true;
         },
 
         evaluateStatus: function (food, statusArray) {
@@ -410,8 +492,8 @@ export default {
         },
         evaluatePrice: function (food, priceRange) {
             this.pageNum = 0;
-            var cal = parseFloat(food.food_price) - parseFloat(food.food_discount);
-            if (priceRange == "2,5") {
+            var cal = parseFloat(food.food_price).toFixed(2) - parseFloat(food.food_discount).toFixed(2);
+            if (priceRange == "2,50") {
                 if (2 <= cal && cal <= 5) {
                     return food;
                 }
@@ -441,6 +523,14 @@ export default {
             }
         },
 
+        calculateSummaryPrice: function () {
+            let total = 0.00;
+            for (let i = 0; i < this.Cartarray.length; i++) {
+                total = total + this.Cartarray[i].price * this.Cartarray[i].qty
+            }
+            return parseFloat(total).toFixed(2)
+        },
+
         filterFoodBtn: function (value, index) {
 
             this.FilterBtncolor(index)
@@ -448,9 +538,11 @@ export default {
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
             this.foodObj.category = value;
+            this.qty.length = 0
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }
+            this.setqty = false
         },
 
         FilterBtncolor(index) {
@@ -484,28 +576,23 @@ export default {
             }
         },
 
-        onQtyChange: function (index) {
-            // Cancella il timer se esiste per l'articolo specifico
-            if (this.throttleTimers[index]) {
-                clearTimeout(this.throttleTimers[index]);
+        onQtyChange: function (BtnInesco, index) {
+            console.log(index)
+            if (BtnInesco === 0) {
+                this.qty[index]++
+            } else if (BtnInesco === 2) {
+                this.qty[index]--
+                if (this.qty[index] < 0) {
+                    this.qty[index] = 0;
+                }
             }
-
-            if (this.qty[index] < 0) {
-                this.qty[index] = 0;
-
-            }
-            this.showCart = false;
-            this.eventBus.emit("showCart", this.showCart);
 
             // Imposta un timer specifico per l'articolo
-            this.throttleTimers[index] = setTimeout(() => {
-                if (this.currentPageItems[index].FlgVariante != 0) {
-                    this.AltreVarianti(index)
-                } else {
-                    this.addToCart(index, false);
-                }
-                delete this.throttleTimers[index]; // Rimuovi il timer dopo l'esecuzione
-            }, this.throttleDelay);
+            if (this.currentPageItems[index].FlgVariante != 0) {
+                this.AltreVarianti(index)
+            } else {
+                this.cartElement(index)
+            }
 
             this.setqty = true;
 
@@ -518,7 +605,7 @@ export default {
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
                 try {
-                    var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
+                    var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('userCassa'));
                     if (existItem.errMsg) { this.Quickerrore = true; return; }
                 } catch (error) {
                     this.Quickerrore = true; return;
@@ -554,69 +641,24 @@ export default {
         },
 
 
-        async addToCart(index, IsVariante) {
-            this.sendId = this.currentPageItems[index].food_id;
-            this.showCounterCart = !this.showCounterCart;
-
-            let user_id = sessionStorage.getItem('Username');
-            let data = {
-                user_id: user_id,
-                food_id: this.sendId,
-                item_qty: parseInt(this.qty[index])
-            };
-            this.setqty = false
-
-
-            if (data.item_qty <= 0) {
-                // Se la quantità è <= 0, rimuovi l'articolo dal carrello (se presente)
-                await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
-                this.$refs.alert.showAlert("Successo", "Che peccato!", "Articolo rimosso con successo!");
+        cartElement: function (index) {
+            var idElement = this.currentPageItems[index].food_id
+            var item = this.Cartarray.findIndex(item => item.id === idElement);
+            if (item !== -1) {
+                if (this.qty[index] <= 0) {
+                    this.Cartarray.splice(item, 1)
+                } else {
+                    this.Cartarray[item].qty = this.qty[index]
+                }
             } else {
-                // Verifica se l'articolo esiste nel carrello
-                try {
-                    var existingCartItem = await axios.get("/cartItem/" + user_id + "/" + this.sendId);
-                    if (existingCartItem.errMsg) { this.Quickerrore = true; return; }
-                } catch (error) {
-                    this.Quickerrore = true; return;
-                }
-                var Esiste = existingCartItem.data.length > 0 ? true : false
-                if (Esiste) {
-                    // Se l'articolo esiste, aggiorna la quantità
-                    await axios.put("/cartItem/", data);
-                    this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
-                } else {
-                    // Altrimenti, aggiungi l'articolo al carrello
-                    await axios.post("/cartItem", data);
-                    this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo aggiunto al carrello!");
+                if (this.qty[index] > 0) {
+                    this.Cartarray.push(
+                        { id: idElement, artDesc: this.currentPageItems[index].food_name, price: this.currentPageItems[index].food_price, qty: this.qty[index] }
+                    )
                 }
             }
-
-            if (this.Prenotazione === "1") {
-                // Gestisci la prenotazione dell'articolo
-                try {
-                    var cartItems = await axios.get('/cartItem/' + user_id);
-                    if (cartItems.errMsg) { this.Quickerrore = true; return; }
-                } catch (error) {
-                    this.Quickerrore = true; return;
-                }
-                IsVariante = this.currentPageItems[index].FlgVariante != 0 ? true : false
-                if (!IsVariante) {
-                    IsVariante = Esiste === true ? true : false
-                }
-                if (cartItems.data.length > 1 && !IsVariante) {
-                    // Se ci sono più di un articolo non variante nel carrello, rimuovi l'articolo aggiunto
-                    await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
-                    this.qty[index] = 0;
-                    this.showQuickView = true;
-                    this.$refs.alert.showAlert("Attenzione", "Ci Dispiace!", "Puoi prenotare solo un articolo per ordine!");
-                } else {
-                    await axios.put("/cartItem/", data);
-                    this.$refs.alert.showAlert("Successo", "Grazie!", "Articolo modificato correttamente!");
-                }
-            }
-
-            this.showCart = true;
-            this.eventBus.emit("showCart", this.showCart);
+            sessionStorage.setItem('CartArray', JSON.stringify(this.Cartarray))
+            sessionStorage.setItem('QtyArray', JSON.stringify(this.qty))
         },
     },
 
@@ -624,23 +666,25 @@ export default {
         VueBasicAlert,
         QuickViewPrenotazione,
         QuickViewErrore,
-        VueToggles,
     }
 };
 </script>
 
 <style scoped>
+.info-container,
 .filter-menu-container {
     position: fixed;
     top: 1;
     left: 0;
     right: 0;
     background-color: #fff;
+    text-align: center;
     z-index: 100;
+    margin-top: 77.5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-x: auto;
     white-space: nowrap;
-    border-bottom: 2px inset  black;
+    border-bottom: 2px inset black;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -656,7 +700,46 @@ export default {
 
 .filter-menu {
     display: flex;
-    padding: 10px 2px;
+    padding: 15px 2px;
+}
+
+.info-container {
+    margin-top: 0px;
+    background-color: #f7f7f7;
+    display: flex;
+    padding: 10px 0;
+    justify-content: space-evenly;
+}
+
+.info-container .divisor {
+    border-top: 3px solid #273dae;
+    margin: 0;
+    padding: 0;
+    width: 128px;
+    transform: rotate(90deg);
+    /* Ruota l'hr per renderlo verticale */
+}
+
+.info-container .form-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    text-align: center;
+    font-size: 1.7rem;
+    margin: 0
+}
+
+
+.info-container .form-group input {
+    margin: .7rem 0;
+    border-radius: .5rem;
+    background: #fff;
+    padding: 2rem 1.2rem;
+    font-size: 1.6rem;
+    color: #130f40;
+    text-transform: none;
+
+    border-color: black;
 }
 
 
@@ -709,12 +792,80 @@ hr {
     transition: all 0.5s ease;
 }
 
-.search-box {
+.filter-box {
+    margin-left: 1%;
+    flex: 29%;
+    position: sticky;
+    top: 175px;
     width: 100%;
+    height: 60vh;
+    border: 1px inset black;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    -webkit-box-shadow: -1px 3px 8px 5px #bbbbbb, 2px 5px 16px 0px #0B325E, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+    box-shadow: -1px 3px 8px 5px #bbbbbb, 2px 5px 16px 0px #0B325E, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+}
+
+.filter-box .price-box {
+    background-color: #273dae;
+    margin: 15px 10px;
+    padding: 10px 10px;
+    border-radius: 10px;
     justify-content: center;
-    position: relative;
-    display: flex;
-    margin-bottom: 10px;
+    font-size: 2.5rem;
+    color: white;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4),
+        /* ombra interna */
+        inset -5px -5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.filter-box .close-table {
+    width: 100%;
+    height: 50%;
+    overflow-x: auto;
+    margin: 15px 2px;
+    border: 2px inset black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.filter-box .close-table .table-cart {
+    width: 100%;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 1.5rem;
+}
+
+.table-cart>thead {
+    border-bottom: 2px solid #273dae;
+}
+
+.table-cart>tbody>tr {
+    border-bottom: 1px dashed #273dae;
+}
+
+.table-cart>thead>tr>th,
+.table-cart>tbody>tr>td {
+    padding: 5px 0px;
+    border-right: 2px solid #273dae;
+}
+
+.table-cart>thead>tr>th {
+    padding: 2px 0px;
+}
+
+.close-table::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 0.5rem;
+}
+
+
+.close-table::-webkit-scrollbar-thumb {
+    background: #f38609;
+    padding: 3px 0px;
+    border-radius: 10px;
 }
 
 .search-input {
@@ -741,62 +892,49 @@ hr {
 }
 
 .menu-section {
-    padding: 11rem 9%;
+    padding: 17rem 2% 17rem 5%;
+}
+
+.row-container {
+    display: flex;
+}
+
+.grid-container {
+    flex: 70%;
+    padding: 10px;
+    border: 2px solid black;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4),
+        /* ombra interna */
+        inset -5px -5px 10px rgba(0, 0, 0, 0.4);
 }
 
 .menu-section .box-container {
+    user-select: none;
+    margin: 2.5px;
+    cursor: pointer;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(27rem, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(9vmax, 1fr));
+    gap: 0.4rem;
 }
 
 .menu-section .box-container .box {
-    border-radius: 0.5rem;
+    border-radius: 10px;
+    border: 3px dotted rgb(0, 0, 0);
     position: relative;
-    background: #f7f7f7;
+    background: #d4d4d4;
     padding: 2rem;
     text-align: center;
 }
 
-.menu-section .box-container .box .image {
-    margin: 1rem 0;
-}
-
-.menu-section .box-container .box .image img {
-    height: 15rem;
-}
-
 .menu-section .box-container .box .content h3 {
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: #130f40;
-}
-
-.menu-section .box-container .box .content .stars {
-    font-size: 1.7rem;
-}
-
-.menu-section .box-container .box .content .stars i {
-    color: gold;
-}
-
-.menu-section .box-container .box .content .stars span {
-    color: #666;
-}
-
-.menu-section .box-container .box .content .desc p {
-    font-size: 14px;
 }
 
 .menu-section .box-container .box .content .price {
     font-size: 2.4rem;
     padding-bottom: 3px;
     color: #130f40;
-}
-
-.menu-section .box-container .box .content .price span {
-    font-size: 1.5rem;
-    color: #666;
-    text-decoration: line-through;
 }
 
 .menu-section .box-container .box .content .add-to-cart {
@@ -867,19 +1005,25 @@ hr {
     margin-right: 25%;
     margin-top: 5vh;
 }
+
 /*---------------------------------*/
 h3 {
-  /*font-size: 1.2em; */
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limita il titolo a 2 righe */
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden; /* Nasconde il testo oltre la seconda riga */
-  text-overflow: ellipsis; /* Aggiunge "..." alla fine se il testo è troppo lungo */
-  /*max-height: calc(1.2em * 2); /* Altezza massima impostata per 2 righe di testo */
-  line-height: 1.1em; /* Altezza della linea specifica per mantenere proporzioni corrette */
-  word-wrap: break-word; /* Permette al testo di andare a capo correttamente */
+    /*font-size: 1.2em; */
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Limita il titolo a 2 righe */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* Nasconde il testo oltre la seconda riga */
+    text-overflow: ellipsis;
+    /* Aggiunge "..." alla fine se il testo è troppo lungo */
+    /*max-height: calc(1.2em * 2); /* Altezza massima impostata per 2 righe di testo */
+    line-height: 1.1em;
+    /* Altezza della linea specifica per mantenere proporzioni corrette */
+    word-wrap: break-word;
+    /* Permette al testo di andare a capo correttamente */
 }
 
 

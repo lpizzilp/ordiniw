@@ -9,7 +9,8 @@
     </div>
     <div class="header">
         <router-link @click="scrollToTop()" to="/cassiere/prenotazioni" class="testa"><i
-                class="fa-solid fa-cash-register" style="padding-right: 2vh;"></i>Ciao {{ nav_name }}!
+                class="fa-solid fa-cash-register" style="padding-right: 2vh;"></i>Ciao 
+                {{ userCassa == null ? 'User' : userCassa.split(" ")[0].slice(0, 12) }}!
         </router-link>
         <button class="btn"><i class="fas fa-bars" @click="showNav()"></i>
         </button>
@@ -27,7 +28,7 @@
             <li class="td-router" onmouseover="this.style.backgroundColor='#273dae'">
                 <hr style="width: 100%; border: 2px outset white; border-radius: 10px;">
             </li>
-            <li class="td-router"><router-link @click="scrollToTop(), Writelog('Utenti')" to="/cassiere/utenti"><i
+            <li class="td-router" id="tdUser"><router-link @click="scrollToTop(), setCassiere(null), Writelog('Utenti')" to="/"><i
                         class="fa-solid fa-user-lock" style="padding-right: 2vh;"></i>Cambio Utente</router-link></li>
             <li class="td-router"><router-link @click="scrollToTop(), Writelog('Utenti')" to="/cassiere/utenti"><i
                         class="fa-solid fa-users-between-lines" style="padding-right: 2vh;"></i>Lista
@@ -36,7 +37,7 @@
 
 
         <div class="icons">
-            <router-link @click="setAdmin(''), Writelog('uscita')" to="/" class="link">
+            <router-link @click="CloseCassa(), Writelog('uscita')" to="/" class="link">
                 <i class="fa-solid fa-right-from-bracket"> Chiudi Cassa</i>
             </router-link>
         </div>
@@ -68,29 +69,34 @@
 import router from "@/router";
 import axios from "axios";
 import { nextTick } from "vue";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
     name: 'NavBar',
+    inject: ["eventBus"],
 
     data() {
         return {
-            nav_name: 'Amministratore',
             PannelAction: false,
             route: '',
         }
     },
 
-    created() {
-        this.getName()
-    },
-
     mounted() {
         this.updateWidth()
+        this.eventBus.on("Fullscreen", () => {
+            this.TooglePannel()
+            router.push('/cassiere/cassa')
+        });
     },
 
+    computed: {
+        ...mapState(["userCassa"])
+    },
+
+
     methods: {
-        ...mapMutations(["setAdmin"]),
         ...mapMutations(["setCassaBarraWidth"]),
+        ...mapMutations(["setCassiere"]),
 
         scrollToTop() {
             window.scrollTo(0, 0);
@@ -102,12 +108,6 @@ export default {
                 arg: pagina == 'uscita' ? 'Uscita di ' + sessionStorage.getItem('User') + '\n' : 'Accesso a ' + pagina + ' di ' + sessionStorage.getItem('User')
             }
             await axios.post('/log', data)
-        },
-
-        async getName() {
-            /* let user = ''
-             user = (await axios.get('/users/' + sessionStorage.getItem('SagraId') +'/'+ sessionStorage.getItem('Admin'))).data.user_name.split(' ')
-             this.nav_name = user[0]*/
         },
 
         async TooglePannel() {
@@ -149,6 +149,11 @@ export default {
             }
         },
 
+        CloseCassa() {
+            sessionStorage.removeItem('IsCassiere')
+            this.setCassiere(null)
+        },
+
 
         RouteNav(type) {
             router.push(type)
@@ -163,7 +168,7 @@ export default {
 .open-button,
 .close-button {
     position: fixed;
-    z-index: 998;
+    z-index: 997;
     top: 0;
     left: 0;
     bottom: 0;
@@ -181,7 +186,7 @@ export default {
 }
 
 .open-button {
-    width: fit-content;
+    width: fit-content; 
     text-align: center;
     font-size: 2.5rem;
     padding: 0;
@@ -189,7 +194,7 @@ export default {
 
 .header {
     position: fixed;
-    z-index: 999;
+    z-index: 998;
     top: 0;
     bottom: 0;
     left: 0;
@@ -203,7 +208,7 @@ export default {
 
 .header .testa {
     text-align: left;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bolder;
     color: white;
     background-color: transparent;

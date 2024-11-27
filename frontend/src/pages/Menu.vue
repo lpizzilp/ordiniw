@@ -257,7 +257,8 @@ export default {
         },
 
         loadReparti: function () {
-            return this.allReparti
+            const IdRepartomap = [...new Set(this.allFoods.map(f => f.IdReparto))];
+            return this.allReparti.filter((r) => IdRepartomap.includes(r.idReparto));
         },
     },
 
@@ -382,9 +383,12 @@ export default {
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
                         let FoodID = existItem.data[ix].food_id
+                        console.log(FoodID + ' foood Id')
                         for (var l = 0; l < pageItem; l++) {
                             var Itempage = this.currentPageItems[l].food_id
+                            console.log('secondo for ' +  Itempage)
                             if (Itempage == FoodID) {
+                                console.log('fine if ' + Itempage)
                                 this.qty[l] = parseInt(existItem.data[ix].item_qty)
                                 break;
                             }

@@ -255,7 +255,6 @@ export default {
 
         calculateSummaryPrice: function () {
             let subtotal = 0;
-            console.log(this.itemQuantity.length + ' item q')
             for (let i = 0; i < this.itemQuantity.length; i++) {
                 console.log(parseFloat(this.filterFoods[i].food_price))
                 subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]

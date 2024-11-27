@@ -8,6 +8,7 @@ const store = createStore({
             allReparti: [],
             admin: undefined,
             cassaBarraWidth: null,
+            userCassa: null,
         }
     },
     mutations: {
@@ -25,6 +26,10 @@ const store = createStore({
 
         setCassaBarraWidth(state, width) {
             state.cassaBarraWidth = width
+        },
+
+        setCassiere(state, payload){
+            state.userCassa = payload;
         },
     },
     actions: {

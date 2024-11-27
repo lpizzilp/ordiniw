@@ -1,4 +1,4 @@
-import { createRouter,createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Register from '../admin/login/Register.vue';
 import Home from '../pages/Home.vue';
 import Menu from '../pages/Menu.vue';
@@ -24,7 +24,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home, 
+    component: Home,
   },
   {
     path: "/menu",
@@ -59,7 +59,7 @@ const routes = [
   {
     path: "/tavolo",
     name: "Tavolo",
-    component: Table, 
+    component: Table,
   },
   {
     path: "/thank",
@@ -104,12 +104,12 @@ const routes = [
   {
     path: "/admin/utenti",
     name: "Utenti",
-    component: Utenti, 
+    component: Utenti,
   },
   {
     path: "/admin/errori",
     name: "TabErrori",
-    component: Errori, 
+    component: Errori,
   },
   {
     path: "/cassiere/Cashboard",
@@ -135,9 +135,9 @@ const router = createRouter({
 
 router.afterEach((to, from) => {
   window.dispatchEvent(new Event('routeChanged'));
-  window.addEventListener('popstate', function(event) {
+  window.addEventListener('popstate', function (event) {
     event.preventDefault
-    switch ( from.fullPath ) {
+    switch (from.fullPath) {
       case '/':
         router.removeRoute('Home');
         break;
@@ -145,7 +145,7 @@ router.afterEach((to, from) => {
         this.history.state.current = '/';
         router.push('/');
         break;
-      case '/checkout': 
+      case '/checkout':
         // this.history.state.current = '/thank'
         // router.push('/thank')
         this.history.state.current = '/'
@@ -158,7 +158,7 @@ router.afterEach((to, from) => {
       default:
         this.history.state.current = event.state.current
         router.push(event.state.current)
-    } 
+    }
 
     this.scrollTo(0, 0)
   });
