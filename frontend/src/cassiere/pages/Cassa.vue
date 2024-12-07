@@ -23,12 +23,12 @@
 
     <div class="filter-menu-container" :style="{ marginLeft: `${cassaBarraWidth}px` }">
         <div class="filter-menu" ref="menuRef">
-            <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
-                Mostra Tutto
-            </button>
             <button :id="'filter' + (ind + 1)" v-for="(r, ind) in loadReparti" :key="ind"
                 @click="filterFoodBtn(r.idReparto, (ind + 1))">
                 {{ r.descReparto }}
+            </button>
+            <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
+                Mostra Tutto
             </button>
         </div>
     </div>
@@ -114,9 +114,9 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn" style="width: 100%;"><i class="fa-solid fa-print"
+                <button class="btn" style="width: 80%;"><i class="fa-solid fa-print"
                         style="padding-right: 2vh;"></i>STAMPA</button>
-                <button class="btn" style="width: 100%; background-color: #f38609; margin-top: 2vh;"
+                <button class="btn" style="width: 80%; background-color: #f38609; margin-top: 2vh;"
                     @click="ClearAll()"><i class="fa-solid fa-xmark" style="padding-right: 2vh;"></i>Annulla
                     l'ordine</button>
             </div>
@@ -204,7 +204,7 @@ export default {
 
     mounted() {
         setTimeout(() => {
-            this.FilterBtncolor(0)
+            this.filterFoodBtn(this.loadReparti[0].idReparto, 1)
             this.setupWatcher();
         }, 200);
     },
@@ -822,10 +822,10 @@ hr {
 }
 
 .filter-box .close-table {
-    width: 100%;
+    width: 90%;
     height: 50%;
     overflow-x: auto;
-    margin: 15px 2px;
+    margin: 15px 5%;
     border: 2px inset black;
     background-color: white;
     border-radius: 10px;
