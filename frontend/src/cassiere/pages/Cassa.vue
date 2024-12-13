@@ -97,7 +97,7 @@
             </div>
             <div class="filter-box" ref="filterbox">
                 <h4 class="row price-box">{{ calculateSummaryPrice() }} €</h4>
-                <hr />
+                <hr style="margin: 0px;" />
                 <div class="close-table">
                     <table class="table-cart">
                         <thead>
@@ -114,9 +114,10 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn" style="width: 80%;"><i class="fa-solid fa-print"
+                <button class="btn" style="width: 90%; font-size: 1.8rem;"><i class="fa-solid fa-print"
                         style="padding-right: 2vh;"></i>STAMPA</button>
-                <button class="btn" style="width: 80%; background-color: #f38609; margin-top: 2vh;"
+                <button class="btn"
+                    style="width: 90%; background-color: #f38609; font-size: 1.7rem; margin-top: 2vh; margin-bottom: 2vh; "
                     @click="ClearAll()"><i class="fa-solid fa-xmark" style="padding-right: 2vh;"></i>Annulla
                     l'ordine</button>
             </div>
@@ -336,9 +337,10 @@ export default {
                 : ['Nominativo', 'bill_note'];
 
             const updateVisibility = () => {
-                const visibility = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'none' : 'block';
+                const visibility = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'none' : 'block'
                 document.getElementById('Copertura').style.display = visibility;
             };
+
 
             this.$watch(() => this.checkoutObj[props[0]], updateVisibility);
             this.$watch(() => this.checkoutObj[props[1]], updateVisibility);
@@ -793,12 +795,12 @@ hr {
 }
 
 .filter-box {
+    display: flex;
+    flex-direction: column;
     margin-left: 1%;
-    flex: 29%;
-    position: sticky;
-    top: 175px;
+    flex: 24%;
     width: 100%;
-    height: 60vh;
+    height: 70vh;
     border: 1px inset black;
     background-color: #f5f5f5;
     border-radius: 10px;
@@ -810,6 +812,7 @@ hr {
 
 .filter-box .price-box {
     background-color: #273dae;
+    width: 90%;
     margin: 15px 10px;
     padding: 10px 10px;
     border-radius: 10px;
@@ -823,7 +826,7 @@ hr {
 
 .filter-box .close-table {
     width: 90%;
-    height: 50%;
+    height: calc(9 * (16px + 1.5rem));
     overflow-x: auto;
     margin: 15px 5%;
     border: 2px inset black;
@@ -900,7 +903,7 @@ hr {
 }
 
 .grid-container {
-    flex: 70%;
+    flex: 75%;
     padding: 10px;
     border: 2px solid black;
     box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4),
@@ -913,7 +916,7 @@ hr {
     margin: 2.5px;
     cursor: pointer;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(9vmax, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(10vmax, 1fr));
     gap: 0.4rem;
 }
 
