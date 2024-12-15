@@ -20,24 +20,18 @@
                 v-model="currentCoversOrNotes" />
         </div>
     </div>
-
-    <div class="filter-menu-container" :style="{ marginLeft: `${cassaBarraWidth}px` }">
-        <div class="filter-menu" ref="menuRef">
-            <button :id="'filter' + (ind + 1)" v-for="(r, ind) in loadReparti" :key="ind"
-                @click="filterFoodBtn(r.idReparto, (ind + 1))">
-                {{ r.descReparto }}
-            </button>
-            <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
-                Mostra Tutto
-            </button>
-        </div>
-    </div>
     <hr id="Copertura"
         style="position: fixed; top: 68px; left: 0; right: 0; bottom: 0; z-index: 996; width: 100%; height: 100%; border: 200vh solid #0000004f;">
     <div class="menu-section" :style="{ marginLeft: `${cassaBarraWidth - 39}px` }">
 
         <div class="row-container">
             <div class="grid-container">
+                <div class="filter-menu" ref="menuRef">
+                    <button :id="'filter' + (ind + 1)" v-for="(r, ind) in loadReparti" :key="ind"
+                        @click="filterFoodBtn(r.idReparto, (ind + 1))">
+                        {{ r.descReparto }}
+                    </button>
+                </div>
                 <div class="row box-container">
                     <div v-for="(f, index) in currentPageItems" :key="index" @click="onQtyChange($event.button, index)"
                         @contextmenu.prevent="onQtyChange($event.button, index)">
@@ -59,10 +53,10 @@
                                     </h4>
                                 </div>
                                 <div v-else class="add-to-cart">
-                                    <h4 class="btn" style="background-color: white; padding: 0px 10px;"
+                                    <h4 class="btn" style="background-color: white; padding: 0px 10px; "
                                         v-if="qty[index] == 0">{{ qty[index] }}</h4>
                                     <h4 class="btn" v-else
-                                        style="background-color: #f38609f4; padding: 1px 10px; color: white;">{{
+                                        style="background-color: #27ae60; padding: 1px 10px; color: white; box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4);">{{
                                             qty[index] }}
                                     </h4>
                                 </div>
@@ -102,13 +96,13 @@
                     <table class="table-cart">
                         <thead>
                             <tr>
-                                <th>Qta</th>
+                                <th style="border-right: 2px solid #273dae;">Qta</th>
                                 <th>Articolo</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(i, index) in Cartarray" :key="index">
-                                <td>{{ i.qty }}</td>
+                                <td style="border-right: 2px solid #273dae;">{{ i.qty }}</td>
                                 <td>{{ i.artDesc }}</td>
                             </tr>
                         </tbody>
@@ -337,7 +331,7 @@ export default {
                 : ['Nominativo', 'bill_note'];
 
             const updateVisibility = () => {
-                const visibility = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'none' : 'block'
+                const visibility = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'none' : 'block';
                 document.getElementById('Copertura').style.display = visibility;
             };
 
@@ -553,12 +547,12 @@ export default {
                 document.querySelectorAll('[id^="filter"]').forEach(el => {
                     el.style.cssText = `
                         padding: 5px 25px;
-                        margin: 0px 10px;
+                        margin: 0px 0px;
                         width: 100%;
                         background-color: #f0f0f0;
-                        border-radius: 20px;
+                        border-radius: 0px;
                         font-size: 2rem;
-                        border: 1px inset black;
+                        border: 2px inset black;
                         cursor: pointer;
                         transition: background-color 0.3s;`;
                 });
@@ -566,11 +560,11 @@ export default {
                 if (element) {
                     element.style.cssText = `
                     padding: 5px 25px;
-                    margin: 0px 10px;
+                    margin: 0px 0px;
                     width: 100%;
-                    background: #f38609;
+                    background: #273dae;
                     border: 2px inset black;
-                    border-radius: 20px;
+                    border-radius: 0px;
                     font-size: 2rem;
                     color: white;
                 `;
@@ -702,7 +696,10 @@ export default {
 
 .filter-menu {
     display: flex;
-    padding: 15px 2px;
+    background-color: #273dae;
+    margin: -7px -10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
 }
 
 .info-container {
@@ -852,7 +849,6 @@ hr {
 .table-cart>thead>tr>th,
 .table-cart>tbody>tr>td {
     padding: 5px 0px;
-    border-right: 2px solid #273dae;
 }
 
 .table-cart>thead>tr>th {
@@ -895,7 +891,7 @@ hr {
 }
 
 .menu-section {
-    padding: 17rem 2% 17rem 5%;
+    padding: 11rem 2% 0rem 5%;
 }
 
 .row-container {
@@ -906,6 +902,8 @@ hr {
     flex: 75%;
     padding: 10px;
     border: 2px solid black;
+    border-top: 0px;
+    border-radius: 10px;
     box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4),
         /* ombra interna */
         inset -5px -5px 10px rgba(0, 0, 0, 0.4);
