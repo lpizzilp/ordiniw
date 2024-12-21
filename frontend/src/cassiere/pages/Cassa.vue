@@ -21,7 +21,7 @@
         </div>
     </div>
     <hr id="Copertura"
-        style="position: fixed; top: 68px; left: 0; right: 0; bottom: 0; z-index: 996; width: 100%; height: 100%; border: 200vh solid #0000004f;">
+        style="position: fixed; top: 68px; left: 0; right: 0; bottom: 0; z-index: 994; width: 100%; height: 100%; border: 200vh solid #0000004f;">
     <div class="menu-section" :style="{ marginLeft: `${cassaBarraWidth - 39}px` }">
 
         <div class="row-container">
@@ -117,8 +117,9 @@
             </div>
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
-            @closedata="CloseQuickvue"></quick-view-prenotazione>
+        @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
+    <quick-view-casse v-if="Quickcasse" @CassaUsed="handleTipocassa"></quick-view-casse>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 
@@ -127,6 +128,7 @@ import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
+import QuickViewCasse from "../components/QuickViewCasse.vue";
 import axios from "axios";
 //import { nextTick } from "vue";
 
@@ -139,7 +141,6 @@ export default {
         let categorytype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
-        let Ordertype = "w"
         // sessionStorage.getItem('TipoOrdine')
         /*switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
@@ -160,8 +161,8 @@ export default {
         })();
 
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
-            checkoutObj: { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: "", prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
+            checkoutObj: { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: "", Nominativo: "", bill_note: "" },
             Cartarray: [], //{ id: "", artDesc: "", price: "", qty: "" }
             showDropDown: false,
             matchUser: undefined,
@@ -184,6 +185,7 @@ export default {
             wifiquality: null,
             wifispeed: null,
             Quickerrore: false,
+            Quickcasse: true,
         };
     },
 
@@ -323,6 +325,12 @@ export default {
 
         handleFilterChange(filter) {
             this.activeFilter = filter
+        },
+
+        handleTipocassa(data) {
+            this.Quickcasse = false
+            this.foodObj.type = data
+            this.checkoutObj.TipoCassa = data
         },
 
         setupWatcher() {
@@ -660,6 +668,7 @@ export default {
 
     components: {
         VueBasicAlert,
+        QuickViewCasse,
         QuickViewPrenotazione,
         QuickViewErrore,
     }
@@ -1074,7 +1083,7 @@ h3 {
     }
 
     .menu-section .box-container .box .image img {
-        height: 12.5rem;
+        height: 1.5rem;
     }
 
     .menu-section .box-container .box .desc p {

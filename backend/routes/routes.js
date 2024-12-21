@@ -99,6 +99,7 @@ import {
 import { Infolog } from "../log/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
 import { getAllCategorie } from "../controllers/categorie.js";
+import { getAllCasse } from "../controllers/tipicasse.js";
 
 // init express router
 const router = express.Router();
@@ -234,6 +235,9 @@ router.put("/api/sagraObbligo", updateControlObbligo)
 
 ////////////////////////////// Categorie /////////////////////////////
 router.get("/api/categorie", getAllCategorie);
+
+///////////////////////////// Tipi cassa ///////////////////////////
+router.get("/api/tipicassa", getAllCasse);
 
 /////////////////////////  Errore /////////////////////////////////////
 router.get("/api/errori", allErrori)
