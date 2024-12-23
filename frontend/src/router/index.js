@@ -18,6 +18,7 @@ import Contaprezzi from "@/pages/Contaprezzi.vue";
 import Errori from "@/admin/pages/Errori.vue";
 import Cashboard from "@/cassiere/pages/Cashboard.vue";
 import Cassa from "@/cassiere/pages/Cassa.vue";
+import QuickViewCasse from "@/cassiere/pages/QuickViewCasse.vue";
 
 
 const routes = [
@@ -115,6 +116,11 @@ const routes = [
     path: "/cassiere/Cashboard",
     name: "Cashboard",
     component: Cashboard,
+  },
+  {
+    path: "/cassiere/infoc",
+    name: "InfoCassa",
+    component: QuickViewCasse,
   },
   {
     path: "/cassiere/cassa",

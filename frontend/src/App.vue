@@ -60,7 +60,7 @@ export default {
     created() {
         this.getFoodsData()
         this.getRepartiData()
-        this.IsCassiere ? router.push('/cassiere/cassa') : null
+        this.IsCassiere ? router.push('/cassiere/infoc') : null
     },
 
 

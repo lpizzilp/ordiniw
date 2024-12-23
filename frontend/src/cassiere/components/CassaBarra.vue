@@ -23,7 +23,7 @@
                 <hr style="width: 100%; border: 2px outset white; border-radius: 10px;">
             </li>
             <li class="td-router" @click="!PannelAction ? TooglePannel() : null"><router-link
-                    @click="scrollToTop(), Writelog('Cassa')" to="/cassiere/cassa"><i class="fa-solid fa-utensils"
+                    @click="scrollToTop(), Writelog('Cassa')" to="/cassiere/infoc"><i class="fa-solid fa-utensils"
                         style="padding-right: 2vh;"></i>Casse</router-link></li>
             <li class="td-router" onmouseover="this.style.backgroundColor='#273dae'">
                 <hr style="width: 100%; border: 2px outset white; border-radius: 10px;">
@@ -85,7 +85,7 @@ export default {
         this.updateWidth()
         this.eventBus.on("Fullscreen", () => {
             this.TooglePannel()
-            router.push('/cassiere/cassa')
+            router.push('/cassiere/infoc')
         });
     },
 

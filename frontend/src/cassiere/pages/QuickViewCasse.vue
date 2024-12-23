@@ -3,7 +3,8 @@
         <div class="quick-view-inner">
             <h2>Scegli il tipo cassa</h2><br>
             <div class="container">
-                <button class="btn" :style="{ 'background-color': c.bgcolore, 'color': c.txcolore}" v-for="(c, index) in casseObj" :key="index" @click="DataParent(c.lettera)">
+                <button class="btn" :style="{ 'background-color': c.bgcolore, 'color': c.txcolore }"
+                    v-for="(c, index) in casseObj" :key="index" @click="DataParent(c.lettera)">
                     {{ c.nome }}</button>
             </div>
         </div>
@@ -11,6 +12,7 @@
 </template>
 
 <script>
+import router from "@/router";
 import axios from "axios";
 export default {
     name: "QuickView",
@@ -31,17 +33,21 @@ export default {
 
     methods: {
         async DataParent(lettera) {
-            this.$emit('CassaUsed', lettera)
+            sessionStorage.setItem('Tipo', lettera)
+            router.push('/cassiere/cassa')
         },
 
 
         async Getcasse() {
-            var casse = await axios.get('/tipicassa')
-            console.log(casse.data)
-            casse.data.forEach(element => {
-                this.casseObj.push({ nome: element.nome, lettera: element.lettera, bgcolore: element.bgcolore, txcolore: element.txcolore });
-            });
-            console.log(this.casseObj)
+            if (sessionStorage.getItem('Tipo') != null) {
+                router.push('/cassiere/cassa')
+            } else {
+                var casse = await axios.get('/tipicassa')
+                console.log(casse.data)
+                casse.data.forEach(element => {
+                    this.casseObj.push({ nome: element.nome, lettera: element.lettera, bgcolore: element.bgcolore, txcolore: element.txcolore });
+                });
+            }
         },
     },
 
@@ -56,7 +62,7 @@ export default {
     right: 0;
     bottom: 0;
     z-index: 995;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgb(39, 38, 38);
 
     display: flex;
     align-items: center;

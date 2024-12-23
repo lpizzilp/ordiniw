@@ -1,9 +1,9 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
     <div class="info-container" :style="{ marginLeft: `${cassaBarraWidth}px` }">
-        <div class="form-group">
+        <div class="form-group" :key="refreshlayout">
             <label :id="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'" style="padding-right: 10px;">
-                {{ foodObj.type ? 'Inserisci il Tavolo' : 'Inserisci il Nominativo' }}
+                {{ foodObj.type == 'w' ? 'Inserisci il Tavolo' : 'Inserisci il Nominativo' }}
             </label>
             <input type="text" :id="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'"
                 :name="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'" class="form-control"
@@ -13,10 +13,11 @@
         <hr class="divisor" />
         <div class="form-group">
             <label :for="foodObj.type ? 'uCoperti' : 'uNote'" style="padding-right: 10px;">
-                {{ foodObj.type ? 'Inserisci i Coperti' : 'Note' }}
+                {{ foodObj.type == 'w' ? 'Inserisci i Coperti' : 'Note' }}
             </label>
-            <input type="text" :id="foodObj.type ? 'uCoperti' : 'uNote'" :name="foodObj.type ? 'uCoperti' : 'uNote'"
-                class="form-control" :placeholder="foodObj.type ? 'Inserisci i coperti' : 'Inserisci una specifica'"
+            <input type="text" :id="foodObj.type == 'w' ? 'uCoperti' : 'uNote'"
+                :name="foodObj.type == 'w' ? 'uCoperti' : 'uNote'" class="form-control"
+                :placeholder="foodObj.type == 'w' ? 'Inserisci i coperti' : 'Inserisci una specifica'"
                 v-model="currentCoversOrNotes" />
         </div>
     </div>
@@ -56,7 +57,8 @@
                                     <h4 class="btn" style="background-color: white; padding: 0px 10px; "
                                         v-if="qty[index] == 0">{{ qty[index] }}</h4>
                                     <h4 class="btn" v-else
-                                        style="background-color: #27ae60; padding: 1px 10px; color: white; box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4);">{{
+                                        style="background-color: #27ae60; padding: 1px 10px; color: white; box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.4);">
+                                        {{
                                             qty[index] }}
                                     </h4>
                                 </div>
@@ -108,7 +110,8 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn" style="width: 90%; font-size: 1.8rem;"><i class="fa-solid fa-print"
+                <button class="btn" @click="handleSubmit()" style="width: 90%; font-size: 1.8rem;"
+                    :disabled="buttonDisabled"><i class="fa-solid fa-print"
                         style="padding-right: 2vh;"></i>STAMPA</button>
                 <button class="btn"
                     style="width: 90%; background-color: #f38609; font-size: 1.7rem; margin-top: 2vh; margin-bottom: 2vh; "
@@ -117,9 +120,8 @@
             </div>
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
-        @closedata="CloseQuickvue"></quick-view-prenotazione>
+            @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
-    <quick-view-casse v-if="Quickcasse" @CassaUsed="handleTipocassa"></quick-view-casse>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 
@@ -128,7 +130,6 @@ import { mapState } from "vuex";
 import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
-import QuickViewCasse from "../components/QuickViewCasse.vue";
 import axios from "axios";
 //import { nextTick } from "vue";
 
@@ -141,7 +142,7 @@ export default {
         let categorytype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
-        // sessionStorage.getItem('TipoOrdine')
+        let Ordertype = sessionStorage.getItem('Tipo')
         /*switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
@@ -161,7 +162,7 @@ export default {
         })();
 
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: "", prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
+            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
             checkoutObj: { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: "", Nominativo: "", bill_note: "" },
             Cartarray: [], //{ id: "", artDesc: "", price: "", qty: "" }
             showDropDown: false,
@@ -171,6 +172,7 @@ export default {
             Compress: false,
             QtyDisponibile: [],
 
+            refreshlayout: 0,
             sendId: null,
             showCart: false,
             showCounterCart: false,
@@ -186,6 +188,7 @@ export default {
             wifispeed: null,
             Quickerrore: false,
             Quickcasse: true,
+            buttonDisabled: false,
         };
     },
 
@@ -254,7 +257,10 @@ export default {
         },
 
         loadReparti: function () {
-            const IdRepartomap = [...new Set(this.allFoods.map(f => f.IdReparto))];
+            console.log(this.foodObj.type)
+            console.log(this.allFoods[3].food_type)
+            const IdRepartomap = [...new Set(this.allFoods.filter(f => f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase())).map(f => f.IdReparto))];
+            console.log(IdRepartomap)
             return this.allReparti.filter((r) => IdRepartomap.includes(r.idReparto));
         },
 
@@ -331,6 +337,7 @@ export default {
             this.Quickcasse = false
             this.foodObj.type = data
             this.checkoutObj.TipoCassa = data
+            this.refreshlayout = 1
         },
 
         setupWatcher() {
@@ -425,7 +432,9 @@ export default {
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
-            this.foodObj.ora = now.getFullYear() + month + day;
+            var hour = ("0" + (now.getHours())).slice(-2);
+            var min = ("0" + (now.getMinutes())).slice(-2);
+            this.foodObj.ora = now.getFullYear() + "-" + month + "-" + day + "T" + hour + ":" + min;
         },
 
         async chekQty() {
@@ -479,7 +488,6 @@ export default {
                     });
                 });
             }
-
             this.setqty = true;
         },
 
@@ -536,7 +544,6 @@ export default {
         },
 
         filterFoodBtn: function (value, index) {
-
             this.FilterBtncolor(index)
             this.foodObj.name = ""
             var qtylenght = Object.keys(this.currentPageItems).length;
@@ -666,9 +673,55 @@ export default {
         },
     },
 
+    handleConfermaClick() {
+        // Disabilita il pulsante
+        this.buttonDisabled = true;
+
+        setTimeout(() => {
+            this.buttonDisabled = false;
+        }, 500); // 1000 millisecondi = 1 secondo
+    },
+
+    async handleSubmit(e) {
+        e.preventDefault(); //importante
+        this.handleConfermaClick()
+        if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
+            axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
+            axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
+        }
+        let billId = (await axios.get("/billstatus/new")).data;
+
+        if (billId == "") billId = 1;
+        else {
+            billId = parseInt(billId.bill_id) + 1;
+        }
+        this.checkoutObj.bill_id = billId
+        try {
+            const response = await axios.post("/billstatus", this.checkoutObj);
+            if (response.errMsg) { this.Quickerrore = true; return; }
+        } catch (error) {
+            this.Quickerrore = true; return;
+        }
+        sessionStorage.setItem('Bill', this.checkoutObj.bill_id)
+        sessionStorage.setItem('Coperti', this.checkoutObj.bill_coperti)
+
+        //COMMON -> dettaglio per tutti ----------------------------------------- 
+        let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
+        this.cartItem.forEach((foodId, index) => {
+            detailPromises.push(this.sendBillDetails(this.checkoutObj.id_sagra, this.checkoutObj.bill_id, foodId, this.itemQuantity[index]));
+        });
+        try {
+            await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
+        } catch (error) {
+            this.Quickerrore = true;
+            return;
+        }
+        this.ClearAll()
+    },
+
     components: {
         VueBasicAlert,
-        QuickViewCasse,
+
         QuickViewPrenotazione,
         QuickViewErrore,
     }
