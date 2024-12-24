@@ -2,22 +2,22 @@
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
     <div class="info-container" :style="{ marginLeft: `${cassaBarraWidth}px` }">
         <div class="form-group" :key="refreshlayout">
-            <label :id="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'" style="padding-right: 10px;">
-                {{ foodObj.type == 'w' ? 'Inserisci il Tavolo' : 'Inserisci il Nominativo' }}
+            <label :id="foodObj.type == 'W' ? 'uTavolo' : 'uNominativo'" style="padding-right: 10px;">
+                {{ foodObj.type == 'W' ? 'Inserisci il Tavolo' : 'Inserisci il Nominativo' }}
             </label>
-            <input type="text" :id="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'"
-                :name="foodObj.type == 'w' ? 'uTavolo' : 'uNominativo'" class="form-control"
-                :placeholder="foodObj.type == 'w' ? 'Inserisci il tavolo' : 'Inserisci il nominativo'"
+            <input type="text" :id="foodObj.type == 'W' ? 'uTavolo' : 'uNominativo'"
+                :name="foodObj.type == 'W' ? 'uTavolo' : 'uNominativo'" class="form-control"
+                :placeholder="foodObj.type == 'W' ? 'Inserisci il tavolo' : 'Inserisci il nominativo'"
                 v-model="currentTableOrName" :ref="foodObj.type ? 'Itavolo' : null" />
         </div>
         <hr class="divisor" />
         <div class="form-group">
             <label :for="foodObj.type ? 'uCoperti' : 'uNote'" style="padding-right: 10px;">
-                {{ foodObj.type == 'w' ? 'Inserisci i Coperti' : 'Note' }}
+                {{ foodObj.type == 'W' ? 'Inserisci i Coperti' : 'Note' }}
             </label>
-            <input type="text" :id="foodObj.type == 'w' ? 'uCoperti' : 'uNote'"
-                :name="foodObj.type == 'w' ? 'uCoperti' : 'uNote'" class="form-control"
-                :placeholder="foodObj.type == 'w' ? 'Inserisci i coperti' : 'Inserisci una specifica'"
+            <input type="text" :id="foodObj.type == 'W' ? 'uCoperti' : 'uNote'"
+                :name="foodObj.type == 'W' ? 'uCoperti' : 'uNote'" class="form-control"
+                :placeholder="foodObj.type == 'W' ? 'Inserisci i coperti' : 'Inserisci una specifica'"
                 v-model="currentCoversOrNotes" />
         </div>
     </div>
@@ -110,9 +110,8 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn" @click="handleSubmit()" style="width: 90%; font-size: 1.8rem;"
-                    :disabled="buttonDisabled"><i class="fa-solid fa-print"
-                        style="padding-right: 2vh;"></i>STAMPA</button>
+                <button class="btn" @click="handleConfermaClick($event)" style="width: 90%; font-size: 1.8rem;" :disabled="buttonDisabled"><i
+                        class="fa-solid fa-print" style="padding-right: 2vh;"></i>STAMPA</button>
                 <button class="btn"
                     style="width: 90%; background-color: #f38609; font-size: 1.7rem; margin-top: 2vh; margin-bottom: 2vh; "
                     @click="ClearAll()"><i class="fa-solid fa-xmark" style="padding-right: 2vh;"></i>Annulla
@@ -142,7 +141,7 @@ export default {
         let categorytype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
-        let Ordertype = sessionStorage.getItem('Tipo')
+        let Ordertype = sessionStorage.getItem('Tipo').toUpperCase()
         /*switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
@@ -163,7 +162,7 @@ export default {
 
         return {
             foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
-            checkoutObj: { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: "", Nominativo: "", bill_note: "" },
+            checkoutObj: { id_sagra: sessionStorage.getItem('SagraId'), bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
             Cartarray: [], //{ id: "", artDesc: "", price: "", qty: "" }
             showDropDown: false,
             matchUser: undefined,
@@ -269,7 +268,7 @@ export default {
                 return this.foodObj.type ? this.checkoutObj.bill_tavolo : this.checkoutObj.Nominativo;
             },
             set(value) {
-                if (this.foodObj.type == 'w') {
+                if (this.foodObj.type == 'W') {
                     this.checkoutObj.bill_tavolo = value;
                 } else {
                     this.checkoutObj.Nominativo = value;
@@ -281,7 +280,7 @@ export default {
                 return this.foodObj.type ? this.checkoutObj.bill_coperti : this.checkoutObj.bill_note;
             },
             set(value) {
-                if (this.foodObj.type == 'w') {
+                if (this.foodObj.type == 'W') {
                     this.checkoutObj.bill_coperti = value;
                 } else {
                     this.checkoutObj.bill_note = value;
@@ -320,7 +319,7 @@ export default {
             let Ordertype = this.foodObj.Ordertype
             let currentTime = this.checkoutObj.bill_when
             this.checkoutObj = []
-            this.checkoutObj = { id_sagra: "", bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
+            this.checkoutObj = { id_sagra: sessionStorage.getItem('sagraId'), bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
 
                 sessionStorage.removeItem("QtyArray")
             sessionStorage.removeItem("CartArray")
@@ -341,7 +340,7 @@ export default {
         },
 
         setupWatcher() {
-            const props = this.foodObj.type === 'w'
+            const props = this.foodObj.type === 'W'
                 ? ['bill_tavolo', 'bill_coperti']
                 : ['Nominativo', 'bill_note'];
 
@@ -671,57 +670,74 @@ export default {
             sessionStorage.setItem('CartArray', JSON.stringify(this.Cartarray))
             sessionStorage.setItem('QtyArray', JSON.stringify(this.qty))
         },
-    },
 
-    handleConfermaClick() {
-        // Disabilita il pulsante
-        this.buttonDisabled = true;
+        handleConfermaClick(e) {
+            // Disabilita il pulsante
+            this.buttonDisabled = true;
+            this.Datasubmit(e)
+            setTimeout(() => {
+                this.buttonDisabled = false;
+            }, 1000); // 1000 millisecondi = 1 secondo
+        },
 
-        setTimeout(() => {
-            this.buttonDisabled = false;
-        }, 500); // 1000 millisecondi = 1 secondo
-    },
+        async sendBillDetails(idSagra, billId, foodId, qty) {
+            let Details = {
+                    id_sagra: idSagra,
+                    bill_id: parseInt(billId),
+                    food_id: foodId,
+                    item_qty: parseInt(qty)
+                };
+            try {
+                const response = await axios.post("/billdetails", Details);
+                if (response.errMsg ) {
+                    throw new Error("Whoops!");
+                }
+            } catch (error) {
+                throw new Error("Whoops!");
+            }
+        },
 
-    async handleSubmit(e) {
-        e.preventDefault(); //importante
-        this.handleConfermaClick()
-        if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
-            axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
-            axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
-        }
-        let billId = (await axios.get("/billstatus/new")).data;
+        async Datasubmit(e) {
+            e.preventDefault(); //importante
+            if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
+                axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
+                axios.delete("/billdetails/delete/" + sessionStorage.getItem('Bill'))
+            }
+            let billId = (await axios.get("/billstatus/new")).data;
 
-        if (billId == "") billId = 1;
-        else {
-            billId = parseInt(billId.bill_id) + 1;
-        }
-        this.checkoutObj.bill_id = billId
-        try {
-            const response = await axios.post("/billstatus", this.checkoutObj);
-            if (response.errMsg) { this.Quickerrore = true; return; }
-        } catch (error) {
-            this.Quickerrore = true; return;
-        }
-        sessionStorage.setItem('Bill', this.checkoutObj.bill_id)
-        sessionStorage.setItem('Coperti', this.checkoutObj.bill_coperti)
+            if (billId == "") billId = 1;
+            else {
+                billId = parseInt(billId.bill_id) + 1;
+            }
+            this.checkoutObj.bill_id = billId
+            try {
+                const response = await axios.post("/billstatus", this.checkoutObj);
+                console.log(response + 'response' + this.checkoutObj)
+                if (response.errMsg) { this.Quickerrore = true; return; }
+            } catch (error) {
+                this.Quickerrore = true; return;
+            }
+            sessionStorage.setItem('Bill', this.checkoutObj.bill_id)
+            sessionStorage.setItem('Coperti', this.checkoutObj.bill_coperti)
+            console.log(this.Cartarray)
 
-        //COMMON -> dettaglio per tutti ----------------------------------------- 
-        let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
-        this.cartItem.forEach((foodId, index) => {
-            detailPromises.push(this.sendBillDetails(this.checkoutObj.id_sagra, this.checkoutObj.bill_id, foodId, this.itemQuantity[index]));
-        });
-        try {
-            await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
-        } catch (error) {
-            this.Quickerrore = true;
-            return;
-        }
-        this.ClearAll()
+            //COMMON -> dettaglio per tutti ----------------------------------------- 
+            let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
+            this.Cartarray.forEach(f => {
+                detailPromises.push(this.sendBillDetails(this.checkoutObj.id_sagra, this.checkoutObj.bill_id, f.id, f.qty));
+            });
+            try {
+                await Promise.all(detailPromises);// Attendere il completamento di tutte le richieste di inserimento dei dettagli dell'ordine
+            } catch (error) {
+                this.Quickerrore = true;
+                return;
+            }
+            this.ClearAll()
+        },
     },
 
     components: {
         VueBasicAlert,
-
         QuickViewPrenotazione,
         QuickViewErrore,
     }
