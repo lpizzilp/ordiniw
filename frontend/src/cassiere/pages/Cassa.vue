@@ -110,8 +110,9 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn" @click="handleConfermaClick($event)" style="width: 90%; font-size: 1.8rem;" :disabled="buttonDisabled"><i
-                        class="fa-solid fa-print" style="padding-right: 2vh;"></i>STAMPA</button>
+                <button class="btn" @click="handleConfermaClick($event)" style="width: 90%; font-size: 1.8rem;"
+                    :disabled="buttonDisabled"><i class="fa-solid fa-print"
+                        style="padding-right: 2vh;"></i>STAMPA</button>
                 <button class="btn"
                     style="width: 90%; background-color: #f38609; font-size: 1.7rem; margin-top: 2vh; margin-bottom: 2vh; "
                     @click="ClearAll()"><i class="fa-solid fa-xmark" style="padding-right: 2vh;"></i>Annulla
@@ -219,6 +220,7 @@ export default {
         ...mapState({
             cassaBarraWidth: state => state.cassaBarraWidth,
         }),
+        ...mapState(["userCassa"]),
 
         filteredMenuItems() {
             if (this.activeFilter === 'Tutti') {
@@ -256,10 +258,7 @@ export default {
         },
 
         loadReparti: function () {
-            console.log(this.foodObj.type)
-            console.log(this.allFoods[3].food_type)
             const IdRepartomap = [...new Set(this.allFoods.filter(f => f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase())).map(f => f.IdReparto))];
-            console.log(IdRepartomap)
             return this.allReparti.filter((r) => IdRepartomap.includes(r.idReparto));
         },
 
@@ -467,7 +466,6 @@ export default {
             if (this.setqty) return;
             const qtyArray = JSON.parse(sessionStorage.getItem("QtyArray") || '[]');
             const cartArray = JSON.parse(sessionStorage.getItem("CartArray") || '[]');
-            console.log(qtyArray + '  ' + cartArray)
             if (qtyArray.length && cartArray.length) {
                 this.Cartarray = cartArray;
                 this.qty = qtyArray;
@@ -539,7 +537,8 @@ export default {
             for (let i = 0; i < this.Cartarray.length; i++) {
                 total = total + this.Cartarray[i].price * this.Cartarray[i].qty
             }
-            return parseFloat(total).toFixed(2)
+            this.checkoutObj.bill_total = parseFloat(total).toFixed(2)
+            return this.checkoutObj.bill_total
         },
 
         filterFoodBtn: function (value, index) {
@@ -587,7 +586,6 @@ export default {
         },
 
         onQtyChange: function (BtnInesco, index) {
-            console.log(index)
             if (BtnInesco === 0) {
                 this.qty[index]++
             } else if (BtnInesco === 2) {
@@ -673,6 +671,7 @@ export default {
 
         handleConfermaClick(e) {
             // Disabilita il pulsante
+            // axios.post('stampa/ordine')
             this.buttonDisabled = true;
             this.Datasubmit(e)
             setTimeout(() => {
@@ -682,14 +681,14 @@ export default {
 
         async sendBillDetails(idSagra, billId, foodId, qty) {
             let Details = {
-                    id_sagra: idSagra,
-                    bill_id: parseInt(billId),
-                    food_id: foodId,
-                    item_qty: parseInt(qty)
-                };
+                id_sagra: idSagra,
+                bill_id: parseInt(billId),
+                food_id: foodId,
+                item_qty: parseInt(qty)
+            };
             try {
                 const response = await axios.post("/billdetails", Details);
-                if (response.errMsg ) {
+                if (response.errMsg) {
                     throw new Error("Whoops!");
                 }
             } catch (error) {
@@ -712,14 +711,12 @@ export default {
             this.checkoutObj.bill_id = billId
             try {
                 const response = await axios.post("/billstatus", this.checkoutObj);
-                console.log(response + 'response' + this.checkoutObj)
                 if (response.errMsg) { this.Quickerrore = true; return; }
             } catch (error) {
                 this.Quickerrore = true; return;
             }
             sessionStorage.setItem('Bill', this.checkoutObj.bill_id)
             sessionStorage.setItem('Coperti', this.checkoutObj.bill_coperti)
-            console.log(this.Cartarray)
 
             //COMMON -> dettaglio per tutti ----------------------------------------- 
             let detailPromises = []; // Array per memorizzare le promesse delle richieste di inserimento dei dettagli dell'ordine
@@ -732,6 +729,31 @@ export default {
                 this.Quickerrore = true;
                 return;
             }
+
+            const descSagra = (await axios.get('/sagra/ute/' + this.checkoutObj.id_sagra)).data[0].descrizione;
+
+            let data = this.Cartarray.map(item => {
+                const food = Object.values(this.allFoods).find(f => f.food_id === item.id);
+                return {
+                    Descsagra: descSagra,
+                    bill_id: this.checkoutObj.bill_id,
+                    user_name: this.userCassa,
+                    bill_tavolo: this.checkoutObj.bill_tavolo,
+                    bill_nominativo: this.checkoutObj.Nominativo,
+                    bill_coperti: this.checkoutObj.bill_coperti,
+                    bill_note: this.checkoutObj.bill_note,
+                    bill_when: this.checkoutObj.bill_when,
+                    bill_total: this.checkoutObj.bill_total,
+                    TipoCassa: this.checkoutObj.TipoCassa,
+                    food_id: item.id.trim(),
+                    food_desc: food?.food_name,
+                    food_price: item.price,
+                    food_qty: item.qty
+                };
+            });
+
+            await axios.post('stampa/ordine/' + data)
+
             this.ClearAll()
         },
     },

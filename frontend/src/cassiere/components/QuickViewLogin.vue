@@ -93,6 +93,7 @@ export default {
                 this.Quickerrore = true
                 Makelog(response);
             }
+            console.log(Adminuser.data)
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
             } else if (Adminuser.data.authlevel == 2) {
