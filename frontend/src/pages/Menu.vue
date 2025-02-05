@@ -1,7 +1,7 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
-    <div class="filter-menu-container">
-        <div class="filter-menu" ref="menuRef">
+    <div v-if="Prenotazione == '0'" class="filter-menu-container">
+        <div  class="filter-menu" ref="menuRef">
             <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
                 Mostra Tutto
             </button>
@@ -156,6 +156,7 @@ export default {
             case 'PRE':
                 flgartprenotabile = "1"
                 flgvariante = "1"
+                console.log(flgartprenotabile)
                 break;
             default:
                 sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
@@ -345,7 +346,7 @@ export default {
         },
 
         async chekQty() {
-            let totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sumordine')).data;
+            let totqty = (await axios.get('/prenotazione/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {

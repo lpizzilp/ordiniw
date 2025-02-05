@@ -110,9 +110,13 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn" @click="handleConfermaClick($event)" style="width: 90%; font-size: 1.8rem;"
-                    :disabled="buttonDisabled"><i class="fa-solid fa-print"
+                <button v-if="buttonDisabled" class="btn" @click="handleConfermaClick($event)" style="width: 90%; font-size: 1.8rem;"
+                    ><i class="fa-solid fa-print"
                         style="padding-right: 2vh;"></i>STAMPA</button>
+                <button v-else class="btn" @click="handleConfermaClick($event)" style="width: 90%; font-size: 1.8rem;"
+                    disabled><i class="fa-solid fa-print"
+                        style="padding-right: 2vh;"></i>STAMPA</button>
+
                 <button class="btn"
                     style="width: 90%; background-color: #f38609; font-size: 1.7rem; margin-top: 2vh; margin-bottom: 2vh; "
                     @click="ClearAll()"><i class="fa-solid fa-xmark" style="padding-right: 2vh;"></i>Annulla
@@ -142,6 +146,7 @@ export default {
         let categorytype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
+        console.log(sessionStorage.getItem('sagraId') + '   dati')
         let Ordertype = sessionStorage.getItem('Tipo').toUpperCase()
         /*switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
@@ -212,6 +217,11 @@ export default {
     updated() {
         this.buildArray(),
             this.getAllCartItem()
+    },
+
+    beforeUnmount() {
+        this.ClearAll()
+        console.log('passo')
     },
 
     computed: {
@@ -318,9 +328,10 @@ export default {
             let Ordertype = this.foodObj.Ordertype
             let currentTime = this.checkoutObj.bill_when
             this.checkoutObj = []
-            this.checkoutObj = { id_sagra: sessionStorage.getItem('sagraId'), bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
+            this.checkoutObj = { id_sagra: sessionStorage.getItem('SagraId'), bill_id: "", user_id: sessionStorage.getItem('userCassa'), bill_tavolo: "", bill_coperti: "", bill_when: currentTime, bill_method: "cash", bill_discount: '0', bill_delivery: '0', bill_total: "0", bill_paid: "true", bill_status: "1", TipoCassa: Ordertype, Nominativo: "", bill_note: "" },
 
-                sessionStorage.removeItem("QtyArray")
+                sessionStorage.removeItem('Tipo')
+            sessionStorage.removeItem("QtyArray")
             sessionStorage.removeItem("CartArray")
             this.CartItem = []
             this.Cartarray = []
@@ -345,7 +356,9 @@ export default {
 
             const updateVisibility = () => {
                 const visibility = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'none' : 'block';
+                const visibility2 = this.checkoutObj[props[0]] && this.checkoutObj[props[1]] ? 'false' : 'true';
                 document.getElementById('Copertura').style.display = visibility;
+                this.buttonDisabled = visibility2
             };
 
 
@@ -436,7 +449,7 @@ export default {
         },
 
         async chekQty() {
-            let totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') + '/sumordine')).data;
+            let totqty = (await axios.get('/prenotazione/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
@@ -752,7 +765,12 @@ export default {
                 };
             });
 
-            await axios.post('stampa/ordine/' + data)
+            try {
+                const response = await axios.post('stampa/ordine', data)
+                if (response.errMsg) { this.Quickerrore = true; return; }
+            } catch (error) {
+                this.Quickerrore = true; return;
+            }
 
             this.ClearAll()
         },

@@ -44,7 +44,7 @@ axios.interceptors.response.use(
 // Aggiungi un interceptor per includere il codice sagra in ogni richiesta
 axios.interceptors.request.use(config => {
     config.headers['Id-Sagra'] = sessionStorage.getItem('SagraId');
-    if (  config.url.slice(0,14) == 'stampa/ordine/') {
+    if (  config.url == 'stampa/ordine') {
         config.baseURL = process.env.NODE_ENV === 'production' ?  URLProdStampa : URLDevStampa
     }
     return config;

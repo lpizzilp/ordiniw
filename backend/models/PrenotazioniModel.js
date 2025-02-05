@@ -135,7 +135,7 @@ export const getsum = (idsagra,result) => {
 };
 
 export const getqtaperordine = (idsagra,result) => {
-    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty FROM food f LEFT JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id WHERE f.id_sagra = ? f.FlgPrenotabile != 0 GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
+    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty FROM food f LEFT JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id WHERE f.id_sagra = ? AND f.FlgPrenotabile != 0 GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

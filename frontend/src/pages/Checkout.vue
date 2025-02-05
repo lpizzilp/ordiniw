@@ -359,12 +359,13 @@ export default {
             this.handleConfermaClick()
             //PRENOTAZIONE ----------------------------------------------------
             if (this.type === 'PRE') {  
-                if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
+                if (sessionStorage.getItem('Bill') != null) {
+                    console.log(sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                 }
 
-                let bookId = (await axios.get("/prenotazione/" + sessionStorage.getItem('SagraId') + "/new")).data;
+                let bookId = (await axios.get("/prenotazione/new")).data;
                 if (bookId == "") {
                     if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
                         bookId = sessionStorage.getItem('startprt');
@@ -380,7 +381,7 @@ export default {
                 }
 
                 let dataprenotazione = {
-                    id_sagra: sessionStorage.getItem('Sagraid'),
+                    id_sagra: sessionStorage.getItem('SagraId'),
                     book_id: parseInt(bookId),
                     user_id: sessionStorage.getItem('Username'),
                     book_tavolo: this.checkoutObj.Tavolo,
