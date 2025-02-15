@@ -1,5 +1,3 @@
-
-
 -- db_restaurant.billstatus definition
 
 CREATE TABLE `billstatus` (
@@ -19,17 +17,6 @@ CREATE TABLE `billstatus` (
   `Nominativo` varchar(50) DEFAULT NULL,
   `bill_note` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id_sagra`,`bill_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- db_restaurant.billdetails definition
-
-CREATE TABLE `billdetails` (
-  `id_sagra` varchar(5) NOT NULL,
-  `bill_id` int(11) NOT NULL,
-  `food_id` varchar(5) NOT NULL,
-  `item_qty` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_sagra`,`bill_id`,`food_id`),
-  CONSTRAINT `billdetails_FK` FOREIGN KEY (`id_sagra`,`bill_id`) REFERENCES `billstatus` (`id_sagra`,`bill_id`) ON DELETE CASCADE 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -98,10 +85,11 @@ CREATE TABLE `catalogo_sagre` (
   `nstartprt` int(10) unsigned NOT NULL DEFAULT 500,
   `linkSito` varchar(100) DEFAULT NULL,
   `StrOrdini` varchar(10) NOT NULL DEFAULT '011',
-  `MaskVisibilita` varchar(10) NOT NULL DEFAULT '1111000110',
-  `MaskObbligo` varchar(10) NOT NULL DEFAULT '1100000100',
+  `MaskVisibilita` varchar(15) NOT NULL DEFAULT '1111000110',
+  `MaskObbligo` varchar(15) NOT NULL DEFAULT '1100000100',
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- db_restaurant.errors definition
 
@@ -143,7 +131,7 @@ CREATE TABLE `food` (
   `food_name` varchar(255) DEFAULT NULL,
   `food_star` varchar(255) DEFAULT NULL,
   `food_vote` varchar(255) DEFAULT NULL,
-  `food_price` varchar(255) DEFAULT NULL,
+  `food_price` decimal(10,2) DEFAULT NULL,
   `food_discount` varchar(255) DEFAULT NULL,
   `food_desc` varchar(255) DEFAULT NULL,
   `food_status` varchar(255) DEFAULT NULL,
@@ -173,6 +161,18 @@ CREATE TABLE `reparti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+-- db_restaurant.tipicassa definition
+
+CREATE TABLE `tipicassa` (
+  `id_sagra` varchar(5) NOT NULL,
+  `nome` varchar(25) NOT NULL,
+  `lettera` varchar(20) NOT NULL,
+  `bgcolore` varchar(10) DEFAULT NULL,
+  `txcolore` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id_sagra`,`nome`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 -- db_restaurant.`user` definition
 
 CREATE TABLE `user` (
@@ -183,7 +183,19 @@ CREATE TABLE `user` (
   `user_name` varchar(50) DEFAULT NULL,
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`,`id_sagra`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.billdetails definition
+
+CREATE TABLE `billdetails` (
+  `id_sagra` varchar(5) NOT NULL,
+  `bill_id` int(11) NOT NULL,
+  `food_id` varchar(5) NOT NULL,
+  `item_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_sagra`,`bill_id`,`food_id`),
+  CONSTRAINT `billdetails_FK` FOREIGN KEY (`id_sagra`, `bill_id`) REFERENCES `billstatus` (`id_sagra`, `bill_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.bookdetails definition
@@ -194,5 +206,5 @@ CREATE TABLE `bookdetails` (
   `food_id` varchar(5) NOT NULL,
   `item_qty` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_sagra`,`book_id`,`food_id`),
-  CONSTRAINT `bookdetails_FK` FOREIGN KEY (`id_sagra`,`book_id`) REFERENCES `bookstatus` (`id_sagra`,`book_id`) ON DELETE CASCADE
+  CONSTRAINT `bookdetails_FK` FOREIGN KEY (`id_sagra`, `book_id`) REFERENCES `bookstatus` (`id_sagra`, `book_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -7,6 +7,9 @@ axios.defaults.withCredentials = false
 // axios.defaults.baseURL = "http://localhost:8081/api"
 let URLProd = "https://" + window.location.hostname.toString() + "/api"
 let URLDev ="http://" + window.location.hostname.toString() + ":8081/api"
+let URLDevStampa = "http://192.168.56.132:1234/"
+let URLProdStampa = "http://localhost:1234/"
+
 
 let backendUrl = process.env.NODE_ENV === 'production' ?  URLProd : URLDev 
 axios.defaults.baseURL = backendUrl
@@ -15,6 +18,7 @@ axios.defaults.baseURL = backendUrl
 
 axios.interceptors.response.use(
     response => {
+        console.log(response)
         // Gestisci la risposta normale qui
         var errMsg = null
         if (response.data.errno != undefined    ) {
@@ -40,6 +44,9 @@ axios.interceptors.response.use(
 // Aggiungi un interceptor per includere il codice sagra in ogni richiesta
 axios.interceptors.request.use(config => {
     config.headers['Id-Sagra'] = sessionStorage.getItem('SagraId');
+    if (  config.url == 'stampa/ordine') {
+        config.baseURL = process.env.NODE_ENV === 'production' ?  URLProdStampa : URLDevStampa
+    }
     return config;
   }, error => {
     return Promise.reject(error);

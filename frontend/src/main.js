@@ -18,9 +18,8 @@ if (savedVersion !== currentVersion) {
 // Id sagra param
 const queryString = window.location.search.substring(1);
 const parametriObj = Object.fromEntries(new URLSearchParams(queryString));
-if (parametriObj.id != null) {
-    sessionStorage.setItem('SagraId', parametriObj.id)
-}
+    parametriObj.id != null ? sessionStorage.setItem('SagraId', parametriObj.id) : null
+    parametriObj.IsCass != null ? sessionStorage.setItem('IsCassiere', true) : null
 
 //create vue 
 createApp(App)

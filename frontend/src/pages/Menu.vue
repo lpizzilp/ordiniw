@@ -1,7 +1,7 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
-    <div class="filter-menu-container">
-        <div class="filter-menu" ref="menuRef">
+    <div v-if="Prenotazione == '0'" class="filter-menu-container">
+        <div  class="filter-menu" ref="menuRef">
             <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
                 Mostra Tutto
             </button>
@@ -23,7 +23,7 @@
             <div class="col-sm-4 col-12 filter-box">
                 <div class="row search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
+                    <input id="search" type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
                 </div>
 
 
@@ -33,7 +33,7 @@
                         <ul class="filter-option">
                             <hr />
                             <li id="Compress" style="display: flex; width: 75%; ">
-                                <label for="ndStatus" class="d-flex justify-content-between">Comprimi spazio</label>
+                                <label class="d-flex justify-content-between">Comprimi spazio</label>
                                 <VueToggles :value="Compress" @click="changeCompress()" :height="28" :width="58"
                                     checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey"
                                     style="margin-left: -58px;" />
@@ -156,6 +156,7 @@ export default {
             case 'PRE':
                 flgartprenotabile = "1"
                 flgvariante = "1"
+                console.log(flgartprenotabile)
                 break;
             default:
                 sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
@@ -257,7 +258,8 @@ export default {
         },
 
         loadReparti: function () {
-            return this.allReparti
+            const IdRepartomap = [...new Set(this.allFoods.map(f => f.IdReparto))];
+            return this.allReparti.filter((r) => IdRepartomap.includes(r.idReparto));
         },
     },
 
@@ -344,7 +346,7 @@ export default {
         },
 
         async chekQty() {
-            let totqty = (await axios.get('/prenotazione/' + sessionStorage.getItem('SagraId') +'/sumordine')).data;
+            let totqty = (await axios.get('/prenotazione/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
@@ -382,9 +384,12 @@ export default {
                     var pageItem = Object.keys(this.currentPageItems).length;
                     for (var ix = 0; ix < existItem.data.length; ix++) {
                         let FoodID = existItem.data[ix].food_id
+                        console.log(FoodID + ' foood Id')
                         for (var l = 0; l < pageItem; l++) {
                             var Itempage = this.currentPageItems[l].food_id
+                            console.log('secondo for ' +  Itempage)
                             if (Itempage == FoodID) {
+                                console.log('fine if ' + Itempage)
                                 this.qty[l] = parseInt(existItem.data[ix].item_qty)
                                 break;
                             }

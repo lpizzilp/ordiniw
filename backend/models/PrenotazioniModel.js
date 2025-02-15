@@ -112,7 +112,12 @@ export const getAll = (idsagra,id,result) => {
 };
 
 export const Updatestatus = (idsagra,data, result) => {
-    db.query("UPDATE bookstatus SET book_status = ? WHERE id_sagra = ? AND book_id = ?",[idsagra,data.action, data.id], (err,results)=> {
+    // console.log (idsagra)
+    // console.log (data.action)
+    // console.log (idsagra)
+
+//    db.query("UPDATE bookstatus SET book_status = ? WHERE id_sagra = ? AND book_id = ?",[idsagra,data.action, data.id], (err,results)=> {
+    db.query("UPDATE bookstatus SET book_status = ? WHERE id_sagra = ? AND book_id = ?",[data.action,idsagra, data.id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -135,7 +140,7 @@ export const getsum = (idsagra,result) => {
 };
 
 export const getqtaperordine = (idsagra,result) => {
-    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty FROM food f LEFT JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id WHERE f.id_sagra = ? f.FlgPrenotabile != 0 GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
+    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty FROM food f LEFT JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id WHERE f.id_sagra = ? AND f.FlgPrenotabile != 0 GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

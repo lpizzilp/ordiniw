@@ -68,9 +68,9 @@ export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Telefono: "", Type: "", paymentMethod: "cash", Note: "" },
-            errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], NoteErr: [], payErr: [] },
-             tempCoperti: "",
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "",Note: "" , Telefono: "", Type: "", paymentMethod: "cash"},
+            errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], NoteErr: [], TelefonoErr: [], TypeErr: [], payErr: [] },
+            tempCoperti: "",
             cartItem: [],
             itemQuantity: [],
             maskVisibilita: [],
@@ -95,69 +95,67 @@ export default {
         /* Gestione logiche Mashera Visibilità e Obbligo */
         /*---------------------------------------------- */
         formId() {
-        return this.type === 'W' ? 'Tavolo' : 'Asporto';
+            return this.type === 'W' ? 'Tavolo' : 'Asporto';
         },
         formTitle() {
-        return this.type === 'W' ? 'Completa dettagli ordine' : 'Dettagli dell\'acquirente';
+            return this.type === 'W' ? 'Completa dettagli ordine' : 'Dettagli dell\'acquirente';
         },
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Returns an array of field objects based on the current order type.
+ * 
+ * Each field object contains properties such as `name`, `type`, `placeholder`, 
+ * and optional attributes like `inputType`, `attrs`, and event handlers.
+ * 
+ * The fields are categorized into common fields and type-specific fields. 
+ * The `typeSpecificFields` object contains fields for different order types 
+ * ('W', 'Y', 'PRE'), and the `commonFields` array contains fields that are 
+ * applicable to all order types.
+ * 
+ * @returns {Array} An array of field objects to be used in the checkout form.
+ */
+
+/******  ad136381-6879-4bf5-9b36-2ef8e0acee0b  *******/
         fields() {
             const commonFields = [
                 {
-                name: 'Nominativo',
-                type: 'input',
-                placeholder: this.type === 'PRE' ? 'Inserisci un nominativo' : 'Campo nominativo'
+                    name: 'Tavolo',
+                    type: 'input',
+                    placeholder: 'Inserisci il numero del tavolo'
                 },
                 {
-                name: 'Note',
-                type: 'textarea',
-                attrs: { rows: 2, cols: 50, maxlength: 100 },
-                placeholder: this.type === 'PRE' ? 'Inserisci una nota o un desiderata' : 'Inserisci Nota o Variante'
-                }
+                    name: 'Coperti',
+                    type: 'input',
+                    inputType: 'number',
+                    placeholder: 'Inserisci il numero di coperti',
+                    attrs: { min: 1 },
+                    onChange: this.calculatePersonaPrice
+                },
+
+                {
+                    name: 'Nominativo',
+                    type: 'input',
+                    placeholder: this.type === 'PRE' ? 'Inserisci un nominativo' : 'Campo nominativo'
+                },
+                {
+                    name: 'Note',
+                    type: 'textarea',
+                    attrs: { rows: 2, cols: 50, maxlength: 100 },
+                    placeholder: this.type === 'PRE' ? 'Inserisci una nota o un desiderata' : 'Inserisci Nota o Variante'
+                },
+                {
+                    name: 'Telefono',
+                    type: 'input',
+                    inputType: 'tel',
+                    placeholder: 'Inserisci un numero di telefono'
+                },                
+                 
             ];
 
-            const typeSpecificFields = {
-                'W': [
-                    {
-                        name: 'Tavolo',
-                        type: 'input',
-                        placeholder: 'Inserisci il numero del tavolo'
-                    },
-                    {
-                        name: 'Coperti',
-                        type: 'input',
-                        inputType: 'number',
-                        placeholder: 'Inserisci il numero di coperti',
-                        attrs: { min: 1 },
-                        onChange: this.calculatePersonaPrice
-                    }
-                ],
-                'Y': [
-                    {
-                        name: 'Nominativo',
-                        type: 'input',
-                        placeholder: 'Inserisci un nominativo'
-                    }
-                ],
-                'PRE': [
-                    {
-                        name: 'Coperti',
-                        type: 'input',
-                        inputType: 'number',
-                        placeholder: 'Inserisci il numero di coperti',
-                        attrs: { min: 1 },
-                        onChange: this.calculatePersonaPrice
-                    },
-                    {
-                        name: 'Telefono',
-                        type: 'input',
-                        inputType: 'tel',
-                        placeholder: 'Inserisci un numero di telefono, Non obbligatorio'
-                    }
-                ]
-            };
-
-            return [...(typeSpecificFields[this.type] || []), ...commonFields];
+ 
+            return commonFields;
         }
+
         /*end---------------------------------------------- */        
     },
     methods: {
@@ -165,7 +163,8 @@ export default {
         /* Gestione logiche Mashera Visibilità e Obbligo */
         /*---------------------------------------------- */
         getPlaceholderText(fieldName, index) {
-            const maskIndex = this.type === 'Y' ? index + 5 : index;  // Adatta l'index come hai fatto per la visibilità
+            const maskIndex = this.type === 'W' ? index : this.type === 'Y' ? index + 5 : index + 10;
+
             const isObligatory = this.maskObbligo[maskIndex] == 1;
             const basePlaceholder = this.fields.find(f => f.name === fieldName).placeholder || '';
             return isObligatory ? `${basePlaceholder} (Obbligatorio)` : `${basePlaceholder} (Facoltativo)`;
@@ -175,12 +174,14 @@ export default {
             this.validateField(fieldName);  // Validiamo il campo dopo l'input
         },
         getFieldVisibility(index) {
-            const maskIndex = this.type === 'Y' ? index + 6 : index;
+
+            //const maskIndex =  this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10;  //this.type === 'Y' ? index + 5 : index;
+            const maskIndex  = this.type === 'W' ? index : this.type === 'Y' ? index + 5 : index + 10;
             return this.maskVisibilita[maskIndex] == 1 ? 'block' : 'none';
         },
         checkForm() {
             this.resetCheckErr();
-            const startIndex = this.type === 'Y' ? 6 : 0;
+            const startIndex =  this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10; 
             
             this.fields.forEach((field, index) => {
                 const maskIndex = startIndex + index;
@@ -189,14 +190,6 @@ export default {
                 }
             });
 
-            if (this.type === 'PRE') {
-                if (!this.checkoutObj.Nominativo) {
-                this.errorObj.NominativoErr.push("Il campo nominativo è obbligatorio");
-                }
-                if (!this.checkoutObj.Coperti) {
-                this.errorObj.CopertiErr.push("Il campo coperti è obbligatorio");
-                }
-            }
         },
         resetCheckErr() {
             Object.keys(this.errorObj).forEach(key => {
@@ -205,14 +198,12 @@ export default {
         },
 
         validateField(fieldName) {
-            //console.log(`Current value for ${fieldName}:`, this.checkoutObj[fieldName]);
-            const startIndex = this.type === 'Y' ? 5 : 0;
+            const startIndex = this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10; 
             const fieldIndex = this.fields.findIndex(f => f.name === fieldName);
             const maskIndex = startIndex + fieldIndex;
 
             this.errorObj[`${fieldName}Err`] = [];
 
-            //console.log(`Validating ${fieldName}:`, this.checkoutObj[fieldName]);
 
 
             if (this.maskVisibilita[maskIndex] == 1 && this.maskObbligo[maskIndex] == 1 && !this.checkoutObj[fieldName]) {
@@ -223,8 +214,20 @@ export default {
 
         buildForm () {
             let bitData = sessionStorage.getItem('SagraBottoni').split("µ")
+            console.log("bitdata ->", sessionStorage.getItem('SagraBottoni').split("µ"));
            this.maskVisibilita = bitData[9].split('')
            this.maskObbligo = bitData[10].split('')
+ 
+           // Elementi statici da aggiungere
+            let bitvisibilitaStatic = "01111".split(''); // Converte la stringa in un array
+            let bitObbligoStatic = "01100".split(''); // Converte la stringa in un array
+
+            // Aggiungiamo gli elementi statici in coda
+            this.maskVisibilita = [...this.maskVisibilita, ...bitvisibilitaStatic];
+            this.maskObbligo = [...this.maskObbligo, ...bitObbligoStatic];
+
+            console.log("maskVisibilita ->", this.maskVisibilita);
+
         },
 
         handleConfermaClick() {
@@ -359,12 +362,13 @@ export default {
             this.handleConfermaClick()
             //PRENOTAZIONE ----------------------------------------------------
             if (this.type === 'PRE') {  
-                if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
+                if (sessionStorage.getItem('Bill') != null) {
+                    console.log(sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                 }
 
-                let bookId = (await axios.get("/prenotazione/" + sessionStorage.getItem('SagraId') + "/new")).data;
+                let bookId = (await axios.get("/prenotazione/new")).data;
                 if (bookId == "") {
                     if (sessionStorage.getItem('Bill') == null || sessionStorage.getItem('Bill') == "" || sessionStorage.getItem('Bill') == undefined) {
                         bookId = sessionStorage.getItem('startprt');
@@ -380,7 +384,7 @@ export default {
                 }
 
                 let dataprenotazione = {
-                    id_sagra: sessionStorage.getItem('Sagraid'),
+                    id_sagra: sessionStorage.getItem('SagraId'),
                     book_id: parseInt(bookId),
                     user_id: sessionStorage.getItem('Username'),
                     book_tavolo: this.checkoutObj.Tavolo,
