@@ -112,7 +112,12 @@ export const getAll = (idsagra,id,result) => {
 };
 
 export const Updatestatus = (idsagra,data, result) => {
-    db.query("UPDATE bookstatus SET book_status = ? WHERE id_sagra = ? AND book_id = ?",[idsagra,data.action, data.id], (err,results)=> {
+    // console.log (idsagra)
+    // console.log (data.action)
+    // console.log (idsagra)
+
+//    db.query("UPDATE bookstatus SET book_status = ? WHERE id_sagra = ? AND book_id = ?",[idsagra,data.action, data.id], (err,results)=> {
+    db.query("UPDATE bookstatus SET book_status = ? WHERE id_sagra = ? AND book_id = ?",[data.action,idsagra, data.id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

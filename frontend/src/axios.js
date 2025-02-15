@@ -7,7 +7,7 @@ axios.defaults.withCredentials = false
 // axios.defaults.baseURL = "http://localhost:8081/api"
 let URLProd = "https://" + window.location.hostname.toString() + "/api"
 let URLDev ="http://" + window.location.hostname.toString() + ":8081/api"
-let URLDevStampa = "http://192.168.32.128:1234/"
+let URLDevStampa = "http://192.168.56.132:1234/"
 let URLProdStampa = "http://localhost:1234/"
 
 
