@@ -8,12 +8,12 @@ export const getFoods = (idsagra, result) => {
         let sql1 = "SELECT f.*, e.QtaDisponibile, r.peso, f.IdReparto AS Reparto FROM food f LEFT JOIN esauriti e ON f.food_id = e.food_id LEFT JOIN reparti r on r.idReparto = f.IdReparto WHERE f.id_sagra = ? AND r.id_sagra = f.id_sagra AND f.food_name != 'ZZ' "
         let sql11 = sql1 + " AND f.FlgValidita = 0 "
         let sql2 = " UNION "
-        // let sql3 = sql1 + " AND f.FlgValidita != 0 AND " + datacorrente.toString() + " >= f.DataInizioValidita AND " + datacorrente.toString() + " <= f.DataFineValidita ORDER BY peso asc, Reparto desc, food_name asc"
-        // let sql = sql11 + sql2 + sql3
-        // db.query(sql,[idsagra],(err, results) => {
+    // let sql3 = sql1 + " AND f.FlgValidita != 0 AND " + datacorrente.toString() + " >= f.DataInizioValidita AND " + datacorrente.toString() + " <= f.DataFineValidita ORDER BY peso asc, Reparto desc, food_name asc"
+    // let sql = sql11 + sql2 + sql3
+    // db.query(sql,[idsagra, idsagra],(err, results) => {
         let sql3 = sql1 + " AND f.FlgValidita != 0 AND ? >= f.DataInizioValidita AND ? <= f.DataFineValidita ORDER BY peso asc, Reparto desc, food_name asc";
         let sql = sql11 + sql2 + sql3;
-        db.query(sql, [idsagra, datacorrente.toString(), datacorrente.toString()], (err, results) => {            
+        db.query(sql, [idsagra,idsagra, datacorrente.toString(), datacorrente.toString()], (err, results) => {            
             if (err) {
                 console.log(err);
                 result(err, null);
