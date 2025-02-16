@@ -21,7 +21,7 @@ export const insertReparti = (data) => {
 
 export const deleteReparti = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM reparti WHERE id_sagra = ?;",idsagra, (err, results) => {
+        db.query("DELETE FROM reparti WHERE id_sagra = ?;",[idsagra], (err, results) => {
             if (err) {
                 console.error('Errore durante la cancellazione:', idsagra);
                 reject(err);
@@ -50,7 +50,7 @@ export const insertAnagrafica = (data) => {
 
 export const deleteAnagrafica = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM food WHERE id_sagra = ?; ", idsagra, (err, results) => {
+        db.query("DELETE FROM food WHERE id_sagra = ?; ", [idsagra], (err, results) => {
             if (err) {
                 console.error('Errore durante la cancellazione:', err);
                 reject(err);
@@ -80,7 +80,7 @@ export const insertEsauriti = (data) => {
 // delete esauriti
 export const deleteEsauriti = (idsagra) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM esauriti WHERE id_sagra = ? ;",idsagra, (err, results) => {
+        db.query("DELETE FROM esauriti WHERE id_sagra = ? ;",[idsagra], (err, results) => {
             if (err) {
                 console.error("Errore durante la cancellazione degli esauriti:", err);
                 reject(err);

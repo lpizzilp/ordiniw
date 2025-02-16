@@ -54,7 +54,7 @@ export const getBillsByBill = (idsagra,id,result) => {
 
 // get all Bills Status
 export const getAll = (idsagra,result) => {
-    db.query("SELECT * FROM billstatus WHERE id_sagra = ? order by case WHEN bill_status = 1 THEN 1 WHEN bill_status = 2 THEN 2 WHEN bill_status = 3 THEN 3 ELSE 4 end, bill_id desc, bill_when desc", idsagra, (err,results)=> {
+    db.query("SELECT * FROM billstatus WHERE id_sagra = ? order by case WHEN bill_status = 1 THEN 1 WHEN bill_status = 2 THEN 2 WHEN bill_status = 3 THEN 3 ELSE 4 end, bill_id desc, bill_when desc", [idsagra], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -78,7 +78,7 @@ export const updateStatus = (idsagra,id,result) => {
 };
 
 export const updatePaid = (idsagra,id,result) => {
-    db.query("UPDATE billstatus SET bill_paid = 'true' WHERE id_sagra = ?, bill_id = ?",[idsagra,id], (err,results)=> {
+    db.query("UPDATE billstatus SET bill_paid = 'true' WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -89,20 +89,18 @@ export const updatePaid = (idsagra,id,result) => {
 };
 
 export const cancelStatus = (idsagra,id,result) => {
-    db.query("UPDATE billstatus SET bill_status = 0  WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results);
+    db.query(
+        "UPDATE billstatus SET bill_status = 0, bill_paid = 0 WHERE id_sagra = ? AND bill_id = ?", 
+        [idsagra, id], 
+        (err, results) => { 
+            if (err) {
+                console.log(err);
+                result(err, null);
+            } else {
+                result(null, results);
+            }
         }
-    });
-    db.query("UPDATE billstatus SET bill_paid = 'false' WHERE id_sagra = ? AND bill_id = ?",[idsagra,id], (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }
-    });
+    );    
 };
 
 
@@ -134,8 +132,8 @@ export const getBillsGtId = (idsagra,id,result) => {
 };
 
 //cancella tutti gli orini
-export const deleteAllBills = (idsagra,data,result) => {
-    db.query("DELETE FROM billstatus WHERE id_sagra = ? ",[idsagra,data], (err,results)=> {
+export const deleteAllBills = (idsagra,result) => {
+    db.query("DELETE FROM billstatus WHERE id_sagra = ? ",[idsagra], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

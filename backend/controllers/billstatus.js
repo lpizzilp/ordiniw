@@ -144,9 +144,9 @@ export const getAllBillsGtId=(req,res)=>{
 
 
 export const deleteAllBill=(req,res)=>{
-    const id = req.params.id;
+    //const id = req.params.id;
     const idsagra = req.headers['id-sagra']
-    deleteAllBills(idsagra,id,(err,results)=> {
+    deleteAllBills(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

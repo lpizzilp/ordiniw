@@ -1,9 +1,10 @@
+
 // import connection
 import db from "../config/database.js";
 
-// get all user
+// get all users
 export const getAllUser = (result) => {
-    db.query("SELECT * FROM user", (err, results) => {
+    db.query("SELECT * FROM `user`", (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -13,64 +14,68 @@ export const getAllUser = (result) => {
     });
 };
 
-
 // get single user
-export const getUserByEmail = (idsagra,email, result) => {
-    db.query("SELECT * FROM user WHERE id_sagra = ? and user_email = ?", [idsagra, email], (err, results) => {
+export const getUserByEmail = (idsagra, email, result) => {
+    db.query("SELECT * FROM `user` WHERE id_sagra = ? AND user_email = ?", [idsagra, email], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
         } else {
-            result(null, results[0]);
+            result(null, results[0]); // Restituisce solo il primo risultato
         }
     });
 };
 
 // insert User
 export const insertUser = (data, result) => {
-    db.query("INSERT INTO user SET ?", data, (err, results) => {
+    db.query("INSERT INTO `user` SET ?", data, (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
         } else {
-            result(null,results); //was results[0]
+            result(null, results);
         }
     });
 };
-
 
 // update authlevel
-export const updateauthlevel = (data, result) => {
-    db.query("UPDATE user SET authlevel = ? where id_sagra = ? and user_email = ?",[data.authlevel, data.id_sagra, data.user_email], (err,results)=> {
-        if (err){
+export const updateauthlevel  = (data, result) => {
+    db.query(
+        "UPDATE `user` SET authlevel = ? WHERE id_sagra = ? AND user_email = ?",
+        [data.authlevel, data.id_sagra, data.user_email],
+        (err, results) => {
+            if (err) {
+                console.log(err);
+                result(err, null);
+            } else if (results.affectedRows === 0) {
+                result("Nessun utente aggiornato, verifica i parametri", null);
+            } else {
+                result(null, results);
+            }
+        }
+    );
+};
+
+// delete user by email
+export const deleteuserbyemail   = (email, result) => {
+    db.query("DELETE FROM `user` WHERE user_email = ?", [email], (err, results) => {
+        if (err) {
             console.log(err);
-            result(err,null);
-        }else{
-            result(null,results);
+            result(err, null);
+        } else {
+            result(null, results);
         }
     });
 };
 
-//delete user
-export const deleteuserbyemail = (email, result) => {
-    db.query("Delete from `user`  where user_email = ?",[email], (err,results)=> {
-        if (err){
-            console.log(err);
-            result(err,null);
-        }else{
-            result(null,results);
-        }
-    });
-};
-
-//Segnalazioneerrore
+// Segnalazione errore
 export const insertError = (data, result) => {
     db.query("INSERT INTO errors SET ?", data, (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
         } else {
-            result(null,results); //was results[0]
+            result(null, results);
         }
     });
 };

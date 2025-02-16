@@ -5,7 +5,7 @@ import db from "../config/database.js";
 export const getSagrabyId = (idsagra,result) => {
     db.query("select * from catalogo_sagre where id_sagra = ?",[idsagra], (err,results)=> {
         if (err){
-            console.log(err);
+            console.error("Errore in getSagrabyId:", err);
             result(err,null);
         }else{
             result(null,results);
@@ -17,7 +17,7 @@ export const getSagrabyId = (idsagra,result) => {
 export const getAllSagre = (id, result) => {
     db.query("SELECT id_sagra, descrizione  FROM catalogo_sagre ORDER BY CASE WHEN id_sagra = ? THEN 0 ELSE 1 END, id_sagra;",[id], (err, results)=> {
         if (err){
-            console.log(err);
+            console.error("Errore in getAllSagre:", err);
             result(err,null);
         }else{
             result(null,results);
@@ -75,7 +75,7 @@ export const updateSagraCodaeInfoByID = (data,idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results);
+            result(null, results.affectedRows ? results : null);
         }
     });
 };
@@ -88,10 +88,10 @@ export const updateSagraCodaeInfoByID = (data,idsagra,result) => {
 export const updateContrOrdini = (idsagra,data,result) => {
     db.query("UPDATE catalogo_sagre SET StrOrdini = ? WHERE id_sagra = ?",[data.type, idsagra],(err,results)=> {
         if (err){
-            console.log(err);
+            console.error("Errore in updateContrOrdini:", err);
             result(err,null);
         }else{
-            result(null,results);
+            result(null, results.affectedRows ? results : null);
         }
     });
 };
@@ -123,7 +123,7 @@ export const getContrOrdini = (idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results);
+            result(null, results.length ? results[0] : null);
         }
     });
 };
@@ -134,7 +134,7 @@ export const getContrVisibilita = (idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results);
+            result(null, results.affectedRows ? results : null);
         }
     });
 };
@@ -144,7 +144,7 @@ export const getContrObbligo = (idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null,results);
+            result(null, results.affectedRows ? results : null);
         }
     });
 };
@@ -154,10 +154,10 @@ export const getContrObbligo = (idsagra,result) => {
 export const Wakeup = (result) => {
     db.query("Select 1 from catalogo_sagre",(err,results)=> {
         if (err){
-            console.log(err);
+            console.error("Errore in Wakeup:", err);
             result(err,null);
         }else{
-            //result = ' ';
+            
             result(null,results);
         }
     });
