@@ -123,7 +123,7 @@ export const getContrOrdini = (idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null, results.length ? results[0] : null);
+            result(null, results);
         }
     });
 };
@@ -134,7 +134,7 @@ export const getContrVisibilita = (idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null, results.affectedRows ? results : null);
+            result(null, results);
         }
     });
 };
@@ -144,7 +144,7 @@ export const getContrObbligo = (idsagra,result) => {
             console.log(err);
             result(err,null);
         }else{
-            result(null, results.affectedRows ? results : null);
+            result(null, results);
         }
     });
 };

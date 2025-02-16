@@ -348,6 +348,7 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async GetSwitch() {
+            console.log('entro in getSwitch')
             try {
                 const adminId = sessionStorage.getItem('AdminSagraId');
                 const [switchdataOrdini, switchdataVisibilita, switchdataObbligo] = await Promise.all([
@@ -378,7 +379,8 @@ export default {
                     updateStatusToggle(this.DataVisibilità, puntoStart, [4, 6, 8, 10]);
                     updateStatusToggle(this.DataObbligo, puntoStart, [5, 7, 9, 11]);
                 }
-            } catch (error) {
+            } catch (error) { 
+                console.log(error)
                 this.Quickerrore = true;
             }
         },
