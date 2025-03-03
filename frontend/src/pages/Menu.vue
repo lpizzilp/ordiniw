@@ -342,7 +342,8 @@ export default {
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
-            this.foodObj.ora = now.getFullYear() + month + day;
+            now.getFullYear() + month + day;
+
         },
 
         async chekQty() {
@@ -350,8 +351,10 @@ export default {
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
+                        
                         if (this.allFoods[i].food_id == totqty[l].food_id) {
-                            if (this.allFoods[i].DataFinePRT < this.foodObj.ora) {
+                            const dataFine = new Date(this.allFoods[i].DataFinePRT);
+                            if ( dataFine< new Date() ){
                                 this.QtyDisponibile.push(true)
                                 break;
                             } else {
