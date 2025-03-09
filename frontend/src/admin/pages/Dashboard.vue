@@ -70,7 +70,7 @@
                                 checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
                         </td>
                     </tr>
-                </tbody>    
+                </tbody>
             </table>
         </div>
         <div v-else class="table-close" @click="OpenGrid(0)">
@@ -117,7 +117,10 @@
                     style="margin-left: 10px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;"
                     class="btn">Tavolo</button>
                 <button @click="TogleCheckout(1)" id="BtnA"
-                    style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" class="btn">Asporto</button>
+                    style="border-radius: 0px; border-left: 2px solid black; border-right: 2px solid black;"
+                    class="btn">Asporto</button>
+                <button @click="TogleCheckout(2)" id="BtnP"
+                    style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" class="btn">Pren</button>
             </h3>
             <hr style="width: 100%; margin: 20px 0px; border-width: 2px; border-color: #27ae60;">
             <table class="project-list">
@@ -360,7 +363,7 @@ export default {
                 this.DataVisibilità = switchdataVisibilita.data[0].MaskVisibilita.split('')
                 this.DataObbligo = switchdataObbligo.data[0].MaskObbligo.split('')
 
-                const puntoStart = this.buttonActive === 'T' ? 0 : 5;
+                const puntoStart = this.buttonActive === 'T' ? 0 : this.buttonActive === 'A' ? 5 : 10;
                 if (`${switchdataOrdini.request.response} ${switchdataVisibilita.request.response} ${switchdataObbligo.request.response}`.includes("{\"code\"")) {
                     this.Quickerrore = true;
                     return;
@@ -368,7 +371,7 @@ export default {
 
                 const updateStatusToggle = (splitArray, startIndex, sequence) => {
                     for (let i = startIndex; i < splitArray.length; i++) {
-                        const index = sequence[(startIndex == 5 ? (i - 5) : i)];
+                        const index = sequence[(startIndex == 5 ? (i - 5) : startIndex == 10 ? (i - 10) : i)];
                         this.status[index] = splitArray[i] == '0' ? 'Disabilitato' : 'Abilitato';
                         this.toggle[index] = splitArray[i] != '0';
                     }
@@ -379,7 +382,7 @@ export default {
                     updateStatusToggle(this.DataVisibilità, puntoStart, [4, 6, 8, 10]);
                     updateStatusToggle(this.DataObbligo, puntoStart, [5, 7, 9, 11]);
                 }
-            } catch (error) { 
+            } catch (error) {
                 console.log(error)
                 this.Quickerrore = true;
             }
@@ -390,14 +393,15 @@ export default {
         },
 
         TogleCheckout(id) {
-            let BtnArray = ['BtnT', 'BtnA']
-            let Active = document.getElementById(BtnArray[id])
-            let Disativate = document.getElementById(BtnArray[id == 0 ? 1 : 0])
-            this.buttonActive = BtnArray[id].slice(3, 4)
+            const BtnArray = ['BtnT', 'BtnA', 'BtnP'];
 
-            Active.style.backgroundColor = '#f38609'
-            Disativate.style.backgroundColor = '#27ae60'
-            this.GetSwitch()
+            BtnArray.forEach((btn, index) => {
+                let element = document.getElementById(btn);
+                element.style.backgroundColor = (index === id) ? '#f38609' : '#27ae60';
+            });
+
+            this.buttonActive = BtnArray[id].charAt(3);
+            this.GetSwitch();
         },
 
         OpenGrid(index) {
@@ -416,14 +420,16 @@ export default {
                 let unionStatus = []
                 if (url != '/SagraComand') {
                     if (this.buttonActive == 'T') {
-                        unionStatus = [...statusIndexes.map(i => this.status[i]), ...['0'], ...dataArray.slice(5,10)]
-                    } else {
-                        unionStatus = [...dataArray.slice(0,5),...statusIndexes.map(i => this.status[i]), ...['0']]
+                        unionStatus = [...statusIndexes.map(i => this.status[i]), ...['0'], ...dataArray.slice(5, 15)]
+                    } else if (this.buttonActive == 'A') {
+                        unionStatus = [...dataArray.slice(0, 5), ...statusIndexes.map(i => this.status[i]), ...['0'], ...dataArray.slice(10, 15)]
+                    } if (this.buttonActive == 'P') {
+                        unionStatus = [...dataArray.slice(0, 10), ...statusIndexes.map(i => this.status[i]), ...['0']]
                     } 
                 } else {
                     unionStatus = statusIndexes.map(i => this.status[i])
                 }
-               const uniondata = {
+                const uniondata = {
                     type: unionStatus.join('').replace(/Abilitato/g, '1').replace(/Disabilitato/g, '0'),
                     id: sessionStorage.getItem('AdminSagraId')
                 };
