@@ -217,14 +217,6 @@ export default {
             console.log("bitdata ->", sessionStorage.getItem('SagraBottoni').split("µ"));
            this.maskVisibilita = bitData[9].split('')
            this.maskObbligo = bitData[10].split('')
- 
-           // Elementi statici da aggiungere
-            let bitvisibilitaStatic = "01111".split(''); // Converte la stringa in un array
-            let bitObbligoStatic = "01100".split(''); // Converte la stringa in un array
-
-            // Aggiungiamo gli elementi statici in coda
-            this.maskVisibilita = [...this.maskVisibilita, ...bitvisibilitaStatic];
-            this.maskObbligo = [...this.maskObbligo, ...bitObbligoStatic];
 
             console.log("maskVisibilita ->", this.maskVisibilita);
 
