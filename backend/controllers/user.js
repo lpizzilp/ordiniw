@@ -12,7 +12,8 @@ import {
 
 // get all Users
 export const allUsers=(req,res)=>{
-    getAllUser((err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    getAllUser(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {
@@ -24,7 +25,7 @@ export const allUsers=(req,res)=>{
 
 // get single user
 export const showAUser = (req,res)=>{
-    const idsagra = req.params.id
+    const idsagra = req.headers['id-sagra']
     getUserByEmail(idsagra,req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
@@ -61,7 +62,8 @@ export const updateUserauthlevel=(req,res)=>{
 
 // delete user
 export const Userdelete = (req,res)=>{
-    deleteuserbyemail(req.params.email,(err,results)=> {
+    const idsagra = req.headers['id-sagra']
+    deleteuserbyemail(idsagra,req.params.email,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

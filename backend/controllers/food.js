@@ -4,8 +4,9 @@ import {
     getFoods,
     getFoodById,
     insertFood,
-    updateFoodById,
     deleteFoodById,
+    updateFoodById,
+
 } from "../models/FoodModel.js";
 
 // get all Foods

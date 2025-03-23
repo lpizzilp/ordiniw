@@ -10,8 +10,9 @@ import {
 } from "../models/CartModel.js";
 
 // get all Items
-export const allItems=(req,res)=>{
-    getAllItems(req.params.id,(err,results)=> {
+export const allItems=(req,res)=>{ 
+    const idsagra = req.headers['id-sagra']
+    getAllItems(idsagra,req.params.id,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

@@ -88,7 +88,12 @@ export const deleteAllBooks = (idsagra,data,result) => {
 
 //recupera dettaglio
   export const getPrenDetails = (idsagra,id,result) => {
-    db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name, f.food_price FROM bookdetails b2, food f WHERE b2.id_sagra = ? AND f.id_sagra = b2.id_sagra AND b2.book_id = ? AND f.food_id = b2.food_id" ,[idsagra,id], (err,results)=> {
+    db.query("SELECT b2.book_id, b2.food_id, b2.item_qty, f.food_name, f.food_price " + 
+            " FROM bookdetails b2, food f " + 
+            "WHERE b2.id_sagra = ? " + 
+            "  AND b2.book_id = ? " + 
+            "  AND f.id_sagra = b2.id_sagra " + 
+            "  AND f.food_id = b2.food_id" ,[idsagra,id], (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -132,7 +137,12 @@ export const Updatestatus = (idsagra,data, result) => {
 };
 
 export const getsum = (idsagra,result) => {
-    db.query("SELECT f.food_id, f.food_name, f.FlgVariante, SUM(bd.item_qty) AS somma_qty FROM food AS f JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id JOIN bookstatus bs ON bd.id_sagra= bs.id_sagra AND bd.book_id = bs.book_id AND bs.book_status != 3 WHERE f.id_sagra = ? GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
+    db.query("SELECT f.food_id, f.food_name, f.FlgVariante, SUM(bd.item_qty) AS somma_qty " + 
+            "   FROM food AS f " + 
+            "  JOIN bookdetails bd ON bd.id_sagra = f.id_sagra AND bd.food_id = f.food_id " + 
+            "  JOIN bookstatus bs ON bs.id_sagra= f.id_sagra AND bd.book_id = bs.book_id AND bs.book_status != 3 " + 
+            " WHERE f.id_sagra = ? " + 
+            " GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);
@@ -144,7 +154,11 @@ export const getsum = (idsagra,result) => {
 };
 
 export const getqtaperordine = (idsagra,result) => {
-    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty FROM food f LEFT JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id WHERE f.id_sagra = ? AND f.FlgPrenotabile != 0 GROUP BY f.food_name ORDER BY f.food_name asc", idsagra, (err,results)=> {
+    db.query("SELECT f.*, IFNULL(SUM(bd.item_qty), 0) AS somma_qty " + 
+            " FROM food f " + 
+            " LEFT JOIN bookdetails bd ON f.id_sagra = bd.id_sagra AND f.food_id = bd.food_id " + 
+            " WHERE f.id_sagra = ? AND f.FlgPrenotabile != 0 GROUP BY f.food_name " + 
+            " ORDER BY f.food_name asc", idsagra, (err,results)=> {
         if (err){
             console.log(err);
             result(err,null);

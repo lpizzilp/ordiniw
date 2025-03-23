@@ -3,8 +3,8 @@
 import db from "../config/database.js";
 
 // get all users
-export const getAllUser = (result) => {
-    db.query("SELECT * FROM `user`", (err, results) => {
+export const getAllUser = (idsagra,result) => {
+    db.query("SELECT * FROM `user` WHERE id_sagra = ? ", [idsagra],(err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
@@ -57,8 +57,8 @@ export const updateauthlevel  = (data, result) => {
 };
 
 // delete user by email
-export const deleteuserbyemail   = (email, result) => {
-    db.query("DELETE FROM `user` WHERE user_email = ?", [email], (err, results) => {
+export const deleteuserbyemail   = (idsagra, email, result) => {
+    db.query("DELETE FROM `user` WHERE id_sagra = ? AND user_email = ?", [idsagra,email], (err, results) => {
         if (err) {
             console.log(err);
             result(err, null);
