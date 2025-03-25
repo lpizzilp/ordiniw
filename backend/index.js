@@ -12,6 +12,9 @@ import cors from "cors";
 // import routes
 import router from "./routes/routes.js";
 
+//import middleware per applicazione sicurezza
+import { verifyHmac } from './middleware/middleware.js'; // Importa il middleware
+
 // init express
 const app = express();
 
@@ -22,6 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //use cors
 app.use(cors());
 
+// Applica il middleware globalmente
+app.use(verifyHmac); 
 // use router
 app.use(router);
 

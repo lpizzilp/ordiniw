@@ -100,6 +100,7 @@ import { Infolog } from "../log/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
 import { getAllCategorie } from "../controllers/categorie.js";
 import { getAllCasse } from "../controllers/tipicasse.js";
+import { verifyHmac } from "../middleware/middleware.js"; // Importa il middleware
 
 // init express router
 const router = express.Router();
