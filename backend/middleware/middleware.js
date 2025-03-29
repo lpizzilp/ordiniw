@@ -22,7 +22,7 @@ export function verifyHmac(req, res, next) {
     return next();
   }
   if  (isInternalRequest && req.path != '/api/foods' )  {
-    return next();
+    //return next();
   }
 
   const signature = req.headers['x-signature'];
