@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "prod": "node index.js"
+    "startelog": "nodemon index.js  > ./stderr.log 2>&1"
   },
   "keywords": [],
   "author": "",

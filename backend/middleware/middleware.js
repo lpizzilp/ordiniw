@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 
+
 const usedNonces = new Set();
 const secret = 'Esagra2025-Il-tuo-gestionale-per-la-tua-sagra';
 
@@ -10,19 +11,12 @@ export function verifyHmac(req, res, next) {
     '/api/sagra/keepalive'
   ];
 
-  //solo per localHost
-  const includedLocalRoutes =  [
-    '/api/foods' 
-  ];
-  
-  // Verifica se la richiesta proviene dal server stesso
-  const isInternalRequest = req.hostname === 'localhost' || req.hostname === '127.0.0.1';  
-
   if (excludedRoutes.includes(req.path)) {
     return next();
   }
-  if  (isInternalRequest && req.path != '/api/foods' )  {
-    //return next();
+  if (req.headers['x-internal-request'] === 'true') {
+      console.log('Richiesta interna al server');  
+      return next();
   }
 
   const signature = req.headers['x-signature'];
