@@ -87,6 +87,7 @@ CREATE TABLE `catalogo_sagre` (
   `StrOrdini` varchar(10) NOT NULL DEFAULT '011',
   `MaskVisibilita` varchar(15) NOT NULL DEFAULT '1111000110',
   `MaskObbligo` varchar(15) NOT NULL DEFAULT '1100000100',
+  `flgMenu` tinyint(1) NOT NULL DEFAULT 0,  
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
