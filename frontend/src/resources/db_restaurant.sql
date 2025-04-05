@@ -111,7 +111,7 @@ CREATE TABLE `errors` (
   `connessione` varchar(100) DEFAULT NULL,
   `err_ora` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`,`id_sagra`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.esauriti definition
@@ -176,6 +176,8 @@ CREATE TABLE `tipicassa` (
 
 -- db_restaurant.`user` definition
 
+-- db_restaurant.`user` definition
+
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_email` varchar(50) DEFAULT NULL,
@@ -183,8 +185,9 @@ CREATE TABLE `user` (
   `id_sagra` varchar(5) NOT NULL,
   `user_name` varchar(50) DEFAULT NULL,
   `authlevel` int(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`user_id`,`id_sagra`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_user_email_IDX` (`user_email`,`id_sagra`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition
