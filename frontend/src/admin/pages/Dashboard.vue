@@ -37,6 +37,29 @@
                     </tr>
                     <tr>
                         <td>
+                            <h3>Visualizzazione Menù</h3>
+                        </td>
+                        <td style="text-align: center;">
+                            <h3>{{ status[3] }}</h3>
+                        </td>
+                        <td>
+                            <VueToggles :value="toggle[3]" @click="ChangeStatus(3)" :height="28" :width="56"
+                                checkedText="On" uncheckedText="Off" checkedBg="#2196F3" uncheckedBg="lightgrey" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
+                        </td>
+                        <td style="padding-left: 0px;">
+                            <hr style="width: 100%; margin: 10px 0px; border-width: 1px; border-color: #27ae60;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <h3>Ordini al Tavolo</h3>
                         </td>
                         <td style="text-align: center;">
@@ -359,6 +382,7 @@ export default {
                     axios.get(`/sagra/visibilita/${adminId}`),
                     axios.get(`/sagra/obbligo/${adminId}`)
                 ]);
+                console.log(switchdataOrdini)
 
                 this.DataVisibilità = switchdataVisibilita.data[0].MaskVisibilita.split('')
                 this.DataObbligo = switchdataObbligo.data[0].MaskObbligo.split('')
