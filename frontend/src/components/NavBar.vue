@@ -131,8 +131,7 @@ export default {
                     sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
                     sagra.data[0].linkSito == null ? this.sito = 0 : this.sito = sagra.data[0].linkSito
 
-                    const flgdata = ordini[0] + 'µ' + ordini[1] + 'µ' + ordini[2] + 'µ' + sagra.data[0].flgEliminacode + 'µ' + this.numcoda + 'µ' + sagra.data[0].flgInfo + 'µ' + this.info + 'µ' + sagra.data[0].nstartprt + 'µ' + this.sito + 'µ' + sagra.data[0].MaskVisibilita + 'µ' + sagra.data[0].MaskObbligo + 'µ' + sagra.data[0].flgMenu
-                    console.log(flgdata)
+                    const flgdata = ordini[0] + 'µ' + ordini[1] + 'µ' + ordini[2] + 'µ' + sagra.data[0].flgEliminacode + 'µ' + this.numcoda + 'µ' + sagra.data[0].flgInfo + 'µ' + this.info + 'µ' + sagra.data[0].nstartprt + 'µ' + this.sito + 'µ' + sagra.data[0].MaskVisibilita + 'µ' + sagra.data[0].MaskObbligo
                     sessionStorage.setItem('SagraBottoni', flgdata)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;

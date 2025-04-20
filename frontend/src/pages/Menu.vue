@@ -51,7 +51,7 @@
                             <div v-if="Artimage(f.food_src) != '' && Compress == false" class="image">
                                 <img v-if="f.QtaDisponibile != 0 && f.FlgPrenotabile == 0" :src="Artimage(f.food_src)"
                                     :alt="require('../assets/images/no.png')"
-                                    @click="IsMenu === 0 && (qty[index]++, onQtyChange(index))" />
+                                    @click="qty[index]++, onQtyChange(index)" />
                                 <img v-else :src="Artimage(f.food_src)" :alt="require('../assets/images/no.png')" />
                             </div>
                             <div class="content">
@@ -78,7 +78,7 @@
                                         Prenotazione Chiusa
                                     </h4>
                                 </div>
-                                <div v-else-if="IsMenu == 0" class="add-to-cart">
+                                <div v-else class="add-to-cart">
                                     <button class="btn"
                                         style="border-right-color: black; border-bottom-right-radius: 0%;  border-top-right-radius: 0%;"
                                         value="minus" @click="qty[index]--, onQtyChange(index)"><i
@@ -121,7 +121,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="IsMenu == 0" class="to-cart">
+        <div class="to-cart">
             <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
                 <i class="fas fa-shopping-cart cart"></i> Vai al carrello
             </router-link>
@@ -152,7 +152,6 @@ export default {
         let flgartprenotabile = "0"
         let flgvariante = "0"
         let Ordertype = sessionStorage.getItem('TipoOrdine')
-        let flgMenu = sessionStorage.getItem('SagraBottoni').split("µ")
         switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
                 flgartprenotabile = "1"
@@ -165,7 +164,6 @@ export default {
         }
         return {
             foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
-            IsMenu: flgMenu[11],
             showDropDown: false,
             matchUser: undefined,
             setqty: false,

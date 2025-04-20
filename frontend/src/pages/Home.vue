@@ -5,7 +5,8 @@
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>Ordina online, paga alla cassa {{ MetodOrdineString }}</p>
-                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
+                <button @click="handleSubmit('')" class="btn" style="margin-bottom: 10px;">Inizia a
+                    Ordinare</button><br>
                 <span v-if="Btn[2] == 1" style="padding-left: 30px;">oppure</span><br>
                 <button v-if="Btn[2] == 1" @click="handleSubmit('PRE')" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Prenota
