@@ -128,7 +128,7 @@
             <button v-else class="btn" style="width: 100%;" :disabled="true">
                 <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
         </div>
-        <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView === true"
+        <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView[0] === true" :-evento="showQuickView[1]" :-num-pezzi="showQuickView[2]"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
@@ -176,7 +176,7 @@ export default {
             sendId: null,
             showCart: false,
             showCounterCart: false,
-            showQuickView: false,
+            showQuickView: [false, 0, null],
             qty: [],
             CartItem: [],
             perPage: 70,
@@ -205,7 +205,7 @@ export default {
         this.getWIFIConnection()
         if (this.Prenotazione == '1') {
             this.chekdata()
-            this.chekQty()
+            this.chekQty("-1")
         }
     },
 
@@ -298,7 +298,7 @@ export default {
         },
 
         CloseQuickvue(data) {
-            this.showQuickView = data
+            this.showQuickView[0] = data
             this.Quickerrore = data
         },
 
@@ -348,12 +348,11 @@ export default {
 
         },
 
-        async chekQty() {
+        async chekQty(index) {
             let totqty = (await axios.get('/prenotazione/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
                     for (let l = 0; l < totqty.length; l++) {
-                        
                         if (this.allFoods[i].food_id == totqty[l].food_id) {
                             const dataFine = new Date(this.allFoods[i].DataFinePRT);
                             if ( dataFine< new Date() ){
@@ -366,7 +365,22 @@ export default {
                                     if (this.allFoods[i].QtaDisponibile <= totqty[l].somma_qty) {
                                         this.QtyDisponibile.push(true)
                                     } else {
-                                        this.QtyDisponibile.push(false)
+                                        if (index !== "-1" ) {
+                                            let selectedId = this.currentPageItems[index].food_id;
+                                            if (selectedId == totqty[l].food_id) {
+                                                let selectedQty = parseInt(totqty[l].somma_qty) + parseInt(this.qty[index])
+                                                if (this.allFoods[i].QtaDisponibile < selectedQty) {
+                                                    this.qty[index] = parseInt(this.allFoods[i].QtaDisponibile) - parseInt(totqty[l].somma_qty)
+                                                    this.showQuickView = [true, 1, this.qty[index]];
+                                                } else {
+                                                    this.QtyDisponibile.push(false)
+                                                }
+                                            } else {
+                                                this.QtyDisponibile.push(false) 
+                                            }
+                                        } else {
+                                            this.QtyDisponibile.push(false)   
+                                        }
                                     }
                                 }
                                 break;
@@ -374,6 +388,9 @@ export default {
                         }
                     }
                 }
+            }
+            if (index !== "-1") {
+                this.addToCart(index, false);
             }
         },
 
@@ -491,7 +508,7 @@ export default {
             }
         },
 
-        onQtyChange: function (index) {
+       onQtyChange: function (index) {
             // Cancella il timer se esiste per l'articolo specifico
             if (this.throttleTimers[index]) {
                 clearTimeout(this.throttleTimers[index]);
@@ -509,7 +526,12 @@ export default {
                 if (this.currentPageItems[index].FlgVariante != 0) {
                     this.AltreVarianti(index)
                 } else {
-                    this.addToCart(index, false);
+                    if (this.Prenotazione) {
+                        console.log("this.onQtyChange index: " + index)
+                        this.chekQty(index)
+                    } else {
+                        this.addToCart(index, false);
+                    }  
                 }
                 delete this.throttleTimers[index]; // Rimuovi il timer dopo l'esecuzione
             }, this.throttleDelay);
@@ -614,7 +636,7 @@ export default {
                     // Se ci sono più di un articolo non variante nel carrello, rimuovi l'articolo aggiunto
                     await axios.delete("/cartItem/" + user_id + "/" + this.sendId);
                     this.qty[index] = 0;
-                    this.showQuickView = true;
+                    this.showQuickView = [true, 0, null];
                     this.$refs.alert.showAlert("Attenzione", "Ci Dispiace!", "Puoi prenotare solo un articolo per ordine!");
                 } else {
                     await axios.put("/cartItem/", data);

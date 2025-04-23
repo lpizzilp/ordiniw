@@ -1,9 +1,19 @@
 <template>
-    <div class="quick-view">
+    <div v-if="Evento == 0" class="quick-view">
         <div class="quick-view-inner">
             <h2>Ci Dispiace!</h2><br>
             <h3> Puoi prenotare un singolo articolo!<br><br>
                 Se vuoi prenotare un altro articolo devi fare una nuova prenotazione.
+                <slot></slot>
+            </h3>
+            <button class="btn" @click="DataParent()" style="width: 100%;">Ho capito</button>
+        </div>
+    </div>
+    <div v-if="Evento == 1" class="quick-view">
+        <div class="quick-view-inner">
+            <h2>Ci Dispiace!</h2><br>
+            <h3> Quantità Esaurita!<br><br>
+                Per questo articolo sono disponibili solo {{ NumPezzi }} pezzi.
                 <slot></slot>
             </h3>
             <button class="btn" @click="DataParent()" style="width: 100%;">Ho capito</button>
@@ -19,6 +29,11 @@ export default {
     data() {
         return {
         }
+    },
+
+    props: {
+        Evento: Number,
+        NumPezzi: Number,
     },
 
     scrollToTop() {
