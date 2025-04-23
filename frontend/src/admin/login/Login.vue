@@ -137,7 +137,7 @@ export default {
                     case true:
                         this.setAdmin('Admin');
                         sessionStorage.setItem("Admin", this.loginObj.email);
-                        this.$router.push("/admin/prenotazioni");
+                        this.$router.push("/admin/dashboard");
                         break;
 
                     case undefined:
