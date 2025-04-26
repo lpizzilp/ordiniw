@@ -67,7 +67,7 @@
 
                                 <div v-if="f.FlgPrenotabile == 0 && f.QtaDisponibile == 0" class="add-to-cart">
                                     <h4
-                                        style="flex: 50%; background-color: #f38609; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
+                                        style="flex: 50%; background-color: red; text-align: center; color: white; border-radius: 10px; padding: 0.9rem;">
                                         Esaurito
                                     </h4>
                                 </div>
