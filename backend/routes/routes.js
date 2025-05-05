@@ -96,11 +96,17 @@ import {
     cancelBookstatus,
     cancelBookdetails
 } from "../controllers/prenotazioni.js";
+
+import {
+    sendMsg
+} from "../controllers/telegram.js";
+
+
 import { Infolog } from "../log/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
 import { getAllCategorie } from "../controllers/categorie.js";
 import { getAllCasse } from "../controllers/tipicasse.js";
-import { verifyHmac } from "../middleware/middleware.js"; // Importa il middleware
+//import { verifyHmac } from "../middleware/middleware.js"; // Importa il middleware
 
 // init express router
 const router = express.Router();
@@ -257,6 +263,10 @@ router.post("/api/importreparti", importReparti);
 router.post("/api/importesauriti", importEsauriti);
 router.delete("/api/deleteesauriti", deleteAllEsauriti);
 
+////////////////////////// TELEGRAM  ////////////////////////////////
+
+// send mail ordine completato
+router.post("/api/telegram/send", sendMsg );
 
 // export default router
 export default router;
