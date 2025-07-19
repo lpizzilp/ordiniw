@@ -48,13 +48,12 @@ CREATE TABLE `bookstatus` (
 CREATE TABLE `booktable` (
   `id_sagra` varchar(5) NOT NULL,
   `book_id` int(5) NOT NULL,
-  `book_name` varchar(255) DEFAULT NULL,
-  `book_phone` varchar(255) DEFAULT NULL,
-  `book_people` int(11) DEFAULT NULL,
-  `book_tables` int(11) DEFAULT NULL,
-  `user_id` varchar(20) DEFAULT NULL,
-  `book_when` varchar(255) DEFAULT NULL,
-  `book_note` text DEFAULT NULL,
+  `book_name` varchar(50) NOT NULL,
+  `book_day` varchar(10) NOT NULL,
+  `book_periodo` int(11) NOT NULL,
+  `book_posti` int(3) NOT NULL,
+  `book_status` varchar(50) DEFAULT NULL,
+  `book_created` varchar(22) NOT NULL,
   PRIMARY KEY (`id_sagra`,`book_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -87,8 +86,18 @@ CREATE TABLE `catalogo_sagre` (
   `StrOrdini` varchar(10) NOT NULL DEFAULT '011',
   `MaskVisibilita` varchar(15) NOT NULL DEFAULT '1111000110',
   `MaskObbligo` varchar(15) NOT NULL DEFAULT '1100000100',
-  `flgMenu` tinyint(1) NOT NULL DEFAULT 0,  
+  `flgMenu` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id_sagra`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- db_restaurant.dayslot definition
+
+CREATE TABLE `dayslot` (
+  `id_sagra` varchar(5) NOT NULL,
+  `data` varchar(10) NOT NULL,
+  `periodo` varchar(10) NOT NULL,
+  PRIMARY KEY (`id_sagra`,`data`,`periodo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -111,7 +120,7 @@ CREATE TABLE `errors` (
   `connessione` varchar(100) DEFAULT NULL,
   `err_ora` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`,`id_sagra`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.esauriti definition
@@ -162,6 +171,18 @@ CREATE TABLE `reparti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+-- db_restaurant.timeslot definition
+
+CREATE TABLE `timeslot` (
+  `id_sagra` varchar(5) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `periodo` varchar(10) NOT NULL,
+  `ora` varchar(11) NOT NULL,
+  `capacita` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`id_sagra`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 -- db_restaurant.tipicassa definition
 
 CREATE TABLE `tipicassa` (
@@ -176,8 +197,6 @@ CREATE TABLE `tipicassa` (
 
 -- db_restaurant.`user` definition
 
--- db_restaurant.`user` definition
-
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_email` varchar(50) DEFAULT NULL,
@@ -187,7 +206,7 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_user_email_IDX` (`user_email`,`id_sagra`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition
