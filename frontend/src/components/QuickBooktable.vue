@@ -1,8 +1,9 @@
 <template>
     <div class="quick-vue">
-        <div style="display: block; text-align: center; height: fit-content; padding: 2rem; background-color: white; border: 2px inset black;">
+        <div class="start-box">
             <h3 style="font-size: 1.8rem; text-transform: none;">{{ periodoSelected == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
-            <button v-if="(Isread[0] == false && Isread[1] == false) || (Isread[0] == true && Isread[1] == false && periodoSelected != null)" class="btn" style="font-size: 1.6rem; margin-top: 2rem;" @click="Isread[0] == false ? Isread[0] = true : Isread[1] = true">Ok, ho capito</button>
+            <button v-if="(!Isread[0] && !Isread[1]) || (Isread[0] && !Isread[1] && periodoSelected)" class="btn" @click="Isread[Isread[0] ? 1 : 0] = true"> Ok, ho capito</button>
+            <button v-if="(Isread[0] && Isread[1]) || (!Isread[0] && Isread[1])" class="btn" style="background-color: #f38609;">Torna indietro</button>
         </div>
         <div v-if="periodoSelected == null" class="table-date">
             <template v-if="Isread[0]">
@@ -11,42 +12,39 @@
                     v-for="(d, index) in dayObj" :key="index">
                     <template v-if="isHovered != index">
                         <div class="table-shadow">
-                            <p style="color: black; font-size: larger; margin: 0px; padding: 3px;">{{ d.data }}</p>
+                            <p>{{ d.data }}</p>
                             <h3>{{ d.giorno }}</h3>
                         </div>
-                        <hr class="hr" :style="{ 'border': '2px dashed' + backcolors[2][index] }">
+                        <hr class="hr">
                         <h5 style="font-size: medium; margin: 0px; padding: 8px 0px;"><i class="fa-solid fa-chevron-down"
                                 style="padding-right: 2rem;"></i>Periodi disponibili</h5>
                     </template>
                     <div class="time-div" v-else>
                         <div class="table-shadow" @click="periodoSelected = p, SetCapacitaArray()"
-                            style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">{{ p == 'M'
-                                ?
-                                "Colazione" : p == 'P' ? "Pranzo" : "Cena" }}</div>
+                            style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">
+                            {{ p == 'M'?"Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
+                        </div>
                     </div>
                 </button>
             </template>
         </div>
         <div v-else class="table-date">
             <template v-if="Isread[1]">
-            <button class="td-tabledate"
-                :style="{ 'background-color': 'white', 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
-                v-for="(t, index) in timeObj.filter(t => t.periodo === periodoSelected)" :key="index">
-                <div class="table-shadow">
-                    <h3>{{ t.periodo == 'M' ? "Colazione" : t.periodo == 'P' ? "Pranzo" : "Cena" }} {{ t.ora }}</h3>
-                    <p style="color: black; font-size: larger; margin: 0px; padding: 3px;">Posti disponibli {{
-                        t.capacita }}</p>
-                </div>
-                <hr class="hr" style="border-color: #27ae60;">
-                <div style="display: flex; width: 100%; justify-content: center; align-items: center; margin-bottom: 10px;">
-                    <button class="btn" @click="SetPlaceQty('+', index)"><i class="fa-solid fa-plus"></i></button>
-                    <p style=" width: fit-content; background-color: #f7f7f7; color: black; text-align: center; font-size: large; margin: 0px; padding: 10px;">
-                        {{ places[index] }}</p>
-                    <button class="btn" @click="SetPlaceQty('-', index)"><i
-                            class="fa-solid fa-minus"></i></button>
-                </div>
-                <button v-if="places[index] != 0" class="btn">Checkout</button>
-            </button>
+                <button class="td-tabledate"
+                    :style="{ 'background-color': 'white', 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
+                    v-for="(t, index) in timeObj.filter(t => t.periodo === periodoSelected)" :key="index">
+                    <div class="table-shadow">
+                        <h3>{{ t.periodo == 'M' ? "Colazione" : t.periodo == 'P' ? "Pranzo" : "Cena" }} {{ t.ora }}</h3>
+                        <p>Posti disponibli {{ t.capacita }}</p>
+                    </div>
+                    <hr class="hr" style="border-color: #27ae60;">
+                    <div class="check-btn">
+                        <button class="btn" @click="SetPlaceQty('+', index)"><i class="fa-solid fa-plus"></i></button>
+                        <p>{{ places[index] }}</p>
+                        <button class="btn" @click="SetPlaceQty('-', index)"><i class="fa-solid fa-minus"></i></button>
+                    </div>
+                    <button v-if="places[index] != 0" class="btn">Checkout</button>
+                </button>
             </template>
         </div>
     </div>
@@ -76,21 +74,12 @@ export default {
 
     methods: {
         setbackgroundcolor(length) {
-            this.backcolors = [[], [], []]
-            if (this.isHovered != null) {
-                for (let i = 0; i < length; i++) {
-                    if (this.isHovered == i) {
-                        this.backcolors[0].push('#27ae60')
-                        this.backcolors[1].push('black')
-                        this.backcolors[2].push('white')
-                    } else {
-                        this.backcolors[0].push('white')
-                        this.backcolors[1].push('black')
-                        this.backcolors[2].push('#27ae60')
-                    }
-                }
-            }
-            return this.backcolors
+            this.backcolors = [
+                Array.from({ length }, (_, i) => this.isHovered === i ? '#27ae60' : 'white'),
+                Array.from({ length }, () => 'black'),
+                []
+            ];
+            return this.backcolors;
         },
 
         async GetDay() {
@@ -173,6 +162,20 @@ export default {
 </script>
 
 <style scoped>
+.start-box{
+    display: block; 
+    text-align: center; 
+    height: fit-content; 
+    padding: 2rem; 
+    background-color: white; 
+    border: 2px inset black;
+}
+
+.start-box .btn {
+    font-size: 1.6rem; 
+    margin-top: 2rem;
+}
+
 .table-date {
     display: flex;
     width: 100%;
@@ -188,6 +191,13 @@ export default {
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;
     -webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;
     -moz-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;
+}
+
+.table-shadow p {
+    color: black;
+    font-size: larger; 
+    margin: 0px; 
+    padding: 3px;
 }
 
 .td-tabledate {
@@ -218,6 +228,24 @@ export default {
 
 .td-tabledate:hover .hr {
     border: 2px dashed white;
+}
+
+.td-tabledate .check-btn {
+    display: flex; 
+    width: 100%; 
+    justify-content: center; 
+    align-items: center; 
+    margin-bottom: 10px;
+}
+
+.td-tabledate .check-btn p {
+    width: fit-content;
+    background-color: #f7f7f7; 
+    color: black; 
+    text-align: center; 
+    font-size: large; 
+    margin: 0px; 
+    padding: 10px;
 }
 
 .time-div {
