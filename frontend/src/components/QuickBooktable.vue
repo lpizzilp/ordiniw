@@ -3,7 +3,6 @@
         <div class="start-box">
             <h3 style="font-size: 1.8rem; text-transform: none;">{{ periodoSelected == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
             <button v-if="(!Isread[0] && !Isread[1]) || (Isread[0] && !Isread[1] && periodoSelected)" class="btn" @click="Isread[Isread[0] ? 1 : 0] = true"> Ok, ho capito</button>
-            <button v-if="(Isread[0] && Isread[1]) || (!Isread[0] && Isread[1])" class="btn" style="background-color: #f38609;">Torna indietro</button>
         </div>
         <div v-if="periodoSelected == null" class="table-date">
             <template v-if="Isread[0]">
@@ -20,7 +19,7 @@
                                 style="padding-right: 2rem;"></i>Periodi disponibili</h5>
                     </template>
                     <div class="time-div" v-else>
-                        <div class="table-shadow" @click="periodoSelected = p, SetCapacitaArray()"
+                        <div class="table-shadow" @click="periodoSelected = p, SetPlaceArray()"
                             style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">
                             {{ p == 'M'?"Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
                         </div>
@@ -35,7 +34,7 @@
                     v-for="(t, index) in timeObj.filter(t => t.periodo === periodoSelected)" :key="index">
                     <div class="table-shadow">
                         <h3>{{ t.periodo == 'M' ? "Colazione" : t.periodo == 'P' ? "Pranzo" : "Cena" }} {{ t.ora }}</h3>
-                        <p>Posti disponibli {{ t.capacita }}</p>
+                        <p>Posti disponibli {{ SetCapacita(t.capacita) }}</p>
                     </div>
                     <hr class="hr" style="border-color: #27ae60;">
                     <div class="check-btn">
@@ -47,6 +46,7 @@
                 </button>
             </template>
         </div>
+        <button v-if="(Isread[0] && Isread[1]) || (!Isread[0] && Isread[1])" class="btn" @click="periodoSelected = null; Isread[1] = false;" style="margin-top: 2rem ; background-color: #f38609;">Torna indietro</button>
     </div>
 </template>
 
@@ -56,8 +56,10 @@ export default {
     name: "Table",
     data() {
         return {
+            checkoutObj: {book_name: "", book_day: "", book_periodo: "", book_posti: "", book_status: "null", book_created: ""},
             dayObj: [],
             timeObj: [],
+            capacitaObj: [],
             backcolors: [[], [], []],
             places: [],
             isHovered: null,
@@ -85,8 +87,10 @@ export default {
         async GetDay() {
             var dayslot = await axios.get('/getdayslot')
             var timeslot = await axios.get('/gettimeslot')
+            var capacita = await axios.get('/getcapacita')
             console.log('dayslot', dayslot.data)
             console.log('timeslot', timeslot.data)
+            console.log('capacita', capacita.data)
             dayslot.data.forEach(element => {
                 let giorno = this.getDayOfWeek(element.data)
                 let periodarray = element.periodo.split('')
@@ -95,6 +99,9 @@ export default {
             });
             timeslot.data.forEach(element => {
                 this.timeObj.push({ id: element.id, periodo: element.periodo, ora: element.ora, capacita: element.capacita });
+            });
+            capacita.data.forEach(element => {
+                this.capacitaObj.push({ book_day: element.book_day, periodo: element.id, ora: element.ora, riservati: element.riservati });
             });
         },
 
@@ -105,7 +112,7 @@ export default {
             return days[date.getDay()];
         },
 
-        SetCapacitaArray() {
+        SetPlaceArray() {
             this.places = []
             let fltObj = this.timeObj.filter(t => t.periodo === this.periodoSelected)
             for (let i = 0; i < fltObj.length; i++) {
@@ -130,6 +137,10 @@ export default {
                     this.places[index]--
                 }
             }
+        },
+
+        SetCapacita(capacita){
+
         },
 
         async handleSubmit(e) {
