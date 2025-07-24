@@ -1,15 +1,15 @@
 <template>
     <div class="quick-vue">
         <div class="start-box">
-            <h3 style="font-size: 1.8rem; text-transform: none;">{{ periodoSelected == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
-            <button v-if="(!Isread[0] && !Isread[1]) || (Isread[0] && !Isread[1] && periodoSelected)" class="btn" @click="Isread[Isread[0] ? 1 : 0] = true"> Ok, ho capito</button>
+            <h3 style="font-size: 1.8rem; text-transform: none;">{{ checkoutObj.book_periodo == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
+            <button v-if="(!Isread[0] && !Isread[1]) || (Isread[0] && !Isread[1] && checkoutObj.book_periodo)" class="btn" @click="Isread[Isread[0] ? 1 : 0] = true"> Ok, ho capito</button>
         </div>
-        <div v-if="periodoSelected == null" class="table-date">
+        <div v-if="checkoutObj.book_periodo == null" class="table-date">
             <template v-if="Isread[0]">
-                <button class="td-tabledate" @click="isHovered = index, setbackgroundcolor(dayObj.length)"
+                <button class="td-tabledate" @click="checkoutObj.book_day = d.data, setbackgroundcolor(dayObj.length, index)"
                     :style="{ 'background-color': backcolors[0][index], 'color': backcolors[1][index], 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
                     v-for="(d, index) in dayObj" :key="index">
-                    <template v-if="isHovered != index">
+                    <template v-if="checkoutObj.book_day != d.data">
                         <div class="table-shadow">
                             <p>{{ d.data }}</p>
                             <h3>{{ d.giorno }}</h3>
@@ -19,7 +19,7 @@
                                 style="padding-right: 2rem;"></i>Periodi disponibili</h5>
                     </template>
                     <div class="time-div" v-else>
-                        <div class="table-shadow" @click="periodoSelected = p, SetPlaceArray()"
+                        <div class="table-shadow" @click="checkoutObj.book_periodo = p, SetPlaceArray()"
                             style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">
                             {{ p == 'M'?"Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
                         </div>
@@ -31,10 +31,10 @@
             <template v-if="Isread[1]">
                 <button class="td-tabledate"
                     :style="{ 'background-color': 'white', 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
-                    v-for="(t, index) in timeObj.filter(t => t.periodo === periodoSelected)" :key="index">
+                    v-for="(t, index) in timeObj.filter(t => t.periodo === checkoutObj.book_periodo)" :key="index">
                     <div class="table-shadow">
                         <h3>{{ t.periodo == 'M' ? "Colazione" : t.periodo == 'P' ? "Pranzo" : "Cena" }} {{ t.ora }}</h3>
-                        <p>Posti disponibli {{ SetCapacita(t.capacita) }}</p>
+                        <p>Posti disponibli {{ SetCapacita(t.capacita, t.id) }}</p>
                     </div>
                     <hr class="hr" style="border-color: #27ae60;">
                     <div class="check-btn">
@@ -42,28 +42,27 @@
                         <p>{{ places[index] }}</p>
                         <button class="btn" @click="SetPlaceQty('-', index)"><i class="fa-solid fa-minus"></i></button>
                     </div>
-                    <button v-if="places[index] != 0" class="btn">Checkout</button>
+                    <button v-if="places[index] != 0" @click="handleSubmit(index, t.id)" class="btn">Checkout</button>
                 </button>
             </template>
         </div>
-        <button v-if="(Isread[0] && Isread[1]) || (!Isread[0] && Isread[1])" class="btn" @click="periodoSelected = null; Isread[1] = false;" style="margin-top: 2rem ; background-color: #f38609;">Torna indietro</button>
+        <button v-if="(Isread[0] && Isread[1]) || (!Isread[0] && Isread[1])" class="btn" @click="checkoutObj.book_periodo = null; Isread[1] = false;" style="margin-top: 2rem ; background-color: #f38609;">Torna indietro</button>
     </div>
 </template>
 
 <script>
+import router from '@/router';
 import axios from 'axios';
 export default {
     name: "Table",
     data() {
         return {
-            checkoutObj: {book_name: "", book_day: "", book_periodo: "", book_posti: "", book_status: "null", book_created: ""},
+            checkoutObj: {book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: ""},
             dayObj: [],
             timeObj: [],
             capacitaObj: [],
             backcolors: [[], [], []],
             places: [],
-            isHovered: null,
-            periodoSelected: null,
             Isread: [false, false]
             //orderObj: { name: "", phone: "", people: "", tables: "", card: "", when: "", note: "" },
             // errorObj: { nameErr: [], phoneErr: [], peopleErr: [], tablesErr: [], cardErr: [], whenErr: [] },
@@ -75,9 +74,9 @@ export default {
     },
 
     methods: {
-        setbackgroundcolor(length) {
+        setbackgroundcolor(length, index) {
             this.backcolors = [
-                Array.from({ length }, (_, i) => this.isHovered === i ? '#27ae60' : 'white'),
+                Array.from({ length }, (_, i) => index === i ? '#27ae60' : 'white'),
                 Array.from({ length }, () => 'black'),
                 []
             ];
@@ -114,14 +113,14 @@ export default {
 
         SetPlaceArray() {
             this.places = []
-            let fltObj = this.timeObj.filter(t => t.periodo === this.periodoSelected)
+            let fltObj = this.timeObj.filter(t => t.periodo === this.checkoutObj.book_periodo)
             for (let i = 0; i < fltObj.length; i++) {
                 this.places.push(0)
             }
         },
 
         SetPlaceQty(type, index) {
-            let timefiltered = this.timeObj.filter(t => t.periodo === this.periodoSelected)
+            let timefiltered = this.timeObj.filter(t => t.periodo === this.checkoutObj.book_periodo)
             if (type == '+') {
                 if (this.places.every(value => value === 0)) {
                     this.places[index]++
@@ -139,33 +138,16 @@ export default {
             }
         },
 
-        SetCapacita(capacita){
-
+        SetCapacita(capacita, periodoId) {
+            const item = this.capacitaObj.find(
+            el => el.book_day === this.checkoutObj.book_day && el.periodo === periodoId);
+            return item ? parseInt(capacita) - parseInt(item.riservati) : capacita;
         },
 
-        async handleSubmit(e) {
-            this.checkForm();
-
-            if (!this.checkEmptyErr()) {
-                e.preventDefault();
-            } else {
-                e.preventDefault();
-
-                let data = {
-                    book_name: this.orderObj.name,
-                    book_phone: parseInt(this.orderObj.phone),
-                    book_people: parseInt(this.orderObj.people),
-                    book_tables: parseInt(this.orderObj.tables),
-                    user_id: parseInt(this.orderObj.card),
-                    book_when: this.orderObj.when,
-                    book_note: this.orderObj.note,
-                }
-
-                await axios.post("/booking", data);
-
-                this.$refs.alert.showAlert('success', 'Thank you! We will call you soon to confirm your order', 'Booking Successfully !')
-                document.getElementById("bookTableForm").reset();
-            }
+        handleSubmit(index, book_periodo) {
+            this.checkoutObj.book_periodo = book_periodo
+            this.checkoutObj.book_posti = this.places[index]
+            router.push('/checkout')
         }
     },
 
