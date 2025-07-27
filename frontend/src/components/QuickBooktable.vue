@@ -1,6 +1,6 @@
 <template>
     <div class="quick-vue">
-        <div class="start-box">
+        <div v-if="!Number.isInteger(checkoutObj.book_periodo)" class="start-box">
             <h3 style="font-size: 1.8rem; text-transform: none;">{{ checkoutObj.book_periodo == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
             <button v-if="(!Isread[0] && !Isread[1]) || (Isread[0] && !Isread[1] && checkoutObj.book_periodo)" class="btn" @click="Isread[Isread[0] ? 1 : 0] = true"> Ok, ho capito</button>
         </div>
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import router from '@/router';
 import axios from 'axios';
 export default {
     name: "Table",
@@ -63,9 +62,9 @@ export default {
             capacitaObj: [],
             backcolors: [[], [], []],
             places: [],
-            Isread: [false, false]
+            Isread: [false, false],
             //orderObj: { name: "", phone: "", people: "", tables: "", card: "", when: "", note: "" },
-            // errorObj: { nameErr: [], phoneErr: [], peopleErr: [], tablesErr: [], cardErr: [], whenErr: [] },
+            errorObj: [],
         }
     },
 
@@ -145,9 +144,8 @@ export default {
         },
 
         handleSubmit(index, book_periodo) {
-            this.checkoutObj.book_periodo = book_periodo
+            this.checkoutObj.book_periodo = parseInt(book_periodo)
             this.checkoutObj.book_posti = this.places[index]
-            router.push('/checkout')
         }
     },
 
