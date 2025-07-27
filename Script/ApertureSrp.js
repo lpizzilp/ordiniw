@@ -18,7 +18,7 @@ axios.get(`http://localhost:8081/api/sagra/controlli/${unionParam.id}`, {
   .then(response => {
     if (response.data[0].StrOrdini.substring(0, 1) == 1) {
       unionParam.type = response.data[0].StrOrdini.substring(0, 1) + unionParam.type + response.data[0].StrOrdini.substring(3, 4);
-
+      
       // Richiesta PUT con header personalizzato
       axios.put('http://localhost:8081/api/sagraComand', unionParam, {
         headers: { 'X-Internal-Request': 'true' }
