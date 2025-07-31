@@ -9,7 +9,7 @@
                 <button class="td-tabledate" @click="checkoutObj.book_day = d.data, setbackgroundcolor(dayObj.length, index)"
                     :style="{ 'background-color': backcolors[0][index], 'color': backcolors[1][index], 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
                     v-for="(d, index) in dayObj" :key="index">
-                    <template v-if="checkoutObj.book_day != d.data">
+                    <template v-if="Giorno != d.data">
                         <div class="table-shadow">
                             <p>{{ d.data }}</p>
                             <h3>{{ d.giorno }}</h3>
@@ -66,6 +66,10 @@ export default {
             //orderObj: { name: "", phone: "", people: "", tables: "", card: "", when: "", note: "" },
             errorObj: [],
         }
+    },
+
+    props: {
+        giorno: String
     },
 
     created() {

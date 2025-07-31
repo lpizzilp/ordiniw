@@ -90,6 +90,7 @@
                                         style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
                                         value="plus" @click="qty[index]++, onQtyChange(index)"><i
                                             class="fa-solid fa-plus"></i></button>
+                                            <button class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataInzioPrenotazione">Prenota tavolo</button>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +131,7 @@
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView[0] === true" :-evento="showQuickView[1]" :-num-pezzi="showQuickView[2]"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
+        <QuickViewBooktable v-if="quickPrenotazione != null" :giorno="quickPrenotazione"></QuickViewBooktable>
     </div>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
@@ -140,6 +142,7 @@ import { VueToggles } from "vue-toggles";
 import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
+import QuickViewBooktable from "@/components/QuickBooktable.vue";
 import axios from "axios";
 
 export default {
@@ -186,6 +189,7 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
+            quickPrenotazione: null,
             Quickerrore: false,
 
             categoryFilters: ['Tutti', 'Bevande', 'Panini', 'Dolci', 'Vino', 'Antipasti', 'Primi', 'Secondi'],
@@ -652,6 +656,7 @@ export default {
     components: {
         VueBasicAlert,
         QuickViewPrenotazione,
+        QuickViewBooktable,
         QuickViewErrore,
         VueToggles,
     }
