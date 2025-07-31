@@ -52,7 +52,7 @@
                         <td v-if="showSerata[id] == true">{{ b.book_nominativo }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_coperti }}</td>
                         <td v-if="showSerata[id] == true">{{ b.book_phone }}</td>
-                        <td v-if="showSerata[id] == true">{{ formattime(b.book_when) }}</td>
+                        <td v-if="showSerata[id] == true">{{ formattime('when', b.book_when) }}</td>
                         <td v-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
                                 style="padding-right: 1vh;"></i>Inserito</td>
                         <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i class="fa-regular fa-square-check"
@@ -193,9 +193,10 @@ export default {
             this.showOrderDetails = !this.showOrderDetails;
         },
 
-        formattime(data) {
-            const dataParsata = moment(data, 'YYYY/MM/DDTHH:mm');
+        formattime(type, data) {
+            const dataParsata = type == 'when' ? moment(data, 'YYYY/MM/DDTHH:mm') : moment(data.slice(0, -6), 'MM/DD/YYYY HH:mm')
 
+            console.log(dataParsata)
             // Formatta la data nel nuovo formato
             const dataFormattata = dataParsata.format('DD/MM/YYYY');
 
@@ -269,7 +270,9 @@ export default {
                             book_status = 'Cancellata'
                             break;
                     }
-                    data[plus] = [this.allPenot[l].book_id, this.allPenot[l].food_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime(this.allPenot[l].book_when), this.formattime(this.allPenot[l].DataFinePRT), this.allPenot[l].book_note, this.allPenot[l].book_total]
+
+                    console.log(this.allPenot[l].book_total)
+                    data[plus] = [this.allPenot[l].book_id, this.allPenot[l].food_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime('when', this.allPenot[l].book_when), this.formattime('PRT', this.allPenot[l].DataFinePRT), this.allPenot[l].book_note, this.allPenot[l].book_total]
                     plus = plus + 1
                 }
             }
@@ -312,7 +315,6 @@ export default {
                 alignment: { vertical: 'middle', horizontal: 'center' },
                 border: { top: { style: 'thin', color: { argb: '000000' } }, left: { style: 'thin', color: { argb: '000000' } }, right: { style: 'thin', color: { argb: '000000' } }, bottom: { style: 'thin', color: { argb: '000000' } } },
             };
-
 
             // Aggiungere dati al foglio Excel
             const data = await this.Exportdata()
