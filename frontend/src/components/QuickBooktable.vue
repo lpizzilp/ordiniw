@@ -69,11 +69,12 @@ export default {
     },
 
     props: {
-        giorno: String
+        giorno: Array
     },
 
     created() {
         this.GetDay()
+        console.log('entro')
     },
 
     methods: {

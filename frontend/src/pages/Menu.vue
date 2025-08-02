@@ -90,7 +90,7 @@
                                         style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
                                         value="plus" @click="qty[index]++, onQtyChange(index)"><i
                                             class="fa-solid fa-plus"></i></button>
-                                            <button class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataInzioPrenotazione">Prenota tavolo</button>
+                                    <button class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="openquick(f.DataInzioPrenotazione)">Prenota tavolo</button>
                                 </div>
                             </div>
                         </div>
@@ -131,8 +131,8 @@
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView[0] === true" :-evento="showQuickView[1]" :-num-pezzi="showQuickView[2]"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
-        <QuickViewBooktable v-if="quickPrenotazione != null" :giorno="quickPrenotazione"></QuickViewBooktable>
     </div>
+    <QuickViewBooktable v-if="quickPrenotazione != null" :giorno="quickPrenotazione"></QuickViewBooktable>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 
@@ -272,6 +272,11 @@ export default {
     methods: {
         handleFilterChange(filter) {
             this.activeFilter = filter
+        },
+
+        openquick(giorno){
+            this.quickPrenotazione = giorno
+            console.log('entro')
         },
 
         getWIFIConnection() {
