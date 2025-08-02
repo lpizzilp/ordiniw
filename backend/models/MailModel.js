@@ -42,9 +42,9 @@ export const Emailsender = (data, result) => {
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #f38609; border-right:  2px dashed #f38609;">
                 <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#f38609; padding-bottom: 2px;">Hai dei ripensamenti?</p>
-                <p style="text-align: center; font-size:16px;">Se ti sei accorto che nel tuo ordine manca qualcosa,<br>puoi sempre modificarlo cliccando sul bottone qui sotto </p>
+                <p style="text-align: center; font-size:16px;">Se ti sei accorto che nel tuo prenotazione manca qualcosa,<br>puoi sempre modificarlo cliccando sul bottone qui sotto </p>
                 <p style="margin-top:5px;">ㅤ</p>
-                <a href="` + data.user_data + `" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #f38609; border-radius: 10px;">Clicca e modifica l'ordine</a>
+                <a href="` + data.user_data + `" style="padding: 10px 5px; item-aling: center; font-size: 16px; color: #fff; background: #f38609; border-radius: 10px;">Clicca e modifica l'prenotazione</a>
                 <p style="margin-top:5px;">ㅤ</p>
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-botton: 8px; border-radius: 10px">
@@ -53,7 +53,7 @@ export const Emailsender = (data, result) => {
             <p style="text-align:center; font-size:16px;">Riportiamo l'articolo che hai prenotato:</p>
             <br>
             <table  width="100%" border="solid" align="center" margin-bottom="20px"><tr style="background-color: #ffffff;"><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px;">Articoli</td><td style="background-color: #ffffff; padding-left:10px; padding-top:10px; padding-bottom:10px; font-size:16px; text-align: center;">Quantità` + data.ord_item.join('') + `</td></tr></table><br>
-            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'ordine inserito alle ore ` + data.ord_data + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
+            <p style="text-align: left; font-size:16px;">Questa email inviata da <a href="` + data.sagra_link + `">ordini.esagra.it</a> per l'prenotazione inserito alle ore ` + data.ord_data + `<br><br>La ringraziamo per aver utilizzato il nostro servizio online.</p>
         </div>`;
 
         mailOptions.subject = "La tua prenotazione Web"
