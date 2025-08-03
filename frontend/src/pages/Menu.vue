@@ -132,7 +132,7 @@
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView[0] === true" :-evento="showQuickView[1]" :-num-pezzi="showQuickView[2]"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
-    <QuickViewBooktable v-if="quickPrenotazione != null" :giorno="quickPrenotazione"></QuickViewBooktable>
+    <QuickViewBooktable></QuickViewBooktable>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 

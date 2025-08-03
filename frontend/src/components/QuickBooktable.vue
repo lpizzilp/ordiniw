@@ -53,7 +53,7 @@
 <script>
 import axios from 'axios';
 export default {
-    name: "Table",
+    name: "QuikView",
     data() {
         return {
             checkoutObj: {book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: ""},
@@ -158,6 +158,18 @@ export default {
 </script>
 
 <style scoped>
+.quick-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999999;
+    background-color: rgba(0, 0, 0, 0.2);
+
+    display:block;
+}
+
 .start-box{
     display: block; 
     text-align: center; 
