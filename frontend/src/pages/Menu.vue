@@ -90,7 +90,7 @@
                                         style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
                                         value="plus" @click="qty[index]++, onQtyChange(index)"><i
                                             class="fa-solid fa-plus"></i></button>
-                                    <button class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="openquick(f.DataInzioPrenotazione)">Prenota tavolo</button>
+                                    <button v-if="Prenotazione === '1'" class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataFineValidita">Prenota tavolo</button>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView[0] === true" :-evento="showQuickView[1]" :-num-pezzi="showQuickView[2]"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
     </div>
-    <QuickViewBooktable></QuickViewBooktable>
+    <QuickViewBooktable v-if="Prenotazione === '1' && quickPrenotazione != false"  :giorno="quickPrenotazione"></QuickViewBooktable>
     <quick-view-errore v-if="Quickerrore" @childError="CloseQuickvue"></quick-view-errore>
 </template>
 
@@ -189,7 +189,7 @@ export default {
             throttleTimers: {}, // Oggetto per memorizzare i timer per ciascun articolo
             wifiquality: null,
             wifispeed: null,
-            quickPrenotazione: null,
+            quickPrenotazione: false,
             Quickerrore: false,
 
             categoryFilters: ['Tutti', 'Bevande', 'Panini', 'Dolci', 'Vino', 'Antipasti', 'Primi', 'Secondi'],
@@ -272,11 +272,6 @@ export default {
     methods: {
         handleFilterChange(filter) {
             this.activeFilter = filter
-        },
-
-        openquick(giorno){
-            this.quickPrenotazione = giorno
-            console.log('entro')
         },
 
         getWIFIConnection() {
