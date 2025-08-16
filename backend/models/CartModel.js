@@ -68,11 +68,23 @@ export const deleteItemInCart = (user,food,result) => {
     });
 };
 
-// delete all Items
+// delete all Items by user
 export const deleteAllItemsByUser = (id,result) => {
     db.query("DELETE FROM cart WHERE user_id = ?",[id], (err,results)=> {
         if (err){
             console.error(`Errore in deleteAllItemsByUser (user_id=${id}):`, err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+// delete all Items
+export const deleteAllItems = (result) => {
+    db.query("DELETE FROM cart", (err,results)=> {
+        if (err){
+            console.error(`Errore in deleteAllItems:`, err);
             result(err,null);
         }else{
             result(null,results);

@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 import "@/axios"
 
-const currentVersion = '2.0.1'; // Versione corrente impostata durante il deploy
+const currentVersion = '2.0.2'; // Versione corrente impostata durante il deploy
 const eventBus = mitt();
 
 //controllo di versione 
