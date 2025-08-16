@@ -11,6 +11,13 @@ if ((unionParam.id === undefined) || (unionParam.id === "?")) {
   process.exit(1);
 }
 
+console.log(unionParam)
+if (unionParam.type[0] == '1') {
+  axios.delete(`http://localhost:8081/api/cartDelete`, {
+  headers: { 'X-Internal-Request': 'true' }
+})
+}
+
 // Richiesta GET con header personalizzato
 axios.get(`http://localhost:8081/api/sagra/controlli/${unionParam.id}`, {
   headers: { 'X-Internal-Request': 'true' }

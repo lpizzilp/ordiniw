@@ -31,7 +31,8 @@ import {
     updateItem,
     allItems,
     deleteItem,
-    deleteItems
+    deleteItems,
+    deleteAll
 } from "../controllers/cart.js";
 
 import {
@@ -181,8 +182,11 @@ router.put("/api/cartItem/", updateItem);
 // delete a item in cart
 router.delete("/api/cartItem/:user_id/:food_id", deleteItem);
 
-// delete all items in cart
+// delete all items by user in cart
 router.delete("/api/cartItem/:id", deleteItems);
+
+// delete all items in cart
+router.delete("/api/cartDelete", deleteAll);
 
 
 
