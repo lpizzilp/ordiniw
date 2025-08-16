@@ -463,6 +463,7 @@ export default {
         margin-bottom: 10px;
         padding: 10px 25%;
         text-align: center;
+        cursor: pointer;
     }
 }
 
@@ -487,6 +488,7 @@ export default {
         margin-right: 5px;
         margin-bottom: 0px;
         padding: 10px 25%;
+        cursor: pointer;
     }
 
     .image-box {

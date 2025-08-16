@@ -130,6 +130,7 @@ export default {
     text-align: center;
     margin-top: 1vh;
     margin-bottom: 2vh;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -161,6 +162,7 @@ export default {
         text-align: center;
         margin-top: 1vh;
         margin-bottom: 2vh;
+        cursor: pointer;
     }
 }
 </style>

@@ -532,6 +532,7 @@ export default {
     margin: 1rem 0;
     width: 100%;
     text-align: center;
+    cursor: pointer;
 }
 
 .checkout-container .checkout-form-container form p {
