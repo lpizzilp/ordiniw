@@ -34,3 +34,13 @@ export const getAllCapacita = (idsagra,result) => {
         }
     });
 };
+
+export const insertBookTable = (data,result) => {
+    db.query("INSERT INTO booktable SET ?",data, (err,results)=> {
+        if (err){
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};

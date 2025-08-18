@@ -1,7 +1,8 @@
 import {
     getAllCapacita,
     getSlotbyId,
-    getTimebyId
+    getTimebyId,
+    insertBookTable
 } from "../models/BookTableModel.js";
 
 // create Booking
@@ -34,6 +35,19 @@ export const getCapacita=(req,res)=>{
             res.send(err);
         }else {
             res.json(results);
+        }
+    });
+};
+
+// create Booktable
+export const createBooktable=(req,res)=>{
+    const data = req.body;
+    insertBookTable(data,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+            //res.status(500).send("errmessage");
         }
     });
 };

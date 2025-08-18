@@ -1,7 +1,7 @@
 <template>
     <div class="checkout-container">
         <div class="checkout-form-container">
-            <form id="checkoutForm" @submit="handleSubmit" novalidate autocomplete="off" >
+            <form id="checkoutForm" @submit="handleSubmit" novalidate autocomplete="off">
                 <div class="checkout-heading">
                     <h3>Manca solo un passaggio</h3>
                 </div>
@@ -9,26 +9,21 @@
                 <!-- openai dynamic versione  --------------------------------------------->
                 <template v-for="(field, index) in fields" :key="field.name">
                     <div class="form-group" :style="{ display: getFieldVisibility(index) }">
-                        <component
-                            :is="field.type === 'textarea' ? 'textarea' : 'input'"  
-                            :type="field.inputType || 'text'"
-                            :name="field.name"
-                            :id="field.name"
-                            :placeholder="getPlaceholderText(field.name, index)" 
-                            class="form-control"
-                            :value="checkoutObj[field.name]"  
-                            @input="updateFieldValue($event, field.name)"  
-                            v-bind="field.attrs || {}"                        
-                        ></component>
+                        <component :is="field.type === 'textarea' ? 'textarea' : 'input'"
+                            :type="field.inputType || 'text'" :name="field.name" :id="field.name"
+                            :placeholder="getPlaceholderText(field.name, index)" class="form-control"
+                            :value="checkoutObj[field.name]" @input="updateFieldValue($event, field.name)"
+                            v-bind="field.attrs || {}"></component>
 
-                        <p class="error-mess" v-if="errorObj[`${field.name}Err`] && errorObj[`${field.name}Err`].length > 0">
+                        <p class="error-mess"
+                            v-if="errorObj[`${field.name}Err`] && errorObj[`${field.name}Err`].length > 0">
                             {{ errorObj[`${field.name}Err`][0] }}
                         </p>
                     </div>
-                </template>                 
+                </template>
                 <!-- openai dynamic versione  ------------------------------------------>
 
-                <div class="form-group details-group" id="General">                
+                <div class="form-group details-group" id="General">
                     <div class="checkout-headings">
                         <h3 v-if="Ute"><span>Totale {{ calculateSummaryPrice()[3] }}€</span></h3>
                         <h3 v-if="Ute"><span>Totale per persona {{ calculatePersonaPrice() }}</span></h3>
@@ -44,7 +39,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Conferma" class="btn"   :disabled="buttonDisabled" />
+                    <input type="submit" value="Conferma" class="btn" :disabled="buttonDisabled" />
                 </div>
                 <div>
                     <button class="btn" type="button" style="margin-top: 20px; background-color: #ff8902;"
@@ -68,7 +63,7 @@ export default {
     name: "Checkout",
     data() {
         return {
-            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "",Note: "" , Telefono: "", Type: "", paymentMethod: "cash"},
+            checkoutObj: { Tavolo: "", Coperti: "", Nominativo: "", Note: "", Telefono: "", Type: "", paymentMethod: "cash" },
             errorObj: { TavoloErr: [], CopertiErr: [], NominativoErr: [], NoteErr: [], TelefonoErr: [], TypeErr: [], payErr: [] },
             tempCoperti: "",
             cartItem: [],
@@ -85,6 +80,7 @@ export default {
     created() {
         this.buildForm();
         this.getAllCartItem();
+        this.checkPrenTavolo();
     },
     computed: {
         ...mapState(["allFoods"]),
@@ -100,22 +96,22 @@ export default {
         formTitle() {
             return this.type === 'W' ? 'Completa dettagli ordine' : 'Dettagli dell\'acquirente';
         },
-/*************  ✨ Codeium Command ⭐  *************/
-/**
- * Returns an array of field objects based on the current order type.
- * 
- * Each field object contains properties such as `name`, `type`, `placeholder`, 
- * and optional attributes like `inputType`, `attrs`, and event handlers.
- * 
- * The fields are categorized into common fields and type-specific fields. 
- * The `typeSpecificFields` object contains fields for different order types 
- * ('W', 'Y', 'PRE'), and the `commonFields` array contains fields that are 
- * applicable to all order types.
- * 
- * @returns {Array} An array of field objects to be used in the checkout form.
- */
+        /*************  ✨ Codeium Command ⭐  *************/
+        /**
+         * Returns an array of field objects based on the current order type.
+         * 
+         * Each field object contains properties such as `name`, `type`, `placeholder`, 
+         * and optional attributes like `inputType`, `attrs`, and event handlers.
+         * 
+         * The fields are categorized into common fields and type-specific fields. 
+         * The `typeSpecificFields` object contains fields for different order types 
+         * ('W', 'Y', 'PRE'), and the `commonFields` array contains fields that are 
+         * applicable to all order types.
+         * 
+         * @returns {Array} An array of field objects to be used in the checkout form.
+         */
 
-/******  ad136381-6879-4bf5-9b36-2ef8e0acee0b  *******/
+        /******  ad136381-6879-4bf5-9b36-2ef8e0acee0b  *******/
         fields() {
             const commonFields = [
                 {
@@ -148,15 +144,15 @@ export default {
                     type: 'input',
                     inputType: 'tel',
                     placeholder: 'Inserisci un numero di telefono'
-                },                
-                 
+                },
+
             ];
 
- 
+
             return commonFields;
         }
 
-        /*end---------------------------------------------- */        
+        /*end---------------------------------------------- */
     },
     methods: {
         /*---------------------------------------------- */
@@ -168,7 +164,7 @@ export default {
             const isObligatory = this.maskObbligo[maskIndex] == 1;
             const basePlaceholder = this.fields.find(f => f.name === fieldName).placeholder || '';
             return isObligatory ? `${basePlaceholder} (Obbligatorio)` : `${basePlaceholder} (Facoltativo)`;
-        },        
+        },
         updateFieldValue(event, fieldName) {
             this.checkoutObj[fieldName] = event.target.value;  // Aggiorniamo direttamente il valore nel checkoutObj
             this.validateField(fieldName);  // Validiamo il campo dopo l'input
@@ -176,20 +172,26 @@ export default {
         getFieldVisibility(index) {
 
             //const maskIndex =  this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10;  //this.type === 'Y' ? index + 5 : index;
-            const maskIndex  = this.type === 'W' ? index : this.type === 'Y' ? index + 5 : index + 10;
+            const maskIndex = this.type === 'W' ? index : this.type === 'Y' ? index + 5 : index + 10;
             return this.maskVisibilita[maskIndex] == 1 ? 'block' : 'none';
         },
         checkForm() {
             this.resetCheckErr();
-            const startIndex =  this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10; 
-            
+            const startIndex = this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10;
+
             this.fields.forEach((field, index) => {
                 const maskIndex = startIndex + index;
                 if (this.maskVisibilita[maskIndex] == 1 && this.maskObbligo[maskIndex] == 1 && !this.checkoutObj[field.name]) {
-                this.errorObj[`${field.name}Err`].push(`Il campo ${field.name.toLowerCase()} è obbligatorio`);
+                    this.errorObj[`${field.name}Err`].push(`Il campo ${field.name.toLowerCase()} è obbligatorio`);
                 }
             });
 
+        },
+        checkPrenTavolo() {
+            let bookTablearray = JSON.parse(sessionStorage.getItem('bookTable'))
+            if (this.type == "PRE" && bookTablearray != null) {
+                this.checkoutObj.Coperti = bookTablearray.book_posti
+            }
         },
         resetCheckErr() {
             Object.keys(this.errorObj).forEach(key => {
@@ -198,7 +200,7 @@ export default {
         },
 
         validateField(fieldName) {
-            const startIndex = this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10; 
+            const startIndex = this.type === 'W' ? 0 : this.type === 'Y' ? 5 : 10;
             const fieldIndex = this.fields.findIndex(f => f.name === fieldName);
             const maskIndex = startIndex + fieldIndex;
 
@@ -207,16 +209,16 @@ export default {
 
 
             if (this.maskVisibilita[maskIndex] == 1 && this.maskObbligo[maskIndex] == 1 && !this.checkoutObj[fieldName]) {
-            this.errorObj[`${fieldName}Err`].push(`Il campo ${fieldName.toLowerCase()} è obbligatorio`);
+                this.errorObj[`${fieldName}Err`].push(`Il campo ${fieldName.toLowerCase()} è obbligatorio`);
             }
-        },        
+        },
         /*-------------------------------------------END */
 
-        buildForm () {
+        buildForm() {
             let bitData = sessionStorage.getItem('SagraBottoni').split("µ")
             console.log("bitdata ->", sessionStorage.getItem('SagraBottoni').split("µ"));
-           this.maskVisibilita = bitData[9].split('')
-           this.maskObbligo = bitData[10].split('')
+            this.maskVisibilita = bitData[9].split('')
+            this.maskObbligo = bitData[10].split('')
 
             console.log("maskVisibilita ->", this.maskVisibilita);
 
@@ -230,7 +232,7 @@ export default {
                 this.buttonDisabled = false;
             }, 500); // 1000 millisecondi = 1 secondo
         },
-        
+
         availableTime: function () {
             var now = new Date();
             var currentMonth = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -272,8 +274,11 @@ export default {
         },
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
-                try {var existItem = await axios.get("/cartItem/" + sessionStorage.getItem('Username'));
-                    if (existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                try {
+                    var existItem = await axios.get("/cartItem/" + sessionStorage.getItem('Username'));
+                    if (existItem.errMsg) { this.Quickerrore = true; return; }
+                } catch (error) {
+                    this.Quickerrore = true; return;
                 }
                 existItem.data.forEach(element => {
                     this.cartItem.push(element.food_id);
@@ -327,7 +332,7 @@ export default {
             }
             try {
                 const response = await axios.post(callURL, Details);
-                if (response.errMsg ) {
+                if (response.errMsg) {
                     throw new Error("Whoops!");
                 }
             } catch (error) {
@@ -353,7 +358,7 @@ export default {
             }
             this.handleConfermaClick()
             //PRENOTAZIONE ----------------------------------------------------
-            if (this.type === 'PRE') {  
+            if (this.type === 'PRE') {
                 if (sessionStorage.getItem('Bill') != null) {
                     console.log(sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
@@ -369,7 +374,7 @@ export default {
                     }
                 } else {
                     if (bookId.book_id < sessionStorage.getItem('startprt')) {
-                        bookId =  sessionStorage.getItem('startprt')
+                        bookId = sessionStorage.getItem('startprt')
                     } else {
                         bookId = parseInt(bookId.book_id) + 1;
                     }
@@ -395,14 +400,34 @@ export default {
 
                 };
 
+                if (sessionStorage.getItem('bookTable') != null) {
+                    console.log('entro in booktable')
+                    let booktablearray = JSON.parse(sessionStorage.getItem('bookTable'))
+                    let dataTavolo = {
+                        id_sagra: sessionStorage.getItem('SagraId'),
+                        book_id: parseInt(bookId),
+                        book_name: this.checkoutObj.Nominativo,
+                        book_day: booktablearray.book_day,
+                        book_periodo: booktablearray.book_periodo,
+                        book_posti: booktablearray.book_posti,
+                        book_status: 'insert',
+                        book_created: this.currentTime(),
+                    };
+
+                    try {
+                        const response = await axios.post("/booktable", dataTavolo);
+                        if (response.errMsg) { this.Quickerrore = true; return; } } catch (error) {this.Quickerrore = true; return;
+                    }
+                }
+
                 try {
                     const response = await axios.post("/prenotazione", dataprenotazione);
-                    if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                    if (response.errMsg) { this.Quickerrore = true; return; } } catch (error) {this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', dataprenotazione.book_id)
                 sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
 
-            //ORDINI ----------------------------------------------------         
+                //ORDINI ----------------------------------------------------         
             } else {
                 if (sessionStorage.getItem('Bill') != "" || sessionStorage.getItem('Bill') != null || sessionStorage.getItem('Bill') != undefined) {
                     axios.delete("/billstatus/delete/" + sessionStorage.getItem('Bill'))
@@ -434,7 +459,9 @@ export default {
 
                 try {
                     const response = await axios.post("/billstatus", billStatus);
-                    if (response.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
+                    if (response.errMsg) { this.Quickerrore = true; return; }
+                } catch (error) {
+                    this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', billStatus.bill_id)
                 sessionStorage.setItem('Coperti', billStatus.bill_coperti)
@@ -457,7 +484,7 @@ export default {
             this.itemQuantity = [];
             this.$router.push("/thank");
         }
-    },    
+    },
     components: {
         QuickViewCheckout,
         QuickViewErrore
