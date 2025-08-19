@@ -90,7 +90,7 @@
                                         style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
                                         value="plus" @click="qty[index]++, onQtyChange(index)"><i
                                             class="fa-solid fa-plus"></i></button>
-                                    <button v-if="Prenotazione === '1'" class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataFineValidita">Prenota tavolo</button>
+                                    <button v-if="Prenotazione === '1' && qty[index] != 0" class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataFineValidita">Prenota tavolo</button>
                                 </div>
                             </div>
                         </div>
