@@ -1,5 +1,6 @@
 // import express 
 import express from "express";
+import compression from "compression";
 // import functions from controller 
 import {
     showFoods,
@@ -112,7 +113,18 @@ import { getAllCasse } from "../controllers/tipicasse.js";
 // init express router
 const router = express.Router();
 
-
+// abilito la compressione gzip/deflate
+router.use(compression({
+  level: 6,                          // Bilanciamento CPU ↔ velocità
+  threshold: 1024,                   // Minimo 1 KB da comprimere
+  filter: (req, res) => {
+    const ct = res.getHeader("Content-Type") || "";
+    if (ct.includes("application/json") || ct.startsWith("text/")) {
+      return true;                   // Comprime solo testo e JSON
+    }
+    return false;                    // Esclude binari, immagini, streaming
+  }
+}));
 ////////////////////////// FOOD ////////////////////////////////
 // get all Food
 router.get("/api/foods", showFoods);
