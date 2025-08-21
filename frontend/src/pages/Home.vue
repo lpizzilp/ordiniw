@@ -5,7 +5,7 @@
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
                 <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa' + MetodOrdineString }}</p>
-                <button @click="handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
+                <button @click="Btn[11] == 1 ? handleSubmit('menu') : handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
                 <span v-if="Btn[2] == 1 && (Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1)" style="padding-left: 30px;">oppure</span><br>
                 <button v-if="Btn[2] == 1" @click="handleSubmit('PRE')" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Prenota
@@ -234,6 +234,20 @@ export default {
                         this.Btn[0] = this.Btn[1] = 0
                         this.showQuickVue = true
                     }
+                    break;
+
+                case 'menu':
+                    this.showQuickVue = false
+                    var idR = uniqid()
+                    this.matchUser = {
+                        user_id: idR,
+                        user_email: this.loginObj.email,
+                        user_password: this.loginObj.pass,
+                    };
+                    sessionStorage.setItem('Username', this.matchUser.user_id);
+                    sessionStorage.setItem('MatchUser', this.matchUser);
+                    sessionStorage.setItem('TipoOrdine', 'W');
+                    this.$router.push("/menu");
                     break;
 
                 default:
