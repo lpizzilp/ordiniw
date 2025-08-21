@@ -1,46 +1,50 @@
 <template>
     <div class="quick-view">
         <div class="quick-inner">
-        <div v-if="!Number.isInteger(checkoutObj.book_periodo)" class="start-box">
-            <h3 style="font-size: 1.8rem; text-transform: none;">{{ checkoutObj.book_periodo == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
-        </div>
-        <div v-if="checkoutObj.book_periodo == null" class="table-date">
+            <div v-if="!Number.isInteger(checkoutObj.book_periodo)" class="start-box">
+                <h3 style="font-size: 1.8rem; text-transform: none;">{{ checkoutObj.book_periodo == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
+            </div>
+            <div v-if="checkoutObj.book_periodo == null" class="table-date">
                 <button class="td-tabledate" @click="selectperiodo = true, setbackgroundcolor(dayObj.length, index)"
-                    :style="{ 'background-color': backcolors[0][index], 'color': backcolors[1][index], 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
+                    :style="{ 'background-color': backcolors[0][index], 'color': backcolors[1][index] }"
                     v-for="(d, index) in dayObj.filter(d => d.data === formatter(giorno))" :key="index">
-                        <div class="table-shadow">
-                            <p>{{ d.data }}</p>
-                            <h3>{{ d.giorno }}</h3>
-                        </div>
-                        <hr class="hr">
-                        <h5 style="font-size: medium; margin: 0px; padding: 8px 0px;"><i class="fa-solid fa-chevron-down"
-                                style="padding-right: 2rem;"></i>Periodi disponibili</h5>
+                    <div class="table-shadow">
+                        <p>{{ d.data }}</p>
+                        <h3>{{ d.giorno }}</h3>
+                    </div>
+                    <hr class="hr">
+                    <h5 style="font-size: medium; margin: 0px; padding: 8px 0px;"><i class="fa-solid fa-chevron-down"
+                            style="padding-right: 2rem;"></i>Periodi disponibili</h5>
                     <div class="time-div" v-if="selectperiodo != false">
                         <div class="table-shadow" @click="checkoutObj.book_periodo = p, SetPlaceArray()"
                             style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">
-                            {{ p == 'M'?"Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
+                            {{ p == 'M' ? "Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
                         </div>
                     </div>
                 </button>
-        </div>
-        <div v-else class="table-date">
-                <button class="td-tabledate"
-                    :style="{ 'background-color': 'white', 'flex': '0 0 50%', 'border-left': index == 0 ? 'none' : '2px inset black', 'border-right': index == (dayObj.length - 1) ? 'none' : '2px inset black' }"
+            </div>
+            <div v-else class="table-date">
+                <button class="td-tabledate" :style="{ 'background-color': 'white', 'flex': '0 0 50%' }"
                     v-for="(t, index) in timeObj.filter(t => t.periodo === checkoutObj.book_periodo)" :key="index">
                     <div class="table-shadow">
                         <h3>{{ t.periodo == 'M' ? "Colazione" : t.periodo == 'P' ? "Pranzo" : "Cena" }} {{ t.ora }}</h3>
                         <p>Posti disponibli {{ SetCapacita(t.capacita, t.id) }}</p>
                     </div>
                     <hr class="hr" style="border-color: #27ae60;">
-                    <div class="check-btn">
-                        <button class="btn" @click="SetPlaceQty('+', index)"><i class="fa-solid fa-plus"></i></button>
-                        <p>{{ places[index] }}</p>
+                    <div v-if="SetCapacita(t.capacita, t.id) != 0" class="check-btn">
                         <button class="btn" @click="SetPlaceQty('-', index)"><i class="fa-solid fa-minus"></i></button>
+                        <p>{{ places[index] }}</p>
+                        <button class="btn" @click="SetPlaceQty('+', index)"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                    <button v-if="places[index] != 0" @click="handleSubmit(index, t.id)" class="btn">Vai al Carrello</button>
+                    <div v-else class="check-btn"><button class="btn" style="background-color: #f38609;">Posti
+                            esauriti</button></div>
+                    <button v-if="places[index] != 0" @click="handleSubmit(index, t.id)" class="btn">Vai al
+                        Carrello</button>
                 </button>
-        </div>
-        <button class="btn" @click="checkoutObj.book_periodo == null ? closeForm() : checkoutObj.book_periodo = null;" style="margin-top: 2rem ; background-color: #f38609;">Torna indietro</button>
+            </div>
+            <button class="btn"
+                @click="checkoutObj.book_periodo == null ? closeForm() : checkoutObj.book_periodo = null;"
+                style="margin-top: 2rem ; align-self: center; background-color: #f38609;">Torna indietro</button>
         </div>
     </div>
 </template>
@@ -53,7 +57,7 @@ export default {
     name: "QuikView",
     data() {
         return {
-            checkoutObj: {book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: ""},
+            checkoutObj: { book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: "" },
             dayObj: [],
             selectperiodo: false,
             timeObj: [],
@@ -135,8 +139,8 @@ export default {
                 if (this.places.every(value => value === 0)) {
                     this.places[index]++
                 } else if (this.places[index] !== 0 && this.places.includes(this.places[index])) {
-                    if (this.places[index] < timefiltered[index].capacita) {
-                        this.places[index]++   
+                    if (this.places[index] < this.SetCapacita(timefiltered[index].capacita, timefiltered[index].id)) {
+                        this.places[index]++
                     }
                 }
             } else if (type == '-') {
@@ -150,12 +154,13 @@ export default {
 
         SetCapacita(capacita, periodoId) {
             const item = this.capacitaObj.find(
-            el => el.book_day === this.checkoutObj.book_day && el.periodo === periodoId);
+                el => el.book_day === this.checkoutObj.book_day && el.periodo === periodoId);
             return item ? parseInt(capacita) - parseInt(item.riservati) : capacita;
         },
 
         handleSubmit(index, book_periodo) {
             this.checkoutObj.day = this.giorno.trim()
+            console.log(this.giorno + ' gionro')
             this.checkoutObj.book_periodo = parseInt(book_periodo)
             this.checkoutObj.book_posti = this.places[index]
             console.log(this.checkoutObj)
@@ -177,27 +182,28 @@ export default {
     z-index: 999;
     background-color: rgba(0, 0, 0, 0.7);
 
-    display:block;
+    display: block;
     padding: 15rem 0px;
 }
 
-.quick-inner{
+.quick-inner {
     background-color: #c7c7c7;
     padding: 2%;
+    text-align: center;
 }
 
 
-.start-box{
-    display: block; 
-    text-align: center; 
-    height: fit-content; 
-    padding: 2rem; 
-    background-color: white; 
+.start-box {
+    display: block;
+    text-align: center;
+    height: fit-content;
+    padding: 2rem;
+    background-color: white;
     border: 2px inset black;
 }
 
 .start-box .btn {
-    font-size: 1.6rem; 
+    font-size: 1.6rem;
     margin-top: 2rem;
 }
 
@@ -221,14 +227,15 @@ export default {
 
 .table-shadow p {
     color: black;
-    font-size: larger; 
-    margin: 0px; 
+    font-size: larger;
+    margin: 0px;
     padding: 3px;
 }
 
 .td-tabledate {
     flex: auto;
     background-color: white;
+    border: 1px solid black;
     border-radius: 10px;
     font-size: small;
     padding: 1.2rem;
@@ -257,20 +264,20 @@ export default {
 }
 
 .td-tabledate .check-btn {
-    display: flex; 
-    width: 100%; 
-    justify-content: center; 
-    align-items: center; 
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 10px;
 }
 
 .td-tabledate .check-btn p {
     width: fit-content;
-    background-color: #f7f7f7; 
-    color: black; 
-    text-align: center; 
-    font-size: large; 
-    margin: 0px; 
+    background-color: #f7f7f7;
+    color: black;
+    text-align: center;
+    font-size: large;
+    margin: 0px;
     padding: 10px;
 }
 
@@ -286,8 +293,8 @@ export default {
     }
 
     .table-date {
-    display: flex;
-    flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
     }
 }
 </style>

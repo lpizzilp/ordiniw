@@ -129,13 +129,17 @@
                                         </div>
                                     </div>
                                     <hr style="border-width: 2px; background-color: #27ae60;">
+                                    <div v-if="isPrenotazione && bookTable != null" style="background-color: #146c39;" class="box-content row">
+                                        <h3>{{ bookTable.book_periodo }}</h3>
+                                    </div>
+
                                 </div>
                             </div>
 
 
                         </div>
 
-                        <div class="box-content row">
+                        <div v-if="!isPrenotazione" class="box-content row">
                             <div v-if="Isuser">
                                 <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Aggiungi
                                     articoli</router-link>
@@ -190,6 +194,7 @@ export default {
         return {
             cartItem: [],
             itemQuantity: [],
+            bookTable: null,
             showQuickView: false,
             dataFromParent: null,
             Isuser: false,
@@ -321,6 +326,11 @@ export default {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
                 });
+                if (this.isPrenotazione) {
+                    if (this.bookTable == null) {
+                        this.bookTable = JSON.parse(sessionStorage.getItem('bookTable'))  
+                    }
+                }
             }
         },
 
@@ -341,7 +351,7 @@ export default {
 }
 
 .item-name {
-    color: #27ae60
+    color: #27ae60;
 }
 
 .cart-product-img {
