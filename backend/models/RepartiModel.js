@@ -1,6 +1,6 @@
 import db from "../config/database.js";
 
-export const allCategorie = (idsagra, result) => {
+export const allReparti = (idsagra, result) => {
     if (!idsagra) {
         return result(null, null);
     }
@@ -14,7 +14,7 @@ export const allCategorie = (idsagra, result) => {
         [idsagra], 
         (err, results) => {
             if (err) {
-                console.error("Errore nella query allCategorie:", err);
+                console.error("Errore nella query allReparti:", err);
                 return result(err, null);
             }
             result(null, results);

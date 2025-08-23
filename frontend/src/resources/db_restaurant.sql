@@ -131,7 +131,7 @@ CREATE TABLE `food` (
   `food_id` varchar(5) NOT NULL,
   `food_name` varchar(255) DEFAULT NULL,
   `food_star` varchar(255) DEFAULT NULL,
-  `food_vote` varchar(255) DEFAULT NULL,
+  `peso_categorie` tinyint(5) DEFAULT NULL,
   `food_price` decimal(10,2) DEFAULT NULL,
   `food_discount` varchar(255) DEFAULT NULL,
   `food_desc` varchar(255) DEFAULT NULL,

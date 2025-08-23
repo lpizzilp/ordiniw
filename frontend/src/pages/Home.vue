@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="TypeMess">
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Repartoselected="reparto" :BtnAttivi="TypeMess">
         </QuickViewHome>
         <QuickViewErrore v-if="errore"></QuickViewErrore>
         <QuickViewEliminacode v-if="showQuickVueEliminacode" :-whatshow="Showeliminacode"
@@ -93,7 +93,7 @@ export default {
             errors: [],
             showQuickVue: false,
             showQuickVueEliminacode: false,
-            Category: undefined,
+            reparto: undefined,
             sagra_name: "",
             MetodOrdineString: "",
             Btn: [],
@@ -154,7 +154,7 @@ export default {
                 this.matchUser = datareg;
                 sessionStorage.setItem('Username', this.matchUser.user_id);
                 sessionStorage.setItem('MatchUser', this.matchUser);
-                sessionStorage.setItem('filtro', type.category);
+                sessionStorage.setItem('filtro', type.reparto);
                 this.$router.push("/menu");
             }
         },
@@ -223,7 +223,7 @@ export default {
                     if (this.Btn[2] == 1) {
                         var data = {
                             vis: false,
-                            category: type
+                            reparto: type
                         }
                         sessionStorage.setItem('TipoOrdine', 'W');
                         this.handleChildEvent(data)
@@ -263,7 +263,7 @@ export default {
                         this.TypeMess[1] = this.Btn[1] == 1 ? true : false
                     }
                     this.TypeMess[2] = false
-                    this.Category = type
+                    this.reparto = type
                     this.showQuickVue = true
                     break;
             }
@@ -296,8 +296,7 @@ export default {
 <style scoped>
 .home-main,
 .home-about,
-.home-banner,
-.home-category {
+.home-banner{
     padding: 2rem 9%;
 }
 

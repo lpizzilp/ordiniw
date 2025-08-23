@@ -106,7 +106,7 @@ import {
 
 import { Infolog } from "../log/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
-import { getAllCategorie } from "../controllers/categorie.js";
+import { getAllReparti } from "../controllers/reparti.js";
 import { getAllCasse } from "../controllers/tipicasse.js";
 //import { verifyHmac } from "../middleware/middleware.js"; // Importa il middleware
 
@@ -256,8 +256,8 @@ router.put("/api/sagraComand", updateControlOrdini);
 router.put("/api/sagraVisibilita", updateControlVisibilita)
 router.put("/api/sagraObbligo", updateControlObbligo)
 
-////////////////////////////// Categorie /////////////////////////////
-router.get("/api/categorie", getAllCategorie);
+////////////////////////////// Reparti /////////////////////////////
+router.get("/api/reparti", getAllReparti);
 
 ///////////////////////////// Tipi cassa ///////////////////////////
 router.get("/api/tipicassa", getAllCasse);
