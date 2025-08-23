@@ -159,11 +159,10 @@ export default {
         },
 
         handleSubmit(index, book_periodo) {
-            this.checkoutObj.day = this.giorno.trim()
-            console.log(this.giorno + ' gionro')
+            this.checkoutObj.book_day = this.giorno.trim()
+            console.log(this.checkoutObj.book_day + ' gionro')
             this.checkoutObj.book_periodo = parseInt(book_periodo)
             this.checkoutObj.book_posti = this.places[index]
-            console.log(this.checkoutObj)
             sessionStorage.setItem('bookTable', JSON.stringify(this.checkoutObj))
             router.push('/cart')
         }
