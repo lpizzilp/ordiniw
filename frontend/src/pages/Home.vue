@@ -217,22 +217,26 @@ export default {
                     break;
 
                 case 'PRE':
-                    if (sagra.data[0].flgPrenotazioni == 1) {
+                    if (this.Btn[12] != false) {
+                        window.open(this.Btn[12])
+                    } else {
+                        if (sagra.data[0].flgPrenotazioni == 1) {
                         this.Btn[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
-                    }
-                    if (this.Btn[2] == 1) {
+                        }
+                        if (this.Btn[2] == 1) {
                         var data = {
                             vis: false,
                             reparto: type
                         }
                         sessionStorage.setItem('TipoOrdine', 'W');
                         this.handleChildEvent(data)
-                    } else {
+                        } else {
                         this.TypeMess[2] = 'click'
                         this.TypeMess[1] = false
                         this.TypeMess[0] = false
                         this.Btn[0] = this.Btn[1] = 0
                         this.showQuickVue = true
+                        }
                     }
                     break;
 
