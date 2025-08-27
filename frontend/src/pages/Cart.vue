@@ -189,6 +189,7 @@ import { mapState } from "vuex";
 
 export default {
     name: "Cart",
+    inject: ["eventBus"],
 
     data() {
         return {
@@ -204,6 +205,7 @@ export default {
 
     created() {
         this.getAllCartItem();
+        this.booktabledata()
     },
 
     computed: {
@@ -225,6 +227,11 @@ export default {
     },
 
     methods: {
+
+        booktabledata(){
+            this.bookTable = JSON.parse(sessionStorage.getItem('bookDataCart')) 
+            console.log(this.bookTable)
+        },
 
         Artimage(food) {
             try {
@@ -326,11 +333,6 @@ export default {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
                 });
-                if (this.isPrenotazione) {
-                    if (this.bookTable == null) {
-                        this.bookTable = JSON.parse(sessionStorage.getItem('bookTable'))  
-                    }
-                }
             }
         },
 

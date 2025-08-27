@@ -55,6 +55,8 @@ import axios from 'axios';
 import moment from 'moment';
 export default {
     name: "QuikView",
+    inject: ["eventBus"],
+
     data() {
         return {
             checkoutObj: { book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: "" },
@@ -164,6 +166,9 @@ export default {
             this.checkoutObj.book_periodo = parseInt(book_periodo)
             this.checkoutObj.book_posti = this.places[index]
             sessionStorage.setItem('bookTable', JSON.stringify(this.checkoutObj))
+            this.checkoutObj.book_day = this.dayObj[0].giorno
+            this.checkoutObj.book_periodo = this.timeObj[book_periodo]
+            sessionStorage.setItem("bookDataCart", JSON.stringify(this.checkoutObj));
             router.push('/cart')
         }
     },
