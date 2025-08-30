@@ -44,7 +44,8 @@
             </div>
             <button class="btn"
                 @click="checkoutObj.book_periodo == null ? closeForm() : checkoutObj.book_periodo = null;"
-                style="margin-top: 2rem ; align-self: center; background-color: #f38609;">Torna indietro</button>
+                style="margin-top: 2rem ; align-self: center; background-color: #f38609; margin-right: 1rem;">Torna indietro</button>
+            <router-link style="margin-top: 2rem ; align-self: center; margin-left: 1rem;" class="btn" v-if="places.every(value => value === 0)" to="/cart">Vai al carrello</router-link>
         </div>
     </div>
 </template>
@@ -95,13 +96,14 @@ export default {
         },
 
         async GetDay() {
-            console.log('gironoprova ' + this.giorno)
             var dayslot = await axios.get('/getdayslot')
             var timeslot = await axios.get('/gettimeslot')
             var capacita = await axios.get('/getcapacita')
             console.log('dayslot', dayslot.data)
             console.log('timeslot', timeslot.data)
             console.log('capacita', capacita.data)
+            console.log(this.giorno)
+            this.checkoutObj.book_day = this.giorno
             dayslot.data.forEach(element => {
                 let giorno = this.getDayOfWeek(element.data)
                 let periodarray = element.periodo.split('')
@@ -157,6 +159,7 @@ export default {
         SetCapacita(capacita, periodoId) {
             const item = this.capacitaObj.find(
                 el => el.book_day === this.checkoutObj.book_day && el.periodo === periodoId);
+                console.log(item)
             return item ? parseInt(capacita) - parseInt(item.riservati) : capacita;
         },
 
@@ -166,9 +169,8 @@ export default {
             this.checkoutObj.book_periodo = parseInt(book_periodo)
             this.checkoutObj.book_posti = this.places[index]
             sessionStorage.setItem('bookTable', JSON.stringify(this.checkoutObj))
-            this.checkoutObj.book_day = this.dayObj[0].giorno
-            this.checkoutObj.book_periodo = this.timeObj[book_periodo]
-            sessionStorage.setItem("bookDataCart", JSON.stringify(this.checkoutObj));
+            let databook = { day: (this.dayObj[0].giorno + ' ' + this.formatter(this.giorno)), ora: this.timeObj[(book_periodo - 1)].ora, posti: this.checkoutObj.book_posti}
+            sessionStorage.setItem("bookDataCart", JSON.stringify(databook));
             router.push('/cart')
         }
     },

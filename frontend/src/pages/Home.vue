@@ -226,6 +226,10 @@ export default {
                             category: type
                         }
                         sessionStorage.setItem('TipoOrdine', 'W');
+                        if (sessionStorage.getItem('bookTable') != null && sessionStorage.getItem('bookDataCart') != null) {
+                            sessionStorage.removeItem('bookTable')
+                            sessionStorage.removeItem('bookDataCart')   
+                        }
                         this.handleChildEvent(data)
                     } else {
                         this.TypeMess[2] = 'click'

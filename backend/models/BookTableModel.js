@@ -25,7 +25,7 @@ export const getTimebyId = (idsagra,result) => {
 };
 
 export const getAllCapacita = (idsagra,result) => {
-    db.query("SELECT b2.book_day, t.id, COALESCE(SUM(b2.book_posti), 0) AS riservati FROM timeslot t INNER JOIN booktable b2 ON t.id = b2.book_periodo GROUP BY b2.book_day, t.id, t.ora ORDER BY b2.book_day",[idsagra], (err,results)=> {
+    db.query("SELECT b2.book_day, t.id, t.ora, COALESCE(SUM(b2.book_posti), 0) AS riservati FROM timeslot t INNER JOIN booktable b2 ON t.id = b2.book_periodo GROUP BY b2.book_day, t.id, t.ora ORDER BY b2.book_day",[idsagra], (err,results)=> {
         if (err){
             console.error("Errore in getSlotbyId:", err);
             result(err,null);
