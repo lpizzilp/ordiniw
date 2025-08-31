@@ -82,6 +82,7 @@ export default {
         this.scrollToTop();
         this.buildForm();
         this.getAllCartItem();
+        this.checkPrenTavolo();
     },
     computed: {
         ...mapState(["allFoods"]),
@@ -190,6 +191,12 @@ export default {
                 }
             });
 
+        },
+        checkPrenTavolo() {
+            let bookTablearray = JSON.parse(sessionStorage.getItem('bookTable'))
+            if (this.type == "PRE" && bookTablearray != null) {
+                this.checkoutObj.Coperti = bookTablearray.book_posti
+            }
         },
         resetCheckErr() {
             Object.keys(this.errorObj).forEach(key => {
@@ -397,6 +404,26 @@ export default {
                     book_note: this.checkoutObj.Note
 
                 };
+
+                if (sessionStorage.getItem('bookTable') != null) {
+                    console.log('entro in booktable')
+                    let booktablearray = JSON.parse(sessionStorage.getItem('bookTable'))
+                    let dataTavolo = {
+                        id_sagra: sessionStorage.getItem('SagraId'),
+                        book_id: parseInt(bookId),
+                        book_name: this.checkoutObj.Nominativo,
+                        book_day: booktablearray.book_day,
+                        book_periodo: booktablearray.book_periodo,
+                        book_posti: booktablearray.book_posti,
+                        book_status: 'insert',
+                        book_created: this.currentTime(),
+                    };
+
+                    try {
+                        const response = await axios.post("/booktable", dataTavolo);
+                        if (response.errMsg) { this.Quickerrore = true; return; } } catch (error) {this.Quickerrore = true; return;
+                    }
+                }
 
                 try {
                     const response = await axios.post("/prenotazione", dataprenotazione);

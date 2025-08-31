@@ -34,11 +34,23 @@ export const Emailsender = (data, result) => {
 
         mailOptions.subject = "Il tuo codice dell' Ordine web"
     } else {
+        let booktabledata = "\u200B"
+        if (data.booktable){
+            booktabledata =  `<ul style="background-color: white; color: black; border: 2px solid black; border-radius: 10px; margin: 2rem 0px; padding: 1rem 3rem; box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset; -webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset; -moz-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;"><h2 style="color: #27ae60;">Prenotazione tavolo:</h2>
+                                    <li><h3 style="margin: none;">Giorno: ` + data.bookdata.day + `</h3></li>
+                                    <li><h3 style="margin: none;">Ora: ` + data.bookdata.ora + `</h3></li>
+                                    <li><h3 style="margin: none;">Posti: ` + data.bookdata.posti + `</h3></li>
+                                    <h2 style="padding-top: 6px; color: red">Attenzione: <span style="color: black; text-transform: none;">Il tavolo resterà riservato solo all'interno della fascia oraria prescelta</span></h2>
+                                </ul>` 
+        }
+
         emailText = `<div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #f5f5f5; padding-top: 5px; padding-botton: 5px; border-radius: 10px">
             <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#f38609;">Grazie</p>
             <p style="text-align: center; font-size:16px;">Buongiorno gentile cliente.<br>Il tuo codice prenotazione è:</p>
-            <h2 style="text-align:center; font-size:60px; padding-top: 5px; padding-botton: 5px; color:#f38609; whidth:100%; background-color: #fff;">P.`  + data.ord_id + `</h2>
-            <hr style="border: 2px dashed #f38609;">
+            <h2 style="text-align:center; font-size:60px; padding-top: 5px; padding-botton: 5px; color:#27ae60; whidth:100%; background-color: #fff;">P.`  + data.ord_id + `</h2>`
+            + booktabledata +
+            `<hr style="border: 2px dashed #27ae60;">
+
         </div>
         <div style=" whidth: 90%; padding-left:4px; padding-right:4px; background-color: #fff; padding-top: 8px; padding-botton: 8px; border-left: 2px dashed #f38609; border-right:  2px dashed #f38609;">
                 <p style="text-align:center; font-family: 'Satisfy', cursive; font-size:25px; color:#f38609; padding-bottom: 2px;">Hai dei ripensamenti?</p>

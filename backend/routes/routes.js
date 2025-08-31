@@ -37,7 +37,10 @@ import {
 } from "../controllers/cart.js";
 
 import {
-    createBooking
+    createBooktable,
+    getCapacita,
+    getSlotId,
+    getTimeId
 } from "../controllers/booktable.js";
 
 import {
@@ -203,7 +206,10 @@ router.delete("/api/cartDelete", deleteAll);
 
 
 ////////////////////////// Booking ////////////////////////////////
-router.post("/api/booking", createBooking);
+router.get("/api/getdayslot", getSlotId);
+router.get("/api/gettimeslot", getTimeId);
+router.get("/api/getcapacita", getCapacita);
+router.post("/api/booktable", createBooktable);
 
 ////////////////////////// Prenotazione ////////////////////////////////
 router.get("/api/prenotazione/sum", Totsum);

@@ -129,13 +129,22 @@
                                         </div>
                                     </div>
                                     <hr style="border-width: 2px; background-color: #27ae60;">
+                                    <div v-if="isPrenotazione && bookTable != null" class="bookTablebox">
+                                        <ul class="booklist"><h2>Prenotazione tavolo:</h2>
+                                            <li><h3>Giorno: {{ bookTable.day }}</h3></li>
+                                            <li><h3>Ora: {{ bookTable.ora }}</h3></li>
+                                            <li><h3>Posti: {{ bookTable.posti }}</h3></li>
+                                            <h2 style="padding-top: 10px; color: red">Attenzione: <span style="color: black; text-transform: none;">Il tavolo resterà riservato solo all'interno della fascia oraria prescelta</span></h2>
+                                        </ul>
+                                    </div>
+
                                 </div>
                             </div>
 
 
                         </div>
 
-                        <div class="box-content row">
+                        <div v-if="!isPrenotazione" class="box-content row">
                             <div v-if="Isuser">
                                 <router-link to="/menu" class="btn shop-btn"><i class="fa fa-arrow-left"></i>Aggiungi
                                     articoli</router-link>
@@ -185,11 +194,13 @@ import { mapState } from "vuex";
 
 export default {
     name: "Cart",
+    inject: ["eventBus"],
 
     data() {
         return {
             cartItem: [],
             itemQuantity: [],
+            bookTable: null,
             showQuickView: false,
             dataFromParent: null,
             Isuser: false,
@@ -199,6 +210,7 @@ export default {
 
     created() {
         this.getAllCartItem();
+        this.booktabledata()
     },
 
     computed: {
@@ -220,6 +232,11 @@ export default {
     },
 
     methods: {
+
+        booktabledata(){
+            this.bookTable = JSON.parse(sessionStorage.getItem('bookDataCart'))
+            console.log(this.bookTable)
+        },
 
         Artimage(food) {
             try {
@@ -341,7 +358,7 @@ export default {
 }
 
 .item-name {
-    color: #27ae60
+    color: #27ae60;
 }
 
 .cart-product-img {
@@ -383,6 +400,28 @@ export default {
     border-color: #e7eaec;
     border-image: none;
 
+}
+
+.bookTablebox {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin: 2rem 0px;
+    padding: 1.5rem 3rem;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;
+    -moz-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;
+}
+
+.bookTablebox .booklist h2{
+   color: #27ae60; 
+   font-size: 18px;
+   padding-bottom: 10px;
+}
+
+.bookTablebox .booklist li>h3{
+   margin: none;
 }
 
 .item-desc b {
