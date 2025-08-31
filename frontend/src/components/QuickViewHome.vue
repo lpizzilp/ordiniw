@@ -29,7 +29,7 @@ export default {
         return {};
     },
     props: {
-        Categoria: String,
+        Repartoselected: String,
         BtnAttivi: Array,
     },
 
@@ -41,7 +41,7 @@ export default {
             sessionStorage.setItem('TipoOrdine', Tipo);
             const dataforParent = {
                 vis: false,
-                category: this.Categoria,
+                reparto: this.Repartoselected,
                 mode: Tipo
             };
             this.$emit('childEvent', dataforParent);

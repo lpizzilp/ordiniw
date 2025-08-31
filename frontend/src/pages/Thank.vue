@@ -3,10 +3,14 @@
         <h1> Grazie!</h1>
         <span v-if="prenotazione === false">Utilizza il codice per pagare il tuo ordine</span>
         <span v-else>Il tuo codice prenotazione</span>
-
-        <div class="dot">
-            {{ NumId }}
-        </div>
+        <template style="display: flex; justify-content: center; align-items: center;">
+            <div v-if="prenotazione" class="dot" style="width: 11.5rem; height: 11.5rem; font-size: 8rem; background-color: #27ae60; color: white; line-height: 60%;">
+                P
+            </div>
+            <div class="dot">
+                {{ NumId }}
+            </div>
+        </template>
 
         <div class="thank-letter">
             <p v-if="prenotazione === false">Abbiamo inserito l'ordine provvisorio<br>
@@ -16,13 +20,15 @@
                 Ricordati di mostrare il codice alla cassa.
             </p>
             <div class="end-button">
-                <button class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un Email</button>
+                <button class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un
+                    Email</button>
                 <p>Oppure</p>
                 <button class="btn opt" @click="Btnclick('H')">Torna alla Home</button>
             </div>
         </div>
 
-        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId" :Ncoperti="Ncoperti">
+        <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId"
+            :Ncoperti="Ncoperti">
         </QuickViewFinal>
     </div>
 </template>
@@ -35,11 +41,7 @@ export default {
 
     data() {
         let artprenotabile
-        if (sessionStorage.getItem('filtro')) {
-            artprenotabile = true
-        } else {
-            artprenotabile = false
-        }
+        sessionStorage.getItem('filtro') ? artprenotabile = true : artprenotabile = false
 
         return {
             NumId: 0,
@@ -105,7 +107,7 @@ export default {
 
 .dot {
     background: #fff;
-    margin: 3vh auto;
+    margin: 3vh 0px;
     padding: 3.5vh;
     width: 22.5rem;
     height: 22.5rem;
@@ -128,6 +130,7 @@ export default {
     text-align: center;
     margin-top: 1vh;
     margin-bottom: 2vh;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -159,6 +162,7 @@ export default {
         text-align: center;
         margin-top: 1vh;
         margin-bottom: 2vh;
+        cursor: pointer;
     }
 }
 </style>

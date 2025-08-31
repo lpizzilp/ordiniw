@@ -87,6 +87,7 @@ CREATE TABLE `catalogo_sagre` (
   `MaskVisibilita` varchar(15) NOT NULL DEFAULT '1111000110',
   `MaskObbligo` varchar(15) NOT NULL DEFAULT '1100000100',
   `flgMenu` tinyint(1) NOT NULL DEFAULT 0,
+  `flgForm` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_sagra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -140,13 +141,13 @@ CREATE TABLE `food` (
   `food_id` varchar(5) NOT NULL,
   `food_name` varchar(255) DEFAULT NULL,
   `food_star` varchar(255) DEFAULT NULL,
-  `food_vote` varchar(255) DEFAULT NULL,
+  `peso_categorie` int(11) DEFAULT NULL,
   `food_price` decimal(10,2) DEFAULT NULL,
   `food_discount` varchar(255) DEFAULT NULL,
   `food_desc` varchar(255) DEFAULT NULL,
   `food_status` varchar(255) DEFAULT NULL,
   `food_type` varchar(255) DEFAULT NULL,
-  `food_category` varchar(255) DEFAULT NULL,
+  `food_category` int(11) DEFAULT NULL,
   `food_src` varchar(255) DEFAULT NULL,
   `IdReparto` varchar(1) DEFAULT NULL,
   `FlgDisabled` tinyint(1) DEFAULT 0,

@@ -1,5 +1,6 @@
 // import express 
 import express from "express";
+import compression from "compression";
 // import functions from controller 
 import {
     showFoods,
@@ -31,7 +32,8 @@ import {
     updateItem,
     allItems,
     deleteItem,
-    deleteItems
+    deleteItems,
+    deleteAll
 } from "../controllers/cart.js";
 
 import {
@@ -107,14 +109,25 @@ import {
 
 import { Infolog } from "../log/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
-import { getAllCategorie } from "../controllers/categorie.js";
+import { getAllReparti } from "../controllers/reparti.js";
 import { getAllCasse } from "../controllers/tipicasse.js";
 //import { verifyHmac } from "../middleware/middleware.js"; // Importa il middleware
 
 // init express router
 const router = express.Router();
 
-
+// abilito la compressione gzip/deflate
+router.use(compression({
+  level: 6,                          // Bilanciamento CPU ↔ velocità
+  threshold: 1024,                   // Minimo 1 KB da comprimere
+  filter: (req, res) => {
+    const ct = res.getHeader("Content-Type") || "";
+    if (ct.includes("application/json") || ct.startsWith("text/")) {
+      return true;                   // Comprime solo testo e JSON
+    }
+    return false;                    // Esclude binari, immagini, streaming
+  }
+}));
 ////////////////////////// FOOD ////////////////////////////////
 // get all Food
 router.get("/api/foods", showFoods);
@@ -184,8 +197,11 @@ router.put("/api/cartItem/", updateItem);
 // delete a item in cart
 router.delete("/api/cartItem/:user_id/:food_id", deleteItem);
 
-// delete all items in cart
+// delete all items by user in cart
 router.delete("/api/cartItem/:id", deleteItems);
+
+// delete all items in cart
+router.delete("/api/cartDelete", deleteAll);
 
 
 
@@ -246,8 +262,8 @@ router.put("/api/sagraComand", updateControlOrdini);
 router.put("/api/sagraVisibilita", updateControlVisibilita)
 router.put("/api/sagraObbligo", updateControlObbligo)
 
-////////////////////////////// Categorie /////////////////////////////
-router.get("/api/categorie", getAllCategorie);
+////////////////////////////// Reparti /////////////////////////////
+router.get("/api/reparti", getAllReparti);
 
 ///////////////////////////// Tipi cassa ///////////////////////////
 router.get("/api/tipicassa", getAllCasse);

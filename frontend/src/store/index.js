@@ -44,7 +44,7 @@ const store = createStore({
         },
 
         async getRepartiData(context){
-            await axios.get('/categorie')
+            await axios.get('/reparti')
             .then(function (response) {
                 context.commit("setRepartiData", response.data);
             })

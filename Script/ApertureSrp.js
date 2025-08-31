@@ -11,6 +11,13 @@ if ((unionParam.id === undefined) || (unionParam.id === "?")) {
   process.exit(1);
 }
 
+console.log(unionParam)
+if (unionParam.type[0] == '1') {
+  axios.delete(`http://localhost:8081/api/cartDelete`, {
+  headers: { 'X-Internal-Request': 'true' }
+})
+}
+
 // Richiesta GET con header personalizzato
 axios.get(`http://localhost:8081/api/sagra/controlli/${unionParam.id}`, {
   headers: { 'X-Internal-Request': 'true' }
@@ -18,7 +25,7 @@ axios.get(`http://localhost:8081/api/sagra/controlli/${unionParam.id}`, {
   .then(response => {
     if (response.data[0].StrOrdini.substring(0, 1) == 1) {
       unionParam.type = response.data[0].StrOrdini.substring(0, 1) + unionParam.type + response.data[0].StrOrdini.substring(3, 4);
-
+      
       // Richiesta PUT con header personalizzato
       axios.put('http://localhost:8081/api/sagraComand', unionParam, {
         headers: { 'X-Internal-Request': 'true' }

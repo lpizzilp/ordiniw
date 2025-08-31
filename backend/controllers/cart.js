@@ -6,7 +6,8 @@ import {
     insertToCart,
     updateCartItemQty,
     deleteItemInCart,
-    deleteAllItemsByUser
+    deleteAllItemsByUser,
+    deleteAllItems
 } from "../models/CartModel.js";
 
 // get all Items
@@ -73,7 +74,7 @@ export const deleteItem=(req,res)=>{
     });
 };
 
-// delete all items in cart
+// delete all items by user in cart
 export const deleteItems=(req,res)=>{
     deleteAllItemsByUser(req.params.id,(err,results)=> {
         if (err) {
@@ -83,3 +84,15 @@ export const deleteItems=(req,res)=>{
         }
     });
 };
+
+// delete all items in cart
+export const deleteAll=(req, res)=>{
+    deleteAllItems((err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+

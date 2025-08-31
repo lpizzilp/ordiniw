@@ -5,7 +5,7 @@ import db from "../config/database.js";
 export const getAllItems = (idsagra,id,result) => {
     db.query("SELECT DISTINCT  c.*, f.food_name, f.IdReparto, r.peso \
         FROM cart c JOIN food f ON f.id_sagra = ? AND f.food_id = c.food_id \
-            LEFT JOIN reparti r ON r.idReparto = f.IdReparto \
+            LEFT JOIN reparti r ON r.id_sagra = f.id_sagra AND r.idReparto = f.IdReparto \
         WHERE f.food_name != 'ZZ' AND c.user_id = ? \
         ORDER BY r.peso ASC, f.IdReparto DESC, f.food_name ASC ",[ idsagra,id], (err,results)=> {
 
@@ -68,11 +68,23 @@ export const deleteItemInCart = (user,food,result) => {
     });
 };
 
-// delete all Items
+// delete all Items by user
 export const deleteAllItemsByUser = (id,result) => {
     db.query("DELETE FROM cart WHERE user_id = ?",[id], (err,results)=> {
         if (err){
             console.error(`Errore in deleteAllItemsByUser (user_id=${id}):`, err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+// delete all Items
+export const deleteAllItems = (result) => {
+    db.query("DELETE FROM cart", (err,results)=> {
+        if (err){
+            console.error(`Errore in deleteAllItems:`, err);
             result(err,null);
         }else{
             result(null,results);

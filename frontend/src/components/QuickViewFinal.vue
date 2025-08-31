@@ -204,6 +204,7 @@ export default {
     margin-top: 10px;
     margin-bottom: 10px;
     width: 45%;
+    cursor: pointer;
 }
 
 .email {
@@ -243,6 +244,7 @@ export default {
         font-size: 16px;
         margin-top: 5px;
         margin-bottom: 7px;
+        cursor: pointer;
     }
 }
 
@@ -255,6 +257,7 @@ export default {
         font-size: 16px;
         margin-top: 25px;
         margin-bottom: 0px;
+        cursor: pointer;
     }
 
 }

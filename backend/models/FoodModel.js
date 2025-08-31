@@ -14,7 +14,7 @@ export const getFoods = (idsagra, result) => {
                     f.id_sagra = ? AND r.id_sagra = f.id_sagra AND f.food_name != 'ZZ'`;
         let sql11 = sql1 + " AND f.FlgValidita = 0 "
         let sql2 = " UNION "
-        let sql3 = sql1 + " AND f.FlgValidita != 0 AND ? >= f.DataInizioValidita AND ? <= f.DataFineValidita ORDER BY peso asc, Reparto desc, food_name asc";
+        let sql3 = sql1 + " AND f.FlgValidita != 0 AND ? >= f.DataInizioValidita AND ? <= f.DataFineValidita ORDER BY peso asc, IdReparto asc, peso_categorie asc, food_category asc, food_name asc";
         let sql = sql11 + sql2 + sql3;
         //console.log(sql);
         db.query(sql, [idsagra,idsagra, datacorrente.toString(), datacorrente.toString()], (err, results) => {            

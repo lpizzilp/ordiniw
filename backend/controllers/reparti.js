@@ -1,10 +1,10 @@
-import { allCategorie } from "../models/CategoriaModel.js";
+import { allReparti } from "../models/RepartiModel.js";
 
 
 
-export const getAllCategorie=(req,res)=>{
+export const getAllReparti=(req,res)=>{
     const idsagra = req.headers['id-sagra']
-    allCategorie(idsagra,(err,results)=> {
+    allReparti(idsagra,(err,results)=> {
         if (err) {
             res.send(err);
         }else {

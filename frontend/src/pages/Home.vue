@@ -4,8 +4,11 @@
             <div class="content">
                 <span>Benvenuti {{ sagra_name }}!</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
-                <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa ' + MetodOrdineString }}</p>
-                <button @click="handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
+
+//                <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa ' + MetodOrdineString }}</p>
+//                <button @click="handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
+                <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa' + MetodOrdineString }}</p>
+                <button @click="Btn[11] == 1 ? handleSubmit('menu') : handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
                 <span v-if="Btn[2] == 1 && (Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1)" style="padding-left: 30px;">oppure</span><br>
                 <button v-if="Btn[2] == 1" @click="handleSubmit('PRE')" class="btn"
                     style="margin-top: 10px; margin-bottom: 10px;">Prenota
@@ -63,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Categoria="Category" :BtnAttivi="TypeMess">
+        <QuickViewHome v-if="showQuickVue" @childEvent="handleChildEvent" :Repartoselected="reparto" :BtnAttivi="TypeMess">
         </QuickViewHome>
         <QuickViewErrore v-if="errore"></QuickViewErrore>
         <QuickViewEliminacode v-if="showQuickVueEliminacode" :-whatshow="Showeliminacode"
@@ -93,7 +96,7 @@ export default {
             errors: [],
             showQuickVue: false,
             showQuickVueEliminacode: false,
-            Category: undefined,
+            reparto: undefined,
             sagra_name: "",
             MetodOrdineString: "",
             Btn: [],
@@ -154,7 +157,7 @@ export default {
                 this.matchUser = datareg;
                 sessionStorage.setItem('Username', this.matchUser.user_id);
                 sessionStorage.setItem('MatchUser', this.matchUser);
-                sessionStorage.setItem('filtro', type.category);
+                sessionStorage.setItem('filtro', type.reparto);
                 this.$router.push("/menu");
             }
         },
@@ -217,13 +220,16 @@ export default {
                     break;
 
                 case 'PRE':
-                    if (sagra.data[0].flgPrenotazioni == 1) {
+                    if (this.Btn[12] != false) {
+                        window.open(this.Btn[12])
+                    } else {
+                        if (sagra.data[0].flgPrenotazioni == 1) {
                         this.Btn[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
-                    }
-                    if (this.Btn[2] == 1) {
+                        }
+                        if (this.Btn[2] == 1) {
                         var data = {
                             vis: false,
-                            category: type
+                            reparto: type
                         }
                         sessionStorage.setItem('TipoOrdine', 'W');
                         if (sessionStorage.getItem('bookTable') != null && sessionStorage.getItem('bookDataCart') != null) {
@@ -231,13 +237,28 @@ export default {
                             sessionStorage.removeItem('bookDataCart')   
                         }
                         this.handleChildEvent(data)
-                    } else {
+                        } else {
                         this.TypeMess[2] = 'click'
                         this.TypeMess[1] = false
                         this.TypeMess[0] = false
                         this.Btn[0] = this.Btn[1] = 0
                         this.showQuickVue = true
+                        }
                     }
+                    break;
+
+                case 'menu':
+                    this.showQuickVue = false
+                    var idR = uniqid()
+                    this.matchUser = {
+                        user_id: idR,
+                        user_email: this.loginObj.email,
+                        user_password: this.loginObj.pass,
+                    };
+                    sessionStorage.setItem('Username', this.matchUser.user_id);
+                    sessionStorage.setItem('MatchUser', this.matchUser);
+                    sessionStorage.setItem('TipoOrdine', 'W');
+                    this.$router.push("/menu");
                     break;
 
                 default:
@@ -253,7 +274,7 @@ export default {
                         this.TypeMess[1] = this.Btn[1] == 1 ? true : false
                     }
                     this.TypeMess[2] = false
-                    this.Category = type
+                    this.reparto = type
                     this.showQuickVue = true
                     break;
             }
@@ -286,8 +307,7 @@ export default {
 <style scoped>
 .home-main,
 .home-about,
-.home-banner,
-.home-category {
+.home-banner{
     padding: 2rem 9%;
 }
 

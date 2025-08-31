@@ -112,6 +112,7 @@ export default {
     margin-top: 5vh;
     margin-bottom: 10px;
     width: 45%;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -136,6 +137,7 @@ export default {
         font-size: 16px;
         margin-top: 5px;
         margin-bottom: 7px;
+        cursor: pointer;
     }
 }
 
@@ -148,6 +150,7 @@ export default {
         font-size: 16px;
         margin-top: 25px;
         margin-bottom: 5px;
+        cursor: pointer;
     }
 
 }

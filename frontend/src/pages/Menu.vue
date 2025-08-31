@@ -151,7 +151,7 @@ export default {
     inject: ["eventBus"],
 
     data() {
-        let categorytype = ""
+        let repartotype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
         let Ordertype = sessionStorage.getItem('TipoOrdine')
@@ -163,11 +163,11 @@ export default {
                 console.log(flgartprenotabile)
                 break;
             default:
-                sessionStorage.getItem('filtro') ? categorytype = sessionStorage.getItem('filtro') : categorytype = ""
+                sessionStorage.getItem('filtro') ? repartotype = sessionStorage.getItem('filtro') : repartotype = ""
                 break;
         }
         return {
-            foodObj: { name: "", category: categorytype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
+            foodObj: { name: "", reparto: repartotype, status: [], price: "", type: Ordertype, prenotazioni: flgartprenotabile, ora: "", varianti: flgvariante },
             IsMenu: flgMenu[11],
             showDropDown: false,
             matchUser: undefined,
@@ -191,15 +191,6 @@ export default {
             wifispeed: null,
             quickPrenotazione: false,
             Quickerrore: false,
-
-            categoryFilters: ['Tutti', 'Bevande', 'Panini', 'Dolci', 'Vino', 'Antipasti', 'Primi', 'Secondi'],
-            activeFilter: 'Tutti',
-            menuItems: [
-                { id: 1, name: 'Espresso', category: 'Bevande', price: 1.5 },
-                { id: 2, name: 'Panino al prosciutto', category: 'Panini', price: 4.5 },
-                { id: 3, name: 'Tiramisu', category: 'Dolci', price: 5 },
-                // Aggiungi altri elementi del menu qui
-            ]
         };
     },
 
@@ -228,16 +219,9 @@ export default {
         ...mapState(["allFoods"]),
         ...mapState(["allReparti"]),
 
-        filteredMenuItems() {
-            if (this.activeFilter === 'Tutti') {
-                return this.menuItems
-            }
-            return this.menuItems.filter(item => item.category === this.activeFilter)
-        },
-
         filterFoods: function () {
             return this.allFoods.filter((f) => f.food_name.toLowerCase().match(this.foodObj.name.toLowerCase()) &&
-                (f.IdReparto.match(this.foodObj.category) || this.foodObj.category == "all" || this.foodObj.category == "") &&
+                (f.IdReparto.match(this.foodObj.reparto) || this.foodObj.reparto == "all" || this.foodObj.reparto == "") &&
                 (this.evaluatePrice(f, this.foodObj.price)) &&
                 f.food_type.toLowerCase().match(this.foodObj.type.toLowerCase()) &&
                 (this.evaluateStatus(f, this.foodObj.status)) &&
@@ -270,10 +254,6 @@ export default {
     },
 
     methods: {
-        handleFilterChange(filter) {
-            this.activeFilter = filter
-        },
-
         getWIFIConnection() {
             const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
             if (connection) {
@@ -476,7 +456,7 @@ export default {
             this.foodObj.name = ""
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
-            this.foodObj.category = value;
+            this.foodObj.reparto = value;
             for (var l = 0; l < qtylenght; l++) {
                 this.qty[l] = 0
             }

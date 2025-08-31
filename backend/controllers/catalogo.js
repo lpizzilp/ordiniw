@@ -73,7 +73,7 @@ export const updateSagraCodaeInfo=(req,res)=>{
 
 
 export const updateControlOrdini=(req,res)=>{
-    const idsagra = req.headers['id-sagra']
+    const idsagra = req.body.id != undefined ? req.body.id : req.headers['id-sagra']
     const data = req.body
     updateContrOrdini(idsagra,data,(err,results)=> {
         if (err) {
@@ -109,7 +109,7 @@ export const updateControlObbligo=(req,res)=>{
 };
 
 export const GetControlOrdini=(req,res)=>{
-    const idsagra = req.headers['id-sagra']
+    const idsagra = req.params.id
     getContrOrdini(idsagra,(err,results)=> {
         if (err) {
             res.send(err);

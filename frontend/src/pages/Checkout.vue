@@ -77,7 +77,9 @@ export default {
             buttonDisabled: false
         };
     },
+
     created() {
+        this.scrollToTop();
         this.buildForm();
         this.getAllCartItem();
         this.checkPrenTavolo();
@@ -155,6 +157,9 @@ export default {
         /*end---------------------------------------------- */
     },
     methods: {
+        scrollToTop() {
+            window.scrollTo(0, 0);
+        },
         /*---------------------------------------------- */
         /* Gestione logiche Mashera Visibilità e Obbligo */
         /*---------------------------------------------- */
@@ -422,7 +427,9 @@ export default {
 
                 try {
                     const response = await axios.post("/prenotazione", dataprenotazione);
-                    if (response.errMsg) { this.Quickerrore = true; return; } } catch (error) {this.Quickerrore = true; return;
+                    if (response.errMsg) { this.Quickerrore = true; return; }
+                } catch (error) {
+                    this.Quickerrore = true; return;
                 }
                 sessionStorage.setItem('Bill', dataprenotazione.book_id)
                 sessionStorage.setItem('Coperti', dataprenotazione.book_coperti)
@@ -552,6 +559,7 @@ export default {
     margin: 1rem 0;
     width: 100%;
     text-align: center;
+    cursor: pointer;
 }
 
 .checkout-container .checkout-form-container form p {

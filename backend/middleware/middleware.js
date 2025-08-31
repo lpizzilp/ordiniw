@@ -5,16 +5,24 @@ const usedNonces = new Set();
 const secret = 'Esagra2025-Il-tuo-gestionale-per-la-tua-sagra';
 
 export function verifyHmac(req, res, next) {
-  //rotte da escludere 
+  // rotte da escludere (anche le sottorotte verranno escluse)
   const excludedRoutes = [
-    '/api/log', 
+    '/api/log',
+    '/api/sagra/controlli',
+    '/api/sagraComand',
     '/api/sagra/keepalive'
   ];
 
-  if (excludedRoutes.includes(req.path)) {
-    return next();
+  const isExcluded = excludedRoutes.some(route =>
+    req.path === route || req.path.startsWith(route + '/')
+  );
+
+  if (isExcluded) {
+    return next(); // salta la verifica HMAC
   }
-  if (req.headers['x-internal-request'] === 'true') {
+
+
+if (req.headers['x-internal-request'] === 'true') {
       console.log('Richiesta interna al server');  
       return next();
   }
