@@ -9,11 +9,18 @@
                 <!-- openai dynamic versione  --------------------------------------------->
                 <template v-for="(field, index) in fields" :key="field.name">
                     <div class="form-group" :style="{ display: getFieldVisibility(index) }">
-                        <component :is="field.type === 'textarea' ? 'textarea' : 'input'"
-                            :type="field.inputType || 'text'" :name="field.name" :id="field.name"
-                            :placeholder="getPlaceholderText(field.name, index)" class="form-control"
-                            :value="checkoutObj[field.name]" @input="updateFieldValue($event, field.name)"
-                            v-bind="field.attrs || {}"></component>
+                        <component 
+                            :is="field.type === 'textarea' ? 'textarea' : 'input'"
+                            :type="field.inputType || 'text'" 
+                            :name="field.name" 
+                            :id="field.name"
+                            :placeholder="getPlaceholderText(field.name, index)" 
+                            class="form-control"
+                            :value="checkoutObj[field.name]" 
+                            @input="updateFieldValue($event, field.name)"
+                            v-bind="field.attrs || {}"
+                            :disabled="field.disabled"   
+                        ></component>
 
                         <p class="error-mess"
                             v-if="errorObj[`${field.name}Err`] && errorObj[`${field.name}Err`].length > 0">
@@ -127,7 +134,8 @@ export default {
                     inputType: 'number',
                     placeholder: 'Inserisci il numero di coperti',
                     attrs: { min: 1 },
-                    onChange: this.calculatePersonaPrice
+                    onChange: this.calculatePersonaPrice,
+                    disabled: this.isCopertiLocked 
                 },
 
                 {
@@ -196,6 +204,10 @@ export default {
             let bookTablearray = JSON.parse(sessionStorage.getItem('bookTable'))
             if (this.type == "PRE" && bookTablearray != null) {
                 this.checkoutObj.Coperti = bookTablearray.book_posti
+                this.isCopertiLocked = true   // blocca input
+                console.log("this.isCopertiLocked", this.isCopertiLocked)
+            } else {
+                this.isCopertiLocked = false  // libero input                
             }
         },
         resetCheckErr() {

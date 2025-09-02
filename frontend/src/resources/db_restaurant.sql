@@ -178,7 +178,7 @@ CREATE TABLE `timeslot` (
   `id_sagra` varchar(5) NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `periodo` varchar(10) NOT NULL,
-  `ora` varchar(11) NOT NULL,
+  `ora` varchar(50) NOT NULL,
   `capacita` int(11) NOT NULL,
   PRIMARY KEY (`id`,`id_sagra`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
