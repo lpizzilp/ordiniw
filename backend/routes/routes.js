@@ -33,7 +33,8 @@ import {
     allItems,
     deleteItem,
     deleteItems,
-    deleteAll
+    deleteAll,
+    addMultiItems
 } from "../controllers/cart.js";
 
 import {
@@ -182,6 +183,9 @@ router.post("/api/mail/sengalazione/", Sendsegnalazione)
 
 
 ////////////////////////// CART ////////////////////////////////
+// Aggiornamento one-shot del carello
+router.post("/api/cartItem/batch-update", addMultiItems);
+
 // add to cart
 router.post("/api/cartItem", addItems);
 

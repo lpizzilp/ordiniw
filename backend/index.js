@@ -15,6 +15,8 @@ import router from "./routes/routes.js";
 //import middleware per applicazione sicurezza
 import { verifyHmac } from './middleware/middleware.js'; // Importa il middleware
 
+import { disableCache } from './middleware/middleware.js';
+
 // init express
 const app = express();
 
@@ -27,6 +29,10 @@ app.use(cors());
 
 // Applica il middleware globalmente
 app.use(verifyHmac); 
+
+// Middleware anti-cache per /cartItem
+//app.use(disableCache);
+
 // use router
 app.use(router);
 

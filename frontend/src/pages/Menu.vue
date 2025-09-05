@@ -1,12 +1,20 @@
 <template>
     <vue-basic-alert :duration="300" :closeIn="1500" ref="alert" />
     <div v-if="Prenotazione == '0'" class="filter-menu-container">
-        <div  class="filter-menu" ref="menuRef">
+        <div class="filter-menu" ref="menuRef">
             <button id="filter0" value="all" @click="filterFoodBtn($event.target.value, 0)">
                 Mostra Tutto
             </button>
-            <button :id="'filter' + (ind + 1)" v-for="(r, ind) in loadReparti" :key="ind"
-                @click="filterFoodBtn(r.idReparto, (ind + 1))">
+            <!-- DEBUG: Mostra informazioni di debug -->
+            <span v-if="loadReparti.length === 0" style="color: red; padding: 10px;">
+                DEBUG: Nessun reparto caricato (Foods: {{ allFoods?.length || 0 }}, Reparti: {{ allReparti?.length || 0 }})
+            </span>
+            <button 
+                :id="'filter' + (ind + 1)" 
+                v-for="(r, ind) in loadReparti" 
+                :key="'reparto-' + r.idReparto"
+                @click="filterFoodBtn(r.idReparto, (ind + 1))"
+            >
                 {{ r.descReparto }}
             </button>
         </div>
@@ -26,9 +34,7 @@
                     <input id="search" type="text" class="search-input" v-model="foodObj.name" placeholder=" Cerca.." />
                 </div>
 
-
                 <div v-if="Prenotazione == '0'">
-
                     <div class="row filter-section">
                         <ul class="filter-option">
                             <hr />
@@ -123,11 +129,13 @@
             </div>
         </div>
         <div v-if="IsMenu == 0" class="to-cart">
-            <router-link v-if="showCart == true" @click="scrollToTop()" to="cart" class="btn" style="width: 100%;">
+            <!-- MODIFICATO: Usa il nuovo metodo goToCart invece di router-link -->
+            <button v-if="showCart == true" @click="goToCart()" class="btn" style="width: 100%;">
                 <i class="fas fa-shopping-cart cart"></i> Vai al carrello
-            </router-link>
+            </button>
             <button v-else class="btn" style="width: 100%;" :disabled="true">
-                <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello</button>
+                <i class="fas fa-shopping-cart cart"></i> Vai Al Carrello
+            </button>
         </div>
         <quick-view-prenotazione v-if="Prenotazione === '1' && showQuickView[0] === true" :-evento="showQuickView[1]" :-num-pezzi="showQuickView[2]"
             @closedata="CloseQuickvue"></quick-view-prenotazione>
@@ -182,6 +190,12 @@ export default {
             showQuickView: [false, 0, null],
             qty: [],
             CartItem: [],
+
+            // NUOVI CAMPI PER CARRELLO LOCALE
+            localCart: {}, // { food_id: quantity } - carrello locale
+            isCartDirty: false, // flag per modifiche non salvate
+            isSyncing: false, // flag per evitare sincronizzazioni multiple
+
             perPage: 70,
             pageNum: 0,
             throttleTimer: null,
@@ -205,9 +219,19 @@ export default {
     },
 
     mounted() {
+        
+        this.eventBus.on("goToCartFromNavbar", () => {
+        this.goToCart(); // Riutilizza la funzione esistente!
+        });
+        
         setTimeout(() => {
             this.FilterBtncolor(0)
         }, 200);
+        
+    },
+    unmounted() {
+        // Non dimenticare di rimuovere il listener
+        this.eventBus.off("goToCartFromNavbar");
     },
 
     updated() {
@@ -379,29 +403,44 @@ export default {
             }
         },
 
+        // METODO MODIFICATO - getAllCartItem (CORRETTO per evitare duplicazioni)
         async getAllCartItem() {
             if (this.setqty !== true) {
                 if (sessionStorage.getItem('MatchUser')) {
                     try {
                         var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
                         if (existItem.errMsg) { this.Quickerrore = true; return; }
-                    } catch (error) {
-                        this.Quickerrore = true; return;
-                    }
-                    var pageItem = Object.keys(this.currentPageItems).length;
-                    for (var ix = 0; ix < existItem.data.length; ix++) {
-                        let FoodID = existItem.data[ix].food_id
-                        console.log(FoodID + ' foood Id')
-                        for (var l = 0; l < pageItem; l++) {
-                            var Itempage = this.currentPageItems[l].food_id
-                            console.log('secondo for ' +  Itempage)
-                            if (Itempage == FoodID) {
-                                console.log('fine if ' + Itempage)
-                                this.qty[l] = parseInt(existItem.data[ix].item_qty)
-                                break;
-                            }
+
+                        // CORREZIONE: Reset completo del carrello locale prima di ricaricarlo
+                        this.localCart = {};
+                        
+                        // Carica ogni articolo nel carrello locale usando food_id come chiave
+                        for (const item of existItem.data) {
+                            this.localCart[item.food_id] = item.item_qty;
                         }
+                        // Aggiorna quantità visualizzate
+                        this.loadLocalCartToQty();
+
+                        // Aggiorna stato carrello
+                        this.showCart = Object.keys(this.localCart).length > 0;
+                        this.eventBus.emit("showCart", this.showCart);
+
+                    } catch (error) {
+                        this.Quickerrore = true; 
+                        return;
                     }
+                }
+            }
+        },
+
+        // NUOVO METODO - Carica carrello locale nelle quantità visualizzate
+        loadLocalCartToQty() {
+            for (let i = 0; i < this.currentPageItems.length; i++) {
+                const foodId = this.currentPageItems[i].food_id;
+                if (this.localCart[foodId]) {
+                    this.qty[i] = this.localCart[foodId];
+                } else {
+                    this.qty[i] = 0;
                 }
             }
         },
@@ -450,16 +489,26 @@ export default {
             }
         },
 
-        filterFoodBtn: function (value, index) {
+        // METODO MODIFICATO - filterFoodBtn
+        filterFoodBtn: async function (value, index) {
+            // NUOVO: Sincronizza carrello prima di cambiare filtro
+            await this.syncCartToDatabase();
 
-            this.FilterBtncolor(index)
-            this.foodObj.name = ""
+            this.FilterBtncolor(index);
+            this.foodObj.name = "";
             var qtylenght = Object.keys(this.currentPageItems).length;
             this.pageNum = 0;
             this.foodObj.reparto = value;
+            
+            // Reset quantità visibili
             for (var l = 0; l < qtylenght; l++) {
-                this.qty[l] = 0
+                this.qty[l] = 0;
             }
+
+            // NUOVO: Ricarica quantità dal carrello locale dopo il cambio filtro
+            this.$nextTick(() => {
+                this.loadLocalCartToQty();
+            });
         },
 
         FilterBtncolor(index) {
@@ -493,7 +542,8 @@ export default {
             }
         },
 
-       onQtyChange: function (index) {
+        // METODO MODIFICATO - onQtyChange (solo aggiornamento locale)
+        onQtyChange: function (index) {
             // Cancella il timer se esiste per l'articolo specifico
             if (this.throttleTimers[index]) {
                 clearTimeout(this.throttleTimers[index]);
@@ -501,30 +551,82 @@ export default {
 
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
-
             }
-            this.showCart = false;
+
+            // NUOVO: AGGIORNAMENTO CARRELLO LOCALE
+            const foodId = this.currentPageItems[index].food_id;
+            if (this.qty[index] <= 0) {
+                delete this.localCart[foodId];
+            } else {
+                this.localCart[foodId] = this.qty[index];
+            }
+            this.isCartDirty = true;
+
+            // NUOVO: Aggiorna stato carrello basandosi sul carrello locale
+            this.showCart = Object.keys(this.localCart).length > 0;
             this.eventBus.emit("showCart", this.showCart);
 
-            // Imposta un timer specifico per l'articolo
-            this.throttleTimers[index] = setTimeout(() => {
-                if (this.currentPageItems[index].FlgVariante != 0) {
-                    this.AltreVarianti(index)
-                } else {
-                    if (this.Prenotazione) {
-                        console.log("this.onQtyChange index: " + index)
-                        this.chekQty(index)
+            // Per le prenotazioni, mantieni la logica esistente con throttle
+            if (this.Prenotazione === '1') {
+                this.throttleTimers[index] = setTimeout(() => {
+                    if (this.currentPageItems[index].FlgVariante != 0) {
+                        this.AltreVarianti(index)
                     } else {
-                        this.addToCart(index, false);
-                    }  
-                }
-                delete this.throttleTimers[index]; // Rimuovi il timer dopo l'esecuzione
-            }, this.throttleDelay);
+                        this.chekQty(index)
+                    }
+                    delete this.throttleTimers[index];
+                }, this.throttleDelay);
+            }
 
             this.setqty = true;
-
         },
 
+        // NUOVO METODO - Sincronizzazione carrello con DB (CORRETTO - mantiene food_id originali)
+        async syncCartToDatabase() {
+            if (!this.isCartDirty || this.isSyncing) return;
+
+            const user_id = sessionStorage.getItem('Username');
+            if (!user_id) return;
+
+            this.isSyncing = true;
+
+            try {
+                const items = Object.entries(this.localCart).map(([food_id_str, quantity]) => ({
+                    food_id: food_id_str, 
+                    item_qty: quantity
+                }));
+
+                console.log('Dati inviati al backend:', { user_id, items });
+                console.log('localCart originale:', this.localCart);
+
+                // UNA SOLA CHIAMATA API
+                await axios.post('/cartItem/batch-update', {
+                    user_id: user_id,
+                    items: items
+                });
+
+                console.log('Carrello sincronizzato con 1 chiamata API');
+                this.isCartDirty = false;
+
+            } catch (error) {
+                console.error('Errore sincronizzazione carrello:', error);
+                this.Quickerrore = true;
+            } finally {
+                this.isSyncing = false;
+            }
+        },
+
+
+        //NUOVO METODO - Da chiamare quando si va al carrello
+        async goToCart() {
+            console.log('INIZIO goToCart()');
+            await this.syncCartToDatabase();
+            console.log('SYNC COMPLETATO, ora navigo');
+            this.scrollToTop();
+            this.$router.push('/cart');
+            console.log('NAVIGAZIONE ESEGUITA');
+        },
+ 
         async AltreVarianti(index) {
             this.sendId = this.currentPageItems[index].food_id;
             let lastItem = []
@@ -566,7 +668,6 @@ export default {
                 }
             }
         },
-
 
         async addToCart(index, IsVariante) {
             this.sendId = this.currentPageItems[index].food_id;
@@ -632,6 +733,16 @@ export default {
             this.showCart = true;
             this.eventBus.emit("showCart", this.showCart);
         },
+
+
+    },
+
+    // HOOK AGGIUNTO - Sincronizza carrello prima di uscire dalla pagina
+    beforeUnmount() {
+        // Sincronizza il carrello se ci sono modifiche pendenti
+        if (this.isCartDirty) {
+            this.syncCartToDatabase();
+        }
     },
 
     components: {

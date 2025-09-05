@@ -91,3 +91,77 @@ export const deleteAllItems = (result) => {
         }
     });
 };
+
+//aggiornamento carrello multiple
+export const batchUpdateCart = (data, result) => {
+    const { user_id, items } = data;
+
+    // Inizia transazione
+    db.beginTransaction((err) => {
+        if (err) {
+            console.log('Errore inizio transazione:', err);
+            return result(err, null);
+        }
+
+        // Step 1: Cancella tutti gli articoli del carrello per questo utente
+        const deleteQuery = "DELETE FROM cart WHERE user_id = ?";
+        
+        db.query(deleteQuery, [user_id], (err, deleteResults) => {
+            if (err) {
+                console.log('Errore cancellazione carrello:', err);
+                return db.rollback(() => {
+                    result(err, null);
+                });
+            }
+
+            // Step 2: Se non ci sono articoli da inserire, concludi qui
+            if (items.length === 0) {
+                return db.commit((err) => {
+                    if (err) {
+                        console.log('Errore commit (carrello vuoto):', err);
+                        return db.rollback(() => {
+                            result(err, null);
+                        });
+                    }
+                    result(null, { affectedRows: deleteResults.affectedRows });
+                });
+            }
+
+            // Step 3: Prepara i dati per l'inserimento multiplo
+            const insertQuery = "INSERT INTO cart (user_id, food_id, item_qty) VALUES ?";
+            const values = items.map(item => [
+                user_id,
+                item.food_id,
+                parseInt(item.item_qty)
+            ]);
+
+            // Step 4: Inserimento multiplo
+            db.query(insertQuery, [values], (err, insertResults) => {
+                if (err) {
+                    console.log('Errore inserimento multiplo:', err);
+                    return db.rollback(() => {
+                        result(err, null);
+                    });
+                }
+
+                // Step 5: Commit transazione
+                db.commit((err) => {
+                    if (err) {
+                        console.log('Errore commit:', err);
+                        return db.rollback(() => {
+                            result(err, null);
+                        });
+                    }
+
+                    // Successo!
+                    result(null, {
+                        affectedRows: insertResults.affectedRows,
+                        insertId: insertResults.insertId,
+                        deletedRows: deleteResults.affectedRows
+                    });
+                });
+            });
+        });
+    });
+};
+
