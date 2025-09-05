@@ -221,9 +221,12 @@ export default {
                     break;
 
                 case 'PRE':
-                    if (this.Btn[12] != false) {
+                    console.log(this.Btn[12])
+                    if (this.Btn[12] != '') {
+                        console.log(this.Btn[12])
                         window.open(this.Btn[12])
                     } else {
+                        console.log(this.Btn[12])
                         if (sagra.data[0].flgPrenotazioni == 1) {
                         this.Btn[2] = sagra.data[0].StrOrdini.substring(3, 4) == "" ? 1 : sagra.data[0].StrOrdini.substring(3, 4)
                         }

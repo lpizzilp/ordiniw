@@ -96,7 +96,7 @@ export default {
             console.log(Adminuser.data)
             if (Adminuser.data.length == 0) {
                 this.matchUser = null
-            } else if (Adminuser.data.authlevel == 2) {
+            } else if (Adminuser.data.authlevel == 2 || Adminuser.data.user_email == 'admin@esagra.it') {
                 if (Adminuser.data.user_password === this.loginObj.pass) {
                     Adminuser.data.user_password = "";
                     if (sessionStorage.getItem('SagraId')) {
