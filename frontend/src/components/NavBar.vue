@@ -14,9 +14,13 @@
 
         <div v-if="showCart == true" class="icons">
             <div v-if="showHamburger" id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>
-            <router-link v-else-if="!showHamburger" @click="scrollToTop()" to="cart">
+            <!-- Sostituisci il router-link con un button -->
+            <button v-else-if="!showHamburger" @click="goToCartFromNavbar()" class="cart-button">
                 <div class="fas fa-shopping-cart cart"></div>
-            </router-link>
+            </button>            
+            <!-- <router-link v-else-if="!showHamburger" @click="scrollToTop()" to="cart">
+                <div class="fas fa-shopping-cart cart"></div>
+            </router-link> -->
         </div>
         <div v-else class="icons">
             <div v-if="showHamburger" id="menu-btn" class="fas fa-bars menu-btn" @click="showNav"></div>
@@ -70,6 +74,11 @@ export default {
     },
 
     methods: {
+        goToCartFromNavbar() {
+            this.scrollToTop();
+            // Emetti evento per chiamare goToCart() del componente menu
+            this.eventBus.emit("goToCartFromNavbar");
+        },
 
         scrollToTop() {
             window.scrollTo(0, 0);

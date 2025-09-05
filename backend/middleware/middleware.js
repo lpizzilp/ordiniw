@@ -69,3 +69,13 @@ if (req.headers['x-internal-request'] === 'true') {
   next();
 }
 
+export const disableCache = (req, res, next) => {
+  // Se la richiesta è su una rotta cartItem, disabilita la cache
+  if (req.path.startsWith('/api/cartItem')) {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Surrogate-Control', 'no-store');
+  }
+  next();
+}

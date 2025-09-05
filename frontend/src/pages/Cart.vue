@@ -209,7 +209,9 @@ export default {
     },
 
     created() {
+        console.log('CARRELLO MONTATO, inizio caricamento dati...');
         this.getAllCartItem();
+        console.log('DATI CARRELLO CARICATI');
         this.booktabledata()
     },
 
@@ -235,7 +237,7 @@ export default {
 
         booktabledata(){
             this.bookTable = JSON.parse(sessionStorage.getItem('bookDataCart'))
-            console.log(this.bookTable)
+            //console.log(this.bookTable)
         },
 
         Artimage(food) {
