@@ -2,26 +2,26 @@
     <div>
         <div class="home-main">
             <div class="content">
-                <span>Benvenuti {{ sagra_name }}!</span>
+                <span>Benvenuti {{ sagra_name }}! 🎉</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
 
 <!--                <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa ' + MetodOrdineString }}</p> 
                 <button @click="handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>  
             -->
                 <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa ' + MetodOrdineString }}</p>
-                <button @click="Btn[11] == 1 ? handleSubmit('menu') : handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
+                <button @click="Btn[11] == 1 ? handleSubmit('menu') : handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn btn-primary" style="margin-bottom: 10px;"><i class="fas fa-utensils" style="margin-right: 10px;"></i>{{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
                 <span v-if="Btn[2] == 1 && (Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1)" style="padding-left: 30px;">oppure</span><br>
-                <button v-if="Btn[2] == 1" @click="handleSubmit('PRE')" class="btn"
-                    style="margin-top: 10px; margin-bottom: 10px;">Prenota
+                <button v-if="Btn[2] == 1" @click="handleSubmit('PRE')" class="btn btn-secondary"
+                    style="margin-top: 10px; margin-bottom: 10px;"><i class="fas fa-calendar-alt" style="margin-right: 10px;"></i>Prenota
                     Evento / Specialità</button><br>
                 <span v-if="(Btn[3] == 1 || Btn[5] == 1) && (Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1)" style="padding-left: 30px;">oppure</span><br>
-                <button @click="handleSubmit('TAB')" v-if="Btn[3] == 1 || Btn[5] == 1" class="btn"
-                    style="margin-top: 10px; margin-bottom: 10px;">Tabellone
+                <button @click="handleSubmit('TAB')" v-if="Btn[3] == 1 || Btn[5] == 1" class="btn btn-info"
+                    style="margin-top: 10px; margin-bottom: 10px;"><i class="fas fa-info-circle" style="margin-right: 10px;"></i>Tabellone
                     Eliminacode / Info
                 </button><br>
                 <span v-if="linksito[0] != null" style="padding-left: 30px;">Nel frattempo</span><br>
-                <a v-if="linksito[0] != null" :href="Btn[8]" target="_blank" class="btn"
-                    style="margin-top: 10px;">Visita il
+                <a v-if="linksito[0] != null" :href="Btn[8]" target="_blank" class="btn linksito"
+                    style="margin-top: 10px;"><i class="fas fa-external-link-alt" style="margin-right: 10px;"></i>Visita il
                     nostro sito
                 </a>
             </div>
@@ -344,8 +344,37 @@ export default {
     padding: 1rem 0;
 }
 
-.home-main .content a {
+ .home-main .content .btn-primary {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border: none;
+    transform: translateY(0);
+}
+
+.home-main .content .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
+}
+
+
+.home-main .content .btn-secondary {
+    background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);
+    border: none;
     color: white;
+}
+
+.home-main .content .btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(243, 156, 18, 0.3);
+}
+
+.home-main .content .btn-info {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+}
+
+.home-main .content .btn-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
 }
 
 .home-main .image {
@@ -406,6 +435,19 @@ export default {
     color: #000000a8;
     line-height: 1.5;
     padding: 1rem 0;
+}
+
+.linksito{
+    border: 2px solid #27ae60;
+    color: #27ae60;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s eas
+}
+
+.linksito:hover{
+    background-color: #27ae60;
+    color: #fff;
 }
 
 

@@ -14,14 +14,14 @@
                         <div class="box">
                             <div class="box-title item-total row">
                                 <h3>
-                                    <p style="font-size: 15px;">{{ filterFoods.length.toString() }}
-                                        <span v-if="filterFoods.length != 1">Articoli nel tuo carrello</span>
+                                    <p style="font-size: 15px;">{{ mergedFoods.length.toString() }}
+                                        <span v-if="mergedFoods.length != 1">Articoli nel tuo carrello</span>
                                         <span v-else>Articolo nel tuo carrello</span>
                                     </p>
                                 </h3>
                             </div>
 
-                            <div v-if="!filterFoods.length">
+                            <div v-if="!mergedFoods.length">
                                 <div class="box-content row no-food">
                                     <div class="content">
                                         <h2 style="color: #057835fa;">Non ci sono ancora articoli nel carrello.
@@ -68,7 +68,7 @@
                                                 style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
                                                 @click="f.item_qty++, onQtyChange(index)"><i
                                                     class="fa-solid fa-plus"></i></button>
-                                            <label id="iQuantity" class="form-control item-quantity">{{f.item_qty
+                                            <label id="iQuantity" class="form-control item-quantity">{{ f.item_qty
                                             }}</label>
                                             <button class="btn" value="minus"
                                                 style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
@@ -113,8 +113,7 @@
                                                 style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;"
                                                 @click="f.item_qty++, onQtyChange(index)"><i
                                                     class="fa-solid fa-plus"></i></button>
-                                            <label id="iQuantity" class="form-control item-quantity">{{ f.item_qty
-                                            }}</label>
+                                            <label id="iQuantity" class="form-control item-quantity">{{ f.item_qty }}</label>
                                             <button class="btn" value="minus"
                                                 style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
                                                 @click="f.item_qty--, onQtyChange(index)"><i
@@ -154,7 +153,7 @@
                                     comprare</router-link>
                             </div>
                             <button class="btn check-out-btn" style="margin-left: 10px;"
-                                :disabled="filterFoods.length ? false : true" @click="checkOutBtn()"><i
+                                :disabled="mergedFoods.length ? false : true" @click="checkOutBtn()"><i
                                     class="fa fa fa-shopping-cart"></i>Checkout</button>
                         </div>
                     </div>
@@ -168,11 +167,11 @@
 
                             <div class="box-content">
                                 <div class="btn-group">
-                                    <button class="btn check-out-btn" :disabled="filterFoods.length ? false : true"
+                                    <button class="btn check-out-btn" :disabled="mergedFoods.length ? false : true"
                                         @click="checkOutBtn()"><i class="fa fa-shopping-cart"></i>
                                         Checkout</button>
                                     <button class="btn cancel-btn" @click="cancelBtn(false)"
-                                        :disabled="filterFoods.length ? false : true">
+                                        :disabled="mergedFoods.length ? false : true">
                                         Annulla ordine</button>
                                 </div>
                             </div>
@@ -191,6 +190,7 @@ import axios from "axios";
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewCart from "@/components/QuickViewCart.vue";
 import { mapState } from "vuex";
+import { reactive } from "vue";
 
 export default {
     name: "Cart",
@@ -235,7 +235,7 @@ export default {
           mergedFoods() {
             return this.filterFoods.map(f => {
             const extra = this.existItem.data.find(e => e.food_id === f.food_id)
-            return { ...f, ...extra } // unisci i dati
+            return reactive({ ...f, ...extra }) // unisci i dati
             })
   }
     },
@@ -276,7 +276,7 @@ export default {
         },
 
         calculateItemPrice: function (index) {
-            return ((parseFloat(this.filterFoods[index].food_price) - parseFloat(this.filterFoods[index].food_discount)) * this.itemQuantity[index]).toString()
+            return ((parseFloat(this.mergedFoods[index].food_price) - parseFloat(this.mergedFoods[index].food_discount)) * this.mergedFoods[index].item_qty).toString()
         },
 
         calculateSummaryPrice: function () {
@@ -287,36 +287,36 @@ export default {
             // }
             this.mergedFoods.forEach(item => {
             subtotal += parseFloat(item.food_price) * item.item_qty
-            })            
+            })       
             let total = subtotal;
             return [subtotal, total];
         },
 
         async onQtyChange(i) {
-            if (this.mergedFoods.item_qty[i] == 0) {
+            if (this.mergedFoods[i].item_qty == 0) {
                 this.dataFromParent = i
-                this.mergedFoods.item_qty[i] = 1
+                this.mergedFoods[i].item_qty = 1
                 this.showQuickView = true
             }
 
             let data = {
                 user_id: sessionStorage.getItem('Username'),
-                food_id: this.cartItem[i],
-                item_qty: this.mergedFoods.item_qty[i]
+                food_id: this.mergedFoods[i].food_id,
+                item_qty: this.mergedFoods[i].item_qty
             };
 
-            let IsVariante = this.mergedFoods.find(item => item.food_id == this.cartItem[i])
+            let IsVariante = this.mergedFoods.find(item => item.food_id == data.food_id)
             IsVariante = IsVariante.FlgVariante == 0 ? false : true
             if (IsVariante) {
                 let Nonvariante = this.mergedFoods.findIndex(item => item.FlgVariante == 0)
-                let Maxqta = this.mergedFoods.item_qty[i]
+                let Maxqta = this.mergedFoods[i].item_qty
                 let Qtavarianti = 0
                 for (let i = (Nonvariante + 1); i < this.cartItem.length; i++) {
-                    Qtavarianti = Qtavarianti + this.mergedFoods.item_qty[i]
+                    Qtavarianti = Qtavarianti + this.mergedFoods[i].item_qty
                 }
                 if (Qtavarianti > Maxqta) {
-                    this.mergedFoods.item_qty[i] = data.item_qty - (Qtavarianti - Maxqta)
-                    data.item_qty = this.mergedFoods.item_qty[i]
+                    this.mergedFoods[i].item_qty = data.item_qty - (Qtavarianti - Maxqta)
+                    data.item_qty = this.mergedFoods[i].item_qty
                 }
             }
             await axios.put("/cartItem/", data)
@@ -326,11 +326,10 @@ export default {
             if (index === false) {
                 await axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
-                this.f.item_qty = [];
             } else {
-                await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.cartItem[index]);
-                this.cartItem.splice(index, 1);
-                this.f.item_qty.splice(index, 1);
+                await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.mergedFoods[index].food_id);
+                let idx = this.cartItem.findIndex(n => n == this.mergedFoods[index].food_id)
+                this.cartItem.splice(idx, 1)
             }
         },
 
