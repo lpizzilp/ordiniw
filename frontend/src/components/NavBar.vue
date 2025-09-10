@@ -139,10 +139,11 @@ export default {
                     sagra.data[0].flgInfo == 1 ? this.info = sagra.data[0].info : this.info = ''
                     sagra.data[0].flgEliminacode == 1 ? this.numcoda = sagra.data[0].numcoda.toString() : this.numcoda = '000'
                     sagra.data[0].linkSito == null ? this.sito = 0 : this.sito = sagra.data[0].linkSito
-                    sagra.data[0].flgForm == null ? false : sagra.data[0].flgForm
+                    sagra.data[0].flgForm == '' ? sagra.data[0].flgForm = '' : sagra.data[0].flgForm == null ? sagra.data[0].flgForm = '' : sagra.data[0].flgForm
+                
+                    console.log(sagra.data[0].flgForm)
 
                     const flgdata = ordini[0] + 'µ' + ordini[1] + 'µ' + ordini[2] + 'µ' + sagra.data[0].flgEliminacode + 'µ' + this.numcoda + 'µ' + sagra.data[0].flgInfo + 'µ' + this.info + 'µ' + sagra.data[0].nstartprt + 'µ' + this.sito + 'µ' + sagra.data[0].MaskVisibilita + 'µ' + sagra.data[0].MaskObbligo + 'µ' + sagra.data[0].flgMenu + 'µ' + sagra.data[0].flgForm
-                    console.log(flgdata)
                     sessionStorage.setItem('SagraBottoni', flgdata)
                     if (history.replaceState) {
                         var nuovoURL = window.location.pathname + window.location.hash;

@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import "@/axios"
 
+
 const currentVersion = '2.2.0'; // Versione con ordinamento reparti
 const eventBus = mitt();
 
