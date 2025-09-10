@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import router from '@/router';
 import axios from 'axios';
 import moment from 'moment';
 export default {
@@ -82,6 +81,12 @@ export default {
     },
 
     methods: {
+        goToCartFromBookTable() {
+            this.scrollToTop();
+            // Emetti evento per chiamare goToCart() del componente menu
+            this.eventBus.emit("goToCartFromNavbar");
+        },
+
         closeForm() {
             this.$emit('ClosePrenot', false);
         },
@@ -171,7 +176,7 @@ export default {
             sessionStorage.setItem('bookTable', JSON.stringify(this.checkoutObj))
             let databook = { day: (this.dayObj[0].giorno + ' ' + this.formatter(this.giorno)), ora: this.timeObj[(book_periodo - 1)].ora, posti: this.checkoutObj.book_posti}
             sessionStorage.setItem("bookDataCart", JSON.stringify(databook));
-            router.push('/cart')
+            this.goToCartFromBookTable()
         }
     },
 
