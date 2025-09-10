@@ -335,7 +335,7 @@ export default {
 
         checkOutBtn: function () {
             this.cartItem = [];
-            this.f.item_qty = [];
+            this.mergedFoods.item_qty = [];
             this.$router.push("/checkout");
         },
 
