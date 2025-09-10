@@ -82,7 +82,7 @@ export default {
 
     methods: {
         goToCartFromBookTable() {
-            this.scrollToTop();
+            //this.scrollToTop();
             // Emetti evento per chiamare goToCart() del componente menu
             this.eventBus.emit("goToCartFromNavbar");
         },
