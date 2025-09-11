@@ -2,11 +2,13 @@
     <div class="quick-view">
         <div class="quick-inner">
             <div v-if="!Number.isInteger(checkoutObj.book_periodo)" class="start-box">
+                <div v-if="checkoutObj.book_periodo != null" class="heading">
+                    <span>{{ checkoutObj.book_periodo == 'M' ? "Colazione" : checkoutObj.book_periodo == 'P' ? "Pranzo" : "Cena" }}</span>
+                </div>
                 <h3 style="font-size: 1.8rem; text-transform: none;">{{ checkoutObj.book_periodo == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
             </div>
             <div v-if="checkoutObj.book_periodo == null" class="table-date">
-                <button class="td-tabledate" @click="selectperiodo = true, setbackgroundcolor(dayObj.length, index)"
-                    :style="{ 'background-color': backcolors[0][index], 'color': backcolors[1][index] }"
+                <button class="td-tabledate"
                     v-for="(d, index) in dayObj.filter(d => d.data === formatter(giorno))" :key="index">
                     <div class="table-shadow">
                         <p>{{ d.data }}</p>
@@ -15,7 +17,7 @@
                     <hr class="hr">
                     <h5 style="font-size: medium; margin: 0px; padding: 8px 0px;"><i class="fa-solid fa-chevron-down"
                             style="padding-right: 2rem;"></i>Periodi disponibili</h5>
-                    <div class="time-div" v-if="selectperiodo != false">
+                    <div class="time-div">
                         <div class="table-shadow" @click="checkoutObj.book_periodo = p, SetPlaceArray()"
                             style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">
                             {{ p == 'M' ? "Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
@@ -27,10 +29,10 @@
                 <button class="td-tabledate" :style="{ 'background-color': 'white', 'flex': '0 0 50%' }"
                     v-for="(t, index) in timeObj.filter(t => t.periodo === checkoutObj.book_periodo)" :key="index">
                     <div class="table-shadow">
-                        <h3>{{ t.periodo == 'M' ? "Colazione" : t.periodo == 'P' ? "Pranzo" : "Cena" }} {{ t.ora }}</h3>
+                        <h3>{{ t.ora }}</h3>
                         <p>Posti disponibli {{ SetCapacita(t.capacita, t.id) }}</p>
                     </div>
-                    <hr class="hr" style="border-color: #27ae60;">
+                    <hr class="hr">
                     <div v-if="SetCapacita(t.capacita, t.id) != 0" class="check-btn">
                         <button class="btn" @click="SetPlaceQty('-', index)"><i class="fa-solid fa-minus"></i></button>
                         <p>{{ places[index] }}</p>
@@ -61,7 +63,6 @@ export default {
         return {
             checkoutObj: { book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: "" },
             dayObj: [],
-            selectperiodo: false,
             timeObj: [],
             capacitaObj: [],
             backcolors: [[], [], []],
@@ -79,6 +80,7 @@ export default {
         this.GetDay()
         console.log('entro')
     },
+
 
     methods: {
         goToCartFromBookTable() {
@@ -245,16 +247,12 @@ export default {
 
 .td-tabledate {
     flex: auto;
-    background-color: white;
+    background-color: #27ae60;
+    color: black;
     border: 1px solid black;
     border-radius: 10px;
     font-size: small;
     padding: 1.2rem;
-}
-
-.td-tabledate:hover {
-    background-color: #27ae60;
-    color: white;
 }
 
 .td-tabledate h3 {
@@ -264,14 +262,10 @@ export default {
     color: #f38609;
 }
 
-.hr {
-    border: 2px dashed #27ae60;
+.td-tabledate .hr {
+    border: 2px dashed white;
     margin-top: 1.2rem;
     margin-bottom: 1.2rem;
-}
-
-.td-tabledate:hover .hr {
-    border: 2px dashed white;
 }
 
 .td-tabledate .check-btn {
