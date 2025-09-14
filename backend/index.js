@@ -3,6 +3,11 @@
 // import express - is for building the Rest apis
 import express from "express";
 
+//importa logger
+import { requestLogger } from './middleware/requestLogger.js';
+import { restLogger } from './middleware/requestLogger.js';
+import { errorHandler } from './middleware/errorHandler.js';
+
 // import body-parser - helps to parse the request and create the req.body object
 import bodyParser from "body-parser";
 
@@ -19,6 +24,11 @@ import { disableCache } from './middleware/middleware.js';
 
 // init express
 const app = express();
+
+//uaw logger  
+app.use(requestLogger);
+app.use(errorHandler);
+app.use(restLogger);
 
 // use express json
 app.use(bodyParser.json());
