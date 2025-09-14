@@ -108,7 +108,7 @@ import {
 } from "../controllers/telegram.js";
 
 
-import { Infolog } from "../log/loggerModel.js";
+import { Infolog } from "../models/loggerModel.js";
 import { InserisciErrore, allErrori } from "../controllers/errore.js";
 import { getAllReparti } from "../controllers/reparti.js";
 import { getAllCasse } from "../controllers/tipicasse.js";

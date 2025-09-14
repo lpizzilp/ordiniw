@@ -93,6 +93,92 @@ export const deleteAllItems = (result) => {
 };
 
 //aggiornamento carrello multiple
+
+//POOL FRENDLY
+export const batchUpdateCart = (data, result) => {
+    const { user_id, items } = data;
+
+    db.getConnection((err, connection) => {
+        if (err) {
+            console.log("Errore connessione al DB:", err);
+            return result(err, null);
+        }
+
+        // Inizia la transazione
+        connection.beginTransaction((err) => {
+            if (err) {
+                connection.release();
+                console.log("Errore inizio transazione:", err);
+                return result(err, null);
+            }
+
+            // Step 1: Cancella gli articoli esistenti
+            const deleteQuery = "DELETE FROM cart WHERE user_id = ?";
+            connection.query(deleteQuery, [user_id], (err, deleteResults) => {
+                if (err) {
+                    return connection.rollback(() => {
+                        connection.release();
+                        console.log("Errore cancellazione carrello:", err);
+                        result(err, null);
+                    });
+                }
+
+                // Step 2: Se carrello vuoto → commit immediato
+                if (items.length === 0) {
+                    return connection.commit((err) => {
+                        connection.release();
+                        if (err) {
+                            console.log("Errore commit (carrello vuoto):", err);
+                            return result(err, null);
+                        }
+                        result(null, { affectedRows: deleteResults.affectedRows });
+                    });
+                }
+
+                // Step 3: Prepara valori multipli per inserimento
+                const insertQuery = "INSERT INTO cart (user_id, food_id, item_qty) VALUES ?";
+                const values = items.map(item => [
+                    user_id,
+                    item.food_id,
+                    parseInt(item.item_qty)
+                ]);
+
+                // Step 4: Inserisci gli articoli
+                connection.query(insertQuery, [values], (err, insertResults) => {
+                    if (err) {
+                        return connection.rollback(() => {
+                            connection.release();
+                            console.log("Errore inserimento multiplo:", err);
+                            result(err, null);
+                        });
+                    }
+
+                    // Step 5: Commit finale
+                    connection.commit((err) => {
+                        connection.release();
+                        if (err) {
+                            console.log("Errore commit:", err);
+                            return connection.rollback(() => {
+                                result(err, null);
+                            });
+                        }
+
+                        // Successo
+                        result(null, {
+                            affectedRows: insertResults.affectedRows,
+                            insertId: insertResults.insertId,
+                            deletedRows: deleteResults.affectedRows
+                        });
+                    });
+                });
+            });
+        });
+    });
+};
+
+
+//Versione senza pool
+/*
 export const batchUpdateCart = (data, result) => {
     const { user_id, items } = data;
 
@@ -164,4 +250,4 @@ export const batchUpdateCart = (data, result) => {
         });
     });
 };
-
+*/
