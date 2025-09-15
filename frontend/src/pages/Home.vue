@@ -4,10 +4,6 @@
             <div class="content">
                 <span>Benvenuti {{ sagra_name }}! 🎉</span>
                 <h3>Ordina i nostri gustosi piatti😋</h3>
-
-<!--                <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa ' + MetodOrdineString }}</p> 
-                <button @click="handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn" style="margin-bottom: 10px;"> {{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>  
-            -->
                 <p>{{ (Btn[0] == 0 || Btn[1] == 0 )&& Btn[11] == 1 ? 'Esplora il menu online, scegli in anticipo le pietanze da ordinare': 'Ordina online, paga alla cassa ' + MetodOrdineString }}</p>
                 <button @click="Btn[11] == 1 ? handleSubmit('menu') : handleSubmit('')" v-if="Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1" class="btn btn-primary" style="margin-bottom: 10px;"><i class="fas fa-utensils" style="margin-right: 10px;"></i>{{ Btn[11] == 1 ? "Vai al Menù" : "Inizia a Ordinare" }}</button><br>
                 <span v-if="Btn[2] == 1 && (Btn[0] == 1 || Btn[1] == 1 || Btn[11] == 1)" style="padding-left: 30px;">oppure</span><br>
@@ -449,6 +445,8 @@ export default {
 }
 
 .linksito:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
     background-color: #27ae60;
     color: #fff;
 }
