@@ -231,7 +231,7 @@ export default {
     background: #27ae60;
     color: #130f40;
     border-radius: .5rem;
-    #margin-left: .4rem;
+    /*margin-left: .4rem;*/
     cursor: pointer;
     text-align: center;
 }
