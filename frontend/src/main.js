@@ -6,7 +6,7 @@ import store from './store'
 import "@/axios"
 
 
-const currentVersion = '2.2.3'; // Versione con ordinamento reparti
+const currentVersion = '2.2.4'; //Allegerimento con caricamenti lazy
 const eventBus = mitt();
 
 //controllo di versione 
