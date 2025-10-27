@@ -11,12 +11,12 @@ module.exports = {
   configureWebpack: {
     plugins: [
       // Analizzatore bundle
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'server',
-        analyzerHost: '127.0.0.1',
-        analyzerPort: 8888,
-        openAnalyzer: true,
-      }),
+      // new BundleAnalyzerPlugin({
+      //   analyzerMode: 'server',
+      //   analyzerHost: '127.0.0.1',
+      //   analyzerPort: 8888,
+      //   openAnalyzer: true,
+      // }),
 
       // Ignora i locali di moment.js
       new webpack.IgnorePlugin({
