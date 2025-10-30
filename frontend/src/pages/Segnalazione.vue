@@ -5,11 +5,10 @@
                 <h3 style="text-align: center;">{{ page[0] }}</h3>
                 <!-- TESTATE         -->
                 <div v-if="page[1] == 0">
-                    <button class="btn" @click="ChangePage(1)" style="background-color: #aea04b;">Aiuto</button>
-                    <button class="btn" @click="ChangePage(2)" style="background-color: red;">Segnala Errore</button>
-                    <button class="btn" @click="ChangePage(3)" style="background-color: orange;">Dacci un
-                        Suggerimento</button>
-                    <button class="btn" @click="ChangePage(4)" style="background-color: #27ae60;">Vota App</button>
+                    <button class="btn" @click="ChangePage(1)" style="background: linear-gradient(135deg, #b39a4f, #d0b95b);"><i class="fa-solid fa-circle-question" style="margin-right: 2rem;"></i>Aiuto</button>
+                    <button class="btn" @click="ChangePage(2)" style="background: linear-gradient(135deg, #e52e2e, #ff4d4d);"><i class="fa-solid fa-triangle-exclamation" style="margin-right: 2rem;"></i>Segnala Errore</button>
+                    <button class="btn" @click="ChangePage(3)" style="background: linear-gradient(135deg, #f38304, #fcb361);"><i class="fa-solid fa-lightbulb" style="margin-right: 2rem;"></i>Dacci un Suggerimento</button>
+                    <button class="btn" @click="ChangePage(4)" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);"><i class="fa-solid fa-star" style="margin-right: 2rem;"></i>Vota App</button>
                 </div>
                 <div v-else-if="page[1] == 1 || page[1] == 5 || page[1] == 6">
                     <button class="btn" id="ordinare" @click="ChangePage(5)"
@@ -312,6 +311,17 @@ export default {
 .register-container .register-form-container {
     background: #fff;
 
+}
+
+.btn {
+  color: #fff;
+  cursor: pointer;
+  transform: translateY(0);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
 }
 
 .register-container .register-form-container form {

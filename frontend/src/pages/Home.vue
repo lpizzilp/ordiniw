@@ -52,7 +52,7 @@
                 <div class="content">
                     <p v-if='Btn[3] == 1'>Clicca il bottone sottostante per aggiornare l'eliminacode</p>
                     <p v-if='Btn[5] == 1'>Clicca il bottone sottostante per aggiornare il tabellone.</p>
-                    <button class="btn" @click="UpdateTab('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
+                    <button class="btn update" @click="UpdateTab('TAB')" style="padding: 1.5rem;" :disabled="BtnUpData[0]"><i
                             class="fa-solid fa-retweet" style="margin-right: 5px;"></i>{{ BtnUpData[1] }}</button><br>
                     <!--<button v-if='Btn[3] == 1 && IsIphone == false && Active == true' class="btn" @click="ShowAvviso()"
                         style="padding: 1rem; margin-top: 3vh; margin-bottom: 3vh;"><i class="fa-solid fa-bell"
@@ -343,7 +343,11 @@ export default {
     padding: 1rem 0;
 }
 
- .home-main .content .btn-primary {
+.home-about .tabelloni .update {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.home-main .content .btn-primary {
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     border: none;
     transform: translateY(0);
@@ -401,13 +405,13 @@ export default {
     padding: 1rem;
     border-style: solid;
     border-width: 1px;
-    border-color: #27ae60;
+    border: 2px solid #2980b9;
 }
 
 .home-about .tabelloni span {
     font-family: 'Satisfy', cursive;
     font-size: 3rem;
-    color: #27ae60;
+    color: #2980b9;
 }
 
 .home-about .tabelloni .display {
@@ -417,7 +421,7 @@ export default {
     border-style: outset;
     border-width: 1px;
     border-radius: 10px;
-    border-color: #27ae60;
+    border: 3px dotted #2980b9;
 }
 
 .home-about .tabelloni .display p {

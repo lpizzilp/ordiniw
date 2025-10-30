@@ -7,17 +7,17 @@
             </h3>
             <button v-if="BtnAttivi[0] == true" class="btn" @click="DataParent('W')">Tavolo</button>
             <button v-if="BtnAttivi[1] == true" class="btn" @click="DataParent('Y')" style="margin-top: 3vh;">Asporto</button>
-            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
+            <button @click="DataParent('')" class="btn" style="background: linear-gradient(135deg, #d17002 0%, #ffa33b 100%);">Torna alla Home</button>
         </div>
         <div v-else-if="BtnAttivi[2] == 'click'" class="quick-view-inner">
             <h2>Prenotazioni chiuse</h2><br>
             <h3>Le prenotazioni sono state chiuse. Riprova più tardi</h3><br>
-            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
+            <button @click="DataParent('')" class="btn" style="background: linear-gradient(135deg, #c16803 0%, #fcb361 100%);">Torna alla Home</button>
         </div>
         <div v-else class="quick-view-inner">
             <h2>Ordini non abilitati</h2><br>
             <h3>Il servizio ordini online non è attivo</h3><br>
-            <button @click="DataParent('')" class="btn" style="background-color: #f38304;">Torna alla Home</button>
+            <button @click="DataParent('')" class="btn" style="background: linear-gradient(135deg, #c16803 0%, #fcb361 100%);">Torna alla Home</button>
         </div>
     </div>
 </template>
@@ -87,6 +87,7 @@ export default {
 }
 
 .quick-view .quick-view-inner .btn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     font-size: 18px;
     margin-top: 5vh;
     width: 100%;
