@@ -351,7 +351,6 @@ export default {
         ...mapMutations(["setAdmin"]),
 
         async GetSwitch() {
-            console.log('entro in getSwitch')
             try {
                 const adminId = sessionStorage.getItem('AdminSagraId');
                 const [switchdataOrdini, switchdataVisibilita, switchdataObbligo] = await Promise.all([
@@ -359,7 +358,6 @@ export default {
                     axios.get(`/sagra/visibilita/${adminId}`),
                     axios.get(`/sagra/obbligo/${adminId}`)
                 ]);
-                console.log(switchdataOrdini)
 
                 this.DataVisibilità = switchdataVisibilita.data[0].MaskVisibilita.split('')
                 this.DataObbligo = switchdataObbligo.data[0].MaskObbligo.split('')
@@ -384,7 +382,6 @@ export default {
                     updateStatusToggle(this.DataObbligo, puntoStart, [5, 7, 9, 11]);
                 }
             } catch (error) {
-                console.log(error)
                 this.Quickerrore = true;
             }
         },

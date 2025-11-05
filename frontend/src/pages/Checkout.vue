@@ -205,7 +205,6 @@ export default {
             if (this.type == "PRE" && bookTablearray != null) {
                 this.checkoutObj.Coperti = bookTablearray.book_posti
                 this.isCopertiLocked = true   // blocca input
-                console.log("this.isCopertiLocked", this.isCopertiLocked)
             } else {
                 this.isCopertiLocked = false  // libero input                
             }
@@ -233,12 +232,8 @@ export default {
 
         buildForm() {
             let bitData = sessionStorage.getItem('SagraBottoni').split("µ")
-            console.log("bitdata ->", sessionStorage.getItem('SagraBottoni').split("µ"));
             this.maskVisibilita = bitData[9].split('')
             this.maskObbligo = bitData[10].split('')
-
-            console.log("maskVisibilita ->", this.maskVisibilita);
-
         },
 
         handleConfermaClick() {
@@ -377,7 +372,6 @@ export default {
             //PRENOTAZIONE ----------------------------------------------------
             if (this.type === 'PRE') {
                 if (sessionStorage.getItem('Bill') != null) {
-                    console.log(sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/status/delete/" + sessionStorage.getItem('Bill'))
                     axios.delete("/prenotazioni/details/delete/" + sessionStorage.getItem('Bill'))
                 }
@@ -418,7 +412,6 @@ export default {
                 };
 
                 if (sessionStorage.getItem('bookTable') != null) {
-                    console.log('entro in booktable')
                     let booktablearray = JSON.parse(sessionStorage.getItem('bookTable'))
                     let dataTavolo = {
                         id_sagra: sessionStorage.getItem('SagraId'),

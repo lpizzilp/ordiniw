@@ -146,7 +146,6 @@ export default {
         let categorytype = ""
         let flgartprenotabile = "0"
         let flgvariante = "0"
-        console.log(sessionStorage.getItem('sagraId') + '   dati')
         let Ordertype = sessionStorage.getItem('Tipo').toUpperCase()
         /*switch (sessionStorage.getItem('filtro')) {
             case 'PRE':
@@ -221,7 +220,6 @@ export default {
 
     beforeUnmount() {
         this.ClearAll()
-        console.log('passo')
     },
 
     computed: {

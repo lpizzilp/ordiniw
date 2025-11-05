@@ -43,7 +43,6 @@ export default {
                 router.push('/cassiere/cassa')
             } else {
                 var casse = await axios.get('/tipicassa')
-                console.log(casse.data)
                 casse.data.forEach(element => {
                     this.casseObj.push({ nome: element.nome, lettera: element.lettera, bgcolore: element.bgcolore, txcolore: element.txcolore });
                 });

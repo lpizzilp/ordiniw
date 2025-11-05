@@ -168,7 +168,6 @@ export default {
             case 'PRE':
                 flgartprenotabile = "1"
                 flgvariante = "1"
-                console.log(flgartprenotabile)
                 break;
             default:
                 sessionStorage.getItem('filtro') ? repartotype = sessionStorage.getItem('filtro') : repartotype = ""
@@ -596,16 +595,11 @@ export default {
                     item_qty: quantity
                 }));
 
-                console.log('Dati inviati al backend:', { user_id, items });
-                console.log('localCart originale:', this.localCart);
-
                 // UNA SOLA CHIAMATA API
                 await axios.post('/cartItem/batch-update', {
                     user_id: user_id,
                     items: items
                 });
-
-                console.log('Carrello sincronizzato con 1 chiamata API');
                 this.isCartDirty = false;
 
             } catch (error) {
@@ -619,12 +613,9 @@ export default {
 
         //NUOVO METODO - Da chiamare quando si va al carrello
         async goToCart() {
-            console.log('INIZIO goToCart()');
             await this.syncCartToDatabase();
-            console.log('SYNC COMPLETATO, ora navigo');
             this.scrollToTop();
             this.$router.push('/cart');
-            console.log('NAVIGAZIONE ESEGUITA');
         },
  
         async AltreVarianti(index) {

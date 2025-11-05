@@ -248,11 +248,10 @@ export default {
         },
 
         Artimage(food) {
-            try {
+             try {
                 return require(`../assets/images/${food}`);
-
             } catch (ex) {
-                return '';//require(`../assets/images/no.png`);
+                return require(`../assets/images/nocart.png`);
             }
         },
 
@@ -369,6 +368,7 @@ export default {
 }
 
 .item-name {
+    font-style: bold;
     color: #27ae60;
 }
 

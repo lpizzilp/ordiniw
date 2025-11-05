@@ -41,6 +41,7 @@ import {
     createBooktable,
     getCapacita,
     getSlotId,
+    getDescPeriodo,
     getTimeId
 } from "../controllers/booktable.js";
 
@@ -212,6 +213,7 @@ router.delete("/api/cartDelete", deleteAll);
 ////////////////////////// Booking ////////////////////////////////
 router.get("/api/getdayslot", getSlotId);
 router.get("/api/gettimeslot", getTimeId);
+router.get("/api/getdescperiodi", getDescPeriodo)
 router.get("/api/getcapacita", getCapacita);
 router.post("/api/booktable", createBooktable);
 

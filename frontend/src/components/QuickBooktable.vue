@@ -3,7 +3,7 @@
         <div class="quick-inner">
             <div v-if="!Number.isInteger(checkoutObj.book_periodo)" class="start-box">
                 <div v-if="checkoutObj.book_periodo != null" class="heading">
-                    <span>{{ checkoutObj.book_periodo == 'M' ? "Colazione" : checkoutObj.book_periodo == 'P' ? "Pranzo" : "Cena" }}</span>
+                    <span>{{ descperiodi.find(item => item.periodo == checkoutObj.book_periodo).descperiodo }}</span>
                 </div>
                 <h3 style="font-size: 1.8rem; text-transform: none;">{{ checkoutObj.book_periodo == null ? "Qui potrai scelgiere la giornata da prenotare e il relativo pasto" : "Seleziona l'orario di arrivo, il tuo tavolo resterà prenotato per il lasso di tempo scelto" }}</h3>
             </div>
@@ -20,7 +20,7 @@
                     <div class="time-div">
                         <div class="table-shadow" @click="checkoutObj.book_periodo = p, SetPlaceArray()"
                             style="margin: 1rem 2px; border-radius: 10px;" v-for="(p, i) in d.periodo" :key="i">
-                            {{ p == 'M' ? "Colazione" : p == 'P' ? "Pranzo" : "Cena" }}
+                            {{ descperiodi.find(item => item.periodo == p).descperiodo }}
                         </div>
                     </div>
                 </button>
@@ -30,17 +30,17 @@
                     v-for="(t, index) in timeObj.filter(t => t.periodo === checkoutObj.book_periodo)" :key="index">
                     <div class="table-shadow">
                         <h3>{{ t.ora }}</h3>
-                        <p>Posti disponibli {{ SetCapacita(t.capacita, t.id) }}</p>
+                        <p>Posti disp: {{ SetCapacita(t.capacita, t.id) }},<br>posti min: {{ t.min_capacita }}</p>
                     </div>
                     <hr class="hr">
                     <div v-if="SetCapacita(t.capacita, t.id) != 0" class="check-btn">
                         <button class="btn" @click="SetPlaceQty('-', index)"><i class="fa-solid fa-minus"></i></button>
-                        <p>{{ places[index] }}</p>
+                        <p>{{  places[index] }}</p>
                         <button class="btn" @click="SetPlaceQty('+', index)"><i class="fa-solid fa-plus"></i></button>
                     </div>
                     <div v-else class="check-btn"><button class="btn" style="background-color: #f38609;">Posti
                             esauriti</button></div>
-                    <button v-if="places[index] != 0" @click="handleSubmit(index, t.id)" class="btn">Vai al
+                    <button v-if="places[index] != 0 && (places[index] >= t.min_capacita)" @click="handleSubmit(index, t.id)" class="btn">Vai al
                         Carrello</button>
                 </button>
             </div>
@@ -64,6 +64,7 @@ export default {
             checkoutObj: { book_name: "", book_day: "", book_periodo: null, book_posti: "", book_status: "null", book_created: "" },
             dayObj: [],
             timeObj: [],
+            descperiodi: [],
             capacitaObj: [],
             backcolors: [[], [], []],
             places: [],
@@ -78,7 +79,6 @@ export default {
 
     created() {
         this.GetDay()
-        console.log('entro')
     },
 
 
@@ -105,20 +105,19 @@ export default {
         async GetDay() {
             var dayslot = await axios.get('/getdayslot')
             var timeslot = await axios.get('/gettimeslot')
+            var descperiodi = await axios.get('/getdescperiodi')
             var capacita = await axios.get('/getcapacita')
-            console.log('dayslot', dayslot.data)
-            console.log('timeslot', timeslot.data)
-            console.log('capacita', capacita.data)
-            console.log(this.giorno)
             this.checkoutObj.book_day = this.giorno
             dayslot.data.forEach(element => {
                 let giorno = this.getDayOfWeek(element.data)
                 let periodarray = element.periodo.split('')
-                console.log('periodoarray', periodarray)
                 this.dayObj.push({ data: element.data, giorno, periodo: periodarray });
             });
             timeslot.data.forEach(element => {
-                this.timeObj.push({ id: element.id, periodo: element.periodo, ora: element.ora, capacita: element.capacita });
+                this.timeObj.push({ id: element.id, periodo: element.periodo, ora: element.ora, capacita: element.capacita, min_capacita: element.min_capacita });
+            });
+            descperiodi.data.forEach(element => {
+                this.descperiodi.push({ periodo: element.periodo, descperiodo: element.descperiodo});
             });
             capacita.data.forEach(element => {
                 this.capacitaObj.push({ book_day: element.book_day, periodo: element.id, ora: element.ora, riservati: element.riservati });
@@ -147,6 +146,7 @@ export default {
         SetPlaceQty(type, index) {
             let timefiltered = this.timeObj.filter(t => t.periodo === this.checkoutObj.book_periodo)
             if (type == '+') {
+                console.log(this.places[index], this.timeObj[index].min_capacita)
                 if (this.places.every(value => value === 0)) {
                     this.places[index]++
                 } else if (this.places[index] !== 0 && this.places.includes(this.places[index])) {
@@ -155,7 +155,7 @@ export default {
                     }
                 }
             } else if (type == '-') {
-                if (this.places[index] == 0) {
+                if (this.places[index] == 0){
                     this.places[index]
                 } else {
                     this.places[index]--

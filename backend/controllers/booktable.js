@@ -2,6 +2,7 @@ import {
     getAllCapacita,
     getSlotbyId,
     getTimebyId,
+    getAllDescPeriodo,
     insertBookTable
 } from "../models/BookTableModel.js";
 
@@ -20,6 +21,16 @@ export const getSlotId=(req,res)=>{
 export const getTimeId=(req,res)=>{
     const IdSagra = req.headers['id-sagra'];
     getTimebyId(IdSagra,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const getDescPeriodo=(req,res)=>{
+    getAllDescPeriodo((err,results)=> {
         if (err) {
             res.send(err);
         }else {
