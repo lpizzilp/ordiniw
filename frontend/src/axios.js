@@ -26,7 +26,6 @@ function generateNonce() {
   
 axios.interceptors.response.use(
     response => {
-        console.log(response)
         // Gestisci la risposta normale qui
         var errMsg = null
         if (response.data.errno != undefined    ) {

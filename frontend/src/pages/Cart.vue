@@ -210,9 +210,7 @@ export default {
     },
 
     created() {
-        console.log('CARRELLO MONTATO, inizio caricamento dati...');
         this.getAllCartItem();
-        console.log('DATI CARRELLO CARICATI');
         this.booktabledata()
     },
 

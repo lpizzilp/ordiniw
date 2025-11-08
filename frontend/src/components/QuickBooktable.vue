@@ -146,7 +146,6 @@ export default {
         SetPlaceQty(type, index) {
             let timefiltered = this.timeObj.filter(t => t.periodo === this.checkoutObj.book_periodo)
             if (type == '+') {
-                console.log(this.places[index], this.timeObj[index].min_capacita)
                 if (this.places.every(value => value === 0)) {
                     this.places[index]++
                 } else if (this.places[index] !== 0 && this.places.includes(this.places[index])) {
@@ -166,7 +165,6 @@ export default {
         SetCapacita(capacita, periodoId) {
             const item = this.capacitaObj.find(
                 el => el.book_day === this.checkoutObj.book_day && el.periodo === periodoId);
-                console.log(item)
             return item ? parseInt(capacita) - parseInt(item.riservati) : capacita;
         },
 
