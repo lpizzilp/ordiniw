@@ -192,7 +192,7 @@ CREATE TABLE `timeslot` (
   `capacita` int(11) NOT NULL,
   `min_capacita` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.tipicassa definition
@@ -218,7 +218,7 @@ CREATE TABLE `user` (
   `authlevel` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_user_email_IDX` (`user_email`,`id_sagra`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- db_restaurant.billdetails definition
