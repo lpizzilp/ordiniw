@@ -96,7 +96,7 @@
                                         style="border-left-color: black; border-bottom-left-radius: 0%;  border-top-left-radius: 0%;"
                                         value="plus" @click="qty[index]++, onQtyChange(index)"><i
                                             class="fa-solid fa-plus"></i></button>
-                                    <button v-if="Prenotazione === '1' && qty[index] != 0" class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataFineValidita">Prenota tavolo</button>
+                                    <button v-if="Prenotazione === '1' && isDaySlot && qty[index] != 0" class="btn" style="flex: none; margin-top: 2rem; width: fit-content;" @click="quickPrenotazione = f.DataFineValidita">Prenota tavolo</button>
                                 </div>
                             </div>
                         </div>
@@ -151,6 +151,7 @@ import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";
 import QuickViewBooktable from "@/components/QuickBooktable.vue";
+import moment from 'moment';
 import axios from "axios";
 
 export default {
@@ -189,6 +190,7 @@ export default {
             showQuickView: [false, 0, null],
             qty: [],
             CartItem: [],
+            isDaySlot: null,
 
             // NUOVI CAMPI PER CARRELLO LOCALE
             localCart: {}, // { food_id: quantity } - carrello locale
@@ -212,8 +214,8 @@ export default {
         this.getAllCartItem()
         this.getWIFIConnection()
         if (this.Prenotazione == '1') {
-            this.chekdata()
-            this.chekQty("-1")
+            this.checkdata()
+            this.checkQty("-1")
         }
     },
 
@@ -348,15 +350,21 @@ export default {
             }
         },
 
-        chekdata() {
+        checkdata() {
             var now = new Date();
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
             now.getFullYear() + month + day;
-
         },
 
-        async chekQty(index) {
+        async checkDaySlot(artData) {
+            const dataParsata = moment(artData, 'YYYY/MM/DD')
+            const dataFormatted = encodeURIComponent(dataParsata.format('DD/MM/YYYY'));
+            let result = (await axios.get(`/getdayslotbydate/${dataFormatted}`)).data
+            this.isDaySlot = (result != '' ? true : false)
+        },
+
+        async checkQty(index) {
             let totqty = (await axios.get('/prenotazione/sumordine')).data;
             for (let i = 0; i < this.allFoods.length; i++) {
                 if (this.allFoods[i].FlgPrenotabile != 0) {
@@ -550,6 +558,7 @@ export default {
 
             if (this.qty[index] < 0) {
                 this.qty[index] = 0;
+                this.isDaySlot = null
             }
 
             // NUOVO: AGGIORNAMENTO CARRELLO LOCALE
@@ -567,11 +576,14 @@ export default {
 
             // Per le prenotazioni, mantieni la logica esistente con throttle
             if (this.Prenotazione === '1') {
+                if (this.isDaySlot == null) {
+                    this.checkDaySlot(this.currentPageItems[index].DataFineValidita)   
+                }
                 this.throttleTimers[index] = setTimeout(() => {
                     if (this.currentPageItems[index].FlgVariante != 0) {
                         this.AltreVarianti(index)
                     } else {
-                        this.chekQty(index)
+                        this.checkQty(index)
                     }
                     delete this.throttleTimers[index];
                 }, this.throttleDelay);
