@@ -29,8 +29,8 @@
                 <button class="td-tabledate" :style="{ 'background-color': 'white', 'flex': '0 0 50%' }"
                     v-for="(t, index) in timeObj.filter(t => t.periodo === checkoutObj.book_periodo)" :key="index">
                     <div class="table-shadow">
-                        <h3>{{ t.ora }}</h3>
-                        <p>Posti disp: {{ SetCapacita(t.capacita, t.id) }},<br>posti min: {{ t.min_capacita }}</p>
+                        <h3>{{ t.ora }} {{ t.dove }}</h3>
+                        <p>Posti disp: {{ SetCapacita(t.capacita, t.id) }},<br>Persone min: {{ t.minPersone }}</p>
                     </div>
                     <hr class="hr">
                     <div v-if="SetCapacita(t.capacita, t.id) != 0" class="check-btn">
@@ -40,7 +40,7 @@
                     </div>
                     <div v-else class="check-btn"><button class="btn" style="background-color: #f38609;">Posti
                             esauriti</button></div>
-                    <button v-if="places[index] != 0 && (places[index] >= t.min_capacita)" @click="handleSubmit(index, t.id)" class="btn">Vai al
+                    <button v-if="places[index] != 0 && (places[index] >= t.minPersone)" @click="handleSubmit(index, t.id)" class="btn">Vai al
                         Carrello</button>
                 </button>
             </div>
@@ -114,7 +114,7 @@ export default {
                 this.dayObj.push({ data: element.data, giorno, periodo: periodarray });
             });
             timeslot.data.forEach(element => {
-                this.timeObj.push({ id: element.id, periodo: element.periodo, ora: element.ora, capacita: element.capacita, min_capacita: element.min_capacita });
+                this.timeObj.push({ id: element.id, periodo: element.periodo, ora: element.ora, dove: element.dove, capacita: element.capacita, minPersone: element.minPersone });
             });
             descperiodi.data.forEach(element => {
                 this.descperiodi.push({ periodo: element.periodo, descperiodo: element.descperiodo});
@@ -173,7 +173,7 @@ export default {
             this.checkoutObj.book_periodo = parseInt(book_periodo)
             this.checkoutObj.book_posti = this.places[index]
             sessionStorage.setItem('bookTable', JSON.stringify(this.checkoutObj))
-            let databook = { day: (this.dayObj[0].giorno + ' ' + this.formatter(this.giorno)), ora: this.timeObj.find(obj => obj.id === book_periodo).ora, posti: this.checkoutObj.book_posti}
+            let databook = { day: (this.dayObj[0].giorno + ' ' + this.formatter(this.giorno)), ora: this.timeObj.find(obj => obj.id === book_periodo).ora, dove: this.timeObj.find(obj => obj.id === book_periodo).dove, posti: this.checkoutObj.book_posti}
             sessionStorage.setItem("bookDataCart", JSON.stringify(databook));
             this.goToCartFromBookTable()
         }

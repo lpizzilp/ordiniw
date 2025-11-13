@@ -39,6 +39,7 @@ export const Emailsender = (data, result) => {
             booktabledata =  `<ul style="background-color: white; color: black; border: 2px solid black; border-radius: 10px; margin: 2rem 0px; padding: 1rem 3rem; box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset; -webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset; -moz-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.45) inset;"><h2 style="color: #27ae60;">Prenotazione tavolo:</h2>
                                     <li><h3 style="margin: none;">Giorno: ` + data.bookdata.day + `</h3></li>
                                     <li><h3 style="margin: none;">Ora: ` + data.bookdata.ora + `</h3></li>
+                                    <li><h3 style="margin: none;">Dove: ` + data.bookdata.dove + `</h3></li>
                                     <li><h3 style="margin: none;">Posti: ` + data.bookdata.posti + `</h3></li>
                                     <h2 style="padding-top: 6px; color: red">Attenzione: <span style="color: black; text-transform: none;">Il tavolo resterà riservato solo all'interno della fascia oraria prescelta</span></h2>
                                 </ul>` 
