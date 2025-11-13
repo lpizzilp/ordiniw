@@ -10,7 +10,6 @@ import MyOrder from '../pages/MyOrder.vue';
 import Admin from '../admin/login/Login.vue';
 import Dashboard from '../admin/pages/Dashboard.vue';
 import Ordini from '../admin/pages/Ordini.vue';
-import Prenotazioni from '../admin/pages/Prenotazioni.vue'
 import Confirm from '../admin/login/Confirm.vue';
 import Segnalazione from '../pages/Segnalazione.vue'
 import Utenti from '../admin/pages/Utenti.vue'
@@ -97,11 +96,15 @@ const routes = [
     name: "Ordini",
     component: Ordini,
   },
+  // caricamento lazy per ottimizzazione
   {
-    path: "/admin/prenotazioni",
-    name: "Prenotazioni",
-    component: Prenotazioni,
-  },
+  path: "/admin/prenotazioni",
+  name: "Prenotazioni",
+  component: () => import(
+    /* webpackChunkName: "prenotazioni" */
+    '../admin/pages/Prenotazioni.vue'
+  ),
+},
   {
     path: "/admin/utenti",
     name: "Utenti",

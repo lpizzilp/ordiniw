@@ -57,7 +57,6 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-import ExcelJS from 'exceljs';
 import { mapState, mapMutations } from "vuex";
 export default {
     name: 'Ordini',
@@ -166,7 +165,12 @@ export default {
 
         async Exportfunction() {
             this.totqty = (await axios.get('/prenotazione/sum')).data;
-            // Creare un nuovo workbook e foglio Excel
+            // Creare un nuovo workbook e foglio Excel - caricamento dinamico 
+            const ExcelJS = (await import(
+            /* webpackChunkName: "exceljs" */
+            /* webpackMode: "lazy" */
+            'exceljs'
+            )).default;            
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Dati');
 
