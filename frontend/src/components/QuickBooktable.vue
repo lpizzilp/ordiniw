@@ -30,7 +30,7 @@
                     v-for="(t, index) in timeObj.filter(t => t.periodo === checkoutObj.book_periodo)" :key="index">
                     <div class="table-shadow">
                         <h3>{{ t.ora }} {{ t.dove }}</h3>
-                        <p>Posti disp: {{ SetCapacita(t.capacita, t.id) }},<br>Persone min: {{ t.minPersone }}</p>
+                        <p>Posti disp: {{ SetCapacita(t.capacita, t.id) }}<br>Persone min: {{ t.minPersone }}</p>
                     </div>
                     <hr class="hr">
                     <div v-if="SetCapacita(t.capacita, t.id) != 0" class="check-btn">

@@ -190,7 +190,7 @@ CREATE TABLE `timeslot` (
   `ora` varchar(15) NOT NULL,
   `dove` varchar(25) NOT NULL,
   `capacita` int(11) NOT NULL,
-  `min_capacita` int(11) NOT NULL,
+  `minPersone` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
