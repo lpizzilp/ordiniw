@@ -1,9 +1,22 @@
 import {
     getAllCapacita,
     getSlotbyId,
+    getSlotByDate,
     getTimebyId,
+    getAllDescPeriodo,
     insertBookTable
 } from "../models/BookTableModel.js";
+
+export const getSlotDate=(req,res)=>{
+    const IdSagra = req.headers['id-sagra'];
+    getSlotByDate(IdSagra,req.params.date,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+}
 
 // create Booking
 export const getSlotId=(req,res)=>{
@@ -20,6 +33,16 @@ export const getSlotId=(req,res)=>{
 export const getTimeId=(req,res)=>{
     const IdSagra = req.headers['id-sagra'];
     getTimebyId(IdSagra,(err,results)=> {
+        if (err) {
+            res.send(err);
+        }else {
+            res.json(results);
+        }
+    });
+};
+
+export const getDescPeriodo=(req,res)=>{
+    getAllDescPeriodo((err,results)=> {
         if (err) {
             res.send(err);
         }else {

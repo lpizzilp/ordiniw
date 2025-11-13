@@ -132,6 +132,7 @@
                                         <ul class="booklist"><h2>Prenotazione tavolo:</h2>
                                             <li><h3>Giorno: {{ bookTable.day }}</h3></li>
                                             <li><h3>Ora: {{ bookTable.ora }}</h3></li>
+                                            <li><h3>Dove: {{ bookTable.dove }}</h3></li>
                                             <li><h3>Posti: {{ bookTable.posti }}</h3></li>
                                             <h2 style="padding-top: 10px; color: red">Attenzione: <span style="color: black; text-transform: none;">Il tavolo resterà riservato solo all'interno della fascia oraria prescelta</span></h2>
                                         </ul>
@@ -210,9 +211,7 @@ export default {
     },
 
     created() {
-        console.log('CARRELLO MONTATO, inizio caricamento dati...');
         this.getAllCartItem();
-        console.log('DATI CARRELLO CARICATI');
         this.booktabledata()
     },
 
@@ -248,11 +247,10 @@ export default {
         },
 
         Artimage(food) {
-            try {
+             try {
                 return require(`../assets/images/${food}`);
-
             } catch (ex) {
-                return '';//require(`../assets/images/no.png`);
+                return require(`../assets/images/nocart.png`);
             }
         },
 
@@ -369,6 +367,7 @@ export default {
 }
 
 .item-name {
+    font-style: bold;
     color: #27ae60;
 }
 

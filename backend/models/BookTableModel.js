@@ -13,10 +13,32 @@ export const getSlotbyId = (idsagra,result) => {
     });
 };
 
-export const getTimebyId = (idsagra,result) => {
-    db.query("SELECT t.id_sagra, t.id, t.periodo, t.ora, t.capacita FROM timeslot t LEFT JOIN booktable b2 ON t.id = b2.book_periodo GROUP BY t.id",[idsagra], (err,results)=> {
+export const getSlotByDate = (idsagra,data,result) => {
+    db.query("Select * from dayslot where id_sagra = ? and data = ?",[idsagra,data], (err,results)=> {
         if (err){
-            console.error("Errore in getSlotbyId:", err);
+            console.error("Errore in getSlotbyDate:", err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+export const getTimebyId = (idsagra,result) => {
+    db.query("SELECT t.id_sagra, t.id, t.periodo, t.ora, t.dove, t.capacita, t.minPersone FROM timeslot t LEFT JOIN booktable b2 ON t.id = b2.book_periodo GROUP BY t.id",[idsagra], (err,results)=> {
+        if (err){
+            console.error("Errore in getTimebyId:", err);
+            result(err,null);
+        }else{
+            result(null,results);
+        }
+    });
+};
+
+export const getAllDescPeriodo = (result) => {
+    db.query("SELECT * FROM descperiodi", (err,results)=> {
+        if (err){
+            console.error("Errore in getDescPeriodo:", err);
             result(err,null);
         }else{
             result(null,results);
@@ -27,7 +49,7 @@ export const getTimebyId = (idsagra,result) => {
 export const getAllCapacita = (idsagra,result) => {
     db.query("SELECT b2.book_day, t.id, t.ora, COALESCE(SUM(b2.book_posti), 0) AS riservati FROM timeslot t INNER JOIN booktable b2 ON t.id = b2.book_periodo GROUP BY b2.book_day, t.id, t.ora ORDER BY b2.book_day",[idsagra], (err,results)=> {
         if (err){
-            console.error("Errore in getSlotbyId:", err);
+            console.error("Errore in getAllCapacita:", err);
             result(err,null);
         }else{
             result(null,results);

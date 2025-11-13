@@ -57,13 +57,16 @@ export default {
 .footer .box-container .box .btn {
     width: 25%; 
     margin-left: 37.5%; 
-    border: 1px inset black;
+    border: 2px inset #f32009e3;
     color: #f32009e3;
     background-color: rgba(245, 245, 245, 0.601);
     padding: 4px 2.5px;
+    transition: left 0.5s eas
 }
 
 .footer .box-container .box .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
     color: white;
     background-color: #f32009e3;
 }
