@@ -23,8 +23,9 @@
                     </tr>
                 </thead>
                 <tbody v-for="(t, id) in totqty.slice()" :key="t.food_name">
-                    <tr  :style="{ backgroundColor: t.FlgVariante == 0 ? none : '#d3ffb3' }">
-                        <td style="padding: 12px 4px;">{{ t.FlgVariante == 0 ? t.food_name : '++ Variante ' + t.food_name + ' ++'}}</td>
+                    <tr :style="{ backgroundColor: t.FlgVariante == 0 ? none : '#d3ffb3' }">
+                        <td style="padding: 12px 4px;">{{ t.FlgVariante == 0 ? t.food_name : '++ Variante ' +
+                            t.food_name + ' ++'}}</td>
                         <td style="padding: 12px 4px;"></td>
                         <td style="padding: 12px 4px;"></td>
                         <td style="padding: 12px 4px;">{{ t.somma_qty }}</td>
@@ -45,7 +46,8 @@
                         <th>Data Prenotazione</th>
                         <th>Stato</th>
                     </tr>
-                    <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id" :style="{ backgroundColor: b.book_status == 3 ? '#f34b2a' : 'none', color: b.book_status == 3 ? 'white' : 'black'}">
+                    <tr v-for="(b, index) in filterPenot.slice().reverse()" :key="b.book_id"
+                        :style="{ backgroundColor: b.book_status == 3 ? '#f34b2a' : 'none', color: b.book_status == 3 ? 'white' : 'black' }">
                         <td v-if="showSerata[id] == true" style="width: 1%;">{{ b.book_id }}</td>
                         <td v-if="showSerata[id] == true">{{ b.food_name }}</td>
                         <td v-if="showSerata[id] == true">{{ b.item_qty }}</td>
@@ -55,12 +57,13 @@
                         <td v-if="showSerata[id] == true">{{ formattime('when', b.book_when) }}</td>
                         <td v-if="b.book_status == 0 && showSerata[id] == true"><i class="fa-regular fa-square-minus"
                                 style="padding-right: 1vh;"></i>Inserito</td>
-                        <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i class="fa-regular fa-square-check"
-                                style="padding-right: 1vh;"></i>Parzialmente evaso</td>
-                        <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i class="fa-solid fa-bell-concierge"
-                                style="padding-right: 1vh;"></i>Evaso</td>
-                        <td v-else-if="b.book_status == 3 && showSerata[id] == true"><i
-                                class="fa-solid fa-square-xmark" style="padding-right: 1vh;"></i>Cancellato</td>
+                        <td v-else-if="b.book_status == 1 && showSerata[id] == true"><i
+                                class="fa-regular fa-square-check" style="padding-right: 1vh;"></i>Parzialmente evaso
+                        </td>
+                        <td v-else-if="b.book_status == 2 && showSerata[id] == true"><i
+                                class="fa-solid fa-bell-concierge" style="padding-right: 1vh;"></i>Evaso</td>
+                        <td v-else-if="b.book_status == 3 && showSerata[id] == true"><i class="fa-solid fa-square-xmark"
+                                style="padding-right: 1vh;"></i>Cancellato</td>
                         <td v-if="showSerata[id] == true && b.book_status == 0">
                             <button class="btn" @click="changestate(index)"
                                 style="z-index: 0; padding: 0.1vh 1vh; border-radius: 5px;"><i
@@ -153,7 +156,7 @@ export default {
                     break;
 
                 case false:
-                    this.allPenot = (await axios.get('/getprenotazione/'  + food_id)).data;
+                    this.allPenot = (await axios.get('/getprenotazione/' + food_id)).data;
                     for (let i = 0; i < this.showSerata.length; i++) {
                         if (id == i) {
                             this.showSerata[i] = true
@@ -193,11 +196,9 @@ export default {
         },
 
         formattime(type, data) {
-            const dataParsata = type == 'when' ? moment(data, 'YYYY/MM/DDTHH:mm') : moment(data.slice(0, -6), 'MM/DD/YYYY HH:mm')
-
+            const dataParsata = type == 'when' ? moment(data, 'YYYY/MM/DDTHH:mm') : moment(data.slice(0, -6), 'DD/MM/YYYY HH:mm')
             // Formatta la data nel nuovo formato
             const dataFormattata = dataParsata.format('DD/MM/YYYY');
-
             return dataFormattata;
         },
 
@@ -247,11 +248,11 @@ export default {
             // recupera prenotazioni
             this.totqty = (await axios.get('/prenotazione/sum')).data;
 
-            data[0] = ['Id Prenotazione', 'Codice', 'Articolo', 'Quantità', 'Stato', 'Nominativo', 'Coperti', 'Telefono', 'Data', 'Validità', 'Note', 'Prezzo Tot']
+            data[0] = ['Codice', 'Id Prenotazione', 'Articolo', 'Quantità', 'Nominativo', 'Coperti', 'Telefono', 'Ora', 'Data Pren.', 'Prezzo Tot', 'Data Ins.', 'Note', 'Stato',]
             plus = plus + 1
             // carico dati
             for (let i = 0; i < this.totqty.length; i++) {
-                this.allPenot = (await axios.get('/getprenotazione/'  + this.totqty[i].food_id)).data;
+                this.allPenot = (await axios.get('/getprenotazione/' + this.totqty[i].food_id)).data;
                 for (let l = 0; l < this.allPenot.length; l++) {
                     switch (this.allPenot[l].book_status) {
                         case 0:
@@ -268,31 +269,52 @@ export default {
                             book_status = 'Cancellata'
                             break;
                     }
-
-                    data[plus] = [this.allPenot[l].book_id, this.allPenot[l].food_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, book_status, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.formattime('when', this.allPenot[l].book_when), this.formattime('PRT', this.allPenot[l].DataFinePRT), this.allPenot[l].book_note, this.allPenot[l].book_total]
+                    data[plus] = [this.allPenot[l].food_id, this.allPenot[l].book_id, this.allPenot[l].food_name, this.allPenot[l].item_qty, this.allPenot[l].book_nominativo, this.allPenot[l].book_coperti, this.allPenot[l].book_phone, this.allPenot[l].ora, this.formattime('PRT', this.allPenot[l].DataFinePRT), this.allPenot[l].book_total, this.formattime('when', this.allPenot[l].book_when), this.allPenot[l].book_note, book_status]
                     plus = plus + 1
                 }
             }
-
+            data = this.rimuoviDuplicati(data)
             return data
         },
 
+        arraysUguali(arr1, arr2) {
+            // Controlla se le lunghezze sono uguali
+            if (arr1.length !== arr2.length) return false;
 
+            // Confronta gli elementi uno per uno
+            for (let i = 0; i < arr1.length; i++) {
+                if (arr1[i] !== arr2[i]) return false;
+            }
+            return true;
+        },
+
+        rimuoviDuplicati(array) {
+            for (let i = 0; i < array.length; i++) {
+                for (let j = i + 1; j < array.length; j++) {
+                    // Se due sotto-array sono uguali, rimuovi il secondo
+                    if (this.arraysUguali(array[i], array[j])) {
+                        array.splice(j, 1);
+                        j--; // Per non saltare l'elemento successivo
+                    }
+                }
+            }
+            return array
+        },
 
         async Exportfunction() {
             this.totqty = (await axios.get('/prenotazione/sum')).data;
             // Creare un nuovo workbook e foglio Excel
             const ExcelJS = (await import(
-            /* webpackChunkName: "exceljs" */
-            /* webpackMode: "lazy" */
-            'exceljs'
-            )).default;            
+                /* webpackChunkName: "exceljs" */
+                /* webpackMode: "lazy" */
+                'exceljs'
+            )).default;
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Dati');
 
             // Imposta la larghezza delle colonne
-            worksheet.getColumn('A').width = 17;
-            worksheet.getColumn('B').width = 10;
+            worksheet.getColumn('A').width = 10;
+            worksheet.getColumn('B').width = 15;
             worksheet.getColumn('C').width = 25;
             worksheet.getColumn('D').width = 10;
             worksheet.getColumn('E').width = 20;
