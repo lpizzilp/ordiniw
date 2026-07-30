@@ -172,7 +172,7 @@
                                         @click="checkOutBtn()"><i class="fa fa-shopping-cart"></i>
                                         Checkout</button>
                                     <button class="btn cancel-btn" @click="cancelBtn(false)"
-                                        :disabled="mergedFoods.length ? false : true">
+                                        :disabled="mergedFoods.length ? false : true" >
                                         Annulla ordine</button>
                                 </div>
                             </div>
@@ -481,6 +481,10 @@ export default {
 .no-food .image img {
     width: 200px;
     height: 200px;
+}
+
+.cancel-btn{
+    background: #f38304;
 }
 
 

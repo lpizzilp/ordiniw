@@ -4,7 +4,7 @@
             {{ nav_name }}
         </router-link>
 
-        <nav class="navbar">
+        <nav data-html2canvas-ignore class="navbar">
             <router-link @click="scrollToTop()" to="/">Home</router-link>
             <!--<router-link @click="scrollToTop()" to="/menu">menu</router-link>
             <router-link @click="scrollToTop()" to="/table">table</router-link>

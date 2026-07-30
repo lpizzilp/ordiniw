@@ -20,22 +20,27 @@
                 Ricordati di mostrare il codice alla cassa.
             </p>
             <div class="end-button">
-                <button class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un
-                    Email</button>
+                <button v-if="!wasQuickshow" class="btn opt" @click="Btnclick('E')" style="margin-top: 2vh;">Ricordamelo con un
+                    Email</button><br>
+                <button v-if="!wasQuickshow" class="btn opt" @click="handleChildEvent('screenshot')" style="margin-bottom:2vh">Fai uno screenshot</button>
+                <router-link v-else-if="wasQuickshow && !prenotazione" to="/contaprezzi" class="btn" style="background-color: #E5C000;">Dividi la spesa</router-link>
                 <p>Oppure</p>
-                <button class="btn opt" @click="Btnclick('H')">Torna alla Home</button>
+                <button v-if="!wasQuickshow" class="btn opt" @click="Btnclick('H')" style="background-color: #f38304;"  onmouseover="this.style.background='#27ae60';" onmouseout="this.style.background='#f38304';">Torna alla Home</button>
+                <router-link v-else to="/" class="btn opt" >Torna alla Home</router-link>
             </div>
         </div>
 
         <QuickViewFinal v-if="showQuickView" @childEvent="handleChildEvent" :parentData="from" :parentId="NumId"
             :Ncoperti="Ncoperti">
         </QuickViewFinal>
+        <div v-if="activateScreenshot" data-html2canvas-ignore class="screenshotpannel"></div>
     </div>
 </template>
 
 
 <script>
 import QuickViewFinal from "@/components/QuickViewFinal.vue";
+import html2canvas from "html2canvas";
 export default {
     name: 'Thank',
 
@@ -48,7 +53,9 @@ export default {
             from: undefined,
             showQuickView: false,
             prenotazione: artprenotabile,
-            Ncoperti: null
+            Ncoperti: null,
+            wasQuickshow: false,
+            activateScreenshot: false
         }
     },
 
@@ -72,7 +79,30 @@ export default {
         },
 
         handleChildEvent(dataFromChild) {
-            this.showQuickView = dataFromChild
+            this.showQuickView = false
+            this.wasQuickshow = dataFromChild === 'annulla' ? false : true
+            if (dataFromChild === 'screenshot') {
+                this.doScreenshot();
+            }
+        },
+
+        doScreenshot(){
+            scrollTo(0, 0);
+            this.activateScreenshot = true;
+            html2canvas(document.body, {
+                useCORS: true,
+                logging: true,
+                scrollX: 0,
+                scrollY: 0,
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'NumeroOrdine.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+            setTimeout(() => {
+                this.activateScreenshot = false;
+            }, 1000);
         },
     },
 
@@ -131,6 +161,32 @@ export default {
     margin-top: 1vh;
     margin-bottom: 2vh;
     cursor: pointer;
+}
+
+.screenshotpannel{
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 9999;
+}
+
+.screenshotpannel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: black;
+  opacity: 0;
+  animation: darkEffect 1s ease-in-out;
+}
+
+@keyframes darkEffect {
+  0%, 100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 @media (max-width: 768px) {

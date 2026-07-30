@@ -6,9 +6,9 @@
                 inviare un email o in alternativa di fare uno screenshot.
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent('E')" style="width: 100%;">Invia email</button>
-            <button v-if="Isprenot != 'PRE'" class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>
-            <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
+            <button class="btn" type="reset" @click="DataParent('A')"
+                    style="width: 100%; margin-top: 20px;">Annulla</button>
+            <button class="btn" @click="DataParent('H')" style="width: 100%; background-color: #f38304;" onmouseover="this.style.background='#27ae60';" onmouseout="this.style.background='#f38304';">Torna alla Home</button>
         </div>
         <div v-else-if="from === 'E'" class="quick-view-inner">
             <div>
@@ -21,7 +21,7 @@
                 <input class="email" type="email" id="email" name="email" v-model="Dataform.email"
                     placeholder="Inserisci la tua email" required>
                 <button class="btn" type="submit" style="width: 100%;" @click="submitForm()" :disabled="buttonDisabled" >Invia</button>
-                <button class="btn" type="reset" @click="DataParent('I')"
+                <button class="btn" type="reset" @click="DataParent('A')"
                     style="width: 100%; margin-top: 20px; background-color: #f38304;">Annulla</button>
             </form>
         </div>
@@ -30,15 +30,14 @@
             <h3>L'email è stata inviata con successo.<br>Controlla la casella di posta.<br></h3>
             <h4>(Se non la trovi verifica anche nello Spam)</h4>
                 <slot></slot>
-            <button v-if="Isprenot != 'PRE'" class="btn" @click="DataParent('D')" style="width: 100%; background-color: #E5C000;">Dividi la spesa</button>
-            <button class="btn" @click="DataParent('H')" style="width: 100%;">Torna alla Home</button>
+            <button class="btn" @click="DataParent('I')" style="width: 100%;">Chiudi</button>
         </div>
         <div v-else-if="from === 'D'" class="quick-view-inner">
             <h2 style="color: #c71b1b;">Errore</h2><br>
             <h3>Email non inviata<br>Ti consigliamo di fare uno screenshot in attesa che l'assistenza tecnica intervenga.
                 <slot></slot>
             </h3>
-            <button class="btn" @click="DataParent('I')" style="margin-right: 5%;">Indietro</button>
+            <button class="btn" @click="DataParent('A')" style="margin-right: 5%;">Indietro</button>
         </div>
     </div>
     <QuickViewErrore v-if="Quickerrore"></QuickViewErrore>
@@ -89,29 +88,34 @@ export default {
         window.scrollTo(0, 0);
     },
     methods: {
-        //Codici
-        //this.from                 DataParent
-        //H = Banner Home           //H = Rotta Home
-        //E = Banner Email          //E = Valorizza From con E
+        //Codici this.from
+        //H = Banner Home
+        //E = Banner Email
         //I = Banner Successo
         //D = Banner Errore
 
 
-        async DataParent(where, err) {
-            if (where === 'E') {
-                this.from = 'E'
-                this.error = err
-            } else if (where === 'I') {
-                this.$emit('childEvent', false);
-            } else if (where === 'H') {
-                sessionStorage.removeItem('MatchUser')
-                sessionStorage.removeItem('Username')
-                sessionStorage.removeItem('TipoOrdine')
-                sessionStorage.removeItem('Coperti')
-                this.$router.push("/");
-            } else if (where === 'D') {
-                this.$router.push("/contaprezzi" );
+        async DataParent(where) {
+            const removeItems = () => {
+                    sessionStorage.removeItem('MatchUser')
+                    sessionStorage.removeItem('Username')
+                    sessionStorage.removeItem('TipoOrdine')
+                    sessionStorage.removeItem('Coperti')
+                }
+            switch (where) {
+                case 'A': //annulla
+                    this.$emit('childEvent', 'annulla');
+                    break;
 
+                case 'H': //home
+                    removeItems()
+                    this.$router.push('/');
+                    break;
+
+                case 'I': //inviata
+                    removeItems()
+                    this.$emit('childEvent', false);
+                    break;
             }
         },
 
