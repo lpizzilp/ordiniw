@@ -146,7 +146,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { VueToggles } from "vue-toggles";
+import VueToggles from "vue-toggles";
 import VueBasicAlert from 'vue-basic-alert';
 import QuickViewErrore from "@/components/QuickViewErrore.vue";
 import QuickViewPrenotazione from "@/components/QuickViewPrenotazione.vue";

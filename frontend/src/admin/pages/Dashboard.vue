@@ -314,7 +314,7 @@
 <script>
 import axios from "axios";
 import QuickViewErrore from '@/components/QuickViewErrore.vue';
-import { VueToggles } from "vue-toggles";
+import VueToggles from "vue-toggles";
 import { mapState, mapMutations } from "vuex";
 import { Makelog } from '@/glbFunctions';
 
