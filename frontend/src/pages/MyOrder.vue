@@ -59,6 +59,7 @@ export default {
                     sessionStorage.setItem('Username', parametriObj.user)
                     sessionStorage.setItem('TipoOrdine', parametriObj.type)
                     sessionStorage.setItem('Bill', parametriObj.idData)
+                    sessionStorage.removeItem('localCart')
                     var callURL ='/billdetails/'
                     if (parametriObj.filtroOrd == 'PRE') {
                         sessionStorage.setItem('filtro', (parametriObj.filtroOrd === '-1' ? "" : parametriObj.filtroOrd))

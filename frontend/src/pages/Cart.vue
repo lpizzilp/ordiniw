@@ -233,7 +233,7 @@ export default {
         },
           mergedFoods() {
             return this.filterFoods.map(f => {
-            const extra = this.existItem.data.find(e => e.food_id === f.food_id)
+            const extra = this.existItem.data.find(e => e.food_id == f.food_id)
             return reactive({ ...f, ...extra }) // unisci i dati
             })
   }
@@ -318,28 +318,80 @@ export default {
                 }
             }
             await axios.put("/cartItem/", data)
+
+            // Aggiorna sessionStorage
+            const cachedCart = sessionStorage.getItem('localCart');
+            if (cachedCart) {
+                try {
+                    const localCart = JSON.parse(cachedCart);
+                    localCart[data.food_id] = data.item_qty;
+                    sessionStorage.setItem('localCart', JSON.stringify(localCart));
+                } catch (e) {
+                    console.error("Errore nell'aggiornamento della sessione", e);
+                }
+            }
         },
 
         async cancelBtn(index) {
             if (index === false) {
                 await axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
+                sessionStorage.removeItem('localCart');
             } else {
-                await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + this.mergedFoods[index].food_id);
-                let idx = this.cartItem.findIndex(n => n == this.mergedFoods[index].food_id)
+                const foodId = this.mergedFoods[index].food_id;
+                await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + foodId);
+                let idx = this.cartItem.findIndex(n => n == foodId)
                 this.cartItem.splice(idx, 1)
+
+                // Rimuovi elemento da sessionStorage
+                const cachedCart = sessionStorage.getItem('localCart');
+                if (cachedCart) {
+                    try {
+                        const localCart = JSON.parse(cachedCart);
+                        delete localCart[foodId];
+                        sessionStorage.setItem('localCart', JSON.stringify(localCart));
+                    } catch (e) {
+                        console.error("Errore nella rimozione elemento dalla sessione", e);
+                    }
+                }
             }
         },
 
         checkOutBtn: function () {
             this.cartItem = [];
             this.mergedFoods.item_qty = [];
+            sessionStorage.removeItem('localCart');
             this.$router.push("/checkout");
         },
 
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
                 this.Isuser = true
+
+                // CONTROLLO CACHE:
+                const cachedCart = sessionStorage.getItem('localCart');
+                if (cachedCart) {
+                    try {
+                        const localCart = JSON.parse(cachedCart);
+                        const items = Object.entries(localCart).map(([food_id, quantity]) => ({
+                            food_id: food_id,
+                            item_qty: quantity
+                        }));
+                        
+                        this.existItem = { data: items };
+                        this.cartItem = [];
+                        this.itemQuantity = [];
+                        items.forEach(element => {
+                            this.cartItem.push(element.food_id);
+                            this.itemQuantity.push(element.item_qty);
+                        });
+                        return; // Salta la chiamata API
+                    } catch (e) {
+                        console.error("Errore parsing localCart nel carrello", e);
+                    }
+                }
+
+                // Fallback DB
                 try { this.existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
                     if (this.existItem.errMsg) {this.Quickerrore = true; return; }} catch (error) {this.Quickerrore = true; return;
                 }
@@ -347,9 +399,36 @@ export default {
                     this.cartItem.push(element.food_id);
                     this.itemQuantity.push(element.item_qty);
                 });
+
+                // Popola cache se non esisteva
+                try {
+                    const localCart = {};
+                    this.existItem.data.forEach(element => {
+                        localCart[element.food_id] = element.item_qty;
+                    });
+                    sessionStorage.setItem('localCart', JSON.stringify(localCart));
+                } catch (e) {
+                    console.error("Errore scrittura localCart", e);
+                }
             }
         },
 
+    },
+
+    // NAVIGAZIONE: Gestisce l'annullamento quando si torna in Home dal Carrello
+    async beforeRouteLeave(to, from, next) {
+        if (to.path === "/") {
+            const user_id = sessionStorage.getItem('Username');
+            if (user_id) {
+                try {
+                    await axios.delete("/cartItem/" + user_id);
+                } catch (error) {
+                    console.error("Errore svuotamento carrello su abbandono:", error);
+                }
+            }
+            sessionStorage.removeItem('localCart');
+        }
+        next();
     },
 
     components: {

@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 import "@/axios"
 
-const currentVersion = '2.2.10'; // Versione caching ampliata a css e js + ordinamento reparti e excel aggiornato
+const currentVersion = '2.2.11'; // Versione caching ampliata a css e js + ordinamento reparti e excel aggiornato
 const eventBus = mitt();
 
 //controllo di versione 

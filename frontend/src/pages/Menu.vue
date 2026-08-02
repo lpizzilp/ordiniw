@@ -414,11 +414,25 @@ export default {
         async getAllCartItem() {
             if (this.setqty !== true) {
                 if (sessionStorage.getItem('MatchUser')) {
+                    // Controlla se abbiamo già i dati del carrello in sessione
+                    const cachedCart = sessionStorage.getItem('localCart');
+                    if (cachedCart) {
+                        try {
+                            this.localCart = JSON.parse(cachedCart);
+                            this.loadLocalCartToQty();
+                            this.showCart = Object.keys(this.localCart).length > 0;
+                            this.eventBus.emit("showCart", this.showCart);
+                            return;
+                        } catch (e) {
+                            console.error("Errore nel parsing di localCart da sessionStorage", e);
+                        }
+                    }
+
                     try {
                         var existItem = await axios.get('/cartItem/' + sessionStorage.getItem('Username'));
                         if (existItem.errMsg) { this.Quickerrore = true; return; }
 
-                        // CORREZIONE: Reset completo del carrello locale prima di ricaricarlo
+                        // Reset completo del carrello locale prima di ricaricarlo
                         this.localCart = {};
                         
                         // Carica ogni articolo nel carrello locale usando food_id come chiave
@@ -431,6 +445,9 @@ export default {
                         // Aggiorna stato carrello
                         this.showCart = Object.keys(this.localCart).length > 0;
                         this.eventBus.emit("showCart", this.showCart);
+
+                        // Salva i dati in cache
+                        sessionStorage.setItem('localCart', JSON.stringify(this.localCart));
 
                     } catch (error) {
                         this.Quickerrore = true; 
@@ -614,6 +631,9 @@ export default {
                 });
                 this.isCartDirty = false;
 
+                // Salva lo stato sincronizzato in sessione
+                sessionStorage.setItem('localCart', JSON.stringify(this.localCart));
+
             } catch (error) {
                 console.error('Errore sincronizzazione carrello:', error);
                 this.Quickerrore = true;
@@ -740,12 +760,28 @@ export default {
 
     },
 
-    // HOOK AGGIUNTO - Sincronizza carrello prima di uscire dalla pagina
-    beforeUnmount() {
-        // Sincronizza il carrello se ci sono modifiche pendenti
-        if (this.isCartDirty) {
-            this.syncCartToDatabase();
+    // NAVIGAZIONE: Gestisce il salvataggio o l'annullamento quando si lascia il Menu
+    async beforeRouteLeave(to, from, next) {
+        if (to.path === "/") {
+            // L'utente torna in home page (rinuncia/annulla)
+            const user_id = sessionStorage.getItem('Username');
+            if (user_id) {
+                try {
+                    await axios.delete("/cartItem/" + user_id);
+                } catch (error) {
+                    console.error("Errore svuotamento carrello su abbandono:", error);
+                }
+            }
+            sessionStorage.removeItem('localCart');
+            this.localCart = {};
+            this.isCartDirty = false;
+        } else {
+            // Sincronizza se ci sono modifiche pendenti prima di andare altrove (es. carrello)
+            if (this.isCartDirty) {
+                await this.syncCartToDatabase();
+            }
         }
+        next();
     },
 
     components: {
