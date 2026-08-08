@@ -265,27 +265,60 @@ export default {
         },
 
         calculatePersonaPrice: function () {
-            let subtotal = 0;
-            for (let i = 0; i < this.itemQuantity.length; i++) {
-                subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]
+            const totals = this.calculateSummaryPrice();
+            const total = totals[3];
+            const coperti = parseInt(this.checkoutObj.Coperti);
+            if (!coperti || isNaN(coperti)) {
+                return 'calcolo...';
             }
-            let total = subtotal / this.checkoutObj.Coperti
-            total = total.toFixed(2)
-            return total == 'Infinity' ? 'calcolo...' : total + '€';
+            let personaTotal = total / coperti;
+            return personaTotal.toFixed(2) + '€';
         },
 
         calculateSummaryPrice: function () {
+            // Se presente in sessione, usa il totale già calcolato dal carrello
+            const cachedTotal = sessionStorage.getItem('cartTotal');
+            if (cachedTotal) {
+                const total = parseFloat(cachedTotal);
+                return [total, 0, 0, total];
+            }
+
+            // Fallback: calcolo sicuro (corregge il bug dell'indice sfasato tramite ricerca per ID)
             let subtotal = 0;
             let discount = 0;
             let delivery = 0;
-            for (let i = 0; i < this.itemQuantity.length; i++) {
-                subtotal = subtotal + parseFloat(this.filterFoods[i].food_price) * this.itemQuantity[i]
+            for (let i = 0; i < this.cartItem.length; i++) {
+                const foodId = this.cartItem[i];
+                const quantity = this.itemQuantity[i];
+                const food = this.filterFoods.find(f => f.food_id == foodId);
+                if (food) {
+                    const price = parseFloat(food.food_price) - parseFloat(food.food_discount || 0);
+                    subtotal += price * quantity;
+                }
             }
-            let total = subtotal
+            let total = subtotal;
             return [subtotal, discount, delivery, total];
         },
         async getAllCartItem() {
             if (sessionStorage.getItem('MatchUser')) {
+                // Leggi gli articoli dalla cache locale per evitare la chiamata al DB
+                const cachedCart = sessionStorage.getItem('localCart');
+                if (cachedCart) {
+                    try {
+                        const localCart = JSON.parse(cachedCart);
+                        this.cartItem = [];
+                        this.itemQuantity = [];
+                        Object.entries(localCart).forEach(([food_id, quantity]) => {
+                            this.cartItem.push(food_id);
+                            this.itemQuantity.push(quantity);
+                        });
+                        return; // Evita la chiamata API
+                    } catch (e) {
+                        console.error("Errore nel caricamento del carrello locale nel checkout", e);
+                    }
+                }
+
+                // Fallback DB se la cache è vuota o corrotta
                 try {
                     var existItem = await axios.get("/cartItem/" + sessionStorage.getItem('Username'));
                     if (existItem.errMsg) { this.Quickerrore = true; return; }
@@ -492,11 +525,31 @@ export default {
             }
 
             axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
+            sessionStorage.removeItem('localCart');
+            sessionStorage.removeItem('cartTotal');
             this.cartItem = [];
             this.itemQuantity = [];
             this.$router.push("/thank");
         }
     },
+
+    // NAVIGAZIONE: Gestisce l'annullamento quando si torna in Home dal Checkout
+    async beforeRouteLeave(to, from, next) {
+        if (to.path === "/") {
+            const user_id = sessionStorage.getItem('Username');
+            if (user_id) {
+                try {
+                    await axios.delete("/cartItem/" + user_id);
+                } catch (error) {
+                    console.error("Errore svuotamento carrello su abbandono:", error);
+                }
+            }
+            sessionStorage.removeItem('localCart');
+            sessionStorage.removeItem('cartTotal');
+        }
+        next();
+    },
+
     components: {
         QuickViewCheckout,
         QuickViewErrore

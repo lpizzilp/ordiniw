@@ -337,6 +337,7 @@ export default {
                 await axios.delete("/cartItem/" + sessionStorage.getItem('Username'));
                 this.cartItem = [];
                 sessionStorage.removeItem('localCart');
+                sessionStorage.removeItem('cartTotal');
             } else {
                 const foodId = this.mergedFoods[index].food_id;
                 await axios.delete("/cartItem/" + sessionStorage.getItem('Username') + "/" + foodId);
@@ -354,13 +355,17 @@ export default {
                         console.error("Errore nella rimozione elemento dalla sessione", e);
                     }
                 }
+                sessionStorage.removeItem('cartTotal');
             }
         },
 
         checkOutBtn: function () {
+            // Salva il totale in sessionStorage prima di andare al checkout
+            const totals = this.calculateSummaryPrice(); // Restituisce [subtotal, total]
+            sessionStorage.setItem('cartTotal', totals[1].toString());
+
             this.cartItem = [];
             this.mergedFoods.item_qty = [];
-            sessionStorage.removeItem('localCart');
             this.$router.push("/checkout");
         },
 
