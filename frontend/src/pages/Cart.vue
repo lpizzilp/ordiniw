@@ -47,8 +47,7 @@
                                                 <b>&nbsp;</b>
                                                 <p>{{ f.food_desc.substring(0, 25) }}</p>
                                             </div>
-                                            <button class="btn remove-btn" @click="cancelBtn(index)"
-                                                @touchstart.passive="cancelBtn(index)"><i class="fa fa-trash"></i>Rimuovi</button>
+                                            <button class="btn remove-btn" @click="cancelBtn(index)"><i class="fa fa-trash"></i>Rimuovi</button>
                                         </div>
 
                                         <div class="item-price col-sm-1">
