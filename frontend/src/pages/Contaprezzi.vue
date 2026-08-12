@@ -150,9 +150,10 @@ export default {
         ...mapState(["allFoods", "user"]),
 
         filterFoods: function () {
-            return this.allFoods.filter(
-                (f) => this.matchID(f, this.cartItem)
-            );
+            if (!this.allFoods || this.allFoods.length === 0) return [];
+            return this.cartItem.map(id => {
+                return this.allFoods.find(f => f.food_id == id);
+            }).filter(f => f !== undefined);
         },
 
     },
